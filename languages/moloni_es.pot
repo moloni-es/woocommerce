@@ -1,0 +1,764 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Moloni ES\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-30 10:06+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.4.0; wp-5.4.2"
+
+#: src/Plugin.php:37
+msgid "Starting process..."
+msgstr ""
+
+#: src/Plugin.php:38
+msgid "No orders selected to generate"
+msgstr ""
+
+#: src/Plugin.php:39
+msgid "Creating document"
+msgstr ""
+
+#: src/Plugin.php:40
+msgid "Progress Completed"
+msgstr ""
+
+#: src/Plugin.php:41
+msgid "Documents created: "
+msgstr ""
+
+#: src/Plugin.php:42
+msgid "Documents with errors: "
+msgstr ""
+
+#: src/Plugin.php:108
+msgid "Logs cleanup is complete."
+msgstr ""
+
+#: src/Plugin.php:120
+msgid "Document not found."
+msgstr ""
+
+#: src/Plugin.php:145 src/Controllers/Documents.php:527
+msgid "View document"
+msgstr ""
+
+#: src/Plugin.php:146
+msgid "Document was created!"
+msgstr ""
+
+#: src/Plugin.php:162
+#, php-format
+msgid "Order %s has been marked as generated!"
+msgstr ""
+
+#: src/Plugin.php:169
+#, php-format
+msgid "Do you confirm that you want to mark the order %s as paid?"
+msgstr ""
+
+#: src/Plugin.php:169 src/Plugin.php:189
+msgid "Yes, i confirm"
+msgstr ""
+
+#: src/Plugin.php:183
+msgid "All orders have been marked as generated!"
+msgstr ""
+
+#: src/Plugin.php:185
+msgid "No order found to generate!"
+msgstr ""
+
+#: src/Plugin.php:189
+msgid "Do you confirm that you want to mark all orders as generated?"
+msgstr ""
+
+#: src/Plugin.php:201
+#, php-format
+msgid "%s products updated."
+msgstr ""
+
+#: src/Plugin.php:205
+#, php-format
+msgid "There are %s products up to date."
+msgstr ""
+
+#: src/Plugin.php:209
+#, php-format
+msgid "%s products were not found in WooCommerce."
+msgstr ""
+
+#: src/Start.php:61
+msgid "Changes saved."
+msgstr ""
+
+#: src/Start.php:131
+msgid "You have no companies available in your account!"
+msgstr ""
+
+#: src/Curl.php:98 src/Curl.php:179
+msgid "Oops, an error was encountered..."
+msgstr ""
+
+#: src/Ajax.php:33
+#, php-format
+msgid "Document %s successfully inserted"
+msgstr ""
+
+#: src/Error.php:79
+msgid ""
+"One of the articles does not have an associated VAT rate and as such, you "
+"must select an exemption reason"
+msgstr ""
+
+#: src/Error.php:82
+msgid "Please check if the article has an category"
+msgstr ""
+
+#: src/Crons.php:17
+msgid "Every 5 minutes"
+msgstr ""
+
+#: src/Crons.php:34
+msgid "Could not establish a connection to a Moloni company"
+msgstr ""
+
+#: src/Crons.php:39
+msgid "Starting automatic stock synchronization..."
+msgstr ""
+
+#: src/Crons.php:47
+msgid "Stock sync disabled in plugin settings"
+msgstr ""
+
+#: src/Crons.php:51 src/Hooks/ProductUpdate.php:51 src/Hooks/OrderPaid.php:40
+msgid "Fatal error: "
+msgstr ""
+
+#: src/Hooks/OrderView.php:40
+msgid "The document has already been generated in Moloni"
+msgstr ""
+
+#: src/Hooks/OrderView.php:47 src/Controllers/Documents.php:160
+msgid "See document"
+msgstr ""
+
+#: src/Hooks/OrderView.php:56 src/Hooks/OrderView.php:67
+#: src/Controllers/Documents.php:136
+msgid "Generate again"
+msgstr ""
+
+#: src/Hooks/OrderView.php:59
+msgid "Document marked as generated."
+msgstr ""
+
+#: src/Hooks/OrderView.php:76
+msgid "Generate document on Moloni"
+msgstr ""
+
+#: src/Hooks/OrderView.php:81
+msgid "The order must be paid for in order to be generated."
+msgstr ""
+
+#: src/Hooks/ProductView.php:64
+#, php-format
+msgid "Product with reference %s not found"
+msgstr ""
+
+#: src/Hooks/ProductView.php:70
+msgid "Error getting product"
+msgstr ""
+
+#: src/Hooks/ProductView.php:74
+msgid "Moloni login invalid"
+msgstr ""
+
+#: src/Hooks/ProductView.php:86
+msgid "Reference: "
+msgstr ""
+
+#: src/Hooks/ProductView.php:87
+msgid "Price: "
+msgstr ""
+
+#: src/Hooks/ProductView.php:89
+msgid "Stock: "
+msgstr ""
+
+#: src/Hooks/ProductView.php:98
+msgid "See product"
+msgstr ""
+
+#: src/Hooks/ProductUpdate.php:39
+msgid "Product created on Moloni"
+msgstr ""
+
+#: src/Hooks/ProductUpdate.php:43
+msgid "Product updated on Moloni"
+msgstr ""
+
+#: src/Hooks/OrderPaid.php:31
+msgid "Automatically generating the order document"
+msgstr ""
+
+#: src/Hooks/OrderPaid.php:36
+msgid "There was an error generating the document: "
+msgstr ""
+
+#: src/Templates/Messages.php:7 src/Templates/Messages.php:15
+msgid "Remove warning"
+msgstr ""
+
+#: src/Templates/ErrorMessage.php:5 src/Templates/Messages/DocumentError.php:5
+msgid "Click here for more information"
+msgstr ""
+
+#: src/Templates/ErrorMessage.php:10 src/Templates/Messages/DocumentError.php:9
+msgid "Endpoint"
+msgstr ""
+
+#: src/Templates/ErrorMessage.php:12
+#: src/Templates/Messages/DocumentError.php:12
+msgid "Data received: "
+msgstr ""
+
+#: src/Templates/ErrorMessage.php:18
+#: src/Templates/Messages/DocumentError.php:18
+msgid "Data sent: "
+msgstr ""
+
+#: src/Templates/LoginForm.php:9
+msgid "Developer Id"
+msgstr ""
+
+#: src/Templates/LoginForm.php:14
+msgid "Client Secret"
+msgstr ""
+
+#: src/Templates/LoginForm.php:29
+msgid "Connect with Moloni"
+msgstr ""
+
+#: src/Templates/LoginForm.php:32
+msgid "Click here for more instructions"
+msgstr ""
+
+#: src/Templates/MainContainer.php:10
+msgid "Orders"
+msgstr ""
+
+#: src/Templates/MainContainer.php:15
+msgid "Settings"
+msgstr ""
+
+#: src/Templates/MainContainer.php:20
+msgid "Tools"
+msgstr ""
+
+#: src/Templates/CompanySelect.php:2
+msgid ""
+"Welcome! Here you can select which company you want to connect with "
+"WooCoommerce"
+msgstr ""
+
+#: src/Templates/CompanySelect.php:7
+msgid "Login"
+msgstr ""
+
+#: src/Templates/CompanySelect.php:12
+#: src/Templates/Containers/PendingOrders.php:38
+#: src/Templates/Containers/PendingOrders.php:139
+msgid "VAT"
+msgstr ""
+
+#: src/Controllers/Documents.php:92
+msgid "Document type not set in settings"
+msgstr ""
+
+#: src/Controllers/Documents.php:135
+#, php-format
+msgid "The order %s document was previously generated!"
+msgstr ""
+
+#: src/Controllers/Documents.php:143 src/Controllers/Documents.php:515
+#, php-format
+msgid "Warning, there was an error inserting the document %s"
+msgstr ""
+
+#: src/Controllers/Documents.php:159 src/Controllers/Documents.php:526
+msgid "The document has been inserted but the totals do not match. "
+msgstr ""
+
+#: src/Controllers/Documents.php:169
+msgid "Document sent by email to the customer"
+msgstr ""
+
+#: src/Controllers/Documents.php:174
+msgid "Document inserted in Moloni"
+msgstr ""
+
+#: src/Controllers/Documents.php:176
+msgid "Document inserted as a draft in Moloni"
+msgstr ""
+
+#: src/Controllers/Documents.php:509
+msgid "Warning, cannot insert Invoice + Receipt documents as a draft"
+msgstr ""
+
+#: src/Controllers/Product.php:97
+#, php-format
+msgid "Error creating product %s"
+msgstr ""
+
+#: src/Controllers/Product.php:117
+#, php-format
+msgid "Error updating product %s"
+msgstr ""
+
+#: src/Controllers/Product.php:277 src/Controllers/OrderFees.php:159
+#: src/Controllers/OrderShipping.php:156
+msgid "Measure unit not set!"
+msgstr ""
+
+#: src/Controllers/ProductCategory.php:76
+#, php-format
+msgid "Error creating category %s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:46
+#, php-format
+msgid "Syncing products since %s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:52
+#, php-format
+msgid "Found %s products"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:61
+#, php-format
+msgid "Product with reference %1$s already was up-to-date %2$s | %3$s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:62
+#, php-format
+msgid "Product with reference %s was already up-to-date"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:64 src/Controllers/SyncProducts.php:65
+#, php-format
+msgid "Product with reference %1$s was updated from %2$s to %3$s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:71
+#, php-format
+msgid "Product not found in WooCommerce or without active stock: %s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:72
+msgid "Product not found in WooCommerce or without active stock"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:75
+#, php-format
+msgid "Error: %s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:79
+#, php-format
+msgid "No products to update since %s"
+msgstr ""
+
+#: src/Controllers/SyncProducts.php:172
+msgid "Warning, error getting products via API"
+msgstr ""
+
+#: src/Controllers/OrderFees.php:130
+msgid "Error inserting order fees"
+msgstr ""
+
+#: src/Controllers/OrderCustomer.php:87
+msgid "Warning, there was an error inserting the customer."
+msgstr ""
+
+#: src/Controllers/OrderShipping.php:127
+msgid "Error inserting shipping"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:7 src/Templates/Containers/Tools.php:13
+msgid "Force stock synchronization"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:8
+msgid "Synchronize stocks of all items used in the last 7 days"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:20 src/Templates/Containers/Tools.php:26
+msgid "Remove pending orders"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:21
+msgid "Remove all orders from the order list"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:33
+msgid "View logs"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:34
+msgid "View sync logs from stocks/products"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:38
+msgid "Download logs file"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:45
+msgid "Delete logs"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:46
+msgid "Delete all log files from previous days"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:51
+msgid "Delete daily logs"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:58 src/Templates/Containers/Tools.php:64
+msgid "Logout"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:59
+msgid "We will keep the data regarding the documents already issued"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:12
+msgid "Here you can see all the orders you have to generate"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:18
+msgid "Bulk actions"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:19
+msgid "Generate documents"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:21
+msgid "Run"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:36
+#: src/Templates/Containers/PendingOrders.php:137
+msgid "Order"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:37
+#: src/Templates/Containers/PendingOrders.php:138
+msgid "Client"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:39
+#: src/Templates/Containers/PendingOrders.php:140
+msgid "Total"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:40
+#: src/Templates/Containers/PendingOrders.php:141
+msgid "Status"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:41
+#: src/Templates/Containers/PendingOrders.php:142
+msgid "Payment date"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:64
+msgid "Unknown"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:80
+#: src/Templates/Containers/Settings.php:38
+msgid "Invoice"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:84
+#: src/Templates/Containers/Settings.php:42
+msgid "Invoice + Receipt"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:88
+#: src/Templates/Containers/Settings.php:46
+msgid "Simplified Invoice"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:92
+#: src/Templates/Containers/Settings.php:50
+msgid "Bill of lading"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:96
+#: src/Templates/Containers/Settings.php:54
+msgid "Purchase Order"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:100
+#: src/Templates/Containers/Settings.php:58
+msgid "Pro Forma Invoice"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:107
+msgid "Create"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:113
+msgid "Remove"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:123
+msgid "No orders to be generated were found!"
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:158
+msgid "Generating "
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:160
+msgid " of "
+msgstr ""
+
+#: src/Templates/Containers/PendingOrders.php:162
+msgid " documents."
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:18
+msgid "Documents"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:23
+msgid "Company slug"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:33
+msgid "Document type"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:61
+#: src/Templates/Containers/Settings.php:74
+#: src/Templates/Containers/Settings.php:89
+#: src/Templates/Containers/Settings.php:143
+#: src/Templates/Containers/Settings.php:161
+msgid "Required"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:67
+msgid "Document status"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:71
+msgid "Draft"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:72
+msgid "Closed"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:74
+msgid "(Invoice + Receipt cannot be created in draft.)"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:80
+msgid "Document set"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:95
+msgid "Shipping info"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:99
+#: src/Templates/Containers/Settings.php:112
+#: src/Templates/Containers/Settings.php:319
+#: src/Templates/Containers/Settings.php:332
+#: src/Templates/Containers/Settings.php:345
+msgid "No"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:100
+#: src/Templates/Containers/Settings.php:113
+#: src/Templates/Containers/Settings.php:320
+#: src/Templates/Containers/Settings.php:333
+#: src/Templates/Containers/Settings.php:346
+msgid "Yes"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:102
+msgid "Put shipping info on documents"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:108
+msgid "Send e-mail"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:115
+msgid "The document is only sent to the customer if it is inserted as closed"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:122
+msgid "Products"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:131
+msgid "Warehouse"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:135
+msgid "Default warehouse"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:150
+msgid "Measurement unit"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:167
+msgid "Products tax"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:171
+#: src/Templates/Containers/Settings.php:189
+msgid "Use WooCommerce value"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:179
+#: src/Templates/Containers/Settings.php:197
+#, php-format
+msgid "Use if you do not have tax applied to %s"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:185
+msgid "Shipping tax"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:203
+msgid "Exemption reason"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:209
+msgid "Will be used if items do not have tax"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:215
+msgid "Shipping exemption reason"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:221
+msgid "Will be used if shipping does not have tax"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:227
+msgid "Customer's"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:232
+msgid "Customer's number prefix"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:239
+#, php-format
+msgid "(Example: %s1)"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:241
+msgid "Prefix used when creating customer's"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:256
+msgid "Maturity date"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:260
+#: src/Templates/Containers/Settings.php:278
+#: src/Templates/Containers/Settings.php:296
+msgid "Choose an option"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:268
+msgid "Default maturity date for customer's"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:274
+msgid "Payment method"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:286
+msgid "Default payment method for customer's"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:292
+msgid "Customer VAT"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:304
+msgid "Custom field associated with the customer's VAT"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:310
+msgid "Automation"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:315
+msgid "Create document automatically"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:322
+msgid "Automatically create document when an order is paid"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:328
+msgid "Sync stocks automatically"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:335
+msgid ""
+"Automatic stock synchronization (runs every 5 minutes and updates the stock "
+"of items based on Moloni)"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:341
+msgid "Sync products"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:348
+msgid ""
+"When saving a product in WooCommerce, the plugin will automatically create "
+"the product in Moloni or update the price of the product if it already exists"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:356
+msgid "Save changes"
+msgstr ""
+
+#. Name of the plugin
+msgid "Moloni ES"
+msgstr ""
+
+#. Description of the plugin
+msgid "Simple invoicing integration with Moloni ES"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://moloni.es"
+msgstr ""
+
+#. Author of the plugin
+msgid "Moloni.com"
+msgstr ""

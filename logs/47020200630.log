@@ -1,0 +1,61 @@
+[2020-06-30 08:59:55] Starting automatic stock synchronization...
+[2020-06-30 08:59:55] Syncing products since 2020-06-29 18:05:32
+[2020-06-30 08:59:55] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-29 18:05:32"}}}
+[2020-06-30 08:59:55] Sem produtos para actualizar desde 2020-06-29 18:05:32
+[2020-06-30 09:01:04] Starting automatic stock synchronization...
+[2020-06-30 09:01:04] Syncing products since 2020-06-30 08:59:55
+[2020-06-30 09:01:04] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 08:59:55"}}}
+[2020-06-30 09:01:04] Sem produtos para actualizar desde 2020-06-30 08:59:55
+[2020-06-30 09:05:37] Starting automatic stock synchronization...
+[2020-06-30 09:05:37] Syncing products since 2020-06-30 09:01:04
+[2020-06-30 09:05:37] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:01:04"}}}
+[2020-06-30 09:05:37] Sem produtos para actualizar desde 2020-06-30 09:01:04
+[2020-06-30 09:10:47] Starting automatic stock synchronization...
+[2020-06-30 09:10:47] Syncing products since 2020-06-30 09:05:37
+[2020-06-30 09:10:47] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:05:37"}}}
+[2020-06-30 09:10:47] Sem produtos para actualizar desde 2020-06-30 09:05:37
+[2020-06-30 09:15:38] Starting automatic stock synchronization...
+[2020-06-30 09:15:38] Syncing products since 2020-06-30 09:10:47
+[2020-06-30 09:15:38] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:10:47"}}}
+[2020-06-30 09:15:38] Sem produtos para actualizar desde 2020-06-30 09:10:47
+[2020-06-30 09:20:34] Starting automatic stock synchronization...
+[2020-06-30 09:20:34] Syncing products since 2020-06-30 09:15:38
+[2020-06-30 09:20:34] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:15:38"}}}
+[2020-06-30 09:20:34] Sem produtos para actualizar desde 2020-06-30 09:15:38
+[2020-06-30 09:25:38] Starting automatic stock synchronization...
+[2020-06-30 09:25:38] Syncing products since 2020-06-30 09:20:34
+[2020-06-30 09:25:38] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:20:34"}}}
+[2020-06-30 09:25:38] Sem produtos para actualizar desde 2020-06-30 09:20:34
+[2020-06-30 09:30:32] Iniciando a sincronização automática de stock...
+[2020-06-30 09:30:32] A sincronizar produtos desde 2020-06-30 09:25:38
+[2020-06-30 09:30:32] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:25:38"}}}
+[2020-06-30 09:30:33] Sem produtos para actualizar desde 2020-06-30 09:25:38
+[2020-06-30 09:35:55] Iniciando a sincronização automática de stock...
+[2020-06-30 09:35:55] A sincronizar produtos desde 2020-06-30 09:30:32
+[2020-06-30 09:35:55] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:30:32"}}}
+[2020-06-30 09:35:55] Sem produtos para actualizar desde 2020-06-30 09:30:32
+[2020-06-30 09:40:34] Iniciando a sincronização automática de stock...
+[2020-06-30 09:40:34] A sincronizar produtos desde 2020-06-30 09:35:55
+[2020-06-30 09:40:34] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:35:55"}}}
+[2020-06-30 09:40:34] Sem produtos para actualizar desde 2020-06-30 09:35:55
+[2020-06-30 09:46:20] Iniciando a sincronização automática de stock...
+[2020-06-30 09:46:20] A sincronizar produtos desde 2020-06-30 09:40:34
+[2020-06-30 09:46:20] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:40:34"}}}
+[2020-06-30 09:46:21] Sem produtos para actualizar desde 2020-06-30 09:40:34
+[2020-06-30 09:51:51] Iniciando a sincronização automática de stock...
+[2020-06-30 09:51:51] A sincronizar produtos desde 2020-06-30 09:46:20
+[2020-06-30 09:51:51] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:46:20"}}}
+[2020-06-30 09:51:52] Sem produtos para actualizar desde 2020-06-30 09:46:20
+[2020-06-30 09:55:48] Iniciando a sincronização automática de stock...
+[2020-06-30 09:55:48] A sincronizar produtos desde 2020-06-30 09:51:51
+[2020-06-30 09:55:48] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:51:51"}}}
+[2020-06-30 09:55:48] Sem produtos para actualizar desde 2020-06-30 09:51:51
+[2020-06-30 10:00:41] Iniciando a sincronização automática de stock...
+[2020-06-30 10:00:41] A sincronizar produtos desde 2020-06-30 09:55:48
+[2020-06-30 10:00:41] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 09:55:48"}}}
+[2020-06-30 10:00:41] Sem produtos para actualizar desde 2020-06-30 09:55:48
+[2020-06-30 10:05:35] Iniciando a sincronização automática de stock...
+[2020-06-30 10:05:35] A sincronizar produtos desde 2020-06-30 10:00:41
+[2020-06-30 10:05:35] {"companyId":470,"options":{"filter":{"field":"updatedAt","comparison":"gte","value":"2020-06-30 10:00:41"}}}
+[2020-06-30 10:05:35] Sem produtos para actualizar desde 2020-06-30 10:00:41
+[2020-06-30 10:05:39] 3
