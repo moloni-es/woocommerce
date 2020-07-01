@@ -2,7 +2,6 @@
 /**
  *
  *   Plugin Name:  Moloni ES
- *   Plugin URI:   https://moloni.es
  *   Description:  Simple invoicing integration with Moloni ES
  *   Version:      1.0.0
  *   Author:       Moloni.com
