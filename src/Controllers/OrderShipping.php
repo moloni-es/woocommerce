@@ -87,7 +87,7 @@ class OrderShipping
      */
     private function setReference()
     {
-        $this->reference = 'Envío';
+        $this->reference = __('Shipping','moloni_es');
         return $this;
     }
 
@@ -132,7 +132,7 @@ class OrderShipping
      */
     private function setCategory()
     {
-        $categoryName = 'Loja Online';
+        $categoryName = __('Online Store','moloni_es');
 
         $categoryObj = new ProductCategory($categoryName);
         if (!$categoryObj->loadByName()) {

@@ -73,7 +73,7 @@ class Payment
             return $this;
         }
 
-        throw new Error(__('Erro ao inserir a método de pagamento') . $this->name);
+        throw new Error(__('Error creating payment method','moloni_es') . $this->name);
     }
 
     /**

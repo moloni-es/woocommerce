@@ -198,7 +198,8 @@ class Product
         }
 
         if ((int)$this->category_id === 0) {
-            $categoryObj = new ProductCategory('Loja Online', 0);
+            $categoryName = __('Online Store','moloni_es');
+            $categoryObj = new ProductCategory($categoryName, 0);
 
             if (!$categoryObj->loadByName()) {
                 $categoryObj->create();

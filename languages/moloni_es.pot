@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-30 10:06+0000\n"
+"POT-Creation-Date: 2020-07-01 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "Changes saved."
 msgstr ""
 
-#: src/Start.php:131
+#: src/Start.php:130
 msgid "You have no companies available in your account!"
 msgstr ""
 
@@ -111,16 +111,6 @@ msgstr ""
 #: src/Ajax.php:33
 #, php-format
 msgid "Document %s successfully inserted"
-msgstr ""
-
-#: src/Error.php:79
-msgid ""
-"One of the articles does not have an associated VAT rate and as such, you "
-"must select an exemption reason"
-msgstr ""
-
-#: src/Error.php:82
-msgid "Please check if the article has an category"
 msgstr ""
 
 #: src/Crons.php:17
@@ -279,6 +269,10 @@ msgstr ""
 msgid "VAT"
 msgstr ""
 
+#: src/Controllers/Payment.php:76
+msgid "Error creating payment method"
+msgstr ""
+
 #: src/Controllers/Documents.php:92
 msgid "Document type not set in settings"
 msgstr ""
@@ -323,7 +317,12 @@ msgstr ""
 msgid "Error updating product %s"
 msgstr ""
 
-#: src/Controllers/Product.php:277 src/Controllers/OrderFees.php:159
+#: src/Controllers/Product.php:201 src/Controllers/OrderFees.php:138
+#: src/Controllers/OrderShipping.php:135
+msgid "Online Store"
+msgstr ""
+
+#: src/Controllers/Product.php:278 src/Controllers/OrderFees.php:159
 #: src/Controllers/OrderShipping.php:156
 msgid "Measure unit not set!"
 msgstr ""
@@ -381,12 +380,20 @@ msgstr ""
 msgid "Warning, error getting products via API"
 msgstr ""
 
+#: src/Controllers/OrderFees.php:76 src/Controllers/OrderFees.php:92
+msgid "Fee"
+msgstr ""
+
 #: src/Controllers/OrderFees.php:130
 msgid "Error inserting order fees"
 msgstr ""
 
 #: src/Controllers/OrderCustomer.php:87
 msgid "Warning, there was an error inserting the customer."
+msgstr ""
+
+#: src/Controllers/OrderShipping.php:90
+msgid "Shipping"
 msgstr ""
 
 #: src/Controllers/OrderShipping.php:127
@@ -754,11 +761,10 @@ msgstr ""
 msgid "Simple invoicing integration with Moloni ES"
 msgstr ""
 
-#. URI of the plugin
-#. Author URI of the plugin
-msgid "https://moloni.es"
-msgstr ""
-
 #. Author of the plugin
 msgid "Moloni.com"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://moloni.es"
 msgstr ""
