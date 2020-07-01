@@ -126,7 +126,7 @@ class Curl
             $pagination = $result['data'][$keyString]['options']['pagination'];
             $array = array_merge($array, $result['data'][$keyString]['data']);
             $page++;
-        } while (($pagination['count'] > ($pagination['qty'] * $pagination['page'])) || $page >= 1000);
+        } while (($pagination['count'] > ($pagination['qty'] * $pagination['page'])) && $page <= 1000);
 
         if (!isset(self::$cache[$action]) && in_array($action, self::$complexAllowedCachedMethods, false)) {
             self::$cache[$action] = $array;
