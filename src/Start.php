@@ -59,8 +59,7 @@ class Start
 
         if ($action === 'save') {
             add_settings_error('general', 'settings_updated', __('Changes saved.','moloni_es'), 'updated');
-            $options = $_POST['opt'];
-
+            $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
             foreach ($options as $option => $value) {
                 $option = sanitize_text_field($option);
                 $value = sanitize_text_field($value);

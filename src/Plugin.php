@@ -142,7 +142,7 @@ class Plugin
         $document->createDocument();
 
         if ($document->documentId) {
-            $viewUrl = ' <a href="' . admin_url('admin.php?page=molonies&action=getInvoice&id=' . $document->documentId) . '" target="_BLANK">'. __('View document','moloni_es') .'</a>';
+            $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $document->documentId)) . '" target="_BLANK">'. __('View document','moloni_es') .'</a>';
             add_settings_error('molonies', 'moloni-document-created-success', __('Document was created!','moloni_es') . $viewUrl, 'updated');
         }
 
@@ -166,7 +166,7 @@ class Plugin
             add_settings_error(
                 'molonies',
                 'moloni-order-remove',
-                sprintf( __('Do you confirm that you want to mark the order %s as paid?','moloni_es'), $orderId ). " <a href='" . admin_url('admin.php?page=molonies&action=remInvoice&confirm=true&id=' . $orderId) . "'>" . __('Yes, i confirm','moloni_es') . "</a>"
+                sprintf( __('Do you confirm that you want to mark the order %s as paid?','moloni_es'), $orderId ). " <a href='" . esc_url(admin_url('admin.php?page=molonies&action=remInvoice&confirm=true&id=' . $orderId)) . "'>" . __('Yes, i confirm','moloni_es') . "</a>"
             );
         }
     }
@@ -186,7 +186,7 @@ class Plugin
             }
         } else {
             add_settings_error(
-                'molonies', 'moloni-order-remove', __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . admin_url('admin.php?page=molonies&action=remInvoiceAll&confirm=true') . "'>" . __('Yes, i confirm','moloni_es') . "</a>"
+                'molonies', 'moloni-order-remove', __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . esc_url(admin_url('admin.php?page=molonies&action=remInvoiceAll&confirm=true')) . "'>" . __('Yes, i confirm','moloni_es') . "</a>"
             );
         }
     }

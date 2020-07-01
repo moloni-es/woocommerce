@@ -41,7 +41,7 @@ class OrderView
                 <a type="button"
                    class="button button-primary"
                    target="_BLANK"
-                   href="<?= admin_url('admin.php?page=molonies&action=getInvoice&id=' . $documentId) ?>"
+                   href="<?= esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $documentId)) ?>"
                    style="margin-top: 10px; float:right;"
                 >
                     <?= __('See document' , 'moloni_es') ?>
@@ -50,7 +50,7 @@ class OrderView
                 <a type="button"
                    class="button"
                    target="_BLANK"
-                   href="<?= admin_url('admin.php?page=molonies&action=genInvoice&id=' . $post->ID) ?>"
+                   href="<?= esc_url(admin_url('admin.php?page=molonies&action=genInvoice&id=' . $post->ID)) ?>"
                    style="margin-top: 10px; float:right;"
                 >
                     <?= __('Generate again' , 'moloni_es') ?>
@@ -61,7 +61,7 @@ class OrderView
                 <a type="button"
                    class="button"
                    target="_BLANK"
-                   href="<?= admin_url('admin.php?page=molonies&action=genInvoice&id=' . $post->ID) ?>"
+                   href="<?= esc_url(admin_url('admin.php?page=molonies&action=genInvoice&id=' . $post->ID)) ?>"
                    style="float:right"
                 >
                     <?= __('Generate again' , 'moloni_es') ?>
@@ -70,7 +70,7 @@ class OrderView
                 <a type="button"
                    class="button button-primary"
                    target="_BLANK"
-                   href="<?= admin_url('admin.php?page=molonies&action=genInvoice&id=' . $post->ID) ?>"
+                   href="<?= esc_url(admin_url('admin.php?page=molonies&action=genInvoice&id=' . $post->ID)) ?>"
                    style="float:right"
                 >
                     <?= __('Generate document on Moloni' , 'moloni_es') ?>

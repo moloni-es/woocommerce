@@ -1,5 +1,5 @@
 <div id='formLogin'>
-    <a href='https://moloni.es' target='_BLANK'>
+    <a href='<?= esc_url( 'https://moloni.es' ); ?>' target='_BLANK'>
         <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.png" width='300px' alt="Moloni">
     </a>
     <hr>
@@ -28,7 +28,7 @@
                     <div>
                         <input type='submit' name='submit' value='<?= __('Connect with Moloni','moloni_es') ?>'>
                         <span class='goRight power'>
-                            <a href="https://plugins.moloni.com/woocommerce" target="_blank">
+                            <a href="<?= esc_url( 'https://plugins.moloni.com/woocommerce' ); ?>" target="_blank">
                                 <?= __('Click here for more instructions','moloni_es') ?>
                             </a>
                         </span>
