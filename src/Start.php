@@ -80,7 +80,7 @@ class Start
             }
 
             if (isset($_GET['companyId'])) {
-                $wpdb->update('moloni_es_api', ['company_id' => (int)$_GET['companyId']], ['id' => MOLONI_SESSION_ID]);
+                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => MOLONI_SESSION_ID]);
                 Model::defineValues();
                 Model::defineConfigs();
                 return true;

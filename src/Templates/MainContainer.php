@@ -22,7 +22,7 @@
 </nav>
 
 <?php
-$tab = isset($_GET['tab']) ? $_GET['tab'] : '';
+$tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
 
 switch ($tab) {
     case 'tools':

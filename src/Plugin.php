@@ -86,7 +86,7 @@ class Plugin
 
                 switch ($action) {
                     case 'remInvoice':
-                        $this->removeOrder((int)$_GET['id']);
+                        $this->removeOrder((int)(sanitize_text_field($_GET['id'])));
                         break;
 
                     case 'remInvoiceAll':
@@ -94,7 +94,7 @@ class Plugin
                         break;
 
                     case 'genInvoice':
-                        $orderId = (int)$_REQUEST['id'];
+                        $orderId = (int)(sanitize_text_field($_REQUEST['id']));
                         /** @noinspection PhpUnusedLocalVariableInspection */
                         $document = $this->createDocument($orderId);
                         break;
@@ -110,7 +110,7 @@ class Plugin
 
                     case 'getInvoice':
                         $document = false;
-                        $documentId = (int)$_REQUEST['id'];
+                        $documentId = (int)(sanitize_text_field($_REQUEST['id']));
 
                         if ($documentId > 0) {
                             $document = Documents::showDocument($documentId);
