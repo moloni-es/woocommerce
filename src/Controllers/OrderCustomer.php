@@ -101,6 +101,7 @@ class OrderCustomer
 
         if (defined('VAT_FIELD')) {
             $metaVat = trim($this->order->get_meta(VAT_FIELD));
+
             if (!empty($metaVat)) {
                 $vat = $metaVat;
             }
@@ -121,7 +122,7 @@ class OrderCustomer
             }
         }
 
-        return $this->vat;
+        return $vat;
     }
 
     /**
