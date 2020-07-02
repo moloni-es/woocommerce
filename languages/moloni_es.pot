@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-01 11:57+0000\n"
+"POT-Creation-Date: 2020-07-01 17:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -131,6 +131,14 @@ msgstr ""
 
 #: src/Crons.php:51 src/Hooks/ProductUpdate.php:51 src/Hooks/OrderPaid.php:40
 msgid "Fatal error: "
+msgstr ""
+
+#: src/Activators/Install.php:17
+msgid "cURL library is required for using Moloni Plugin."
+msgstr ""
+
+#: src/Activators/Install.php:22
+msgid "Requires WooCommerce 3.0.0 or above."
 msgstr ""
 
 #: src/Hooks/OrderView.php:40
