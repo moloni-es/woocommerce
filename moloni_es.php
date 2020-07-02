@@ -4,7 +4,7 @@
  *   Plugin Name:  Moloni ES
  *   Description:  Simple invoicing integration with Moloni ES
  *   Version:      1.0.0
- *   Author:       Moloni.com
+ *   Author:       moloni.es
  *   Author URI:   https://moloni.es
  *   License:      GPL2
  *   License URI:  https://www.gnu.org/licenses/gpl-2.0.html

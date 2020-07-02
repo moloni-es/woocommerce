@@ -770,7 +770,7 @@ msgid "Simple invoicing integration with Moloni ES"
 msgstr ""
 
 #. Author of the plugin
-msgid "Moloni.com"
+msgid "moloni.es"
 msgstr ""
 
 #. Author URI of the plugin
