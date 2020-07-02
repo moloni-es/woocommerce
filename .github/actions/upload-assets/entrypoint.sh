@@ -102,6 +102,7 @@ svn status
 if [[ -z $(svn stat) ]]; then
 	echo "🛑 Nothing to deploy!"
 	exit 0
+fi
 
 # Readme also has to be updated in the .org tag
 echo "➤ Preparing stable tag..."
