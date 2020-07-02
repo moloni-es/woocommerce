@@ -32,7 +32,7 @@ All technical and commercial support given to users of the plugin is provided by
 == Frequently Asked Questions ==
 
 = Is there a paid version of the plugin? =
-No. The plugin was developed and is made available completely free by the Moloni team.
+No. The plugin was developed and is made available completely free.
 
 = How much will I have to pay for support? =
 Like the Moloni software, all support is completely free and provided entirely by our Moloni Customer Support team.
