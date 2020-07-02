@@ -28,7 +28,7 @@
                     <div>
                         <input type='submit' name='submit' value='<?= __('Connect with Moloni','moloni_es') ?>'>
                         <span class='goRight power'>
-                            <a href="<?= esc_url( 'https://plugins.moloni.com/woocommerce' ); ?>" target="_blank">
+                            <a href="<?= esc_url( 'https://woocommerce.moloni.es' ); ?>" target="_blank">
                                 <?= __('Click here for more instructions','moloni_es') ?>
                             </a>
                         </span>

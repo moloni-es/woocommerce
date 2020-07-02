@@ -2,7 +2,7 @@
 /**
  *
  *   Plugin Name:  Moloni
- *   Plugin URI:   https://plugins.moloni.com/woocommerce
+ *   Plugin URI:   https://woocommerce.moloni.es
  *   Description:  Send your orders automatically to your Moloni invoice software
  *   Version:      0.0.1
  *   Author:       moloni.es

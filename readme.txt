@@ -2,7 +2,7 @@
 Moloni ES
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Tested up to: 5.4.2
 Requires PHP: 5.6
 Requires at least: 5.0
