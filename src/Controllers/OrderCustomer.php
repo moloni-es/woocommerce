@@ -19,9 +19,9 @@ class OrderCustomer
     private $email = '';
     private $name = 'Cliente';
     private $contactName = '';
-    private $zipCode = '1000-100';
-    private $address = 'Desconhecida';
-    private $city = 'Desconhecida';
+    private $zipCode = '10000';
+    private $address = 'Desconocido';
+    private $city = 'Desconocido';
     private $languageId = 1;
     private $countryId = 1;
 
@@ -101,6 +101,7 @@ class OrderCustomer
 
         if (defined('VAT_FIELD')) {
             $metaVat = trim($this->order->get_meta(VAT_FIELD));
+
             if (!empty($metaVat)) {
                 $vat = $metaVat;
             }
@@ -121,7 +122,7 @@ class OrderCustomer
             }
         }
 
-        return $this->vat;
+        return $vat;
     }
 
     /**

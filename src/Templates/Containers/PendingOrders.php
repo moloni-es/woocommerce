@@ -54,7 +54,7 @@
                                value="<?= $order['id'] ?>">
                     </td>
                     <td>
-                        <a href=<?= admin_url('post.php?post=' . $order['id'] . '&action=edit') ?>>#<?= $order['number'] ?></a>
+                        <a href=<?= esc_url(admin_url('post.php?post=' . $order['id'] . '&action=edit')) ?>>#<?= $order['number'] ?></a>
                     </td>
                     <td>
                         <?php
@@ -109,7 +109,7 @@
 
 
                             <a class="wp-core-ui button-secondary" style="width: 80px; text-align: center"
-                               href="<?= admin_url('admin.php?page=molonies&action=remInvoice&id=' . $order['id']) ?>">
+                               href="<?= esc_url(admin_url('admin.php?page=molonies&action=remInvoice&id=' . $order['id'])) ?>">
                                 <?= __('Remove' , 'moloni_es') ?>
                             </a>
                         </form>

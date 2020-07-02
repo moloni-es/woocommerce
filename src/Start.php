@@ -59,8 +59,7 @@ class Start
 
         if ($action === 'save') {
             add_settings_error('general', 'settings_updated', __('Changes saved.','moloni_es'), 'updated');
-            $options = $_POST['opt'];
-
+            $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
             foreach ($options as $option => $value) {
                 $option = sanitize_text_field($option);
                 $value = sanitize_text_field($value);
@@ -81,7 +80,7 @@ class Start
             }
 
             if (isset($_GET['companyId'])) {
-                $wpdb->update('moloni_es_api', ['company_id' => (int)$_GET['companyId']], ['id' => MOLONI_SESSION_ID]);
+                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => MOLONI_SESSION_ID]);
                 Model::defineValues();
                 Model::defineConfigs();
                 return true;

@@ -130,10 +130,10 @@ class Documents
                 ->setNotes();
 
             if ((!isset($_GET['force']) || sanitize_text_field($_GET['force']) !== 'true') && $this->isReferencedInDatabase()) {
-
+                $viewUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true');
                 throw new Error(
                     sprintf(__('The order %s document was previously generated!','moloni_es') , $this->order->get_order_number()) .
-                    " <a href='admin.php?page=molonies&action=genInvoice&id=" . $this->orderId . "&force=true'>" . __('Generate again','moloni_es') . '</a>'
+                    " <a href='" . esc_url($viewUrl) . "'>" . __('Generate again','moloni_es') . '</a>'
                 );
             }
 
@@ -157,7 +157,7 @@ class Documents
                     $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
                     throw new Error(
                         __('The document has been inserted but the totals do not match. ' , 'moloni_es') .
-                        '<a href="' . $viewUrl . '" target="_BLANK">' . __('See document','moloni_es') . '</a>'
+                        '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document','moloni_es') . '</a>'
                     );
                 }
 
@@ -524,7 +524,7 @@ class Documents
                     add_post_meta($this->orderId, '_molonies_sent', $mutation['documentId'], true);
                     throw new Error(
                         __('The document has been inserted but the totals do not match. ' , 'moloni_es') .
-                        '<a href="' . $viewUrl . '" target="_BLANK">' . __('View document' , 'moloni_es') . '</a>'
+                        '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('View document' , 'moloni_es') . '</a>'
                     );
                 }
 

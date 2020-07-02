@@ -14,12 +14,12 @@ class Install
     {
         if (!function_exists('curl_version')) {
             deactivate_plugins(plugin_basename(__FILE__));
-            wp_die(esc_html__('cURL library is required for using Moloni Plugin.', 'moloni-es'));
+            wp_die(esc_html__('cURL library is required for using Moloni Plugin.', 'moloni_es'));
         }
 
         if (!class_exists('WooCommerce')) {
             deactivate_plugins(plugin_basename(__FILE__));
-            wp_die(esc_html__('Requires WooCommerce 3.0.0 or above.', 'moloni-pt'));
+            wp_die(esc_html__('Requires WooCommerce 3.0.0 or above.', 'moloni_es'));
         }
 
         self::createTables();
@@ -61,24 +61,23 @@ class Install
     private static function insertSettings()
     {
         global $wpdb;
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('document_set_id', 'Escolha uma Série de Documentos para melhor organização')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('exemption_reason', 'Escolha uma Isenção de Impostos para os produtos que não têm impostos')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('exemption_reason_shipping', 'Escolha uma Isenção de Impostos para os portes que não têmimpostos')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('payment_method', 'Escolha um metodo de pagamento por defeito')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('measure_unit', 'Escolha a unidade de medida a usar')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('maturity_date', 'Prazo de Pagamento')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('document_status', 'Escolha o estado do documento (fechado ou em rascunho)')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('document_type', 'Escolha o tipo de documentos que deseja emitir')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('tax_id', 'Escolha uma taxa para aplicar aos produtos')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('tax_id_shipping', 'Escolha uma taxa para aplicar ao envío')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('client_prefix', 'Prefixo da referência do cliente')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('product_prefix', 'Prefixo da referência do produto')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('update_final_consumer', 'Actualizar consumidor final')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('shipping_info', 'Informação de envio')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('vat_field', 'Número de contribuinte')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('email_send', 'Enviar email')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('moloni_stock_sync', 'Sincronizar Stocks')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('moloni_product_sync', 'Sincronizar Artigos')");
-        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, selected, description) VALUES('client_prefix', 'WC', 'Prefixo do utilizador')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('document_set_id', 'Choose a Document Set for better organization')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('exemption_reason', 'Choose a Tax Exemption for products that do not have taxes')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('exemption_reason_shipping', 'Choose a Tax Exemption for shipping that does not have taxes')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('payment_method', 'Choose a default payment method')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('measure_unit', 'Choose the unit of measurement to use')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('maturity_date', 'Maturity date')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('document_status', 'Choose the status of the document (closed or in draft)')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('document_type', 'Choose the type of documents you want to issue')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('tax_id', 'Choose a rate to apply to products')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('tax_id_shipping', 'Choose a rate to apply to shipping')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, selected, description) VALUES('client_prefix', 'WC', 'Customer reference prefix')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('product_prefix', 'Product reference prefix')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('update_final_consumer', 'Update customer')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('shipping_info', 'Shipping info')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('vat_field', 'VAT')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('email_send', 'Send e-mail')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('moloni_stock_sync', 'Sync Stocks')");
+        $wpdb->query("INSERT INTO `moloni_es_api_config`(config, description) VALUES('moloni_product_sync', 'Sync products')");
     }
 }

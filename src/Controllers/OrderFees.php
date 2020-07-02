@@ -73,7 +73,7 @@ class OrderFees
         $this->price = (float)$this->fee['line_total'];
 
         $feeName = $this->fee->get_name();
-        $this->name = !empty($feeName) ? $feeName : 'Taxa';
+        $this->name = !empty($feeName) ? $feeName : __('Fee','moloni_es');
 
         $this
             ->setReference()
@@ -89,7 +89,7 @@ class OrderFees
      */
     private function setReference()
     {
-        $this->reference = 'Fee';
+        $this->reference = __('Fee','moloni_es');
         return $this;
     }
 
@@ -135,7 +135,7 @@ class OrderFees
      */
     private function setCategory()
     {
-        $categoryName = 'Loja Online';
+        $categoryName = __('Online Store','moloni_es');
 
         $categoryObj = new ProductCategory($categoryName);
         if (!$categoryObj->loadByName()) {

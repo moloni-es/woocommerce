@@ -9,7 +9,7 @@
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
             <a class="button button-large"
-               href='<?= admin_url('admin.php?page=molonies&tab=tools&action=syncStocks&since=' . gmdate('Y-m-d', strtotime("-1 week"))) ?>'>
+               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=syncStocks&since=' . gmdate('Y-m-d', strtotime("-1 week")))) ?>'>
                 <?= __('Force stock synchronization' , 'moloni_es') ?>
             </a>
         </td>
@@ -22,7 +22,7 @@
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
             <a class="button button-large"
-               href='<?= admin_url('admin.php?page=molonies&tab=tools&action=remInvoiceAll') ?>'>
+               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=remInvoiceAll')) ?>'>
                 <?= __('Remove pending orders' , 'moloni_es') ?>
             </a>
         </td>
@@ -34,7 +34,7 @@
             <p class='description'><?= __('View sync logs from stocks/products' , 'moloni_es') ?></p>
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large" href="<?= Log::getFileUrl() ?>" download>
+            <a class="button button-large" href="<?= esc_url(Log::getFileUrl()) ?>" download>
                 <?= __('Download logs file' , 'moloni_es') ?>
             </a>
         </td>
@@ -47,7 +47,7 @@
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
             <a class="button button-large"
-               href='<?= admin_url('admin.php?page=molonies&tab=tools&action=remLogs') ?>'>
+               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=remLogs')) ?>'>
                 <?= __('Delete daily logs' , 'moloni_es') ?>
             </a>
         </td>
@@ -60,7 +60,7 @@
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
             <a class="button button-large button-primary"
-               href='<?= admin_url('admin.php?page=molonies&tab=tools&action=logout') ?>'>
+               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=logout')) ?>'>
                 <?= __('Logout' , 'moloni_es') ?>
             </a>
         </td>

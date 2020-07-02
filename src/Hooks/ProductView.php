@@ -93,9 +93,9 @@ class ProductView
                     <a type="button"
                        class="button button-primary"
                        target="_BLANK"
-                       href="https://ac.moloni.es/<?= COMPANY_SLUG ?>/productCategories/products/<?= $this->moloniProduct->product_id ?>"
+                       href="<?= esc_url('https://ac.moloni.es/' . COMPANY_SLUG . '/productCategories/products/' . $this->moloniProduct->product_id)?>"
                        style="margin-top: 10px; float:right;"
-                    > <?php _e("See product" , 'moloni_es') ?> </a>
+                    > <?= __("See product" , 'moloni_es') ?> </a>
                 <?php endif; ?>
 
                 <?php
