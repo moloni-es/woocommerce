@@ -1,5 +1,4 @@
 name: Publishing new release
-
 on:
   push:
     branches: [ master ]
