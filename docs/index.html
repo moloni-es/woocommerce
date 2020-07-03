@@ -1,1 +1,426 @@
-Wordpress
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+        <title>MOLONI PLUGINS - Woocommerce</title>
+
+        <!-- CSS  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="web/materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
+        <link href="web/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+        <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+        <link href="https://www.moloni.pt/_imagens/favicon_16x16_32.png" rel="icon">
+    </head>
+
+    <body>
+        <div class='navbar-fixed'>
+            <nav class="white" role="navigation">
+                <div class="nav-wrapper">
+                    <a id="logo-container" href="#" class="brand-logo ">
+                        <img src="web/images/logo.png" class="valign" alt="Moloni" width="220px">
+                    </a>
+
+
+                    <ul class="right hide-on-med-and-down">
+                        <li class='active'><a href="#" onclick="goToView('index-banner', this)">Inicio</a></li>
+                        <li><a href="#" onclick="goToView('faq', this)">FAQ</a></li>
+                        <li><a href="#" onclick="goToView('install', this)">Instalación</a></li>
+                        <li><a href="https://wordpress.org/plugins/moloni-es/" target='_BLANK'>Woocommerce</a></li>
+                        <li><a href="https://ac.moloni.es/login" target='_BLANK'>Área de cliente</a></li>
+                    </ul>
+
+                    <ul id="nav-mobile" class="side-nav">
+                        <li class='active'><a href="#" onclick="goToView('index-banner', this)">Inicio</a></li>
+                        <li><a href="#" onclick="goToView('install', this)">Instalación</a></li>
+                        <li><a href="#" onclick="goToView('faq', this)">FAQ</a></li>
+                        <li><a href="https://wordpress.org/plugins/moloni-es/" target='_BLANK'>Woocommerce</a></li>
+                        <li><a href="https://ac.moloni.es/login" target='_BLANK'></li>
+                    </ul>
+                    <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+                </div>
+            </nav>
+        </div>
+
+        <div id="index-banner" class="moloni-plugins-container" style="background-color: transparent;">
+            <div class="section no-pad-bot">
+                <div class="container">
+                    <br><br>
+                    <h1 class="header center teal-text text-lighten-2">Woocommerce</h1>
+                    <div class="row center">
+                        <h5 class="header col s12 light">¡La conexión perfecta entre este CMS y Moloni!</h5>
+                    </div>
+                    <div class="row center">
+                        <a href="#" id="download-button" class="btn-large waves-effect waves-light teal lighten-1"
+                           onclick="goToView('install')">¡Instalar!</a>
+                    </div>
+                    <br><br>
+
+                </div>
+            </div>
+            <div class="moloni-plugins"><img src="web/images/slide.jpg" alt=""></div>
+        </div>
+
+
+        <div class="container">
+            <div class="section">
+
+                <!--   Icon Section   -->
+                <div class="row" id="section-text">
+                    <div class="col s12 m4">
+                        <div class="icon-block">
+                            <h2 class="center blue-text"><i class="material-icons">insert_drive_file</i></h2>
+                            <h5 class="center">Documentos</h5>
+
+                            <p class="light">
+                                Acaba con las preocupaciones. Emite facturas directamente desde Woocommerce para Moloni de una forma
+                                sencilla y rápida.</p>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m4">
+                        <div class="icon-block">
+                            <h2 class="center blue-text"><i class="material-icons">add_shopping_cart</i></h2>
+                            <h5 class="center">Productos</h5>
+
+                            <p class="light">
+                                No tienes que preocuparte por crear los productos. Aquí puedes crear los productos y la respectiva familia
+                                de Woocommerce para Moloni.</p>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m4">
+                        <div class="icon-block">
+                            <h2 class="center blue-text"><i class="material-icons">group</i></h2>
+                            <h5 class="center">Clientes</h5>
+
+                            <p class="light">
+                                Con Moloni no tienes que preocuparte. Puedes añadir los clientes de Woocommerce para Moloni en el caso de
+                                que estés no existan. </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div style="background-color: #64B0f2;display: flex;justify-content: center;" id='install'>
+            <h1 style="text-align: center;color: #fff;font-size: 2.5rem;">Instalación y e configuración</h1>
+        </div>
+
+        <div class="container-fluid">
+            <div class="section no-padding install">
+
+                <div class="row even" id="firststepgeneral">
+                    <div class=' col s18 m6 right' id="rightstep">
+                        <img src='web/images/tut/01.png'>
+                    </div>
+                    <div class=' col s18 m5 offset-m1 left' id="leftstep">
+                        <h4>1. Añadir Plugin</h4>
+                        <div class="text">
+                            <p>En el escritorio del Wordpress, en el menú abre <b>Plugins</b> y selecciona <b>Añadir Nuevo</b> y escribe Moloni.es.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="secondstepgeneral">
+                    <div class=' col s18 m6'>
+                        <img src='web/images/tut/02.png'>
+                    </div>
+                    <div class=' col s18 m5'>
+                        <h4>2. Activar Plugin</h4>
+                        <div class="text">
+                            <p>A continuación, haz clic en <b>Instalar</b> ahora. Cuando finalize haz clic en el botón <b>Activar</b>.</p>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="row even" id="secondstepgeneral">
+                    <div class=' col s18 m6 right'>
+                        <img src='web/images/tut/03.png'>
+                    </div>
+                    <div class=' col s18 m5 offset-m1 left'>
+                        <h4>3. Creación del Cliente API </h4>
+                        <div class="text">
+                            <p>Previamente tienes que tener creado un cliente de API con el <b>ID</b> y el <b>Client Secret</b> en el Área de Cliente. Para saber como crear un Cliente API accede a esta <a href="https://www.moloni.es/faqs/como-crear-un-cliente-para-usar-la-api" target="_blank">Guía</a>.</p>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="row" id="fourthstepgeneral">
+                    <div class=' col s18 m6'>
+                        <img src='web/images/tut/04.png'>
+                    </div>
+                    <div class=' col s18 m5'>
+                        <h4>4. Autentificación del Cliente API</h4>
+                        <div class="text">
+                            <p>Coloca los datos que previamente has creado en el Área Cliente de Moloni, el correspondiente <b>ID</b> y <b>Client Secret</b>.</p>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+                <div class="row even" id="fifthstepgeneral">
+                    <div class=' col s18 m6 right'>
+                        <img src='web/images/tut/05.png'>
+                    </div>
+                    <div class=' col s18 m5 offset-m1 left'>
+                        <h4>5. Iniciar Sesión</h4>
+                        <div class="text">
+                            <p>A continuación puedes debes colocar los datos para acceder a la <b>cuenta de tu empresa</b>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="sixthstepgeneral">
+                    <div class=' col s18 m6'>
+                        <img src='web/images/tut/06.png'>
+                    </div>
+                    <div class=' col s18 m5'>
+                        <h4>6. Autorización</h4>
+                        <div class="text">
+                            <p>Ahora deberás <b>autorizar</b> y <b>dar permiso para acceder</b> a tu cuenta Moloni.</p>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+
+                <div class="row even" id="fifthstepgeneral">
+                    <div class=' col s18 m6 right'>
+                        <img src='web/images/tut/07.png'>
+                    </div>
+                    <div class=' col s18 m5 offset-m1 left'>
+                        <h4>7. Selecciona la empresa</h4>
+                        <div class="text">
+                            <p>Aqui tendrás que <b>seleccionar</b> la empresa que deseas.</p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" id="sixthstepgeneral">
+                    <div class=' col s18 m6'>
+                        <img src='web/images/tut/08.png'>
+                    </div>
+                    <div class=' col s18 m5'>
+                        <h4>8. Configuraciones</h4>
+                        <div class="text">
+                            <p>En el separador de Moloni, dentro encuentras varios submenús que son Pedidos, Configuraciones y Herramientas. Selecciona el de las <b>Configuraciones</b> y selecciona las opciones que pretendes y que datos se quedaran por defecto.</p>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+
+                <div class="row even" id="fifthstepgeneral">
+                    <div class=' col s18 m6 right'>
+                        <img src='web/images/tut/09.png'>
+                    </div>
+                    <div class=' col s18 m5 offset-m1 left'>
+                        <h4>9. Crear Pedidos</h4>
+                        <div class="text">
+                            <p>Los pedidos aparecen en el menú inicial del plugin de Moloni para que sean creados.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div style="background-color: #64B0f2;display: flex;justify-content: center;" id='faq'>
+            <h1 class="faq_title" style="text-align: center;color: #fff;font-size: 2.5rem;">Preguntas Frecuentes</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+
+
+                <div class="row">
+                    <ul class="collapsible popout m5 offset-m1" data-collapsible="accordion">
+                        <li>
+                            <div class="collapsible-header"><i style="color:#b7b7b7;" class="material-icons">label</i>Como crear un
+                                documento</div>
+                            <div class="collapsible-body">
+                                <p>Cuando el pedido ya ha sido pagado, va aparecer en una lista de documentos que tiene pendientes para
+                                    enviar para Moloni. Desde ahí, haz clic para crear el documento, añadir los productos, y el respectivo
+                                    cliente en tu cuenta Moloni.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i style="color:#b7b7b7;" class="material-icons">label</i>Error al crear el
+                                documento</div>
+                            <div class="collapsible-body">
+                                <p>En la configuración puedes consultar los registros con detalles sobre los errores.
+                                    Cualquier duda no dude en contactar con nosotros.
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i style="color:#b7b7b7;" class="material-icons">label</i>¿Por qué tengo que
+                                colocar el motivo de la exención si los productos no están exentos?</div>
+                            <div class="collapsible-body">
+                                <p>El motivo de exención seleccionado es un motivo de exención a ser usada por defecto. Si los productos
+                                    tiene un impuesto asociado en el pedido, el motivo de exención no va a ser usado. </p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header"><i style="color:#b7b7b7;" class="material-icons">label</i>Como asociar
+                                gastos de envío</div>
+                            <div class="collapsible-body">
+                                <p>Los gastos de envío son añadidos de forma automática al documento como un producto. Por eso, tendrás
+                                    que verificar que está configurado de forma correcta y con el IVA correspondiente.</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="collapsible-header"><i style="color:#b7b7b7;" class="material-icons">label</i>Los valores
+                                finales no están correctos.</div>
+                            <div class="collapsible-body">
+                                <p>Este problema puede ocurrir cuando se redondea, y si se realiza, el documento no se cierra y te
+                                    presenta un error informandote de lo sucedido. Sin embargo, puedes encontrar el documento creado en
+                                    Moloni en “borrador” y puedes editar el documento sin ningún problema.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <footer class="page-footer teal">
+            <div class="container">
+                <div class="row" id="footer_align">
+                    <div class="col l6 s12" id="presentation">
+                        <h5 class="white-text">Moloni, ¡La forma más fácil de gestionar de gestionar tu empresa! </h5>
+                        <p class="grey-text text-lighten-4 footerSectionText">
+                            Programa de gestión comercial innovador para autónomos, micro, pequeñas y medianas empresas.<br>
+                            Sin necesidad de gastos de extras o configuraciones especiales, completo e intuitivo.
+                        </p>
+                        <p class="grey-text text-lighten-4 footerSectionText">Ofrecemos de forma gratuita un conjunto de plugins para
+                            integrar con tu negocio. <br>
+                            Implementa integraciones totalmente personalizadas con Moloni <a href="https://api.moloni.es/v1/docs/"
+                                                                                             target="_BLANK">a través de la API</a>.
+                        </p>
+                    </div>
+
+                    <div class="footerSectionTextLinksBlock">
+                        <h5 class="white-text">Soporte y Contactos</h5>
+                        <ul>
+                            <li><a class="white-text" href="https://www.moloni.es/support" target="_BLANK">Preguntas Frecuentes</a></li>
+                            <li><a class="white-text" href="https://www.moloni.es/blog" target="_BLANK">Blog</a></li>
+                            <li><a class="white-text" href="https://www.moloni.es/contacts" target="_BLANK">Contacto</a></li><br>
+                            <li><a class="white-text" href="mailto:apoio@moloni.com">soporte@moloni.es</a></li>
+                            <li><a class="white-text">(+34) 910780054</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footerSectionTextLinksBlock">
+                        <h5 class="white-text">Enlaces útiles</h5>
+                        <ul>
+                            <li><a class="white-text" href="https://www.moloni.es/presentation" target="_BLANK">Presentación</a></li>
+                            <li><a class="white-text" href="https://www.moloni.es/plansandprices" target="_BLANK">Planes y Precios</a>
+                            </li>
+                            <li><a class="white-text" href="https://ac.moloni.es/login" target="_BLANK">Área de cliente</a></li>
+                            <li><a class="white-text" href="https://www.moloni.es/aboutus" target="_BLANK">Sobre Nosotros</a></li>
+                            <li><a class="white-text" href="https://www.moloni.es/termsandconditions" target="_BLANK">Términos y
+                                    Condiciones</a></li>
+                            <li><a class="white-text" href="https://www.moloni.es/gdpr" target="_BLANK">RGPD</a></li>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <div class="footerSectionIconRSHolder">
+                    <span class="footerIconeRedesSociais_fb_off"
+                          onclick="window.open('https://www.facebook.com/moloni.es/');"></span>
+                    <span class="footerIconeRedesSociais_in_off"
+                          onclick="window.open('https://www.linkedin.com/company/moloni-es/');"></span>
+                </div>
+                <div class="container">
+                    <h6 style="text-align: center; line-height: 20px;">©&nbsp;2020&nbsp;<a class="brown-text text-lighten-3"
+                                                                                           href="https://www.moloni.es/" target="_BLANK">Moloni</a><br>Programa de facturación online</h6>
+                </div>
+            </div>
+
+            <span id="phplive_btn_1477479141" onclick="phplive_launch_chat_0(0)"
+                  style="color: #0000FF; text-decoration: underline; cursor: pointer; position: fixed; bottom: 40px; right: 0px; z-index: 1000;"></span>
+            <script type="text/javascript">
+                (function() {
+				var phplive_e_1477479141 = document.createElement("script");
+				phplive_e_1477479141.type = "text/javascript";
+				phplive_e_1477479141.async = true;
+				phplive_e_1477479141.src = "//chat.moloni.com/js/phplive_v2.js.php?v=0|1477479141|0|";
+				document.getElementById("phplive_btn_1477479141").appendChild(phplive_e_1477479141);
+                })();
+            </script>
+            <script type="text/javascript">
+                /* <![CDATA[ */
+                var google_conversion_id = 1051120584;
+                var google_conversion_label = "_YlJCMStrQQQyKeb9QM";
+                var google_custom_params = window.google_tag_params;
+                var google_remarketing_only = true;
+                /* ]]> */
+            </script>
+            <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+            <noscript>
+            <div style="display:inline;"><img height="1" width="1" style="border-style:none;" alt=""
+                                              src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1051120584/?value=0&amp;label=_YlJCMStrQQQyKeb9QM&amp;guid=ON&amp;script=0" />
+            </div>
+            </noscript>
+        </footer>
+
+        <!--  Scripts-->
+        <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="web/materialize/js/materialize.js"></script>
+        <script>
+                (function(i, s, o, g, r, a, m) {
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+                ga('create', 'UA-60544801-3', 'auto');
+                ga('send', 'pageview');
+        </script>
+        <script>!function(f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '347754978968627');
+            fbq('track', 'PageView');</script>
+        <noscript><img height="1" width="1"
+                       src="https://www.facebook.com/tr?id=347754978968627&ev=PageView&noscript=1" /></noscript>
+        <script>
+            (function($) {
+			$(function () {
+
+				$('.button-collapse').sideNav();
+				$('.moloni-plugins').parallax();
+
+            }); // end of document ready
+            })(jQuery); // end of jQuery name space
+
+            function goToView(getGoToID, button) {
+			$('html, body').stop(true, true);
+
+			var goTo = "#" + getGoToID;
+
+			$('nav .active').removeClass("active");
+			$(button).parent("li").addClass("active")
+
+			$('html, body').animate({
+				scrollTop: $(goTo).offset().top - 70
+            }, 1000, function () {
+				forcePause = false;
+            });
+            }
+        </script>
+    </body>
+
+</html>
