@@ -1,5 +1,5 @@
 === Plugin Name ===
-Moloni ES
+Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
 Stable tag: 1.0.0

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- *   Plugin Name:  Moloni ES
+ *   Plugin Name:  Moloni España
  *   Description:  Simple invoicing integration with Moloni ES
  *   Version:      1.0.0
  *   Author:       Moloni.com
