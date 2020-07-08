@@ -65,5 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.6 =
+* Fix buttons placement in pending orders page.
+* Plugin name update
+* Minor fixes
+
 = 1.0.0 =
 * Initial release
