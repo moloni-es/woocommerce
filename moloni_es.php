@@ -1,10 +1,10 @@
 <?php
 /**
  *
- *   Plugin Name:  Moloni ES
+ *   Plugin Name:  Moloni España
  *   Description:  Simple invoicing integration with Moloni ES
- *   Version:      1.0.5
- *   Author:       moloni.es
+ *   Version:      1.0.6
+ *   Author:       Moloni.com
  *   Author URI:   https://moloni.es
  *   License:      GPL2
  *   License URI:  https://www.gnu.org/licenses/gpl-2.0.html
@@ -52,8 +52,6 @@ add_action('plugins_loaded', Start::class);
 
 function Start()
 {
-    //loads translations files
-    load_plugin_textdomain( 'moloni_es', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
     //start the plugin
     return new Plugin();
 }

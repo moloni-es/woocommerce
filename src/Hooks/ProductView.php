@@ -53,7 +53,7 @@ class ProductView
             if (Start::login(true)) {
                 $this->product = wc_get_product(get_the_ID());
 
-                if (!$this->product) {
+                if (!$this->product || $this->product->get_sku() === '') {
                     return null;
                 }
 
@@ -61,17 +61,17 @@ class ProductView
 
                 try {
                     if (!$this->moloniProduct->loadByReference()) {
-                        echo sprintf(__("Product with reference %s not found" , 'moloni_es'), $this->moloniProduct->reference);
+                        echo sprintf(__("Product with reference %s not found", 'moloni_es'), $this->moloniProduct->reference);
                         return null;
                     }
 
                     $this->showProductDetails();
                 } catch (Error $e) {
-                    echo __("Error getting product" , 'moloni_es');
+                    echo __("Error getting product", 'moloni_es');
                     return null;
                 }
             } else {
-                echo __("Moloni login invalid" , 'moloni_es');
+                echo __("Moloni login invalid", 'moloni_es');
             }
         } catch (Exception $exception) {
 
@@ -83,19 +83,19 @@ class ProductView
         ?>
         <div>
             <p>
-                <b><?= __("Reference: " , 'moloni_es') ?></b> <?= $this->moloniProduct->reference ?><br>
-                <b><?= __("Price: " , 'moloni_es') ?></b> <?= $this->moloniProduct->price ?>€<br>
+                <b><?= __("Reference: ", 'moloni_es') ?></b> <?= $this->moloniProduct->reference ?><br>
+                <b><?= __("Price: ", 'moloni_es') ?></b> <?= $this->moloniProduct->price ?>€<br>
                 <?php if ($this->moloniProduct->has_stock == 1) : ?>
-                    <b><?= __("Stock: " , 'moloni_es') ?></b> <?= $this->moloniProduct->stock ?>
+                    <b><?= __("Stock: ", 'moloni_es') ?></b> <?= $this->moloniProduct->stock ?>
                 <?php endif; ?>
 
                 <?php if (defined("COMPANY_SLUG")) : ?>
                     <a type="button"
                        class="button button-primary"
                        target="_BLANK"
-                       href="<?= esc_url('https://ac.moloni.es/' . COMPANY_SLUG . '/productCategories/products/' . $this->moloniProduct->product_id)?>"
+                       href="<?= esc_url('https://ac.moloni.es/' . COMPANY_SLUG . '/productCategories/products/' . $this->moloniProduct->product_id) ?>"
                        style="margin-top: 10px; float:right;"
-                    > <?= __("See product" , 'moloni_es') ?> </a>
+                    > <?= __("See product", 'moloni_es') ?> </a>
                 <?php endif; ?>
 
                 <?php

@@ -1,8 +1,8 @@
 === Plugin Name ===
-Moloni ES
+Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 Tested up to: 5.4.2
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,5 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.6 =
+* Fix buttons placement in pending orders page.
+* Plugin name update
+* Minor fixes
+
 = 1.0.0 =
 * Initial release

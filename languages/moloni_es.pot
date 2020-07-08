@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-01 17:32+0000\n"
+"POT-Creation-Date: 2020-07-08 09:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,83 +15,83 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.4.0; wp-5.4.2"
 
-#: src/Plugin.php:37
+#: src/Plugin.php:38
 msgid "Starting process..."
 msgstr ""
 
-#: src/Plugin.php:38
+#: src/Plugin.php:39
 msgid "No orders selected to generate"
 msgstr ""
 
-#: src/Plugin.php:39
+#: src/Plugin.php:40
 msgid "Creating document"
 msgstr ""
 
-#: src/Plugin.php:40
+#: src/Plugin.php:41
 msgid "Progress Completed"
 msgstr ""
 
-#: src/Plugin.php:41
+#: src/Plugin.php:42
 msgid "Documents created: "
 msgstr ""
 
-#: src/Plugin.php:42
+#: src/Plugin.php:43
 msgid "Documents with errors: "
 msgstr ""
 
-#: src/Plugin.php:108
+#: src/Plugin.php:115
 msgid "Logs cleanup is complete."
 msgstr ""
 
-#: src/Plugin.php:120
+#: src/Plugin.php:127
 msgid "Document not found."
 msgstr ""
 
-#: src/Plugin.php:145 src/Controllers/Documents.php:527
+#: src/Plugin.php:152 src/Controllers/Documents.php:527
 msgid "View document"
 msgstr ""
 
-#: src/Plugin.php:146
+#: src/Plugin.php:153
 msgid "Document was created!"
-msgstr ""
-
-#: src/Plugin.php:162
-#, php-format
-msgid "Order %s has been marked as generated!"
 msgstr ""
 
 #: src/Plugin.php:169
 #, php-format
+msgid "Order %s has been marked as generated!"
+msgstr ""
+
+#: src/Plugin.php:176
+#, php-format
 msgid "Do you confirm that you want to mark the order %s as paid?"
 msgstr ""
 
-#: src/Plugin.php:169 src/Plugin.php:189
+#: src/Plugin.php:176 src/Plugin.php:196
 msgid "Yes, i confirm"
 msgstr ""
 
-#: src/Plugin.php:183
+#: src/Plugin.php:190
 msgid "All orders have been marked as generated!"
 msgstr ""
 
-#: src/Plugin.php:185
+#: src/Plugin.php:192
 msgid "No order found to generate!"
 msgstr ""
 
-#: src/Plugin.php:189
+#: src/Plugin.php:196
 msgid "Do you confirm that you want to mark all orders as generated?"
 msgstr ""
 
-#: src/Plugin.php:201
+#: src/Plugin.php:208
 #, php-format
 msgid "%s products updated."
 msgstr ""
 
-#: src/Plugin.php:205
+#: src/Plugin.php:212
 #, php-format
 msgid "There are %s products up to date."
 msgstr ""
 
-#: src/Plugin.php:209
+#: src/Plugin.php:216
 #, php-format
 msgid "%s products were not found in WooCommerce."
 msgstr ""
@@ -275,6 +275,10 @@ msgstr ""
 #: src/Templates/Containers/PendingOrders.php:38
 #: src/Templates/Containers/PendingOrders.php:139
 msgid "VAT"
+msgstr ""
+
+#: src/Menus/Admin.php:27
+msgid "Moloni"
 msgstr ""
 
 #: src/Controllers/Payment.php:76
