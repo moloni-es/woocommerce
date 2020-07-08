@@ -15,6 +15,7 @@ class Plugin
     public function __construct()
     {
         $this->defines();
+        $this->translations();
         $this->actions();
         $this->crons();
     }
@@ -42,6 +43,12 @@ class Plugin
                 'documentsWithErrors' => __('Documents with errors: ','moloni_es')
             ]);
         }
+    }
+
+    public function translations()
+    {
+        //loads translations files
+        load_plugin_textdomain( 'moloni_es', FALSE, basename( dirname( MOLONI_ES_PLUGIN_FILE ) ) . '/languages/' );
     }
 
     private function actions()

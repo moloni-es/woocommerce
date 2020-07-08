@@ -24,7 +24,7 @@ class Admin
     {
         if (current_user_can('manage_woocommerce')) {
             $logoDir = MOLONI_ES_IMAGES_URL . 'small_logo.png';
-            add_menu_page(__('Moloni ES', 'Moloni ES'), __('Moloni', 'Moloni'), 'manage_woocommerce', 'molonies', [$this->parent, 'run'], $logoDir, 55.5);
+            add_menu_page(__('Moloni', 'moloni_es'), __('Moloni', 'moloni_es'), 'manage_woocommerce', 'molonies', [$this->parent, 'run'], $logoDir, 55.5);
         }
     }
 }
