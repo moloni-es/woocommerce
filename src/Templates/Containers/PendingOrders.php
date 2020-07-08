@@ -75,7 +75,7 @@
                             <input type="hidden" name="action" value="genInvoice">
                             <input type="hidden" name="id" value="<?= $order['id'] ?>">
 
-                            <select name="document_type" style="margin-right: 5px">
+                            <select name="document_type" style="margin-right: 5px; max-width: 45%;">
                                 <option value='invoice' <?= (DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
                                     <?= __('Invoice' , 'moloni_es') ?>
                                 </option>
