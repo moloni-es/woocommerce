@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-08 09:35+0000\n"
+"POT-Creation-Date: 2020-07-16 16:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,92 +15,92 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.4.0; wp-5.4.2"
 
-#: src/Plugin.php:38
+#: src/Plugin.php:43
 msgid "Starting process..."
 msgstr ""
 
-#: src/Plugin.php:39
+#: src/Plugin.php:44
 msgid "No orders selected to generate"
 msgstr ""
 
-#: src/Plugin.php:40
+#: src/Plugin.php:45
 msgid "Creating document"
 msgstr ""
 
-#: src/Plugin.php:41
+#: src/Plugin.php:46
 msgid "Progress Completed"
 msgstr ""
 
-#: src/Plugin.php:42
+#: src/Plugin.php:47
 msgid "Documents created: "
 msgstr ""
 
-#: src/Plugin.php:43
+#: src/Plugin.php:48
 msgid "Documents with errors: "
 msgstr ""
 
-#: src/Plugin.php:115
+#: src/Plugin.php:121
 msgid "Logs cleanup is complete."
 msgstr ""
 
-#: src/Plugin.php:127
+#: src/Plugin.php:133
 msgid "Document not found."
 msgstr ""
 
-#: src/Plugin.php:152 src/Controllers/Documents.php:527
+#: src/Plugin.php:159 src/Controllers/Documents.php:527
 msgid "View document"
 msgstr ""
 
-#: src/Plugin.php:153
+#: src/Plugin.php:160
 msgid "Document was created!"
 msgstr ""
 
-#: src/Plugin.php:169
+#: src/Plugin.php:177
 #, php-format
 msgid "Order %s has been marked as generated!"
 msgstr ""
 
-#: src/Plugin.php:176
+#: src/Plugin.php:184
 #, php-format
 msgid "Do you confirm that you want to mark the order %s as paid?"
 msgstr ""
 
-#: src/Plugin.php:176 src/Plugin.php:196
+#: src/Plugin.php:184 src/Plugin.php:206
 msgid "Yes, i confirm"
 msgstr ""
 
-#: src/Plugin.php:190
+#: src/Plugin.php:200
 msgid "All orders have been marked as generated!"
 msgstr ""
 
-#: src/Plugin.php:192
+#: src/Plugin.php:202
 msgid "No order found to generate!"
 msgstr ""
 
-#: src/Plugin.php:196
+#: src/Plugin.php:206
 msgid "Do you confirm that you want to mark all orders as generated?"
 msgstr ""
 
-#: src/Plugin.php:208
+#: src/Plugin.php:221
 #, php-format
 msgid "%s products updated."
 msgstr ""
 
-#: src/Plugin.php:212
+#: src/Plugin.php:225
 #, php-format
 msgid "There are %s products up to date."
 msgstr ""
 
-#: src/Plugin.php:216
+#: src/Plugin.php:229
 #, php-format
 msgid "%s products were not found in WooCommerce."
 msgstr ""
 
-#: src/Start.php:61
+#: src/Start.php:65
 msgid "Changes saved."
 msgstr ""
 
-#: src/Start.php:130
+#: src/Start.php:145
 msgid "You have no companies available in your account!"
 msgstr ""
 
@@ -211,6 +211,59 @@ msgstr ""
 msgid "There was an error generating the document: "
 msgstr ""
 
+#: src/WebHooks/Properties.php:43 src/Controllers/Product.php:202
+#: src/Controllers/ProductProperty.php:29 src/Controllers/OrderFees.php:139
+#: src/Controllers/ProductProperties.php:20
+#: src/Controllers/OrderShipping.php:136
+msgid "Online Store"
+msgstr ""
+
+#: src/WebHooks/Products.php:101
+#, php-format
+msgid "Product created in WooCommerce: %s"
+msgstr ""
+
+#: src/WebHooks/Products.php:103
+#, php-format
+msgid "Product already exists in WooCommerce: %s"
+msgstr ""
+
+#: src/WebHooks/Products.php:131
+#, php-format
+msgid "Product updated in WooCommerce: %s"
+msgstr ""
+
+#: src/WebHooks/Products.php:133
+#, php-format
+msgid "Product not found in WooCommerce to update: %s"
+msgstr ""
+
+#: src/WebHooks/Products.php:154 src/Controllers/SyncProducts.php:61
+#, php-format
+msgid "Product with reference %1$s already was up-to-date %2$s | %3$s"
+msgstr ""
+
+#: src/WebHooks/Products.php:160 src/Controllers/SyncProducts.php:64
+#: src/Controllers/SyncProducts.php:65
+#, php-format
+msgid "Product with reference %1$s was updated from %2$s to %3$s"
+msgstr ""
+
+#: src/WebHooks/Products.php:163 src/Controllers/SyncProducts.php:71
+#, php-format
+msgid "Product not found in WooCommerce or without active stock: %s"
+msgstr ""
+
+#: src/WebHooks/Products.php:277
+#, php-format
+msgid "Variant updated in WooCommerce: %s"
+msgstr ""
+
+#: src/WebHooks/Products.php:280
+#, php-format
+msgid "Variant Created in WooCommerce: %s"
+msgstr ""
+
 #: src/Templates/Messages.php:7 src/Templates/Messages.php:15
 msgid "Remove warning"
 msgstr ""
@@ -257,7 +310,11 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/Templates/MainContainer.php:20
+#: src/Templates/MainContainer.php:20 src/Templates/Containers/Automation.php:4
+msgid "Automation"
+msgstr ""
+
+#: src/Templates/MainContainer.php:25
 msgid "Tools"
 msgstr ""
 
@@ -319,23 +376,18 @@ msgstr ""
 msgid "Warning, cannot insert Invoice + Receipt documents as a draft"
 msgstr ""
 
-#: src/Controllers/Product.php:97
+#: src/Controllers/Product.php:98
 #, php-format
 msgid "Error creating product %s"
 msgstr ""
 
-#: src/Controllers/Product.php:117
+#: src/Controllers/Product.php:118
 #, php-format
 msgid "Error updating product %s"
 msgstr ""
 
-#: src/Controllers/Product.php:201 src/Controllers/OrderFees.php:138
-#: src/Controllers/OrderShipping.php:135
-msgid "Online Store"
-msgstr ""
-
-#: src/Controllers/Product.php:278 src/Controllers/OrderFees.php:159
-#: src/Controllers/OrderShipping.php:156
+#: src/Controllers/Product.php:279 src/Controllers/OrderFees.php:160
+#: src/Controllers/OrderShipping.php:157
 msgid "Measure unit not set!"
 msgstr ""
 
@@ -354,24 +406,9 @@ msgstr ""
 msgid "Found %s products"
 msgstr ""
 
-#: src/Controllers/SyncProducts.php:61
-#, php-format
-msgid "Product with reference %1$s already was up-to-date %2$s | %3$s"
-msgstr ""
-
 #: src/Controllers/SyncProducts.php:62
 #, php-format
 msgid "Product with reference %s was already up-to-date"
-msgstr ""
-
-#: src/Controllers/SyncProducts.php:64 src/Controllers/SyncProducts.php:65
-#, php-format
-msgid "Product with reference %1$s was updated from %2$s to %3$s"
-msgstr ""
-
-#: src/Controllers/SyncProducts.php:71
-#, php-format
-msgid "Product not found in WooCommerce or without active stock: %s"
 msgstr ""
 
 #: src/Controllers/SyncProducts.php:72
@@ -388,7 +425,7 @@ msgstr ""
 msgid "No products to update since %s"
 msgstr ""
 
-#: src/Controllers/SyncProducts.php:172
+#: src/Controllers/SyncProducts.php:171
 msgid "Warning, error getting products via API"
 msgstr ""
 
@@ -396,7 +433,7 @@ msgstr ""
 msgid "Fee"
 msgstr ""
 
-#: src/Controllers/OrderFees.php:130
+#: src/Controllers/OrderFees.php:131
 msgid "Error inserting order fees"
 msgstr ""
 
@@ -408,7 +445,7 @@ msgstr ""
 msgid "Shipping"
 msgstr ""
 
-#: src/Controllers/OrderShipping.php:127
+#: src/Controllers/OrderShipping.php:128
 msgid "Error inserting shipping"
 msgstr ""
 
@@ -559,6 +596,141 @@ msgstr ""
 msgid " documents."
 msgstr ""
 
+#: src/Templates/Containers/Automation.php:10
+msgid "Create document automatically"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:14
+#: src/Templates/Containers/Automation.php:27
+#: src/Templates/Containers/Automation.php:40
+#: src/Templates/Containers/Automation.php:61
+#: src/Templates/Containers/Automation.php:74
+#: src/Templates/Containers/Automation.php:87
+#: src/Templates/Containers/Automation.php:123
+#: src/Templates/Containers/Settings.php:99
+#: src/Templates/Containers/Settings.php:112
+msgid "No"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:15
+#: src/Templates/Containers/Automation.php:28
+#: src/Templates/Containers/Automation.php:41
+#: src/Templates/Containers/Automation.php:62
+#: src/Templates/Containers/Automation.php:75
+#: src/Templates/Containers/Automation.php:88
+#: src/Templates/Containers/Automation.php:124
+#: src/Templates/Containers/Settings.php:100
+#: src/Templates/Containers/Settings.php:113
+msgid "Yes"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:17
+msgid "Automatically create document when an order is paid"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:23
+msgid "Sync stocks automatically"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:30
+msgid ""
+"Automatic stock synchronization (runs every 5 minutes and updates the stock "
+"of items based on Moloni)"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:36
+msgid "Sync products"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:43
+msgid ""
+"When saving a product in WooCommerce, the plugin will automatically create "
+"the product in Moloni or update if it already exists"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:50
+msgid "Hooks"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:57
+msgid "Update products with variants"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:64
+msgid ""
+"When updating a product with variants in Moloni, it will update the product "
+"in WooCommerce (if product already exists in WooCommerce)"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:70
+msgid "Add products"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:77
+msgid ""
+"When a product is created in Moloni it will be created in woocommerce "
+"(products with variants included)"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:83
+msgid "Update products"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:90
+msgid ""
+"When updating a product in Moloni, it will be updated in WooCommerce (only "
+"if product already exists in WooCommerce)"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:96
+msgid "Fields to sync"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:101
+msgid "Name"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:103
+msgid "Price"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:105
+msgid "Description"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:107
+msgid "Visibility"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:109
+msgid "Stock"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:111
+msgid "Categories"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:113
+msgid ""
+"Optional field that will sync when updating/creating a product on your "
+"Moloni account"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:119
+msgid "Update stock"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:126
+msgid ""
+"When a stock movement is created in moloni, the movement will be recreated "
+"in WooCommerce (if product exists)"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:134
+#: src/Templates/Containers/Settings.php:312
+msgid "Save changes"
+msgstr ""
+
 #: src/Templates/Containers/Settings.php:18
 msgid "Documents"
 msgstr ""
@@ -601,22 +773,6 @@ msgstr ""
 
 #: src/Templates/Containers/Settings.php:95
 msgid "Shipping info"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:99
-#: src/Templates/Containers/Settings.php:112
-#: src/Templates/Containers/Settings.php:319
-#: src/Templates/Containers/Settings.php:332
-#: src/Templates/Containers/Settings.php:345
-msgid "No"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:100
-#: src/Templates/Containers/Settings.php:113
-#: src/Templates/Containers/Settings.php:320
-#: src/Templates/Containers/Settings.php:333
-#: src/Templates/Containers/Settings.php:346
-msgid "Yes"
 msgstr ""
 
 #: src/Templates/Containers/Settings.php:102
@@ -729,44 +885,8 @@ msgstr ""
 msgid "Custom field associated with the customer's VAT"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:310
-msgid "Automation"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:315
-msgid "Create document automatically"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:322
-msgid "Automatically create document when an order is paid"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:328
-msgid "Sync stocks automatically"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:335
-msgid ""
-"Automatic stock synchronization (runs every 5 minutes and updates the stock "
-"of items based on Moloni)"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:341
-msgid "Sync products"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:348
-msgid ""
-"When saving a product in WooCommerce, the plugin will automatically create "
-"the product in Moloni or update the price of the product if it already exists"
-msgstr ""
-
-#: src/Templates/Containers/Settings.php:356
-msgid "Save changes"
-msgstr ""
-
 #. Name of the plugin
-msgid "Moloni ES"
+msgid "Moloni España"
 msgstr ""
 
 #. Description of the plugin
@@ -774,7 +894,7 @@ msgid "Simple invoicing integration with Moloni ES"
 msgstr ""
 
 #. Author of the plugin
-msgid "Moloni.com"
+msgid "Moloni.es"
 msgstr ""
 
 #. Author URI of the plugin
