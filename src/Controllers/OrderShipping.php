@@ -103,7 +103,8 @@ class OrderShipping
                     'field' => 'reference',
                     'comparison' => 'eq',
                     'value' => $this->reference
-                ]
+                ],
+                "includeVariants" => true
             ]
         ];
 

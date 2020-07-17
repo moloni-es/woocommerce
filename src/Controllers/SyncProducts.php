@@ -53,7 +53,7 @@ class SyncProducts
             foreach ($updatedProducts as $product) {
                 try {
                     $wcProductId = wc_get_product_id_by_sku($product['reference']);
-                    if ($product['hasStock'] && $wcProductId > 0) {
+                    if ($product['hasStock'] && $wcProductId > 0 && (get_post_meta($wcProductId,'_manage_stock'))[0] !== 'no') {
                         $currentStock = get_post_meta($wcProductId, '_stock', true);
                         $newStock = $product['stock'];
 
@@ -159,11 +159,10 @@ class SyncProducts
                     'field' => 'updatedAt',
                     'comparison' => 'gte',
                     'value' => $this->since
-                ]
+                ],
+                "includeVariants" => true
             ]
         ];
-
-        Log::write(json_encode($variables));
 
         try {
             $fetched = Products::queryProducts($variables);

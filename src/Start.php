@@ -3,6 +3,7 @@
 namespace MoloniES;
 
 use MoloniES\API\Companies;
+use MoloniES\WebHooks\WebHook;
 
 /**
  * Class Start
@@ -37,29 +38,42 @@ class Start
         }
 
         if (!empty($developerId) && !empty($clientSecret)) {
-            Model::setClient($developerId,$clientSecret);
+            Model::setClient($developerId, $clientSecret);
             $url = 'https://api.moloni.es/v1/auth/authorize?apiClientId=' . $developerId . '&redirectUri=' . urlencode(admin_url('admin.php?page=molonies'));
             wp_redirect($url);
             return true;
         }
 
-        if(!empty($code)) {
+        if (!empty($code)) {
             $tokensRow = Model::getTokensRow();
-            $login = Curl::login($code,$tokensRow['client_id'],$tokensRow['client_secret']);
+            $login = Curl::login($code, $tokensRow['client_id'], $tokensRow['client_secret']);
             if ($login && isset($login['accessToken']) && isset($login['refreshToken'])) {
-                Model::setTokens($login['accessToken'],$login['refreshToken']);
+                Model::setTokens($login['accessToken'], $login['refreshToken']);
             } else {
                 return false;
             }
         }
 
         if ($action === 'logout') {
+            //Deletes the created hooks in Moloni
+            WebHook::deleteHooks();
+
             Model::resetTokens();
         }
 
         if ($action === 'save') {
-            add_settings_error('general', 'settings_updated', __('Changes saved.','moloni_es'), 'updated');
+            add_settings_error('general', 'settings_updated', __('Changes saved.', 'moloni_es'), 'updated');
             $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
+
+            //Verifies checkboxes because they are not set if not checked
+            $syncOptions = ['sync_fields_description', 'sync_fields_visibility', 'sync_fields_stock', 'sync_fields_name', 'sync_fields_price', 'sync_fields_categories'];
+            foreach ($syncOptions as $option) { //for each sync opt check if it is set
+                if (!isset($options[$option])) {
+                    $options[$option] = 0;
+                }
+            }
+            //
+
             foreach ($options as $option => $value) {
                 $option = sanitize_text_field($option);
                 $value = sanitize_text_field($value);
@@ -73,7 +87,6 @@ class Start
         if (!empty($tokensRow['main_token']) && !empty($tokensRow['refresh_token'])) {
             Model::refreshTokens();
             Model::defineValues();
-
             if (defined('MOLONIES_COMPANY_ID')) {
                 Model::defineConfigs();
                 return true;
@@ -83,6 +96,8 @@ class Start
                 $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => MOLONI_SESSION_ID]);
                 Model::defineValues();
                 Model::defineConfigs();
+                //Creates hook in moloni
+                WebHook::createHooks();
                 return true;
             }
 
@@ -127,8 +142,8 @@ class Start
         }
 
         if (empty($companies)) {
-            self::loginForm(__('You have no companies available in your account!','moloni_es'));
-        }else if (!self::$ajax) {
+            self::loginForm(__('You have no companies available in your account!', 'moloni_es'));
+        } else if (!self::$ajax) {
             include(MOLONI_ES_TEMPLATE_DIR . 'CompanySelect.php');
         }
     }

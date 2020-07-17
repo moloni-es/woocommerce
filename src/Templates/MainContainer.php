@@ -15,10 +15,16 @@
         <?= __('Settings','moloni_es') ?>
     </a>
 
+    <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=automation')) ?>"
+       class="nav-tab <?= ($_GET['tab'] === 'automation') ? 'nav-tab-active' : '' ?>">
+        <?= __('Automation','moloni_es') ?>
+    </a>
+
     <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=tools')) ?>"
        class="nav-tab <?= ($_GET['tab'] === 'tools') ? 'nav-tab-active' : '' ?>">
         <?= __('Tools','moloni_es') ?>
     </a>
+
 </nav>
 
 <?php
@@ -27,6 +33,9 @@ $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
 switch ($tab) {
     case 'tools':
         include MOLONI_ES_TEMPLATE_DIR . 'Containers/Tools.php';
+        break;
+    case 'automation':
+        include MOLONI_ES_TEMPLATE_DIR . 'Containers/Automation.php';
         break;
     case 'settings':
         include MOLONI_ES_TEMPLATE_DIR . 'Containers/Settings.php';

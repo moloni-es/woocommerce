@@ -82,6 +82,7 @@ class Products
             {
                 data
                 {
+                    visible
                     name
                     productId
                     type
@@ -91,11 +92,78 @@ class Products
                     priceWithTaxes
                     hasStock
                     stock
+                    minStock
                     measurementUnit
                     {
                         measurementUnitId
                         name
+                    }   
+                    warehouse
+                    {
+                        warehouseId
                     }
+                    productCategory
+                    {
+                        productCategoryId
+                        name
+                    }                
+                    variants
+                    {
+                        visible
+                        productId
+                        name
+                        reference
+                        summary
+                        price
+                        priceWithTaxes
+                        hasStock
+                        stock
+                        propertyPairs
+                        {
+                            property
+                            {
+                                name
+                            }
+                            propertyValue
+                            {
+                                code
+                                value
+                            }
+                        }
+                    }
+                    parent
+                    {
+                        productId
+                        name
+                    }
+                    propertyGroup
+                    {
+                        propertyGroupId
+                        name
+                        properties
+                        {
+                            propertyId
+                            name
+                            ordering
+                            values
+                            {
+                                propertyValueId
+                                code
+                                value
+                            }
+                        }
+                    }
+                    taxes
+                    {
+                        tax
+                        {
+                            taxId
+                            value
+                            name
+                        }
+                        value
+                        ordering
+                    }       
                 }
                 errors
                 {
@@ -122,6 +190,7 @@ class Products
             {
                 data
                 {
+                    visible
                     name
                     productId
                     type
@@ -131,6 +200,7 @@ class Products
                     priceWithTaxes
                     hasStock
                     stock
+                    minStock
                     measurementUnit
                     {
                         measurementUnitId
@@ -144,7 +214,46 @@ class Products
                     {
                         productCategoryId
                         name
-                    }                       
+                    }                
+                    variants
+                    {
+                        productId
+                        name
+                        reference
+                    }
+                    parent
+                    {
+                        productId
+                        name
+                    }
+                    propertyGroup
+                    {
+                        propertyGroupId
+                        name
+                        properties
+                        {
+                            propertyId
+                            name
+                            ordering
+                            values
+                            {
+                                propertyValueId
+                                code
+                                value
+                            }
+                        }
+                    }
+                    taxes
+                    {
+                        tax
+                        {
+                            taxId
+                            value
+                            name
+                        }
+                        value
+                        ordering
+                    }             
                 }
                 options
                 {
