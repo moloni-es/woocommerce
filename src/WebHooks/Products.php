@@ -5,6 +5,7 @@ namespace MoloniES\WebHooks;
 use MoloniES\API\Categories;
 use MoloniES\Error;
 use MoloniES\Log;
+use MoloniES\LogSync;
 use MoloniES\Model;
 use MoloniES\Start;
 use MoloniES\API\Products as ApiProducts;
@@ -121,6 +122,11 @@ class Products
 
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
 
+        if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
+            Log::write('Product has already been synced (Moloni -> WooCommerce)');
+            return;
+        }
+
         if ($wcProductId > 0) {
             $wcProduct = $this->setProduct($moloniProduct, $wcProductId);
 
@@ -149,6 +155,11 @@ class Products
         }
 
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
+
+        if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
+            Log::write('Product has already been synced (WooCommerce -> Moloni)');
+            return;
+        }
 
         //if it exists and manage stock is set to true, update it
         if ($wcProductId > 0 && (get_post_meta($wcProductId, '_manage_stock'))[0] !== 'no') {
@@ -297,7 +308,7 @@ class Products
      */
     public function setAttributes($moloniProduct, $wcProductId)
     {
-        $attributes = $this->getAttributes($moloniProduct);
+        $attributes = self::getAttributes($moloniProduct);
         $productAttributes = [];
 
         $product = new WC_Product_Variable($wcProductId);
@@ -324,7 +335,7 @@ class Products
     public function setCategories($moloniCategoryId)
     {
 
-        $namesArray = $this->getCategoriesFromMoloni($moloniCategoryId); //all names from category tree
+        $namesArray = self::getCategoriesFromMoloni($moloniCategoryId); //all names from category tree
 
         $categoriesIds = [];
         $parentId = 0;
@@ -354,7 +365,7 @@ class Products
      * @param $moloniProduct
      * @return array
      */
-    public function getAttributes($moloniProduct)
+    public static function getAttributes($moloniProduct)
     {
         $attributes = [];
 
@@ -375,7 +386,7 @@ class Products
      * @return array|bool
      * @throws Error
      */
-    public function getCategoriesFromMoloni($moloniCategoryId)
+    public static function getCategoriesFromMoloni($moloniCategoryId)
     {
         $moloniId = $moloniCategoryId;//current category id
         $moloniCategoriesTree = [];
