@@ -48,6 +48,8 @@ class WebHook
      */
     public static function createHooks()
     {
+        self::deleteHooks(); //prevent multiple hooks doing the same
+
         $variables = [
             'companyId' => (int)MOLONIES_COMPANY_ID,
             'data' => []
