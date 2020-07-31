@@ -54,6 +54,11 @@ class Categories
                 {
                     productCategoryId
                     name
+                    parent
+                    {
+                        productCategoryId
+                        name
+                    }
                 }
                 options
                 {
@@ -95,6 +100,11 @@ class Categories
                     posVisible
                     summary
                     visible
+                    parent
+                    {
+                        productCategoryId
+                        name
+                    }
                 }
                 errors
                 {

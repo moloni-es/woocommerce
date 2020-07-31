@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 Tested up to: 5.4.2
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.7 =
+* Added support for WebHooks
+* Sync products with variants (Moloni -> WooCommerce)
+
 = 1.0.6 =
 * Fix buttons placement in pending orders page.
 * Plugin name update

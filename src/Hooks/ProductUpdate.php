@@ -6,6 +6,7 @@ use Exception;
 use MoloniES\Controllers\Product;
 use MoloniES\Error;
 use MoloniES\Log;
+use MoloniES\LogSync;
 use MoloniES\Notice;
 use MoloniES\Plugin;
 use MoloniES\Start;
@@ -28,18 +29,27 @@ class ProductUpdate
     {
         try {
             $product = wc_get_product($productid);
+
             try {
                 if ($product->get_status() !== 'draft' && start::login(true)) {
                     /** @noinspection NestedPositiveIfStatementsInspection */
                     if (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC) {
                         $productObj = new product($product);
+
+                        if (LogSync::wasSyncedRecently(1,$productid) === true) {
+                            Log::write('Product has already been synced (WooCommerce -> Moloni)');
+                            return;
+                        }
+
                         if (!$productObj->loadbyreference()) {
                             $productObj->create();
                             if ($productObj->product_id > 0) {
+                                Log::write(__('Product created on Moloni' , 'moloni_es'));
                                 notice::addmessagesuccess(__('Product created on Moloni' , 'moloni_es'));
                             }
                         } else {
                             $productObj->update();
+                            Log::write(__('Product updated on Moloni' , 'moloni_es'));
                             notice::addmessageinfo(__('Product updated on Moloni' , 'moloni_es'));
                         }
                     }

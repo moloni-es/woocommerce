@@ -49,7 +49,7 @@ class OrderProduct
     private $discount;
 
     /** @var int */
-    private $warehouse_id = 0;
+    private $warehouse_id;
     
     /** @var bool */
     private $hasIVA = false;
@@ -323,10 +323,10 @@ class OrderProduct
 
             $results = Warehouses::queryWarehouses($variables);
 
-            $this->warehouseId = $results[0]['warehouseId']; //fail safe
+            $this->warehouse_id = $results[0]['warehouseId']; //fail safe
             foreach ($results as $result) {
                 if ((bool) $result['isDefault'] === true) {
-                    $this->warehouseId = $result['warehouseId'];
+                    $this->warehouse_id = $result['warehouseId'];
                 }
             }
         }

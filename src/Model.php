@@ -30,7 +30,7 @@ class Model
     {
         global $wpdb;
         $wpdb->query('TRUNCATE moloni_es_api');
-        $wpdb->insert('moloni_es_api',['client_id' => $clientId , 'client_secret' => $clientSecret]);
+        $wpdb->insert('moloni_es_api', ['client_id' => $clientId, 'client_secret' => $clientSecret]);
         return self::getTokensRow();
     }
 
@@ -44,7 +44,7 @@ class Model
     public static function setTokens($accessToken, $refreshToken)
     {
         global $wpdb;
-        $wpdb->update('moloni_es_api', ['main_token' => $accessToken, 'refresh_token' => $refreshToken],['id' => 1]);
+        $wpdb->update('moloni_es_api', ['main_token' => $accessToken, 'refresh_token' => $refreshToken], ['id' => 1]);
         return self::getTokensRow();
     }
 
@@ -96,7 +96,7 @@ class Model
         }
 
         if (!$access_expire || $access_expire < time()) {
-            $results = Curl::refresh($tokensRow['client_id'],$tokensRow['client_secret'],$tokensRow['refresh_token']);
+            $results = Curl::refresh($tokensRow['client_id'], $tokensRow['client_secret'], $tokensRow['refresh_token']);
 
             if (!isset($results['accessToken']) || !isset($results['refreshToken'])) {
                 $wpdb->query('TRUNCATE moloni_es_api');
@@ -176,6 +176,25 @@ class Model
         global $wpdb;
         $wpdb->query('TRUNCATE moloni_es_api');
         return self::getTokensRow();
+    }
+
+    /**
+     * Creates hash from company id
+     * @return string
+     */
+    public static function createHash()
+    {
+        return hash('md5', (int)MOLONIES_COMPANY_ID);
+    }
+
+    /**
+     * Checks if hash with company id hash
+     * @param $hash
+     * @return bool
+     */
+    public static function checkHash($hash)
+    {
+        return hash('md5', (int)MOLONIES_COMPANY_ID) === $hash;
     }
 
 }
