@@ -234,7 +234,7 @@ class OrderCustomer
         } else {
             //go straight for the first result because we only ask for 1
             $lastNumber = substr($result[0]['number'], strlen(CLIENT_PREFIX));
-            $nextNumber = CLIENT_PREFIX . ((int) $lastNumber + 1);
+            $nextNumber = CLIENT_PREFIX . $this->sugereProximoNumero($lastNumber);
         }
 
         return $nextNumber;
@@ -304,5 +304,84 @@ class OrderCustomer
         }
 
         return $result;
+    }
+    
+    private function sugereProximoNumero($str, $nums_ocupados = [])
+    {
+        $str_separada = str_split($str);
+
+        $prefixo = '';
+        $sufixo = '';
+        $found_int = false;
+
+        $leading_zeroes = false;
+        $num_pad_left = 0;
+
+        $suposto_inteiro = '';
+
+        // o último	conjunto de inteiros apanhados vai para o $suposto_inteiro todos os anteriomente apanhados vão para o $prefixo
+        // "KJ43HKLJH987IUY" = ($prefixo => "KJ43HKLJH", $sufixo => "IUY", $suposto_inteiro => "987")
+        foreach ($str_separada as $char) {
+            if (is_numeric($char)) {
+                if ($sufixo !== '') {
+                    if ($prefixo === '') {
+                        $prefixo = $suposto_inteiro . $sufixo;
+                        $sufixo = '';
+                        $suposto_inteiro = $char;
+                        continue;
+                    }
+                    $sufixo .= $char;
+                    continue;
+                }
+                $found_int = true;
+                $suposto_inteiro .= $char;
+            } else if ($found_int) {
+                $sufixo .= $char;
+            } else {
+                $prefixo .= $char;
+            }
+        }
+
+        if (strlen($suposto_inteiro) > 0) {
+            $inteiro_sep = str_split($suposto_inteiro);
+
+            // aqui verificam-se os 0 à esquerda para no fim acrecentar
+            if (strcmp($inteiro_sep[0], "0") === 0) {
+                $num_pad_left = count($inteiro_sep);
+                $leading_zeroes = true;
+            }
+
+            $suposto_inteiro = ((int)$suposto_inteiro + 1);
+            $next = $prefixo . $suposto_inteiro . $sufixo;
+
+            if (is_array($nums_ocupados) && !empty($nums_ocupados)) {
+
+                $new_nums_ocupados = array();
+                foreach ($nums_ocupados as $v) {
+                    $new_nums_ocupados[$v] = 1;
+                }
+
+                //para termos a certeza absoluta que não vai ficar aqui "ad aeternum"
+                $iteration = 0;
+                while (isset($new_nums_ocupados[$next])) {
+                    $suposto_inteiro += 1;
+                    $next = ($prefixo . ((int)$suposto_inteiro) . $sufixo);
+
+                    $iteration += 1;
+                    if ($iteration > 1000) {
+                        return '';
+                    }
+                }
+            }
+
+            // caso existam 0 à esquerda acrescentar
+            if ($leading_zeroes) {
+                $next = ($prefixo . (str_pad((int)$suposto_inteiro, $num_pad_left, "0", STR_PAD_LEFT)) . $sufixo);
+            }
+
+            return $next;
+        }
+
+        return $this->sugereProximoNumero($str . '0', $nums_ocupados);
     }
 }
