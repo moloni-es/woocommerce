@@ -65,6 +65,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.8 =
+* Improved customer number
+
 = 1.0.7 =
 * Added support for WebHooks
 * Sync products with variants (Moloni -> WooCommerce)
