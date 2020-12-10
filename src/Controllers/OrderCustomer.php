@@ -234,7 +234,7 @@ class OrderCustomer
         } else {
             //go straight for the first result because we only ask for 1
             $lastNumber = substr($result[0]['number'], strlen(CLIENT_PREFIX));
-            $nextNumber = CLIENT_PREFIX . $this->sugereProximoNumero($lastNumber);
+            $nextNumber = CLIENT_PREFIX . self::sugereProximoNumero($lastNumber);
         }
 
         return $nextNumber;
@@ -306,7 +306,7 @@ class OrderCustomer
         return $result;
     }
     
-    private function sugereProximoNumero($str, $nums_ocupados = [])
+    private static function sugereProximoNumero($str, $nums_ocupados = [])
     {
         $str_separada = str_split($str);
 
@@ -382,6 +382,6 @@ class OrderCustomer
             return $next;
         }
 
-        return $this->sugereProximoNumero($str . '0', $nums_ocupados);
+        return self::sugereProximoNumero($str . '0', $nums_ocupados);
     }
 }
