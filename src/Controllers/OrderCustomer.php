@@ -22,7 +22,7 @@ class OrderCustomer
     private $zipCode = '10000';
     private $address = 'Desconocido';
     private $city = 'Desconocido';
-    private $languageId = 1;
+    private $languageId = 2;
     private $countryId = 1;
 
     /**
@@ -56,11 +56,11 @@ class OrderCustomer
         $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'name' => $this->getCustomerName(),
-                'languageId' => (int) $this->getCustomerLanguageId(),
                 'address' => $this->getCustomerBillingAddress(),
                 'zipCode' => $this->getCustomerZip(),
                 'city' => $this->getCustomerBillingCity(),
                 'countryId' => (int) $this->getCustomerCountryId(),
+                'languageId' => (int) $this->getCustomerLanguageId(),
                 'email' => $this->order->get_billing_email(),
                 'phone' => $this->order->get_billing_phone(),
                 'contactName' => $this->contactName,
