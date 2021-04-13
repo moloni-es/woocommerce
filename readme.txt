@@ -2,8 +2,8 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.10
-Tested up to: 5.5.3
+Stable tag: 1.0.11
+Tested up to: 5.7
 Requires PHP: 5.6
 Requires at least: 5.0
 License: GPLv2 or later
@@ -65,6 +65,14 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.11 =
+* Stability improvements
+* Changed the way an item stocked is handled during stock synchronization
+* Fix behaviour in hooks when using WooCommerce Rest API that injected login form if plugin did not have valid account
+* Tested up to version 5.7 of Wordpress
+* Tested up to version 5.2.0 of WooCommerce
+* Tested up to version 8.0 of PHP
+
 = 1.0.10 =
 * Improved customer language
 
