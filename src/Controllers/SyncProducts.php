@@ -63,9 +63,7 @@ class SyncProducts
                         } else {
                             Log::write(sprintf(__('Product with reference %1$s was updated from %2$s to %3$s','moloni_es'),$product['reference'],$currentStock,$newStock));
                             $this->updated[$product['reference']] = sprintf(__('Product with reference %1$s was updated from %2$s to %3$s','moloni_es'),$product['reference'],$currentStock,$newStock);
-                            update_post_meta($wcProductId, '_stock', $product['stock']);
-                            update_post_meta($wcProductId, '_stock_status', ($product['stock'] > 0 ? 'instock' : $this->outOfStockStatus));
-                            update_post_meta($wcProductId, 'outofstock', ($product['stock'] > 0 ? '0' : '1'));
+                            wc_update_product_stock($wcProductId, $newStock);
                         }
                     } else {
                         Log::write(sprintf(__('Product not found in WooCommerce or without active stock: %s' , 'moloni_es') , $product['reference']));
