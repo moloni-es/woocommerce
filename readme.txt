@@ -68,7 +68,8 @@ Via FTP
 = 1.0.11 =
 * Stability improvements
 * Changed the way an item stocked is handled during stock synchronization
-* Fix behaviour in hooks when using WooCommerce Rest API that injected login form if plugin did not have valid account
+* Fixed behaviour in hooks when using WooCommerce Rest API that injected login form if plugin did not have valid account
+* Fixed error when costumer email was empty
 * Tested up to version 5.7 of Wordpress
 * Tested up to version 5.2.0 of WooCommerce
 * Tested up to version 8.0 of PHP
