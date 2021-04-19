@@ -26,7 +26,7 @@ class OrderPaid
     public function documentCreate($orderId)
     {
         try {
-            if (Start::login() && defined("INVOICE_AUTO") && INVOICE_AUTO) {
+            if (Start::login(true) && defined("INVOICE_AUTO") && INVOICE_AUTO) {
                 Log::setFileName('DocumentsAuto');
                 Log::write(__("Automatically generating the order document",'moloni_es') . $orderId);
                 $document = new Documents($orderId);

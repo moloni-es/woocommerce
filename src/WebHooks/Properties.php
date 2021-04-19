@@ -2,6 +2,7 @@
 
 namespace MoloniES\WebHooks;
 
+use Exception;
 use MoloniES\API\PropertyGroups;
 use MoloniES\Error;
 use MoloniES\Log;
@@ -30,29 +31,34 @@ class Properties
      */
     public function properties($requestData)
     {
-        $parameters = $requestData->get_params();
-        Log::write(print_r($parameters, true));
-        if ($parameters['model'] !== 'Property' || !Start::login(true) || !Model::checkHash($parameters['hash'])) {
-            return;
-        }
+        try {
+            $parameters = $requestData->get_params();
+            Log::write(print_r($parameters, true));
+            if ($parameters['model'] !== 'Property' || !Start::login(true) || !Model::checkHash($parameters['hash'])) {
+                return;
+            }
 
-        $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
-            'search' => [
-                'field' => 'name',
-                'value' => __('Online Store', 'moloni_es')
-            ]
-        ];
+            $variables = [
+                'companyId' => (int)MOLONIES_COMPANY_ID,
+                'search' => [
+                    'field' => 'name',
+                    'value' => __('Online Store', 'moloni_es')
+                ]
+            ];
 
-        $moloniPropertyGroups = PropertyGroups::queryPropertyGroups($variables);
+            $moloniPropertyGroups = PropertyGroups::queryPropertyGroups($variables);
 
-        switch ($parameters['operation']) {
-            case 'create':
-                $this->add($moloniPropertyGroups, $parameters['propertyGroupId']);
-                break;
-            case 'update':
-                $this->update($moloniPropertyGroups, $parameters['propertyGroupId']);
-                break;
+            switch ($parameters['operation']) {
+                case 'create':
+                    $this->add($moloniPropertyGroups, $parameters['propertyGroupId']);
+                    break;
+                case 'update':
+                    $this->update($moloniPropertyGroups, $parameters['propertyGroupId']);
+                    break;
+            }
+        } catch (Exception $exception) {
+            echo json_encode(['valid' => 0, 'error' => $exception->getMessage()]);
+            exit;
         }
     }
 

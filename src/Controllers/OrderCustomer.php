@@ -53,7 +53,8 @@ class OrderCustomer
         $this->vat = $this->getVatNumber();
         $this->email = $this->order->get_billing_email();
 
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = [
+            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'name' => $this->getCustomerName(),
                 'address' => $this->getCustomerBillingAddress(),
@@ -61,7 +62,7 @@ class OrderCustomer
                 'city' => $this->getCustomerBillingCity(),
                 'countryId' => (int) $this->getCustomerCountryId(),
                 'languageId' => (int) $this->getCustomerLanguageId(),
-                'email' => $this->order->get_billing_email(),
+                'email' => $this->email,
                 'phone' => $this->order->get_billing_phone(),
                 'contactName' => $this->contactName,
                 'maturityDateId' => defined('MATURITY_DATE') && (int) MATURITY_DATE > 0 ? (int) MATURITY_DATE : null,
@@ -70,13 +71,18 @@ class OrderCustomer
         ];
 
         $customerExists = $this->searchForCustomer();
+
+        if (empty($variables['data']['email'])) {
+            unset($variables['data']['email']);
+        }
+
         if (!$customerExists) {
             $variables['data']['vat'] = $this->vat;
             $variables['data']['number'] = self::getCustomerNextNumber();
             $result = Customers::mutationCustomerCreate($variables);
             $keyString = 'customerCreate';
         } else {
-            $variables['data']['customerId'] = (int) $customerExists['customerId'];
+            $variables['data']['customerId'] = (int)$customerExists['customerId'];
             $result = Customers::mutationCustomerUpdate($variables);
             $keyString = 'customerUpdate';
         }

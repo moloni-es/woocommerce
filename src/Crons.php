@@ -30,7 +30,7 @@ class Crons
         try {
             self::requires();
 
-            if (!Start::login()) {
+            if (!Start::login(true)) {
                 Log::write(__('Could not establish a connection to a Moloni company','moloni_es'));
                 return false;
             }

@@ -2,6 +2,7 @@
 
 namespace MoloniES\WebHooks;
 
+use Exception;
 use MoloniES\API\Categories;
 use MoloniES\Error;
 use MoloniES\Log;
@@ -37,6 +38,7 @@ class Products
      */
     public function products($requestData)
     {
+        try {
         $parameters = $requestData->get_params();
 
         //model has to be 'Product', needs to be logged in and recieved hash has to match logged in company id hash
@@ -76,6 +78,10 @@ class Products
                     }
                 }
                 break;
+        }
+        } catch (Exception $exception) {
+            echo json_encode(['valid' => 0, 'error' => $exception->getMessage()]);
+            exit;
         }
     }
 
