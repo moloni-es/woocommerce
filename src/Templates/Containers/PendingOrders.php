@@ -76,27 +76,27 @@
                             <input type="hidden" name="id" value="<?= $order['id'] ?>">
 
                             <select name="document_type" style="margin-right: 5px; max-width: 45%;">
-                                <option value='invoice' <?= (DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
+                                <option value='invoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
                                     <?= __('Invoice' , 'moloni_es') ?>
                                 </option>
 
-                                <option value='invoiceReceipt' <?= (DOCUMENT_TYPE === 'invoiceReceipt' ? 'selected' : '') ?>>
+                                <option value='invoiceReceipt' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoiceReceipt' ? 'selected' : '') ?>>
                                     <?= __('Invoice + Receipt' , 'moloni_es') ?>
                                 </option>
 
-                                <option value='simplifiedInvoice'<?= (DOCUMENT_TYPE === 'simplifiedInvoice' ? 'selected' : '') ?>>
+                                <option value='simplifiedInvoice'<?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'simplifiedInvoice' ? 'selected' : '') ?>>
                                     <?= __('Simplified Invoice' , 'moloni_es') ?>
                                 </option>
 
-                                <option value='billsOfLading' <?= (DOCUMENT_TYPE === 'billsOfLading' ? 'selected' : '') ?>>
+                                <option value='billsOfLading' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'billsOfLading' ? 'selected' : '') ?>>
                                     <?= __('Bill of lading' , 'moloni_es') ?>
                                 </option>
 
-                                <option value='purchaseOrder' <?= (DOCUMENT_TYPE === 'purchaseOrder' ? 'selected' : '') ?>>
+                                <option value='purchaseOrder' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'purchaseOrder' ? 'selected' : '') ?>>
                                     <?= __('Purchase Order' , 'moloni_es') ?>
                                 </option>
 
-                                <option value='proFormaInvoice' <?= (DOCUMENT_TYPE === 'proFormaInvoice' ? 'selected' : '') ?>>
+                                <option value='proFormaInvoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'proFormaInvoice' ? 'selected' : '') ?>>
                                     <?= __('Pro Forma Invoice' , 'moloni_es') ?>
                                 </option>
                             </select>
