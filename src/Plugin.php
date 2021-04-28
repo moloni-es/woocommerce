@@ -45,7 +45,8 @@ class Plugin
                 'creatingDocument' => __('Creating document', 'moloni_es'),
                 'progressCompleted' => __('Progress Completed', 'moloni_es'),
                 'createdDocuments' => __('Documents created: ', 'moloni_es'),
-                'documentsWithErrors' => __('Documents with errors: ', 'moloni_es')
+                'documentsWithErrors' => __('Documents with errors: ', 'moloni_es'),
+                'close' => __('Close', 'moloni_es'),
             ]);
         }
     }

@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
     var ProgressWindowTitle = $('#bulk-action-progress-content h2')
 
     var ProgressCurrent = 0;
-    var ProgressWindowCloseButton = '<br><a class="wp-core-ui button-secondary" style="width: 80px; text-align: center; float:right" href="#" rel="modal:close">Fechar</a>'
+    var ProgressWindowCloseButton = '<br><a class="wp-core-ui button-secondary" style="width: 80px; text-align: center; float:right" href="#" rel="modal:close">' + translations.close + '</a>'
 
     var SelectedOrders = [];
 
