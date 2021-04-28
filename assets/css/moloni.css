@@ -47,12 +47,6 @@ hr {
     z-index: 100;
 }
 
-#formPerm {
-    margin-left: auto;
-    margin-right: auto;
-    width: 485px;
-}
-
 #formLogin input[type=text], input[type=password] {
     width: 380px;
     border: 1px solid #CCC !important;
@@ -65,8 +59,11 @@ hr {
     border-radius: 3px;
 }
 
+#formLogin table{
+    width: 100%;
+}
+
 #formLogin td:nth-child(1) {
-    width: 100px;
     text-align: right;
     font-weight: bold;
     font-family: sans-serif;
