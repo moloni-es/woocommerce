@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 Tested up to: 5.7
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,12 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.12 =
+* Added missing translations
+* Fixed labels in login overlay
+* Enqueue jquery if missing
+* Fix behaviour with bulk document creation
+
 = 1.0.11 =
 * Stability improvements
 * Changed the way an item stocked is handled during stock synchronization
