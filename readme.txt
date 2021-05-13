@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 Tested up to: 5.7
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,11 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.13 =
+* Fixed synchronization issue with product variants
+* Fixed behaviour when saving settings
+* Support for EAN synchronization
+
 = 1.0.12 =
 * Added missing translations
 * Fixed labels in login overlay
