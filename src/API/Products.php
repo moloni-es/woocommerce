@@ -93,11 +93,20 @@ class Products
                     hasStock
                     stock
                     minStock
+                    identifications
+                    {
+                        type
+                        text
+                    }
                     measurementUnit
                     {
                         measurementUnitId
                         name
-                    }   
+                    }
+                    parent
+                    {
+                        productId
+                    }
                     warehouse
                     {
                         warehouseId

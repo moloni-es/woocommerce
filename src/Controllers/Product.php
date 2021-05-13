@@ -259,6 +259,7 @@ class Product
     private function setEan()
     {
         $metaBarcode = $this->product->get_meta('barcode', true);
+
         if (!empty($metaBarcode)) {
             $this->ean = $metaBarcode;
         }
@@ -410,14 +411,21 @@ class Product
 
         if(!empty($this->product_id)) {
             $variables['data']['productId'] = (int)$this->product_id;
-        } else {
-            if ((bool) $this->has_stock === true) {
-                $variables['data']['warehouseId'] = (int) $this->warehouseId;
-                $variables['data']['warehouses'] = [
-                    'warehouseId' => (int) $this->warehouseId,
-                    'stock' => (float) $this->stock
-                ];
-            }
+        } else if ((bool) $this->has_stock === true) {
+            $variables['data']['warehouseId'] = (int) $this->warehouseId;
+            $variables['data']['warehouses'] = [
+                'warehouseId' => (int) $this->warehouseId,
+                'stock' => (float) $this->stock
+            ];
+        }
+
+        if (!empty($this->ean)) {
+            $variables['data']['identifications'] = [
+                [
+                    'type' => 'EAN13',
+                    'text' => $this->ean
+                ]
+            ];
         }
 
         return $variables;

@@ -52,12 +52,11 @@ class Products
         ];
 
         $moloniProduct = ApiProducts::queryProduct($variables); //get product that was received from the hook
-
-        if (empty($moloniProduct['data']['product']['data'])) {
-            return; //it happens when searching for variant id (god knows why)
-        }
-
         $moloniProduct = $moloniProduct['data']['product']['data'];
+
+        if ($moloniProduct['parent'] !== null) {
+            return; //we only want to update the main product
+        }
 
         //switch between operations
         switch ($parameters['operation']) {
@@ -68,7 +67,7 @@ class Products
                 $this->update($moloniProduct);
                 break;
             case 'stockChanged':
-                //if the changed product was a variant (because stock changes appens at variant level)
+                //if the changed product was a variant (because stock changes happens at variant level)
                 if (empty($moloniProduct['variants'])) {
                     $this->stockUpdate($moloniProduct);
                 } else {
@@ -102,13 +101,13 @@ class Products
         if ($wcProductId === 0) {
             $wcProduct = $this->setProduct($moloniProduct, $wcProductId);
 
+            Log::write(sprintf(__('Product created in WooCommerce: %s', 'moloni_es'), $moloniProduct['reference']));
+
             //variants need to be added after the parent is added
             //create variants if the moloni array has them
             if (!empty($moloniProduct['variants'])) {
                 $this->setVariants($moloniProduct, $wcProduct);
             }
-
-            Log::write(sprintf(__('Product created in WooCommerce: %s', 'moloni_es'), $moloniProduct['reference']));
         } else {
             Log::write(sprintf(__('Product already exists in WooCommerce: %s', 'moloni_es'), $moloniProduct['reference']));
         }
@@ -236,6 +235,20 @@ class Products
 
         if (defined('SYNC_FIELDS_CATEGORIES') && (int)SYNC_FIELDS_CATEGORIES === 1) {
             $wcProduct->set_category_ids($this->setCategories($moloniProduct['productCategory']['productCategoryId']));
+        }
+
+        if (defined('SYNC_FIELDS_EAN') && (int)SYNC_FIELDS_EAN === 1) {
+            foreach ($moloniProduct['identifications'] as $identification) {
+                if ($identification['type'] === 'EAN13') {
+                    if ($wcProduct->get_meta('_barcode', true) === false) {
+                        $wcProduct->add_meta_data('_barcode', $identification['text']);
+                    } else {
+                        $wcProduct->update_meta_data('_barcode', $identification['text']);
+                    }
+
+                    break;
+                }
+            }
         }
 
         $wcProduct->save();
