@@ -32,6 +32,7 @@ class Start
         $developerId = isset($_POST['developer_id']) ? sanitize_text_field(trim($_POST['developer_id'])) : '';
         $clientSecret = isset($_POST['client_secret']) ? sanitize_text_field(trim($_POST['client_secret'])) : '';
         $code = isset($_GET['code']) ? sanitize_text_field(trim($_GET['code'])) : '';
+        $tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : '';
 
         if ($ajax) {
             self::$ajax = true;
@@ -65,14 +66,24 @@ class Start
             add_settings_error('general', 'settings_updated', __('Changes saved.', 'moloni_es'), 'updated');
             $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
 
-            //Verifies checkboxes because they are not set if not checked
-            $syncOptions = ['sync_fields_description', 'sync_fields_visibility', 'sync_fields_stock', 'sync_fields_name', 'sync_fields_price', 'sync_fields_categories'];
-            foreach ($syncOptions as $option) { //for each sync opt check if it is set
-                if (!isset($options[$option])) {
-                    $options[$option] = 0;
+            if ($tab === 'automation') {
+                //Verifies checkboxes because they are not set if not checked
+                $syncOptions = [
+                    'sync_fields_description',
+                    'sync_fields_visibility',
+                    'sync_fields_stock',
+                    'sync_fields_name',
+                    'sync_fields_price',
+                    'sync_fields_categories',
+                    'sync_fields_ean'
+                ];
+
+                foreach ($syncOptions as $option) { //for each sync opt check if it is set
+                    if (!isset($options[$option])) {
+                        $options[$option] = 0;
+                    }
                 }
             }
-            //
 
             foreach ($options as $option => $value) {
                 $option = sanitize_text_field($option);
