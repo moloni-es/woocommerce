@@ -237,6 +237,20 @@ class Products
             $wcProduct->set_category_ids($this->setCategories($moloniProduct['productCategory']['productCategoryId']));
         }
 
+        if (defined('SYNC_FIELDS_EAN') && (int)SYNC_FIELDS_EAN === 1) {
+            foreach ($moloniProduct['identifications'] as $identification) {
+                if ($identification['type'] === 'EAN13') {
+                    if ($wcProduct->get_meta('_barcode', true) === false) {
+                        $wcProduct->add_meta_data('_barcode', $identification['text']);
+                    } else {
+                        $wcProduct->update_meta_data('_barcode', $identification['text']);
+                    }
+
+                    break;
+                }
+            }
+        }
+
         $wcProduct->save();
 
         return $wcProduct;

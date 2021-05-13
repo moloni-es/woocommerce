@@ -93,6 +93,11 @@ class Products
                     hasStock
                     stock
                     minStock
+                    identifications
+                    {
+                        type
+                        text
+                    }
                     measurementUnit
                     {
                         measurementUnitId
