@@ -97,7 +97,11 @@ class Products
                     {
                         measurementUnitId
                         name
-                    }   
+                    }
+                    parent
+                    {
+                        productId
+                    }
                     warehouse
                     {
                         warehouseId
