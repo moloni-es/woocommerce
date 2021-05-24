@@ -17,7 +17,6 @@ use WC_Tax;
  */
 class Product
 {
-
     /** @var WC_Product */
     private $product;
 
@@ -35,6 +34,7 @@ class Product
     private $exemption_reason;
     private $taxes;
     private $warehouseId;
+    private $hasImage = false;
 
     /**
      * Product constructor.
@@ -89,7 +89,12 @@ class Product
     {
         $this->setProduct();
 
-        $insert = (ApiProducts::mutationProductCreate($this->mapPropsToValues()))['data']['productCreate']['data'];
+        list($map, $file) = $this->getImageVariables();
+        $data = $this->mapPropsToValues();
+
+        $insert = (ApiProducts::mutationProductCreate($data, $map, $file));
+        $insert = $insert['data']['productCreate']['data'];
+
         if (isset($insert['productId'])) {
             $this->product_id = $insert['productId'];
             return $this;
@@ -107,9 +112,12 @@ class Product
     {
         $this->setProduct();
 
-        $update = (ApiProducts::mutationProductUpdate($this->mapPropsToValues()));
+        list($map, $file) = $this->getImageVariables();
+        $data = $this->mapPropsToValues();
 
+        $update = (ApiProducts::mutationProductUpdate($data, $map, $file));
         $update = $update['data']['productUpdate']['data'];
+
         if (isset($update['productId'])) {
             $this->product_id = $update['productId'];
             return $this;
@@ -428,6 +436,32 @@ class Product
             ];
         }
 
+        if ($this->hasImage === false) {
+            $variables['data']['img'] = null;
+        }
+
         return $variables;
+    }
+
+    /**
+     * Returns necessary data to upload images
+     * @return array
+     */
+    private function getImageVariables()
+    {
+        $url = wp_get_attachment_url($this->product->get_image_id());
+        $map = '{}';
+        $file = null;
+
+        if ($url) {
+            $uploads = wp_upload_dir();
+
+            $map = '{ "0": ["variables.data.img"] }';
+            $file[0] = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
+
+            $this->hasImage = true;
+        }
+
+        return [$map,$file];
     }
 }

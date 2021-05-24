@@ -40,23 +40,30 @@ class Curl
     private static $cache = [];
 
     /**
+     * API url
+     *
+     * @var
+     */
+    private static $url = 'https://api.moloni.es/v1';
+
+    /**
      * Makes a simple API post request
+     *
      * @param $action
      * @param $query
      * @param $variables
-     * @param bool $debug
-     * @param string $keyString
+     *
      * @return mixed
      * @throws Error
      */
-    public static function simple($action, $query, $variables, $debug = false)
+    public static function simple($action, $query, $variables)
     {
         if (isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
             return self::$cache[$action];
         }
 
-        $url = 'https://api.moloni.es/v1';
         $data = json_encode(['query' => $query, 'variables' => $variables]);
+
         $args = [
             'headers' => [
                 'Content-Type' => 'application/json' ,
@@ -65,23 +72,88 @@ class Curl
             'body' => $data
         ];
 
-        $response = wp_remote_post($url, $args);
+        $response = wp_remote_post(self::$url, $args);
         $raw = wp_remote_retrieve_body($response);
         $parsed = json_decode($raw, true);
 
         $log = [
-            'url' => $url . '/' . $action,
+            'url' => self::$url . '/' . $action,
             'sent' => $variables,
             'received' => $parsed
         ];
 
         self::$logs[] = $log;
 
-        if ($debug) {
-            echo '<pre>';
-            print_r($log);
-            echo '</pre>';
+        //errors sometimes come inside data/query(or mutation)
+        $keyString = substr($action, strpos($action,'/') + strlen('/'));
+
+        if (!isset($parsed['errors']) && (!isset($parsed['data'][$keyString]['errors']) || empty($parsed['data'][$keyString]['errors']))) {
+
+            if (!isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
+                self::$cache[$action] = $parsed;
+            }
+
+            return $parsed;
         }
+
+        throw new Error(__('Oops, an error was encountered...','moloni_es'), $log);
+    }
+
+    /**
+     * Makes a simple API post request
+     * @param $action
+     * @param $query
+     * @param $variables
+     * @param $map
+     * @param $values
+     *
+     * @return mixed
+     * @throws Error
+     */
+    public static function simpleMultipart($action, $query, $variables, $map, $values)
+    {
+        $query = str_replace(array("\n", "\r"), '', $query);
+
+        $post = [
+            'operations' => json_encode(['query' => $query, 'variables' => $variables]),
+            'map' => $map
+        ];
+
+        if (is_array($values)) {
+            foreach ($values as $key => $value) {
+                $post[$key] = (new \CURLFile($value));
+            }
+        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => self::$url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $post,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . MOLONI_ACCESS_TOKEN
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $parsed = json_decode($response, true);
+
+        curl_close($curl);
+
+        $log = [
+            'url' => self::$url . '/' . $action,
+            'sent' => $variables,
+            'received' => $parsed
+        ];
+
+        self::$logs[] = $log;
 
         //errors sometimes come inside data/query(or mutation)
         $keyString = substr($action, strpos($action,'/') + strlen('/'));
@@ -108,7 +180,7 @@ class Curl
      * @return array|bool
      * @throws Error
      */
-    public static function complex($action, $query, $variables, $keyString, $debug = false)
+    public static function complex($action, $query, $variables, $keyString)
     {
         if (isset(self::$cache[$action]) && in_array($action, self::$complexAllowedCachedMethods, false)) {
             return self::$cache[$action];
@@ -121,7 +193,7 @@ class Curl
             $variables['options']['pagination']['qty'] = 50;
             $variables['options']['pagination']['page'] = $page;
 
-            $result = self::simple($action, $query, $variables, $debug );
+            $result = self::simple($action, $query, $variables);
 
             $pagination = $result['data'][$keyString]['options']['pagination'];
             $array = array_merge($array, $result['data'][$keyString]['data']);
