@@ -41,6 +41,6 @@ class MaturityDates
             }
         }';
 
-        return Curl::complex('maturitydates/maturityDates', $query, $variables, 'maturityDates', false);
+        return Curl::complex('maturitydates/maturityDates', $query, $variables, 'maturityDates');
     }
 }

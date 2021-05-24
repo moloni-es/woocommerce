@@ -44,6 +44,6 @@ class GeographicZones
             }
         }';
 
-        return Curl::complex('geographiczones/geographicZones', $query, $variables, 'geographicZones',  false);
+        return Curl::complex('geographiczones/geographicZones', $query, $variables, 'geographicZones');
     }
 }

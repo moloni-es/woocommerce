@@ -33,7 +33,7 @@ class Categories
             }
         }';
 
-        return Curl::simple('categories/productCategoryCreate', $query, $variables, false);
+        return Curl::simple('categories/productCategoryCreate', $query, $variables);
     }
 
     /**
@@ -77,7 +77,7 @@ class Categories
             }
         }';
 
-        return Curl::complex('categories/productCategories', $query, $variables, 'productCategories', false);
+        return Curl::complex('categories/productCategories', $query, $variables, 'productCategories');
     }
 
     /**
@@ -114,6 +114,6 @@ class Categories
             }
         }';
 
-        return Curl::simple('categories/productCategory', $query, $variables, false);
+        return Curl::simple('categories/productCategory', $query, $variables);
     }
 }

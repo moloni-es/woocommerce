@@ -15,7 +15,7 @@ class Products
      * @return array returns some data of the created product
      * @throws Error
      */
-    public static function mutationProductCreate($variables = [])
+    public static function mutationProductCreate($variables = [], $map = [], $values = [])
     {
         $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
         {
@@ -32,7 +32,7 @@ class Products
             }
         }';
 
-        return Curl::simple('products/productCreate', $query, $variables, false);
+        return Curl::simpleMultipart('products/productCreate', $query, $variables, $map, $values);
     }
 
     /**
@@ -43,7 +43,7 @@ class Products
      * @return array returns some data of the updated product
      * @throws Error
      */
-    public static function mutationProductUpdate($variables = [])
+    public static function mutationProductUpdate($variables = [], $map = [], $values = [])
     {
         $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
         {
@@ -63,7 +63,7 @@ class Products
             }
         }';
 
-        return Curl::simple('products/productUpdate', $query, $variables, false);
+        return Curl::simpleMultipart('products/productUpdate', $query, $variables, $map, $values);
     }
 
     /**
@@ -182,7 +182,7 @@ class Products
             }
         }';
 
-        return Curl::simple('products/product', $query, $variables, false);
+        return Curl::simple('products/product', $query, $variables);
     }
 
     /**
@@ -281,6 +281,6 @@ class Products
             }
         }';
 
-        return Curl::complex('products/products', $query, $variables, 'products', false);
+        return Curl::complex('products/products', $query, $variables, 'products');
     }
 }

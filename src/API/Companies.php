@@ -31,7 +31,7 @@ class Companies
             }
         }';
 
-        return Curl::simple('companies/me', $query, [], false);
+        return Curl::simple('companies/me', $query, []);
     }
 
     /**
@@ -87,6 +87,6 @@ class Companies
             }
         }';
 
-        return Curl::simple('companies/company', $query, $variables, false);
+        return Curl::simple('companies/company', $query, $variables);
     }
 }

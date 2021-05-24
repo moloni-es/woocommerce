@@ -52,7 +52,7 @@ class Taxes
             }
         }';
 
-        return Curl::complex('taxes/taxes', $query, $variables, 'taxes', false);
+        return Curl::complex('taxes/taxes', $query, $variables, 'taxes');
     }
 
     /**
@@ -91,7 +91,7 @@ class Taxes
             }
         }';
 
-        return Curl::simple('taxes/tax', $query, $variables, false);
+        return Curl::simple('taxes/tax', $query, $variables);
     }
 
     /**
@@ -122,6 +122,6 @@ class Taxes
             }
         }';
 
-        return Curl::simple('taxes/taxCreate', $query, $variables, false);
+        return Curl::simple('taxes/taxCreate', $query, $variables);
     }
 }

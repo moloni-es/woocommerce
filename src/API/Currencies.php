@@ -48,7 +48,7 @@ class Currencies
             }
         }';
 
-        return Curl::complex('currencies/currencies', $query, $variables, 'currencies', false);
+        return Curl::complex('currencies/currencies', $query, $variables, 'currencies');
     }
 
     /**
@@ -89,6 +89,6 @@ class Currencies
             }
         }';
 
-        return Curl::complex('currencies/currencyExchanges', $query, $variables, 'currencyExchanges', false);
+        return Curl::complex('currencies/currencyExchanges', $query, $variables, 'currencyExchanges');
     }
 }

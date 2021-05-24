@@ -44,6 +44,6 @@ class DeliveryMethods
             }
         }';
 
-        return Curl::complex('deliverymethods/deliveryMethods', $query, $variables, 'deliveryMethods', false);
+        return Curl::complex('deliverymethods/deliveryMethods', $query, $variables, 'deliveryMethods');
     }
 }

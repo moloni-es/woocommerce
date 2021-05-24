@@ -57,7 +57,7 @@ class PropertyGroups
             }
         }';
 
-        return Curl::complex('propertygroup/propertyGroups', $query, $variables, 'propertyGroups', false);
+        return Curl::complex('propertygroup/propertyGroups', $query, $variables, 'propertyGroups');
     }
 
     /**
@@ -101,7 +101,7 @@ class PropertyGroups
             }
         }';
 
-        return Curl::simple('propertygroup/propertyGroup', $query, $variables, false);
+        return Curl::simple('propertygroup/propertyGroup', $query, $variables);
     }
 
     /**
@@ -145,7 +145,7 @@ class PropertyGroups
             }
         }';
 
-        return Curl::simple('propertygroup/propertyGroupUpdate', $query, $variables, false);
+        return Curl::simple('propertygroup/propertyGroupUpdate', $query, $variables);
     }
 
     /**
@@ -189,6 +189,6 @@ class PropertyGroups
             }
         }';
 
-        return Curl::simple('propertygroup/propertyGroupCreate', $query, $variables, false);
+        return Curl::simple('propertygroup/propertyGroupCreate', $query, $variables);
     }
 }

@@ -45,6 +45,6 @@ class Warehouses
             }
         }';
 
-        return Curl::complex('warehouses/warehouses', $query, $variables, 'warehouses', false);
+        return Curl::complex('warehouses/warehouses', $query, $variables, 'warehouses');
     }
 }

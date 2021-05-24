@@ -57,6 +57,6 @@ class Timezones
             }
         }';
 
-        return Curl::complex('timezones/timezones', $query, $variables, 'timezones', false);
+        return Curl::complex('timezones/timezones', $query, $variables, 'timezones');
     }
 }

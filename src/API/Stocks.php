@@ -34,7 +34,7 @@ class Stocks
             }
         }';
 
-        return Curl::simple('stocks/stockMovementManualEntryCreate', $query, $variables, false);
+        return Curl::simple('stocks/stockMovementManualEntryCreate', $query, $variables);
     }
 
     /**
@@ -64,6 +64,6 @@ class Stocks
             }
         }';
 
-        return Curl::simple('stocks/stockMovementManualExitCreate', $query, $variables, false);
+        return Curl::simple('stocks/stockMovementManualExitCreate', $query, $variables);
     }
 }
