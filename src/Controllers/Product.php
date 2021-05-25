@@ -133,7 +133,7 @@ class Product
      */
     private function uploadImage()
     {
-        if ($this->image !== null) {
+        if (defined('SYNC_IMAGES') && SYNC_IMAGES && $this->image !== null) {
             $variables = [
                 'companyId' => (int)MOLONIES_COMPANY_ID,
                 'data' => [
@@ -476,7 +476,7 @@ class Product
             ];
         }
 
-        if ($this->image) {
+        if (defined('SYNC_IMAGES') && SYNC_IMAGES) {
             $variables['data']['img'] = null;
         }
 
