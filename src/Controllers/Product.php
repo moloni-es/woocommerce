@@ -34,7 +34,7 @@ class Product
     private $exemption_reason;
     private $taxes;
     private $warehouseId;
-    private $hasImage = false;
+    private $image;
 
     /**
      * Product constructor.
@@ -89,14 +89,15 @@ class Product
     {
         $this->setProduct();
 
-        list($map, $file) = $this->getImageVariables();
         $data = $this->mapPropsToValues();
 
-        $insert = (ApiProducts::mutationProductCreate($data, $map, $file));
+        $insert = (ApiProducts::mutationProductCreate($data));
         $insert = $insert['data']['productCreate']['data'];
 
         if (isset($insert['productId'])) {
             $this->product_id = $insert['productId'];
+            $this->uploadImage();
+
             return $this;
         }
 
@@ -112,18 +113,37 @@ class Product
     {
         $this->setProduct();
 
-        list($map, $file) = $this->getImageVariables();
         $data = $this->mapPropsToValues();
 
-        $update = (ApiProducts::mutationProductUpdate($data, $map, $file));
+        $update = (ApiProducts::mutationProductUpdate($data));
         $update = $update['data']['productUpdate']['data'];
 
         if (isset($update['productId'])) {
             $this->product_id = $update['productId'];
+            $this->uploadImage();
+
             return $this;
         }
 
         throw new Error(sprintf(__('Error updating product %s','moloni_es') ,$this->name));
+    }
+
+    /**
+     * Uploads product image after creating/updating product
+     */
+    private function uploadImage()
+    {
+        if ($this->image !== null) {
+            $variables = [
+                'companyId' => (int)MOLONIES_COMPANY_ID,
+                'data' => [
+                    'productId' => (int)$this->product_id,
+                    'img' => null
+                ],
+            ];
+
+            ApiProducts::mutationProductImageUpdate($variables, $this->image);
+        }
     }
 
     /**
@@ -141,7 +161,8 @@ class Product
             ->setEan()
             ->setUnitId()
             ->setWarehouse()
-            ->setTaxes();
+            ->setTaxes()
+            ->setImage();
     }
 
     /**
@@ -366,7 +387,9 @@ class Product
 
     /**
      * Sets product warehouse
+     *
      * @return $this
+     *
      * @throws Error
      */
     private function setWarehouse()
@@ -396,6 +419,22 @@ class Product
     }
 
     /**
+     * Returns necessary data to upload images
+     *
+     * @return void
+     */
+    private function setImage()
+    {
+        $url = wp_get_attachment_url($this->product->get_image_id());
+
+        if ($url) {
+            $uploads = wp_upload_dir();
+
+            $this->image = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
+        }
+    }
+
+    /**
      * Map this object properties to an array to insert/update a moloni document
      * @return array
      */
@@ -413,7 +452,8 @@ class Product
                 'summary' => $this->summary,
                 'exemptionReason' => $this->exemption_reason,
                 'hasStock' => (bool)$this->has_stock,
-                'taxes' => $this->taxes
+                'taxes' => $this->taxes,
+                'img' => null
             ],
         ];
 
@@ -436,32 +476,10 @@ class Product
             ];
         }
 
-        if ($this->hasImage === false) {
+        if ($this->image) {
             $variables['data']['img'] = null;
         }
 
         return $variables;
-    }
-
-    /**
-     * Returns necessary data to upload images
-     * @return array
-     */
-    private function getImageVariables()
-    {
-        $url = wp_get_attachment_url($this->product->get_image_id());
-        $map = '{}';
-        $file = null;
-
-        if ($url) {
-            $uploads = wp_upload_dir();
-
-            $map = '{ "0": ["variables.data.img"] }';
-            $file[0] = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
-
-            $this->hasImage = true;
-        }
-
-        return [$map,$file];
     }
 }

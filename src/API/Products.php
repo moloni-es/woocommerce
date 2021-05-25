@@ -15,7 +15,7 @@ class Products
      * @return array returns some data of the created product
      * @throws Error
      */
-    public static function mutationProductCreate($variables = [], $map = [], $values = [])
+    public static function mutationProductCreate($variables = [])
     {
         $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
         {
@@ -32,7 +32,7 @@ class Products
             }
         }';
 
-        return Curl::simpleMultipart('products/productCreate', $query, $variables, $map, $values);
+        return Curl::simple('products/productCreate', $query, $variables);
     }
 
     /**
@@ -43,7 +43,7 @@ class Products
      * @return array returns some data of the updated product
      * @throws Error
      */
-    public static function mutationProductUpdate($variables = [], $map = [], $values = [])
+    public static function mutationProductUpdate($variables = [])
     {
         $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
         {
@@ -63,7 +63,37 @@ class Products
             }
         }';
 
-        return Curl::simpleMultipart('products/productUpdate', $query, $variables, $map, $values);
+        return Curl::simple('products/productUpdate', $query, $variables);
+    }
+
+    /**
+     * Update a product image
+     *
+     * @param array $variables variables of the query
+     *
+     * @return true
+     */
+    public static function mutationProductImageUpdate($variables = [], $file = '')
+    {
+        $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
+        {
+            productUpdate(companyId: $companyId ,data: $data)
+            {
+                data
+                {
+                    productId
+                    name
+                    reference
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return Curl::uploadImage($query, $variables, $file);
     }
 
     /**
@@ -93,6 +123,7 @@ class Products
                     hasStock
                     stock
                     minStock
+                    img
                     identifications
                     {
                         type
@@ -127,6 +158,7 @@ class Products
                         priceWithTaxes
                         hasStock
                         stock
+                        img
                         propertyPairs
                         {
                             property

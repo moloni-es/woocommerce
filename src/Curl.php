@@ -11,7 +11,11 @@ class Curl
     ///** @var string Moloni Not-so-secret key used for WooCommerce */
     //private static $moloniSecret = '53937d4a8c5889e58fe7f105369d9519a713bf43';
 
-    /** @var array Hold the request log */
+    /**
+     * Hold the request log
+     *
+     * @var array
+     */
     private static $logs = [];
 
     /**
@@ -100,84 +104,15 @@ class Curl
     }
 
     /**
-     * Makes a simple API post request
-     * @param $action
-     * @param $query
-     * @param $variables
-     * @param $map
-     * @param $values
-     *
-     * @return mixed
-     * @throws Error
-     */
-    public static function simpleMultipart($action, $query, $variables, $map, $values)
-    {
-        $query = str_replace(array("\n", "\r"), '', $query);
-
-        $post = [
-            'operations' => json_encode(['query' => $query, 'variables' => $variables]),
-            'map' => $map
-        ];
-
-        if (is_array($values)) {
-            foreach ($values as $key => $value) {
-                $post[$key] = (new \CURLFile($value));
-            }
-        }
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL => self::$url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => $post,
-            CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . MOLONI_ACCESS_TOKEN
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        $parsed = json_decode($response, true);
-
-        curl_close($curl);
-
-        $log = [
-            'url' => self::$url . '/' . $action,
-            'sent' => $variables,
-            'received' => $parsed
-        ];
-
-        self::$logs[] = $log;
-
-        //errors sometimes come inside data/query(or mutation)
-        $keyString = substr($action, strpos($action,'/') + strlen('/'));
-
-        if (!isset($parsed['errors']) && (!isset($parsed['data'][$keyString]['errors']) || empty($parsed['data'][$keyString]['errors']))) {
-
-            if (!isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
-                self::$cache[$action] = $parsed;
-            }
-
-            return $parsed;
-        }
-
-        throw new Error(__('Oops, an error was encountered...','moloni_es'), $log);
-    }
-
-    /**
      * Gets all values from a query and loops its pages of results
+     *
      * @param $action
      * @param $query
      * @param $variables
      * @param $keyString
-     * @param bool $debug
+     *
      * @return array|bool
+     *
      * @throws Error
      */
     public static function complex($action, $query, $variables, $keyString)
@@ -208,7 +143,61 @@ class Curl
     }
 
     /**
+     * Uploads a file
+     *
+     * @param $action
+     * @param $query
+     * @param $variables
+     * @param $file
+     *
+     * @return true
+     */
+    public static function uploadImage($query, $variables, $file)
+    {
+        $payload = '';
+        $boundary = 'MOLONIRULES';
+        $query = str_replace(["\n", "\r"], '', $query);
+
+        $data = [
+            'operations' => json_encode(['query' => $query, 'variables' => $variables]),
+            'map' => '{ "0": ["variables.data.img"] }'
+        ];
+
+        $headers = [
+            'Authorization' => 'Bearer '. MOLONI_ACCESS_TOKEN,
+            'Content-type' => 'multipart/form-data; boundary=' . $boundary,
+        ];
+
+        foreach ($data as $name => $value) {
+            $payload .= '--' . $boundary;
+            $payload .= "\r\n";
+            $payload .= 'Content-Disposition: form-data; name="' . $name .
+                '"' . "\r\n\r\n";
+            $payload .= $value;
+            $payload .= "\r\n";
+        }
+
+        $payload .= '--' . $boundary;
+        $payload .= "\r\n";
+        $payload .= 'Content-Disposition: form-data; name="0"; filename="' . basename($file) . '"' . "\r\n";
+        $payload .= 'Content-Type: image/*' . "\r\n";
+        $payload .= "\r\n";
+        $payload .= file_get_contents($file);
+        $payload .= "\r\n";
+        $payload .= '--' . $boundary . '--';
+
+        wp_remote_post(self::$url, [
+                'headers' => $headers,
+                'body' => $payload,
+            ]
+        );
+
+        return true;
+    }
+
+    /**
      * Returns the last curl request made from the logs
+     *
      * @return array
      */
     public static function getLog()
@@ -218,15 +207,18 @@ class Curl
 
     /**
      * Do a login request to the API
+     *
      * @param $code
      * @param $clientId
      * @param $clientSecret
+     *
      * @return mixed
+     *
      * @throws Error
      */
     public static function login($code,$clientId,$clientSecret)
     {
-        $url = 'https://api.moloni.es/v1/auth/grant';
+        $url = self::$url . '/auth/grant';
 
         $postFields = 'grantType=' . 'authorization_code';
         $postFields .= '&apiClientId=' . $clientId;
@@ -253,14 +245,16 @@ class Curl
 
     /**
      * Refresh the session tokens
+     *
      * @param $clientId
      * @param $clientSecret
      * @param $refreshToken
+     *
      * @return bool|mixed
      */
     public static function refresh($clientId,$clientSecret,$refreshToken)
     {
-        $url = 'https://api.moloni.es/v1/auth/grant';
+        $url = self::$url . '/auth/grant';
 
         $postFields = 'grantType=' . 'refresh_token';
         $postFields .= '&apiClientId=' . $clientId;
