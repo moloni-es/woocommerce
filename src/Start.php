@@ -75,7 +75,8 @@ class Start
                     'sync_fields_name',
                     'sync_fields_price',
                     'sync_fields_categories',
-                    'sync_fields_ean'
+                    'sync_fields_ean',
+                    'sync_fields_image'
                 ];
 
                 foreach ($syncOptions as $option) { //for each sync opt check if it is set

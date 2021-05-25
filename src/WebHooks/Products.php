@@ -251,6 +251,10 @@ class Products
             }
         }
 
+        if (defined('SYNC_FIELDS_IMAGE') && (int)SYNC_FIELDS_IMAGE === 1 && !empty($moloniProduct['img'])) {
+            $this->setImages($moloniProduct, $wcProduct);
+        }
+
         $wcProduct->save();
 
         return $wcProduct;
@@ -374,6 +378,46 @@ class Products
         }
 
         return $categoriesIds;
+    }
+
+    /**
+     * Sets product image
+     *
+     * @param $moloniProduct
+     * @param WC_Product $wcProduct
+     */
+    public function setImages($moloniProduct, &$wcProduct)
+    {
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+        $imageUrl = 'https://mediaapi.moloni.org' . $moloniProduct['img'];
+        $uploadDir = wp_upload_dir();
+        $image_data = file_get_contents($imageUrl);
+        $filename = basename($imageUrl);
+
+        if (wp_mkdir_p($uploadDir['path'])) {
+            $file = $uploadDir['path'] . '/' . $filename;
+        } else {
+            $file = $uploadDir['basedir'] . '/' . $filename;
+        }
+
+        file_put_contents($file, $image_data);
+
+        $wpFiletype = wp_check_filetype($filename, null);
+
+        $attachment = [
+            'post_mime_type' => $wpFiletype['type'],
+            'post_title' => sanitize_file_name($filename),
+            'post_content' => '',
+            'post_status' => 'inherit'
+        ];
+
+        $imageId = wp_insert_attachment($attachment, $file);
+        $attachData = wp_generate_attachment_metadata($imageId, $file);
+
+        wp_update_attachment_metadata($imageId, $attachData);
+
+        $wcProduct->set_image_id($imageId);
     }
 
     /////////////////////////// AUXILIARY METHODS ///////////////////////////

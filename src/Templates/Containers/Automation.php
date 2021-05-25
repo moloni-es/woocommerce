@@ -111,6 +111,8 @@
                                value="1" <?= (defined('SYNC_FIELDS_CATEGORIES') && SYNC_FIELDS_CATEGORIES === '1' ? 'checked' : '') ?>/><label for="categories"><?= __('Categories', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_ean]" id="ean"
                                value="1" <?= (defined('SYNC_FIELDS_EAN') && SYNC_FIELDS_EAN === '1' ? 'checked' : '') ?>/><label for="ean"><?= __('EAN', 'moloni_es') ?></label><br/>
+                        <input type="checkbox" name="opt[sync_fields_image]" id="image"
+                               value="1" <?= (defined('SYNC_FIELDS_IMAGE') && SYNC_FIELDS_IMAGE === '1' ? 'checked' : '') ?>/><label for="image"><?= __('Image', 'moloni_es') ?></label><br/>
                     </fieldset>
                     <p class='description'><?= __('Optional field that will sync when updating/creating a product on your Moloni account', 'moloni_es') ?></p>
                 </td>
