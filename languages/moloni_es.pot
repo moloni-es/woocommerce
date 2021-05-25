@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-28 11:37+0000\n"
+"POT-Creation-Date: 2021-05-25 14:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -23,17 +23,17 @@ msgstr ""
 msgid " of "
 msgstr ""
 
-#: src/Plugin.php:222
+#: src/Plugin.php:224
 #, php-format
 msgid "%s products updated."
 msgstr ""
 
-#: src/Plugin.php:230
+#: src/Plugin.php:232
 #, php-format
 msgid "%s products were not found in WooCommerce."
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:239
+#: src/Templates/Containers/Settings.php:252
 #, php-format
 msgid "(Example: %s1)"
 msgstr ""
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Add products"
 msgstr ""
 
-#: src/Plugin.php:201
+#: src/Plugin.php:203
 msgid "All orders have been marked as generated!"
 msgstr ""
 
@@ -64,7 +64,7 @@ msgstr ""
 msgid "Automatically generating the order document"
 msgstr ""
 
-#: src/Templates/MainContainer.php:20 src/Templates/Containers/Automation.php:4
+#: src/Templates/MainContainer.php:23 src/Templates/Containers/Automation.php:4
 msgid "Automation"
 msgstr ""
 
@@ -81,13 +81,13 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: src/Start.php:65
+#: src/Start.php:66
 msgid "Changes saved."
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:260
-#: src/Templates/Containers/Settings.php:278
-#: src/Templates/Containers/Settings.php:296
+#: src/Templates/Containers/Settings.php:273
+#: src/Templates/Containers/Settings.php:291
+#: src/Templates/Containers/Settings.php:309
 msgid "Choose an option"
 msgstr ""
 
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Client Secret"
 msgstr ""
 
-#: src/Plugin.php:49
+#: src/Plugin.php:51
 msgid "Close"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 msgid "Create document automatically"
 msgstr ""
 
-#: src/Plugin.php:45
+#: src/Plugin.php:47
 msgid "Creating document"
 msgstr ""
 
@@ -144,19 +144,19 @@ msgstr ""
 msgid "cURL library is required for using Moloni Plugin."
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:304
+#: src/Templates/Containers/Settings.php:317
 msgid "Custom field associated with the customer's VAT"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:292
+#: src/Templates/Containers/Settings.php:305
 msgid "Customer VAT"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:227
+#: src/Templates/Containers/Settings.php:240
 msgid "Customer's"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:232
+#: src/Templates/Containers/Settings.php:245
 msgid "Customer's number prefix"
 msgstr ""
 
@@ -170,11 +170,11 @@ msgstr ""
 msgid "Data sent: "
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:268
+#: src/Templates/Containers/Settings.php:281
 msgid "Default maturity date for customer's"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:286
+#: src/Templates/Containers/Settings.php:299
 msgid "Default payment method for customer's"
 msgstr ""
 
@@ -202,11 +202,11 @@ msgstr ""
 msgid "Developer Id"
 msgstr ""
 
-#: src/Plugin.php:207
+#: src/Plugin.php:209
 msgid "Do you confirm that you want to mark all orders as generated?"
 msgstr ""
 
-#: src/Plugin.php:185
+#: src/Plugin.php:187
 #, php-format
 msgid "Do you confirm that you want to mark the order %s as paid?"
 msgstr ""
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Document marked as generated."
 msgstr ""
 
-#: src/Plugin.php:134
+#: src/Plugin.php:136
 msgid "Document not found."
 msgstr ""
 
@@ -252,7 +252,7 @@ msgstr ""
 msgid "Document type not set in settings"
 msgstr ""
 
-#: src/Plugin.php:161
+#: src/Plugin.php:163
 msgid "Document was created!"
 msgstr ""
 
@@ -260,11 +260,11 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: src/Plugin.php:47
+#: src/Plugin.php:49
 msgid "Documents created: "
 msgstr ""
 
-#: src/Plugin.php:48
+#: src/Plugin.php:50
 msgid "Documents with errors: "
 msgstr ""
 
@@ -274,6 +274,10 @@ msgstr ""
 
 #: src/Templates/Containers/Settings.php:71
 msgid "Draft"
+msgstr ""
+
+#: src/Templates/Containers/Automation.php:113
+msgid "EAN"
 msgstr ""
 
 #: src/Templates/ErrorMessage.php:10 src/Templates/Messages/DocumentError.php:9
@@ -289,7 +293,7 @@ msgstr ""
 msgid "Error creating payment method"
 msgstr ""
 
-#: src/Controllers/Product.php:98
+#: src/Controllers/Product.php:104
 #, php-format
 msgid "Error creating product %s"
 msgstr ""
@@ -306,7 +310,7 @@ msgstr ""
 msgid "Error inserting shipping"
 msgstr ""
 
-#: src/Controllers/Product.php:118
+#: src/Controllers/Product.php:128
 #, php-format
 msgid "Error updating product %s"
 msgstr ""
@@ -320,7 +324,7 @@ msgstr ""
 msgid "Every 5 minutes"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:203
+#: src/Templates/Containers/Settings.php:216
 msgid "Exemption reason"
 msgstr ""
 
@@ -374,6 +378,10 @@ msgstr ""
 msgid "https://moloni.es"
 msgstr ""
 
+#: src/Templates/Containers/Automation.php:115
+msgid "Image"
+msgstr ""
+
 #: src/Templates/Containers/PendingOrders.php:80
 #: src/Templates/Containers/Settings.php:38
 msgid "Invoice"
@@ -392,15 +400,15 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: src/Plugin.php:122
+#: src/Plugin.php:124
 msgid "Logs cleanup is complete."
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:256
+#: src/Templates/Containers/Settings.php:269
 msgid "Maturity date"
 msgstr ""
 
-#: src/Controllers/Product.php:279 src/Controllers/OrderFees.php:160
+#: src/Controllers/Product.php:309 src/Controllers/OrderFees.php:160
 #: src/Controllers/OrderShipping.php:157
 msgid "Measure unit not set!"
 msgstr ""
@@ -435,17 +443,18 @@ msgstr ""
 #: src/Templates/Containers/Automation.php:61
 #: src/Templates/Containers/Automation.php:74
 #: src/Templates/Containers/Automation.php:87
-#: src/Templates/Containers/Automation.php:123
+#: src/Templates/Containers/Automation.php:127
 #: src/Templates/Containers/Settings.php:99
 #: src/Templates/Containers/Settings.php:112
+#: src/Templates/Containers/Settings.php:171
 msgid "No"
 msgstr ""
 
-#: src/Plugin.php:203
+#: src/Plugin.php:205
 msgid "No order found to generate!"
 msgstr ""
 
-#: src/Plugin.php:44
+#: src/Plugin.php:46
 msgid "No orders selected to generate"
 msgstr ""
 
@@ -458,16 +467,16 @@ msgstr ""
 msgid "No products to update since %s"
 msgstr ""
 
-#: src/WebHooks/Properties.php:45 src/Controllers/Product.php:202
+#: src/WebHooks/Properties.php:45 src/Controllers/Product.php:231
 #: src/Controllers/OrderFees.php:139 src/Controllers/OrderShipping.php:136
 msgid "Online Store"
 msgstr ""
 
-#: src/Curl.php:98 src/Curl.php:179
+#: src/Curl.php:103 src/Curl.php:243
 msgid "Oops, an error was encountered..."
 msgstr ""
 
-#: src/Templates/Containers/Automation.php:113
+#: src/Templates/Containers/Automation.php:117
 msgid ""
 "Optional field that will sync when updating/creating a product on your "
 "Moloni account"
@@ -478,12 +487,12 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: src/Plugin.php:178
+#: src/Plugin.php:180
 #, php-format
 msgid "Order %s has been marked as generated!"
 msgstr ""
 
-#: src/Templates/MainContainer.php:10
+#: src/Templates/MainContainer.php:13
 msgid "Orders"
 msgstr ""
 
@@ -492,11 +501,11 @@ msgstr ""
 msgid "Payment date"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:274
+#: src/Templates/Containers/Settings.php:287
 msgid "Payment method"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:241
+#: src/Templates/Containers/Settings.php:254
 msgid "Prefix used when creating customer's"
 msgstr ""
 
@@ -513,12 +522,12 @@ msgstr ""
 msgid "Pro Forma Invoice"
 msgstr ""
 
-#: src/WebHooks/Products.php:113
+#: src/WebHooks/Products.php:112
 #, php-format
 msgid "Product already exists in WooCommerce: %s"
 msgstr ""
 
-#: src/WebHooks/Products.php:111
+#: src/WebHooks/Products.php:104
 #, php-format
 msgid "Product created in WooCommerce: %s"
 msgstr ""
@@ -531,17 +540,17 @@ msgstr ""
 msgid "Product not found in WooCommerce or without active stock"
 msgstr ""
 
-#: src/WebHooks/Products.php:185 src/Controllers/SyncProducts.php:69
+#: src/WebHooks/Products.php:184 src/Controllers/SyncProducts.php:69
 #, php-format
 msgid "Product not found in WooCommerce or without active stock: %s"
 msgstr ""
 
-#: src/WebHooks/Products.php:149
+#: src/WebHooks/Products.php:148
 #, php-format
 msgid "Product not found in WooCommerce to update: %s"
 msgstr ""
 
-#: src/WebHooks/Products.php:147
+#: src/WebHooks/Products.php:146
 #, php-format
 msgid "Product updated in WooCommerce: %s"
 msgstr ""
@@ -550,12 +559,12 @@ msgstr ""
 msgid "Product updated on Moloni"
 msgstr ""
 
-#: src/WebHooks/Products.php:176 src/Controllers/SyncProducts.php:61
+#: src/WebHooks/Products.php:175 src/Controllers/SyncProducts.php:61
 #, php-format
 msgid "Product with reference %1$s already was up-to-date %2$s | %3$s"
 msgstr ""
 
-#: src/WebHooks/Products.php:182 src/Controllers/SyncProducts.php:64
+#: src/WebHooks/Products.php:181 src/Controllers/SyncProducts.php:64
 #: src/Controllers/SyncProducts.php:65
 #, php-format
 msgid "Product with reference %1$s was updated from %2$s to %3$s"
@@ -575,11 +584,11 @@ msgstr ""
 msgid "Products"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:167
+#: src/Templates/Containers/Settings.php:180
 msgid "Products tax"
 msgstr ""
 
-#: src/Plugin.php:46
+#: src/Plugin.php:48
 msgid "Progress Completed"
 msgstr ""
 
@@ -628,8 +637,8 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
-#: src/Templates/Containers/Automation.php:134
-#: src/Templates/Containers/Settings.php:312
+#: src/Templates/Containers/Automation.php:138
+#: src/Templates/Containers/Settings.php:325
 msgid "Save changes"
 msgstr ""
 
@@ -645,7 +654,7 @@ msgstr ""
 msgid "Send e-mail"
 msgstr ""
 
-#: src/Templates/MainContainer.php:15
+#: src/Templates/MainContainer.php:18
 msgid "Settings"
 msgstr ""
 
@@ -653,7 +662,7 @@ msgstr ""
 msgid "Shipping"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:215
+#: src/Templates/Containers/Settings.php:228
 msgid "Shipping exemption reason"
 msgstr ""
 
@@ -661,7 +670,7 @@ msgstr ""
 msgid "Shipping info"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:185
+#: src/Templates/Containers/Settings.php:198
 msgid "Shipping tax"
 msgstr ""
 
@@ -678,7 +687,7 @@ msgstr ""
 msgid "Starting automatic stock synchronization..."
 msgstr ""
 
-#: src/Plugin.php:43
+#: src/Plugin.php:45
 msgid "Starting process..."
 msgstr ""
 
@@ -697,6 +706,10 @@ msgstr ""
 
 #: src/Hooks/ProductView.php:89
 msgid "Stock: "
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:167
+msgid "Sync images"
 msgstr ""
 
 #: src/Templates/Containers/Automation.php:36
@@ -737,7 +750,7 @@ msgstr ""
 msgid "The order must be paid for in order to be generated."
 msgstr ""
 
-#: src/Plugin.php:226
+#: src/Plugin.php:228
 #, php-format
 msgid "There are %s products up to date."
 msgstr ""
@@ -746,7 +759,7 @@ msgstr ""
 msgid "There was an error generating the document: "
 msgstr ""
 
-#: src/Templates/MainContainer.php:25
+#: src/Templates/MainContainer.php:28
 msgid "Tools"
 msgstr ""
 
@@ -767,27 +780,27 @@ msgstr ""
 msgid "Update products with variants"
 msgstr ""
 
-#: src/Templates/Containers/Automation.php:119
+#: src/Templates/Containers/Automation.php:123
 msgid "Update stock"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:179
-#: src/Templates/Containers/Settings.php:197
+#: src/Templates/Containers/Settings.php:192
+#: src/Templates/Containers/Settings.php:210
 #, php-format
 msgid "Use if you do not have tax applied to %s"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:171
-#: src/Templates/Containers/Settings.php:189
+#: src/Templates/Containers/Settings.php:184
+#: src/Templates/Containers/Settings.php:202
 msgid "Use WooCommerce value"
 msgstr ""
 
-#: src/WebHooks/Products.php:304
+#: src/WebHooks/Products.php:321
 #, php-format
 msgid "Variant Created in WooCommerce: %s"
 msgstr ""
 
-#: src/WebHooks/Products.php:301
+#: src/WebHooks/Products.php:318
 #, php-format
 msgid "Variant updated in WooCommerce: %s"
 msgstr ""
@@ -798,7 +811,7 @@ msgstr ""
 msgid "VAT"
 msgstr ""
 
-#: src/Plugin.php:160 src/Controllers/Documents.php:527
+#: src/Plugin.php:162 src/Controllers/Documents.php:527
 msgid "View document"
 msgstr ""
 
@@ -851,10 +864,14 @@ msgid ""
 "(products with variants included)"
 msgstr ""
 
-#: src/Templates/Containers/Automation.php:126
+#: src/Templates/Containers/Automation.php:130
 msgid ""
 "When a stock movement is created in moloni, the movement will be recreated "
 "in WooCommerce (if product exists)"
+msgstr ""
+
+#: src/Templates/Containers/Settings.php:174
+msgid "When creating products in Moloni, the image will also be synchronized"
 msgstr ""
 
 #: src/Templates/Containers/Automation.php:43
@@ -875,11 +892,11 @@ msgid ""
 "in WooCommerce (if product already exists in WooCommerce)"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:209
+#: src/Templates/Containers/Settings.php:222
 msgid "Will be used if items do not have tax"
 msgstr ""
 
-#: src/Templates/Containers/Settings.php:221
+#: src/Templates/Containers/Settings.php:234
 msgid "Will be used if shipping does not have tax"
 msgstr ""
 
@@ -889,16 +906,17 @@ msgstr ""
 #: src/Templates/Containers/Automation.php:62
 #: src/Templates/Containers/Automation.php:75
 #: src/Templates/Containers/Automation.php:88
-#: src/Templates/Containers/Automation.php:124
+#: src/Templates/Containers/Automation.php:128
 #: src/Templates/Containers/Settings.php:100
 #: src/Templates/Containers/Settings.php:113
+#: src/Templates/Containers/Settings.php:172
 msgid "Yes"
 msgstr ""
 
-#: src/Plugin.php:185 src/Plugin.php:207
+#: src/Plugin.php:187 src/Plugin.php:209
 msgid "Yes, i confirm"
 msgstr ""
 
-#: src/Start.php:145
+#: src/Start.php:157
 msgid "You have no companies available in your account!"
 msgstr ""
