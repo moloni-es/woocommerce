@@ -54,6 +54,19 @@
 
             <tr>
                 <th>
+                    <label for="hook_product_sync"><?= __('Sync products', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="hook_product_sync" name='opt[hook_product_sync]' class='inputOut'>
+                        <option value='0' <?= (defined('HOOK_PRODUCT_SYNC') && HOOK_PRODUCT_SYNC === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
+                        <option value='1' <?= (defined('HOOK_PRODUCT_SYNC') && HOOK_PRODUCT_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                    </select>
+                    <p class='description'><?= __('When saving a product in Moloni, the plugin will automatically create the product in WooCommerce or update if it already exists', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
                     <label for="moloni_variants_sync"><?= __('Update products with variants', 'moloni_es') ?></label>
                 </th>
                 <td>
@@ -62,32 +75,6 @@
                         <option value='1' <?= (defined('MOLONI_VARIANTS_SYNC') && MOLONI_VARIANTS_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
                     </select>
                     <p class='description'><?= __('When updating a product with variants in Moloni, it will update the product in WooCommerce (if product already exists in WooCommerce)', 'moloni_es') ?></p>
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="hook_product_add"><?= __('Add products', 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="hook_product_add" name='opt[hook_product_add]' class='inputOut'>
-                        <option value='0' <?= (defined('HOOK_PRODUCT_ADD') && HOOK_PRODUCT_ADD === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('HOOK_PRODUCT_ADD') && HOOK_PRODUCT_ADD === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
-                    </select>
-                    <p class='description'><?= __('When a product is created in Moloni it will be created in woocommerce (products with variants included)', 'moloni_es') ?></p>
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="hook_product_update"><?= __('Update products', 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="hook_product_update" name='opt[hook_product_update]' class='inputOut'>
-                        <option value='0' <?= (defined('HOOK_PRODUCT_UPDATE') && HOOK_PRODUCT_UPDATE === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('HOOK_PRODUCT_UPDATE') && HOOK_PRODUCT_UPDATE === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
-                    </select>
-                    <p class='description'><?= __('When updating a product in Moloni, it will be updated in WooCommerce (only if product already exists in WooCommerce)', 'moloni_es')?></p>
                 </td>
             </tr>
 
