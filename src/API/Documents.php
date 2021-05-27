@@ -44,7 +44,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/document', $query, $variables, false);
+        return Curl::simple('documents/document', $query, $variables);
     }
 
     /**
@@ -83,7 +83,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/documentSets', $query, $variables, 'documentSets', false);
+        return Curl::complex('documents/documentSets', $query, $variables, 'documentSets');
     }
 
     /**
@@ -120,7 +120,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/invoice', $query, $variables, false);
+        return Curl::simple('documents/invoice', $query, $variables);
     }
 
     /**
@@ -166,7 +166,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/invoices', $query, $variables, 'invoices', false);
+        return Curl::complex('documents/invoices', $query, $variables, 'invoices');
     }
 
     /**
@@ -200,7 +200,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/invoiceCreate', $query, $variables, false);
+        return Curl::simple('documents/invoiceCreate', $query, $variables);
     }
 
     /**
@@ -230,7 +230,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/invoiceUpdate', $query, $variables, false);
+        return Curl::simple('documents/invoiceUpdate', $query, $variables);
     }
 
     /**
@@ -267,7 +267,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/receipt', $query, $variables, false);
+        return Curl::simple('documents/receipt', $query, $variables);
     }
 
     /**
@@ -313,7 +313,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/receipts', $query, $variables, 'receipts', false);
+        return Curl::complex('documents/receipts', $query, $variables, 'receipts');
     }
 
     /**
@@ -349,7 +349,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/receiptCreate', $query, $variables, false);
+        return Curl::simple('documents/receiptCreate', $query, $variables);
     }
 
     /**
@@ -379,7 +379,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/receiptUpdate', $query, $variables, false);
+        return Curl::simple('documents/receiptUpdate', $query, $variables);
     }
 
     /**
@@ -416,7 +416,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/creditNote', $query, $variables, false);
+        return Curl::simple('documents/creditNote', $query, $variables);
     }
 
     /**
@@ -462,7 +462,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/creditNotes', $query, $variables, 'creditNotes', false);
+        return Curl::complex('documents/creditNotes', $query, $variables, 'creditNotes');
     }
 
     /**
@@ -499,7 +499,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/creditNoteCreate', $query, $variables, false);
+        return Curl::simple('documents/creditNoteCreate', $query, $variables);
     }
 
     /**
@@ -536,7 +536,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/simplifiedInvoice', $query, $variables, false);
+        return Curl::simple('documents/simplifiedInvoice', $query, $variables);
     }
 
     /**
@@ -582,7 +582,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/simplifiedInvoices', $query, $variables, 'simplifiedInvoices', false);
+        return Curl::complex('documents/simplifiedInvoices', $query, $variables, 'simplifiedInvoices');
     }
 
     /**
@@ -620,7 +620,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/simplifiedInvoiceCreate', $query, $variables, false);
+        return Curl::simple('documents/simplifiedInvoiceCreate', $query, $variables);
     }
 
     /**
@@ -650,7 +650,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/simplifiedInvoiceUpdate', $query, $variables, false);
+        return Curl::simple('documents/simplifiedInvoiceUpdate', $query, $variables);
     }
 
     /**
@@ -687,7 +687,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/purchaseOrder', $query, $variables, false);
+        return Curl::simple('documents/purchaseOrder', $query, $variables);
     }
 
     /**
@@ -733,7 +733,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/purchaseOrders', $query, $variables, 'purchaseOrders', false);
+        return Curl::complex('documents/purchaseOrders', $query, $variables, 'purchaseOrders');
     }
 
     /**
@@ -771,7 +771,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/purchaseOrderCreate', $query, $variables, false);
+        return Curl::simple('documents/purchaseOrderCreate', $query, $variables);
     }
 
     /**
@@ -799,7 +799,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/purchaseOrderUpdate', $query, $variables, false);
+        return Curl::simple('documents/purchaseOrderUpdate', $query, $variables);
     }
 
     /**
@@ -836,7 +836,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/proFormaInvoice', $query, $variables, false);
+        return Curl::simple('documents/proFormaInvoice', $query, $variables);
     }
 
     /**
@@ -882,7 +882,7 @@ class Documents
             }
         }';
 
-        return Curl::complex('documents/proFormaInvoices', $query, $variables, 'proFormaInvoices', false);
+        return Curl::complex('documents/proFormaInvoices', $query, $variables, 'proFormaInvoices');
     }
 
     /**
@@ -920,7 +920,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/proFormaInvoiceCreate', $query, $variables, false);
+        return Curl::simple('documents/proFormaInvoiceCreate', $query, $variables);
     }
 
     /**
@@ -950,7 +950,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/proFormaInvoiceUpdate', $query, $variables, false);
+        return Curl::simple('documents/proFormaInvoiceUpdate', $query, $variables);
     }
 
     /**
@@ -985,7 +985,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/billsOfLadingCreate', $query, $variables, false);
+        return Curl::simple('documents/billsOfLadingCreate', $query, $variables);
     }
 
     /**
@@ -1017,7 +1017,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/billsOfLadingUpdate', $query, $variables, false);
+        return Curl::simple('documents/billsOfLadingUpdate', $query, $variables);
     }
 
     /**
@@ -1048,7 +1048,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/simplifiedInvoiceGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/simplifiedInvoiceGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1079,7 +1079,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/invoiceGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/invoiceGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1110,7 +1110,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/receiptGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/receiptGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1141,7 +1141,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/creditNoteGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/creditNoteGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1172,7 +1172,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/proFormaInvoiceGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/proFormaInvoiceGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1203,7 +1203,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/purchaseOrderGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/purchaseOrderGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1233,7 +1233,7 @@ class Documents
             }
         }';
 
-        return Curl::simple('documents/billsOfLadingGetPDFToken', $query, $variables, false);
+        return Curl::simple('documents/billsOfLadingGetPDFToken', $query, $variables);
     }
 
     /**
@@ -1251,7 +1251,7 @@ class Documents
             simplifiedInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
-        return Curl::simple('documents/simplifiedInvoiceGetPDF', $query, $variables, false);
+        return Curl::simple('documents/simplifiedInvoiceGetPDF', $query, $variables);
     }
 
     /**
@@ -1269,7 +1269,7 @@ class Documents
             invoiceGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
-        return Curl::simple('documents/invoiceGetPDF', $query, $variables, false);
+        return Curl::simple('documents/invoiceGetPDF', $query, $variables);
     }
 
     /**
@@ -1287,7 +1287,7 @@ class Documents
             receiptGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
-        return Curl::simple('documents/receiptGetPDF', $query, $variables, false);
+        return Curl::simple('documents/receiptGetPDF', $query, $variables);
     }
 
     /**
@@ -1305,7 +1305,7 @@ class Documents
             creditNoteGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
-        return Curl::simple('documents/creditNoteGetPDF', $query, $variables, false);
+        return Curl::simple('documents/creditNoteGetPDF', $query, $variables);
     }
 
     /**
@@ -1323,7 +1323,7 @@ class Documents
             proFormaInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
-        return Curl::simple('documents/proFormaInvoiceGetPDF', $query, $variables, false);
+        return Curl::simple('documents/proFormaInvoiceGetPDF', $query, $variables);
     }
 
     /**
@@ -1341,7 +1341,7 @@ class Documents
             purchaseOrderGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
-        return Curl::simple('documents/purchaseOrderGetPDF', $query, $variables, false);
+        return Curl::simple('documents/purchaseOrderGetPDF', $query, $variables);
     }
 
     /**
@@ -1357,7 +1357,7 @@ class Documents
             billsOfLadingGetPDF(companyId: $companyId,documentId: $companyId)
         }';
 
-        return Curl::simple('documents/billsOfLadingGetPDF', $query, $variables, false);
+        return Curl::simple('documents/billsOfLadingGetPDF', $query, $variables);
     }
 
     /**
@@ -1373,7 +1373,7 @@ class Documents
             invoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple('documents/invoiceSendMail', $query, $variables, false);
+        return Curl::simple('documents/invoiceSendMail', $query, $variables);
     }
 
     /**
@@ -1389,7 +1389,7 @@ class Documents
             proFormaInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple('documents/proFormaInvoiceSendMail', $query, $variables, false);
+        return Curl::simple('documents/proFormaInvoiceSendMail', $query, $variables);
     }
 
     /**
@@ -1405,7 +1405,7 @@ class Documents
             purchaseOrderSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple('documents/purchaseOrderSendMail', $query, $variables, false);
+        return Curl::simple('documents/purchaseOrderSendMail', $query, $variables);
     }
 
     /**
@@ -1421,7 +1421,7 @@ class Documents
             receiptSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple('documents/receiptSendMail', $query, $variables, false);
+        return Curl::simple('documents/receiptSendMail', $query, $variables);
     }
 
     /**
@@ -1437,7 +1437,7 @@ class Documents
             simplifiedInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple('documents/simplifiedInvoiceSendMail', $query, $variables, false);
+        return Curl::simple('documents/simplifiedInvoiceSendMail', $query, $variables);
     }
 
     /**
@@ -1453,6 +1453,6 @@ class Documents
             billsOfLadingSendMail(companyId: companyId,documents: $documents,mailData: $mailData)
         }';
 
-        return Curl::simple('documents/billsOfLadingSendMail', $query, $variables, false);
+        return Curl::simple('documents/billsOfLadingSendMail', $query, $variables);
     }
 }

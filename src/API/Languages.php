@@ -38,7 +38,7 @@ class Languages
             }
         }';
 
-        return Curl::simple('languages/language', $query, $variables, false);
+        return Curl::simple('languages/language', $query, $variables);
     }
 
     /**
@@ -79,6 +79,6 @@ class Languages
             }
         }';
 
-        return Curl::complex('languages/languages', $query, $variables, 'languages', false);
+        return Curl::complex('languages/languages', $query, $variables, 'languages');
     }
 }

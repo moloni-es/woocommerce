@@ -44,7 +44,7 @@ class MeasurementUnits
             }
         }';
 
-        return Curl::complex('MeasurementUnits/measurementUnits', $query, $variables, 'measurementUnits', false);
+        return Curl::complex('MeasurementUnits/measurementUnits', $query, $variables, 'measurementUnits');
     }
 
     /**
@@ -73,6 +73,6 @@ class MeasurementUnits
             }
         }';
 
-        return Curl::simple('MeasurementUnits/measurementUnitCreate', $query, $variables, false);
+        return Curl::simple('MeasurementUnits/measurementUnitCreate', $query, $variables);
     }
 }

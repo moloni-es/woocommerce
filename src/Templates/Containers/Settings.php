@@ -164,6 +164,19 @@
 
             <tr>
                 <th>
+                    <label for="sync_images"><?= __('Sync images', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="sync_images" name='opt[sync_images]' class='inputOut'>
+                        <option value='0' <?= (defined('SYNC_IMAGES') && SYNC_IMAGES === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
+                        <option value='1' <?= (defined('SYNC_IMAGES') && SYNC_IMAGES === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                    </select>
+                    <p class='description'><?= __('When creating products in Moloni, the image will also be synchronized', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
                     <label for="tax_id"><?= __('Products tax' , 'moloni_es') ?></label>
                 </th>
                 <td>

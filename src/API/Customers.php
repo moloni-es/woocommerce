@@ -35,7 +35,7 @@ class Customers
             }
         }';
 
-        return Curl::simple('customers/customerCreate', $query, $variables, false);
+        return Curl::simple('customers/customerCreate', $query, $variables);
     }
 
     /**
@@ -64,7 +64,7 @@ class Customers
             }
         }';
 
-        return Curl::simple('customers/customerUpdate', $query, $variables, false);
+        return Curl::simple('customers/customerUpdate', $query, $variables);
     }
 
     /**
@@ -101,7 +101,7 @@ class Customers
             }
         }';
 
-        return Curl::simple('customers/customer', $query, $variables, false);
+        return Curl::simple('customers/customer', $query, $variables);
     }
 
     /**
@@ -147,6 +147,6 @@ class Customers
             }
         }';
 
-        return Curl::simple('customers/customers', $query, $variables, false);
+        return Curl::simple('customers/customers', $query, $variables);
     }
 }

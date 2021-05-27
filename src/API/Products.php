@@ -32,7 +32,7 @@ class Products
             }
         }';
 
-        return Curl::simple('products/productCreate', $query, $variables, false);
+        return Curl::simple('products/productCreate', $query, $variables);
     }
 
     /**
@@ -63,7 +63,37 @@ class Products
             }
         }';
 
-        return Curl::simple('products/productUpdate', $query, $variables, false);
+        return Curl::simple('products/productUpdate', $query, $variables);
+    }
+
+    /**
+     * Update a product image
+     *
+     * @param array $variables variables of the query
+     *
+     * @return true
+     */
+    public static function mutationProductImageUpdate($variables = [], $file = '')
+    {
+        $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
+        {
+            productUpdate(companyId: $companyId ,data: $data)
+            {
+                data
+                {
+                    productId
+                    name
+                    reference
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return Curl::uploadImage($query, $variables, $file);
     }
 
     /**
@@ -93,6 +123,7 @@ class Products
                     hasStock
                     stock
                     minStock
+                    img
                     identifications
                     {
                         type
@@ -127,6 +158,7 @@ class Products
                         priceWithTaxes
                         hasStock
                         stock
+                        img
                         propertyPairs
                         {
                             property
@@ -182,7 +214,7 @@ class Products
             }
         }';
 
-        return Curl::simple('products/product', $query, $variables, false);
+        return Curl::simple('products/product', $query, $variables);
     }
 
     /**
@@ -281,6 +313,6 @@ class Products
             }
         }';
 
-        return Curl::complex('products/products', $query, $variables, 'products', false);
+        return Curl::complex('products/products', $query, $variables, 'products');
     }
 }

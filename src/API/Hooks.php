@@ -36,7 +36,7 @@ class Hooks
             }
         }';
 
-        return Curl::complex('hooks/hooks', $query, $variables, 'hooks', false);
+        return Curl::complex('hooks/hooks', $query, $variables, 'hooks');
     }
 
     /**
@@ -67,7 +67,7 @@ class Hooks
             }
         }';
 
-        return Curl::simple('hooks/hookCreate', $query, $variables, false);
+        return Curl::simple('hooks/hookCreate', $query, $variables);
     }
 
     /**
@@ -95,6 +95,6 @@ class Hooks
             }
         }';
 
-        return Curl::simple('hooks/hookDelete', $query, $variables, false);
+        return Curl::simple('hooks/hookDelete', $query, $variables);
     }
 }

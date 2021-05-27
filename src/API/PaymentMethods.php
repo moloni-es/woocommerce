@@ -36,7 +36,7 @@ class PaymentMethods
             }
         }';
 
-        return Curl::simple('paymentmethods/paymentMethod', $query, $variables, false);
+        return Curl::simple('paymentmethods/paymentMethod', $query, $variables);
     }
 
     /**
@@ -77,7 +77,7 @@ class PaymentMethods
             }
         }';
 
-        return Curl::complex('paymentmethods/paymentMethods', $query, $variables, 'paymentMethods', false);
+        return Curl::complex('paymentmethods/paymentMethods', $query, $variables, 'paymentMethods');
     }
 
     /**
@@ -105,6 +105,6 @@ class PaymentMethods
             }
         }';
 
-        return Curl::simple('paymentmethods/paymentMethodCreate', $query, $variables, false);
+        return Curl::simple('paymentmethods/paymentMethodCreate', $query, $variables);
     }
 }
