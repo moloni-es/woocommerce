@@ -2,9 +2,7 @@
 
 namespace MoloniES;
 
-use MoloniES\API\Products as ApiProducts;
 use MoloniES\Controllers\Documents;
-use MoloniES\WebHooks\Products;
 use MoloniES\WebHooks\WebHook;
 
 /**
@@ -107,6 +105,10 @@ class Plugin
 
                     case 'remInvoiceAll':
                         $this->removeOrdersAll();
+                        break;
+
+                    case 'reinstallWebhooks':
+                        $this->reinstallWebhooks();
                         break;
 
                     case 'genInvoice':
@@ -231,5 +233,20 @@ class Plugin
         if ($syncStocksResult->countNotFound() > 0) {
             add_settings_error('molonies', 'moloni-sync-stocks-not-found', sprintf(__('%s products were not found in WooCommerce.', 'moloni_es'), $syncStocksResult->countNotFound()));
         }
+    }
+
+    /**
+     * Reinstall Moloni Webhooks
+     */
+    private function reinstallWebhooks()
+    {
+        try {
+            WebHook::createHooks();
+            $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
+        } catch (Error $e) {
+            $msg = __('Something went wrong reinstalling Moloni Webhooks.', 'moloni_es');
+        }
+
+        add_settings_error('molonies', 'moloni-webhooks-reinstall-error', $msg);
     }
 }

@@ -30,6 +30,19 @@
 
     <tr>
         <th style="padding: 2rem">
+            <strong class="name"><?= __('Reinstall Moloni Webhooks' , 'moloni_es') ?></strong>
+            <p class='description'><?= __('Remove this store Webhooks and install them again' , 'moloni_es') ?></p>
+        </th>
+        <td class="run-tool" style="padding: 2rem; text-align: right">
+            <a class="button button-large"
+               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=reinstallWebhooks')) ?>'>
+                <?= __('Reinstall Moloni Webhooks' , 'moloni_es') ?>
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="padding: 2rem">
             <strong class="name"><?= __('View logs' , 'moloni_es') ?></strong>
             <p class='description'><?= __('View sync logs from stocks/products' , 'moloni_es') ?></p>
         </th>
