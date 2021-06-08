@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-26 09:12+0000\n"
+"POT-Creation-Date: 2021-06-08 09:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -23,12 +23,12 @@ msgstr ""
 msgid " of "
 msgstr ""
 
-#: src/Plugin.php:224
+#: src/Plugin.php:226
 #, php-format
 msgid "%s products updated."
 msgstr ""
 
-#: src/Plugin.php:232
+#: src/Plugin.php:234
 #, php-format
 msgid "%s products were not found in WooCommerce."
 msgstr ""
@@ -42,7 +42,7 @@ msgstr ""
 msgid "(Invoice + Receipt cannot be created in draft.)"
 msgstr ""
 
-#: src/Plugin.php:203
+#: src/Plugin.php:205
 msgid "All orders have been marked as generated!"
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Client Secret"
 msgstr ""
 
-#: src/Plugin.php:51
+#: src/Plugin.php:49
 msgid "Close"
 msgstr ""
 
@@ -136,7 +136,7 @@ msgstr ""
 msgid "created"
 msgstr ""
 
-#: src/Plugin.php:47
+#: src/Plugin.php:45
 msgid "Creating document"
 msgstr ""
 
@@ -182,15 +182,15 @@ msgstr ""
 msgid "Default warehouse"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:46
+#: src/Templates/Containers/Tools.php:59
 msgid "Delete all log files from previous days"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:51
+#: src/Templates/Containers/Tools.php:64
 msgid "Delete daily logs"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:45
+#: src/Templates/Containers/Tools.php:58
 msgid "Delete logs"
 msgstr ""
 
@@ -202,11 +202,11 @@ msgstr ""
 msgid "Developer Id"
 msgstr ""
 
-#: src/Plugin.php:209
+#: src/Plugin.php:211
 msgid "Do you confirm that you want to mark all orders as generated?"
 msgstr ""
 
-#: src/Plugin.php:187
+#: src/Plugin.php:189
 #, php-format
 msgid "Do you confirm that you want to mark the order %s as paid?"
 msgstr ""
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Document marked as generated."
 msgstr ""
 
-#: src/Plugin.php:136
+#: src/Plugin.php:138
 msgid "Document not found."
 msgstr ""
 
@@ -252,7 +252,7 @@ msgstr ""
 msgid "Document type not set in settings"
 msgstr ""
 
-#: src/Plugin.php:163
+#: src/Plugin.php:165
 msgid "Document was created!"
 msgstr ""
 
@@ -260,15 +260,15 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: src/Plugin.php:49
+#: src/Plugin.php:47
 msgid "Documents created: "
 msgstr ""
 
-#: src/Plugin.php:50
+#: src/Plugin.php:48
 msgid "Documents with errors: "
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:38
+#: src/Templates/Containers/Tools.php:51
 msgid "Download logs file"
 msgstr ""
 
@@ -396,11 +396,11 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:58 src/Templates/Containers/Tools.php:64
+#: src/Templates/Containers/Tools.php:71 src/Templates/Containers/Tools.php:77
 msgid "Logout"
 msgstr ""
 
-#: src/Plugin.php:124
+#: src/Plugin.php:126
 msgid "Logs cleanup is complete."
 msgstr ""
 
@@ -429,6 +429,10 @@ msgstr ""
 msgid "Moloni login invalid"
 msgstr ""
 
+#: src/Plugin.php:245
+msgid "Moloni Webhooks reinstalled successfully."
+msgstr ""
+
 #. Author of the plugin
 msgid "Moloni.es"
 msgstr ""
@@ -449,11 +453,11 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: src/Plugin.php:205
+#: src/Plugin.php:207
 msgid "No order found to generate!"
 msgstr ""
 
-#: src/Plugin.php:46
+#: src/Plugin.php:44
 msgid "No orders selected to generate"
 msgstr ""
 
@@ -486,7 +490,7 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: src/Plugin.php:180
+#: src/Plugin.php:182
 #, php-format
 msgid "Order %s has been marked as generated!"
 msgstr ""
@@ -572,7 +576,7 @@ msgstr ""
 msgid "Products tax"
 msgstr ""
 
-#: src/Plugin.php:48
+#: src/Plugin.php:46
 msgid "Progress Completed"
 msgstr ""
 
@@ -589,6 +593,10 @@ msgstr ""
 msgid "Reference: "
 msgstr ""
 
+#: src/Templates/Containers/Tools.php:33 src/Templates/Containers/Tools.php:39
+msgid "Reinstall Moloni Webhooks"
+msgstr ""
+
 #: src/Templates/Containers/PendingOrders.php:113
 msgid "Remove"
 msgstr ""
@@ -599,6 +607,10 @@ msgstr ""
 
 #: src/Templates/Containers/Tools.php:20 src/Templates/Containers/Tools.php:26
 msgid "Remove pending orders"
+msgstr ""
+
+#: src/Templates/Containers/Tools.php:34
+msgid "Remove this store Webhooks and install them again"
 msgstr ""
 
 #: src/Templates/Messages.php:7 src/Templates/Messages.php:15
@@ -667,11 +679,15 @@ msgstr ""
 msgid "Simplified Invoice"
 msgstr ""
 
+#: src/Plugin.php:247
+msgid "Something went wrong reinstalling Moloni Webhooks."
+msgstr ""
+
 #: src/Crons.php:39
 msgid "Starting automatic stock synchronization..."
 msgstr ""
 
-#: src/Plugin.php:45
+#: src/Plugin.php:43
 msgid "Starting process..."
 msgstr ""
 
@@ -735,7 +751,7 @@ msgstr ""
 msgid "The order must be paid for in order to be generated."
 msgstr ""
 
-#: src/Plugin.php:228
+#: src/Plugin.php:230
 #, php-format
 msgid "There are %s products up to date."
 msgstr ""
@@ -796,15 +812,15 @@ msgstr ""
 msgid "VAT"
 msgstr ""
 
-#: src/Plugin.php:162 src/Controllers/Documents.php:527
+#: src/Plugin.php:164 src/Controllers/Documents.php:527
 msgid "View document"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:33
+#: src/Templates/Containers/Tools.php:46
 msgid "View logs"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:34
+#: src/Templates/Containers/Tools.php:47
 msgid "View sync logs from stocks/products"
 msgstr ""
 
@@ -833,7 +849,7 @@ msgstr ""
 msgid "Warning, there was an error inserting the document %s"
 msgstr ""
 
-#: src/Templates/Containers/Tools.php:59
+#: src/Templates/Containers/Tools.php:72
 msgid "We will keep the data regarding the documents already issued"
 msgstr ""
 
@@ -891,7 +907,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/Plugin.php:187 src/Plugin.php:209
+#: src/Plugin.php:189 src/Plugin.php:211
 msgid "Yes, i confirm"
 msgstr ""
 
