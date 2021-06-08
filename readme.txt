@@ -66,6 +66,7 @@ Via FTP
 
 == Changelog ==
 = 1.0.15 =
+* New tool to reinstall Moloni Webhooks
 * Updated jquery enqueue order
 
 = 1.0.14 =
