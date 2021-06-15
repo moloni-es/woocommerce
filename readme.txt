@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.15
+Stable tag: 1.0.16
 Tested up to: 5.7
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.16 =
+* Escaped error when order products were deleted
+
 = 1.0.15 =
 * New tool to reinstall Moloni Webhooks
 * Updated jquery enqueue order
