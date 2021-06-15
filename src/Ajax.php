@@ -29,7 +29,6 @@ class Ajax
                     $document->createDocument();
 
                     if (!$document->getError()) {
-                        Log::write(3);
                         wp_send_json(['valid' => 1, 'message' => sprintf(__('Document %s successfully inserted','moloni_es'), $document->order->get_order_number())]);
                     }
 
