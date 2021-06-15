@@ -82,7 +82,7 @@ class WebHook
             'data' => [
                 'search' => [
                     'field' => 'url',
-                    'value' => get_site_url()
+                    'value' => get_site_url() . '/wp-json/'
                 ]
             ]
         ];
