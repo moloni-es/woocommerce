@@ -192,7 +192,13 @@ class OrderProduct
      */
     private function setProductId()
     {
-        $product = new Product($this->product->get_product());
+        $wooCommerceProduct = $this->product->get_product();
+
+        if (empty($wooCommerceProduct)) {
+            throw new Error(__('Order products were deleted.','moloni_es'));
+        }
+
+        $product = new Product($wooCommerceProduct);
 
         if (!$product->loadByReference()) {
             $product->create();
