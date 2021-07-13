@@ -17,7 +17,7 @@ class Log
             }
 
             $fileName = (defined('MOLONIES_COMPANY_ID') ? MOLONIES_COMPANY_ID : '000')
-                . (self::$fileName ? self::$fileName : date('Ymd'))
+                . (self::$fileName ?: date('Ymd'))
                 . '.log';
 
             $logFile = fopen(MOLONI_ES_DIR . '/logs/' . $fileName, 'ab');

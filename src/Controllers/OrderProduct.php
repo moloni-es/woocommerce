@@ -215,13 +215,18 @@ class OrderProduct
      */
     private function setDiscount()
     {
-        $this->discount = (100 - (((float)$this->product->get_total() * 100) / (float)$this->product->get_subtotal()));
+        $total = (float)$this->product->get_total();
+        $subTotal = (float)$this->product->get_subtotal();
+
+        if ($subTotal !== (float)0) {
+            $this->discount = (100 - (($total * 100) / $subTotal));
+        }
 
         if ($this->discount > 100) {
             $this->discount = 100;
         }
 
-        if ($this->discount < 0) {
+        if (empty($this->discount) || $this->discount < 0) {
             $this->discount = 0;
         }
 
