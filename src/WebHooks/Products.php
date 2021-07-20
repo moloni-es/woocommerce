@@ -41,7 +41,7 @@ class Products
         try {
         $parameters = $requestData->get_params();
 
-        //model has to be 'Product', needs to be logged in and recieved hash has to match logged in company id hash
+        //model has to be 'Product', needs to be logged in and received hash has to match logged in company id hash
         if ($parameters['model'] !== 'Product' || !Start::login(true) || !Model::checkHash($parameters['hash'])) {
             return;
         }
@@ -273,7 +273,10 @@ class Products
             $var_attributes = [];
 
             foreach ($variation["propertyPairs"] as $value) {
-                $var_attributes[strtolower($value['property']["name"])] = $value["propertyValue"]['value'];
+                $propertyName = self::cleanAttributeString($value['property']["name"]);
+                $propertyValue = self::cleanAttributeString($value['propertyValue']["value"]);
+
+                $var_attributes[strtolower($propertyName)] = $propertyValue;
             }
 
             $objVariation->set_attributes($var_attributes);
@@ -400,12 +403,34 @@ class Products
         foreach ($moloniProduct['variants'] as $variant) {
             foreach ($variant['propertyPairs'] as $property) {
                 if (!in_array($property['propertyValue']['value'], $attributes[$property['property']['name']], true)) {
-                    $attributes[$property['property']['name']][] = $property['propertyValue']['value'];
+                    $propertyName = self::cleanAttributeString($property['property']['name']);
+                    $propertyValue = self::cleanAttributeString($property['propertyValue']['value']);
+
+                    $attributes[$propertyName][] = $propertyValue;
                 }
             }
         }
 
         return $attributes;
+    }
+
+    /**
+     * Cleans an string to be used as an attribute identifier
+     *
+     * @param string $string String to clean
+     *
+     * @return string Clean string
+     */
+    private static function cleanAttributeString($string = '')
+    {
+        $string = str_replace('[\', \']', '', $string);
+        $string = preg_replace('/\[.*]/U', '', $string);
+        $string = preg_replace('/&(amp;)?#?[a-z0-9]+;/i', '-', $string);
+        $string = htmlentities($string, ENT_COMPAT, 'utf-8');
+        $string = preg_replace('/&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);/i', '\\1', $string);
+        $string = str_ireplace('amp', '', $string);
+
+        return strtolower(trim($string));
     }
 
     /**
