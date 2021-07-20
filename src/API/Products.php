@@ -159,6 +159,13 @@ class Products
                         hasStock
                         stock
                         img
+                        taxes
+                        {
+                            tax
+                            {
+                                taxId
+                            }
+                        }  
                         propertyPairs
                         {
                             property

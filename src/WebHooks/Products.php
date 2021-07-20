@@ -255,9 +255,9 @@ class Products
 
             if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
                 if (!defined('TAX_ID') || (int)TAX_ID === 0) {
-                    $objVariation->set_regular_price($moloniProduct['price']);
+                    $objVariation->set_regular_price($variation['price']);
                 } else {
-                    $objVariation->set_regular_price($moloniProduct['priceWithTaxes']);
+                    $objVariation->set_regular_price($variation['priceWithTaxes']);
                 }
             }
 
