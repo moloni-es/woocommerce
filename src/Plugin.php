@@ -240,13 +240,16 @@ class Plugin
      */
     private function reinstallWebhooks()
     {
+        $type = '';
+
         try {
             WebHook::createHooks();
             $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
+            $type = 'updated';
         } catch (Error $e) {
             $msg = __('Something went wrong reinstalling Moloni Webhooks.', 'moloni_es');
         }
 
-        add_settings_error('molonies', 'moloni-webhooks-reinstall-error', $msg);
+        add_settings_error('molonies', 'moloni-webhooks-reinstall-error', $msg, $type);
     }
 }
