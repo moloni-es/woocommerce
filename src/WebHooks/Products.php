@@ -276,7 +276,7 @@ class Products
                 $propertyName = self::cleanAttributeString($value['property']["name"]);
                 $propertyValue = self::cleanAttributeString($value['propertyValue']["value"]);
 
-                $var_attributes[strtolower($propertyName)] = $propertyValue;
+                $var_attributes[sanitize_title($propertyName)] = $propertyValue;
             }
 
             $objVariation->set_attributes($var_attributes);
@@ -423,14 +423,7 @@ class Products
      */
     private static function cleanAttributeString($string = '')
     {
-        $string = str_replace('[\', \']', '', $string);
-        $string = preg_replace('/\[.*]/U', '', $string);
-        $string = preg_replace('/&(amp;)?#?[a-z0-9]+;/i', '-', $string);
-        $string = htmlentities($string, ENT_COMPAT, 'utf-8');
-        $string = preg_replace('/&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);/i', '\\1', $string);
-        $string = str_ireplace('amp', '', $string);
-
-        return strtolower(trim($string));
+        return trim($string);
     }
 
     /**
