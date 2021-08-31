@@ -66,6 +66,7 @@ Via FTP
 
 == Changelog ==
 = 1.0.21 =
+* Fix products prices with tax value included
 * Fix error with images permissions
 
 = 1.0.20 =
