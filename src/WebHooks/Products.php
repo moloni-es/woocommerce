@@ -178,10 +178,10 @@ class Products
         }
 
         if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
-            if (!defined('TAX_ID') || (int)TAX_ID === 0) {
-                $wcProduct->set_regular_price($moloniProduct['price']);
-            } else {
+            if (wc_prices_include_tax()) {
                 $wcProduct->set_regular_price($moloniProduct['priceWithTaxes']);
+            } else {
+                $wcProduct->set_regular_price($moloniProduct['price']);
             }
         }
 
@@ -251,13 +251,12 @@ class Products
             }
 
             $objVariation->set_parent_id($wcProduct->get_id());
-            $objVariation->set_sku($variation["reference"]);
 
             if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
-                if (!defined('TAX_ID') || (int)TAX_ID === 0) {
-                    $objVariation->set_regular_price($variation['price']);
-                } else {
+                if (wc_prices_include_tax()) {
                     $objVariation->set_regular_price($variation['priceWithTaxes']);
+                } else {
+                    $objVariation->set_regular_price($variation['price']);
                 }
             }
 
