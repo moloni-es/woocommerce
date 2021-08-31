@@ -251,6 +251,7 @@ class Products
             }
 
             $objVariation->set_parent_id($wcProduct->get_id());
+            $objVariation->set_sku($variation["reference"]);
 
             if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
                 if (wc_prices_include_tax()) {
