@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.20
+Stable tag: 1.0.21
 Tested up to: 5.7
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.21 =
+* Fix products prices with tax value included
+* Fix error with images permissions
+
 = 1.0.20 =
 * Fix properties name escape
 

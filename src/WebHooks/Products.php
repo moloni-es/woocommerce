@@ -178,10 +178,10 @@ class Products
         }
 
         if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
-            if (!defined('TAX_ID') || (int)TAX_ID === 0) {
-                $wcProduct->set_regular_price($moloniProduct['price']);
-            } else {
+            if (wc_prices_include_tax()) {
                 $wcProduct->set_regular_price($moloniProduct['priceWithTaxes']);
+            } else {
+                $wcProduct->set_regular_price($moloniProduct['price']);
             }
         }
 
@@ -254,10 +254,10 @@ class Products
             $objVariation->set_sku($variation["reference"]);
 
             if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
-                if (!defined('TAX_ID') || (int)TAX_ID === 0) {
-                    $objVariation->set_regular_price($variation['price']);
-                } else {
+                if (wc_prices_include_tax()) {
                     $objVariation->set_regular_price($variation['priceWithTaxes']);
+                } else {
+                    $objVariation->set_regular_price($variation['price']);
                 }
             }
 
@@ -353,6 +353,8 @@ class Products
      *
      * @param $moloniProduct
      * @param WC_Product $wcProduct
+     *
+     * @return bool
      */
     public function setImages($moloniProduct, &$wcProduct)
     {
@@ -360,7 +362,14 @@ class Products
 
         $imageUrl = 'https://mediaapi.moloni.org' . $moloniProduct['img'];
         $uploadDir = wp_upload_dir();
-        $image_data = file_get_contents($imageUrl);
+        $imgRequest = wp_remote_get($imageUrl);
+
+        if (is_wp_error($imgRequest)) {
+            Log::write('Could not get image content.');
+            return false;
+        }
+
+        $image_data = $imgRequest['body'];
         $filename = basename($imageUrl);
 
         if (wp_mkdir_p($uploadDir['path'])) {
@@ -386,6 +395,8 @@ class Products
         wp_update_attachment_metadata($imageId, $attachData);
 
         $wcProduct->set_image_id($imageId);
+
+        return true;
     }
 
     /////////////////////////// AUXILIARY METHODS ///////////////////////////
