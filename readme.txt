@@ -2,8 +2,8 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.21
-Tested up to: 5.7
+Stable tag: 1.0.22
+Tested up to: 5.8
 Requires PHP: 5.6
 Requires at least: 5.0
 License: GPLv2 or later
@@ -65,6 +65,11 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.22 =
+* Fix deprecated variants behaviour
+* Tested up to version 5.8 of WordPress
+* Tested up to version 5.6.0 of WooCommerce
+
 = 1.0.21 =
 * Fix products prices with tax value included
 * Fix error with images permissions
