@@ -233,6 +233,9 @@ class Products
      */
     public function setVariants($moloniProduct, $wcProduct)
     {
+        // Variants ids found
+        $relevantIds = [];
+
         //if product has variants, the stock is managed in variants level
         $wcProduct->set_manage_stock(false);
         $wcProduct->save();
@@ -245,7 +248,7 @@ class Products
 
             //check if we are going to update or create
             if ($existsInWC !== 0) {
-                $objVariation = new WC_Product_Variation(wc_get_product(wc_get_product_id_by_sku($variation["reference"])));
+                $objVariation = new WC_Product_Variation($existsInWC);
             } else {
                 $objVariation = new WC_Product_Variation();
             }
@@ -286,9 +289,24 @@ class Products
                 Log::write(sprintf(__('Variant updated in WooCommerce: %s', 'moloni_es'), $variation['reference']));
 
             } else {
-                Log::write(sprintf(__('Variant Created in WooCommerce: %s', 'moloni_es'), $variation['reference']));
+                Log::write(sprintf(__('Variant created in WooCommerce: %s', 'moloni_es'), $variation['reference']));
+            }
+
+            $relevantIds[] = $objVariation->get_id();
+        }
+
+        // Get all current product variations
+        $allProductVariations = $wcProduct->get_available_variations();
+
+        // We need to delete all other variations
+        foreach ($allProductVariations as $productVariation) {
+            if (!in_array((int)$productVariation['variation_id'], $relevantIds, true)) {
+                (new WC_Product_Variation($productVariation['variation_id']))->delete(true);
+
+                Log::write(sprintf(__('Variant deleted in WooCommerce: %s', 'moloni_es'), $productVariation['sku']));
             }
         }
+
     }
 
     /**
