@@ -39,43 +39,43 @@ class Products
     public function products($requestData)
     {
         try {
-        $parameters = $requestData->get_params();
+            $parameters = $requestData->get_params();
 
-        //model has to be 'Product', needs to be logged in and received hash has to match logged in company id hash
-        if ($parameters['model'] !== 'Product' || !Start::login(true) || !Model::checkHash($parameters['hash'])) {
-            return;
-        }
+            //model has to be 'Product', needs to be logged in and received hash has to match logged in company id hash
+            if ($parameters['model'] !== 'Product' || !Start::login(true) || !Model::checkHash($parameters['hash'])) {
+                return;
+            }
 
-        $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
-            'productId' => (int)sanitize_text_field($parameters['productId'])
-        ];
+            $variables = [
+                'companyId' => (int)MOLONIES_COMPANY_ID,
+                'productId' => (int)sanitize_text_field($parameters['productId'])
+            ];
 
-        $moloniProduct = ApiProducts::queryProduct($variables); //get product that was received from the hook
-        $moloniProduct = $moloniProduct['data']['product']['data'];
+            $moloniProduct = ApiProducts::queryProduct($variables); //get product that was received from the hook
+            $moloniProduct = $moloniProduct['data']['product']['data'];
 
-        if ($moloniProduct['parent'] !== null) {
-            return; //we only want to update the main product
-        }
+            if ($moloniProduct['parent'] !== null) {
+                return; //we only want to update the main product
+            }
 
-        //switch between operations
-        switch ($parameters['operation']) {
-            case 'create':
-            case 'update':
-                $this->save($moloniProduct);
-                break;
-            case 'stockChanged':
-                //if the changed product was a variant (because stock changes happens at variant level)
-                if (empty($moloniProduct['variants'])) {
-                    $this->stockUpdate($moloniProduct);
-                } else {
-                    //for each variant check and update its stock
-                    foreach ($moloniProduct['variants'] as $variant) {
-                        $this->stockUpdate($variant);
+            //switch between operations
+            switch ($parameters['operation']) {
+                case 'create':
+                case 'update':
+                    $this->save($moloniProduct);
+                    break;
+                case 'stockChanged':
+                    //if the changed product was a variant (because stock changes happens at variant level)
+                    if (empty($moloniProduct['variants'])) {
+                        $this->stockUpdate($moloniProduct);
+                    } else {
+                        //for each variant check and update its stock
+                        foreach ($moloniProduct['variants'] as $variant) {
+                            $this->stockUpdate($variant);
+                        }
                     }
-                }
-                break;
-        }
+                    break;
+            }
         } catch (Exception $exception) {
             echo json_encode(['valid' => 0, 'error' => $exception->getMessage()]);
             exit;
@@ -296,17 +296,19 @@ class Products
         }
 
         // Get all current product variations
-        $allProductVariations = $wcProduct->get_available_variations();
+        $allProductVariations = $wcProduct->get_children();
 
         // We need to delete all other variations
         foreach ($allProductVariations as $productVariation) {
-            if (!in_array((int)$productVariation['variation_id'], $relevantIds, true)) {
-                (new WC_Product_Variation($productVariation['variation_id']))->delete(true);
+            if (!in_array((int)$productVariation, $relevantIds, true)) {
+                $tempWcProduct = new WC_Product_Variation($productVariation);
+                $tempReference = $tempWcProduct->get_sku();
 
-                Log::write(sprintf(__('Variant deleted in WooCommerce: %s', 'moloni_es'), $productVariation['sku']));
+                $tempWcProduct->delete(true);
+
+                Log::write(sprintf(__('Variant deleted in WooCommerce: %s', 'moloni_es'), $tempReference));
             }
         }
-
     }
 
     /**
