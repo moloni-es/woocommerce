@@ -182,9 +182,8 @@ class OrderFees
      */
     private function setTaxes()
     {
-        //if a tax is set in settings (should not be used by the client)
+        // If a tax is set in settings (should not be used by the client)
         if(defined('TAX_ID') && TAX_ID > 0) {
-
             $variables = [
                 'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID
@@ -200,7 +199,7 @@ class OrderFees
             $unitPrice = (float) $this->price + (float) $this->fee->get_total_tax();
 
             $this->price = ($unitPrice * 100);
-            $this->price = $this->price / (100 + $tax['value']);
+            $this->price /= (100 + $tax['value']);
 
             $this->taxes = $tax;
             $this->exemption_reason = '';
@@ -209,7 +208,18 @@ class OrderFees
         }
 
         //Normal way
-        $taxRate = round(($this->fee->get_total_tax() * 100) / (float)$this->fee->get_amount());
+        $taxedArray = $this->fee->get_taxes();
+        $taxedValue = 0;
+        $taxRate = 0;
+
+        if (isset($taxedArray['total']) && count($taxedArray['total']) > 0) {
+            foreach ($taxedArray['total'] as $value) {
+                $taxedValue += $value;
+            }
+
+            $taxRate = round(($taxedValue * 100) / (float)$this->fee->get_amount());
+        }
+
         if ((float)$taxRate > 0) {
             $this->taxes[] = $this->setTax($taxRate);
         }
