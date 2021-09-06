@@ -114,8 +114,8 @@ class Documents
             $this->customer_id = (new OrderCustomer($this->order))->create();
             $this->document_set_id = $this->getDocumentSetId();
 
-            $this->date = date('Y-m-d');
-            $this->expiration_date = date('Y-m-d');
+            $this->date = date('Y-m-d H:i:s');
+            $this->expiration_date = date('Y-m-d H:i:s');
 
             $this->ourReference = '#' . $this->order->get_order_number();
             $this->yourReference = '#' . $this->order->get_order_number();
