@@ -256,6 +256,11 @@ class Products
             $objVariation->set_parent_id($wcProduct->get_id());
             $objVariation->set_sku($variation["reference"]);
 
+            if (defined('SYNC_FIELDS_DESCRIPTION') && (int)SYNC_FIELDS_DESCRIPTION === 1) {
+                $objVariation->set_description($variation['summary']);
+                $objVariation->set_short_description($variation['summary']);
+            }
+
             if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
                 if (wc_prices_include_tax()) {
                     $objVariation->set_regular_price($variation['priceWithTaxes']);
@@ -265,13 +270,18 @@ class Products
             }
 
             if (defined('SYNC_FIELDS_VISIBILITY') && (int)SYNC_FIELDS_VISIBILITY === 1) {
-                $objVariation->set_catalog_visibility((int)$moloniProduct['visible'] === 1 ? 'visible' : 'hidden');
+                $objVariation->set_catalog_visibility((int)$variation['visible'] === 1 ? 'visible' : 'hidden');
             }
 
             if (defined('SYNC_FIELDS_STOCK') && (int)SYNC_FIELDS_STOCK === 1) {
                 $objVariation->set_manage_stock($variation["hasStock"]);
                 $objVariation->set_stock_quantity($variation["stock"]);
             }
+
+            if (defined('SYNC_FIELDS_IMAGE') && (int)SYNC_FIELDS_IMAGE === 1 && !empty($variation['img'])) {
+                $this->setImages($variation, $objVariation);
+            }
+
 
             $var_attributes = [];
 
