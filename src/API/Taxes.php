@@ -123,6 +123,17 @@ class Taxes
                     taxId
                     name
                     value
+                    type
+                    fiscalZone
+                    flags
+                    {
+                        flagId
+                        name
+                    }
+                    country
+                    {
+                        countryId
+                    }
                 }
                 errors
                 {

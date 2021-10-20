@@ -19,8 +19,14 @@ use WC_Order_Item_Product;
  */
 class Documents
 {
+    /** @var bool */
+    public $isHook = false;
+
     /** @var array */
     private $company = [];
+
+    /** @var string */
+    private $fiscalZone;
 
     /** @var int */
     private $orderId;
@@ -73,7 +79,6 @@ class Documents
     private $payments = [];
 
     public $documentType;
-    public $fiscalZone;
 
     /** @var int */
     private $currencyExchangeId;
@@ -112,6 +117,7 @@ class Documents
     public function createDocument()
     {
         try {
+            $this->company = (Companies::queryCompany(['companyId' => (int)MOLONIES_COMPANY_ID]))['data']['company']['data'];
             $this->customer_id = (new OrderCustomer($this->order))->create();
             $this->document_set_id = $this->getDocumentSetId();
 
@@ -120,6 +126,8 @@ class Documents
 
             $this->ourReference = '#' . $this->order->get_order_number();
             $this->yourReference = '#' . $this->order->get_order_number();
+
+            $this->checkForWarnings();
 
             $this
                 ->setFiscalZone()
@@ -130,14 +138,6 @@ class Documents
                 ->setShippingInfo()
                 ->setPaymentMethod()
                 ->setNotes();
-
-            if ((!isset($_GET['force']) || sanitize_text_field($_GET['force']) !== 'true') && $this->isReferencedInDatabase()) {
-                $viewUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true');
-                throw new Error(
-                    sprintf(__('The order %s document was previously generated!','moloni_es') , $this->order->get_order_number()) .
-                    " <a href='" . esc_url($viewUrl) . "'>" . __('Generate again','moloni_es') . '</a>'
-                );
-            }
 
             $insertedDocument = $this->createDocumentSwitch();
 
@@ -194,21 +194,34 @@ class Documents
      */
     public function setFiscalZone()
     {
-        if (defined('DOCUMENT_FISCAL_ZONE_BASED_ON')) {
-            if (DOCUMENT_FISCAL_ZONE_BASED_ON === 'billing') {
-                $this->fiscalZone = $this->order->get_billing_country();
-            }
+        $fiscalZone = null;
 
-            if (DOCUMENT_FISCAL_ZONE_BASED_ON === 'shipping') {
-                $this->fiscalZone = $this->order->get_shipping_country();
-            }
+        if (isset($_GET['fiscalZone']) && !empty($_GET['fiscalZone'])) {
+            $validValue = sanitize_text_field($_GET['fiscalZone']);
+        } else {
+            $validValue = get_option('woocommerce_tax_based_on');
         }
 
-        if (empty($this->fiscalZone)) {
-            $queryCompany = Companies::queryCompany(['companyId' => (int)MOLONIES_COMPANY_ID]);
+        switch ($validValue) {
+            case 'billing':
+                $fiscalZone = $this->order->get_billing_country();
 
-            $this->fiscalZone = $queryCompany['data']['company']['data']['fiscalZone']['fiscalZone'];
+                break;
+            case 'shipping':
+                $fiscalZone = $this->order->get_shipping_country();
+
+                break;
+            case 'base':
+                $fiscalZone = $this->company['fiscalZone']['fiscalZone'];
+
+                break;
         }
+
+        if ($fiscalZone === null) {
+            $fiscalZone = $this->company['fiscalZone']['fiscalZone'];
+        }
+
+        $this->fiscalZone = $fiscalZone;
 
         return $this;
     }
@@ -274,15 +287,10 @@ class Documents
      */
     private function setExchangeRate()
     {
-        $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID
-        ];
-        $company = Companies::queryCompany($variables);
-
-        if ($company['data']['company']['data']['currency']['iso4217'] !== $this->order->get_currency()) {
-            $result = Tools::getCurrencyExchangeRate($company['data']['company']['data']['currency']['iso4217'],$this->order->get_currency());
-            $this->currencyExchangeId = (int) $result['currencyExchangeId'];
-            $this->currencyExchangeExchange = (float) $result['exchange'];
+        if ($this->company['currency']['iso4217'] !== $this->order->get_currency()) {
+            $result = Tools::getCurrencyExchangeRate($this->company['currency']['iso4217'], $this->order->get_currency());
+            $this->currencyExchangeId = (int)$result['currencyExchangeId'];
+            $this->currencyExchangeExchange = (float)$result['exchange'];
 
             if (!empty($this->products) && is_array($this->products)) {
                 foreach ($this->products as &$product) {
@@ -347,11 +355,6 @@ class Documents
     public function setShippingInfo()
     {
         if ((defined('SHIPPING_INFO') && SHIPPING_INFO) || $this->documentType === 'billsOfLading') {
-            $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID
-            ];
-            $this->company = (Companies::queryCompany($variables))['data']['company']['data'];
-
             $variables = [
                 'companyId' => (int) MOLONIES_COMPANY_ID,
                 'options' => [
@@ -707,6 +710,40 @@ class Documents
         }
 
         return $mutation['data'][$keyString]['data'];
+    }
+
+    /**
+     * Checks for warnings
+     *
+     * @throws Error
+     */
+    private function checkForWarnings()
+    {
+        if ((!isset($_GET['force']) || sanitize_text_field($_GET['force']) !== 'true') && $this->isReferencedInDatabase()) {
+            $viewUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true');
+
+            throw new Error(
+                sprintf(__('The order %s document was previously generated!','moloni_es') , $this->order->get_order_number()) .
+                " <a href='" . esc_url($viewUrl) . "'>" . __('Generate again','moloni_es') . '</a>'
+            );
+        }
+
+        if ($this->isHook === false &&
+            !isset($_GET['fiscalZone']) &&
+            !empty($this->company['fiscalZone']['fiscalZone']) &&
+            !empty($this->order->get_billing_country()) &&
+            $this->company['fiscalZone']['fiscalZone'] !== $this->order->get_billing_country()) {
+            $billingFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=billing');
+            $baseFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=base');
+
+            throw new Error(
+                sprintf(__('The order client and your company have different fiscal zones.','moloni_es') , $this->order->get_order_number()) .
+                "<br>" .
+                " <a href='" . esc_url($billingFiscalZoneUrl) . "'>" . __('Use client billing fiscal zone','moloni_es') . '</a>' .
+                "<br>" .
+                " <a href='" . esc_url($baseFiscalZoneUrl) . "'>" . __('Use company fiscal zone','moloni_es') . '</a>'
+            );
+        }
     }
 
     /**

@@ -30,6 +30,8 @@ class OrderPaid
                 Log::setFileName('DocumentsAuto');
                 Log::write(__("Automatically generating the order document",'moloni_es') . $orderId);
                 $document = new Documents($orderId);
+                $document->isHook = true;
+
                 $newDocument = $document->createDocument();
 
                 if ($newDocument->getError()) {

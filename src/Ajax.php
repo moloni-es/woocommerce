@@ -26,6 +26,7 @@ class Ajax
 
                 try {
                     $document = new Documents($orderId);
+                    $document->isHook = true;
                     $document->createDocument();
 
                     if (!$document->getError()) {
