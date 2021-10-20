@@ -53,6 +53,7 @@ class OrderProduct
     
     /** @var bool */
     private $hasIVA = false;
+    private $fiscalZone;
 
     /**
      * OrderProduct constructor.
@@ -60,11 +61,12 @@ class OrderProduct
      * @param WC_Order $wcOrder
      * @param int $order
      */
-    public function __construct($product, $wcOrder, $order = 0)
+    public function __construct($product, $wcOrder, $order = 0, $fiscalZone = 'es')
     {
         $this->product = $product;
         $this->wc_order = $wcOrder;
         $this->order = $order;
+        $this->fiscalZone = $fiscalZone;
     }
 
     /**
@@ -305,7 +307,7 @@ class OrderProduct
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->wc_order->get_billing_country());
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
         
         $tax = [];
         $tax['taxId'] = (int) $moloniTax['taxId'];

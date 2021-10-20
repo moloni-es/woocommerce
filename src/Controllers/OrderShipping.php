@@ -51,16 +51,18 @@ class OrderShipping
     private $has_stock = 0;
 
     private $hasIVA = false;
+    private $fiscalZone;
 
     /**
      * OrderProduct constructor.
      * @param WC_Order $order
      * @param int $index
      */
-    public function __construct($order, $index = 0)
+    public function __construct($order, $index = 0, $fiscalZone = 'es')
     {
         $this->order = $order;
         $this->index = $index;
+        $this->fiscalZone = $fiscalZone;
     }
 
     /**
@@ -236,7 +238,7 @@ class OrderShipping
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->order->get_billing_country());
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
 
         $tax = [];
         $tax['taxId'] = (int)$moloniTax['taxId'];

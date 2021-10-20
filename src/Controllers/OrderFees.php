@@ -50,8 +50,7 @@ class OrderFees
     private $has_stock = 0;
 
     private $hasIVA = false;
-
-    private $countryCode;
+    private $fiscalZone;
 
     /**
      * OrderProduct constructor.
@@ -59,11 +58,11 @@ class OrderFees
      * @param WC_Order_Item_Fee $fee
      * @param int $index
      */
-    public function __construct($fee, $index = 0, $countryCode = 'es')
+    public function __construct($fee, $index = 0, $fiscalZone = 'es')
     {
         $this->fee = $fee;
         $this->index = $index;
-        $this->countryCode = $countryCode;
+        $this->fiscalZone = $fiscalZone;
     }
 
     /**
@@ -198,7 +197,7 @@ class OrderFees
             $tax['ordering'] = 1;
             $tax['cumulative'] = false;
 
-            $unitPrice = (float) $this->price + (float) $this->fee->get_total_tax();
+            $unitPrice = (float)$this->price + (float)$this->fee->get_total_tax();
 
             $this->price = ($unitPrice * 100);
             $this->price /= (100 + $tax['value']);
@@ -243,7 +242,7 @@ class OrderFees
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->countryCode);
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
 
         $tax = [];
         $tax['taxId'] = (int)$moloniTax['taxId'];

@@ -4,13 +4,6 @@ namespace MoloniES;
 
 class Curl
 {
-
-    ///** @var string Moloni Client Not-so-secret used for WooCommerce */
-    //private static $moloniClient = 'devapi';
-
-    ///** @var string Moloni Not-so-secret key used for WooCommerce */
-    //private static $moloniSecret = '53937d4a8c5889e58fe7f105369d9519a713bf43';
-
     /**
      * Hold the request log
      *

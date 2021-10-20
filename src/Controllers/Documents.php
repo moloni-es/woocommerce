@@ -73,6 +73,7 @@ class Documents
     private $payments = [];
 
     public $documentType;
+    public $fiscalZone;
 
     /** @var int */
     private $currencyExchangeId;
@@ -121,6 +122,7 @@ class Documents
             $this->yourReference = '#' . $this->order->get_order_number();
 
             $this
+                ->setFiscalZone()
                 ->setProducts()
                 ->setShipping()
                 ->setFees()
@@ -184,15 +186,45 @@ class Documents
     }
 
     /**
-     * Sets order products
+     * Set fiscal zone
+     *
      * @return $this
+     *
+     * @throws Error
+     */
+    public function setFiscalZone()
+    {
+        if (defined('DOCUMENT_FISCAL_ZONE_BASED_ON')) {
+            if (DOCUMENT_FISCAL_ZONE_BASED_ON === 'billing') {
+                $this->fiscalZone = $this->order->get_billing_country();
+            }
+
+            if (DOCUMENT_FISCAL_ZONE_BASED_ON === 'shipping') {
+                $this->fiscalZone = $this->order->get_shipping_country();
+            }
+        }
+
+        if (empty($this->fiscalZone)) {
+            $queryCompany = Companies::queryCompany(['companyId' => (int)MOLONIES_COMPANY_ID]);
+
+            $this->fiscalZone = $queryCompany['data']['company']['data']['fiscalZone']['fiscalZone'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets order products
+     *
+     * @return $this
+     *
      * @throws Error
      */
     private function setProducts()
     {
         foreach ($this->order->get_items() as $itemIndex => $orderProduct) {
             /** @var $orderProduct WC_Order_Item_Product */
-            $newOrderProduct = new OrderProduct($orderProduct, $this->order, count($this->products));
+            $newOrderProduct = new OrderProduct($orderProduct, $this->order, count($this->products), $this->fiscalZone);
             $this->products[] = $newOrderProduct->create()->mapPropsToValues();
 
         }
@@ -208,7 +240,7 @@ class Documents
     private function setShipping()
     {
         if ($this->order->get_shipping_method() && (float)$this->order->get_shipping_total() > 0) {
-            $newOrderShipping = new OrderShipping($this->order, count($this->products));
+            $newOrderShipping = new OrderShipping($this->order, count($this->products), $this->fiscalZone);
             $this->products[] = $newOrderShipping->create()->mapPropsToValues();
         }
 
@@ -227,7 +259,7 @@ class Documents
             $feePrice = abs($item['line_total']);
 
             if ($feePrice > 0) {
-                $newOrderFee = new OrderFees($item, count($this->products), $this->order->get_billing_country());
+                $newOrderFee = new OrderFees($item, count($this->products), $this->fiscalZone);
                 $this->products[] = $newOrderFee->create()->mapPropsToValues();
             }
         }
@@ -391,11 +423,12 @@ class Documents
         $variables = [
             'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
+                'fiscalZone' => $this->fiscalZone,
                 'customerId' => (int) $this->customer_id,
                 'documentSetId' => (int) $this->document_set_id,
                 'ourReference' => $this->ourReference,
                 'yourReference' => $this->yourReference,
-                'maturityDateId' => ((int) MATURITY_DATE != 0) ? (int) MATURITY_DATE : null,
+                'maturityDateId' => ((int)MATURITY_DATE !== 0) ? (int) MATURITY_DATE : null,
                 'expirationDate' => $this->expiration_date,
                 'date' => $this->date,
                 'notes' => $this->notes,
@@ -490,7 +523,9 @@ class Documents
 
     /**
      * Creates document based on its type
+     *
      * @return array|mixed
+     *
      * @throws Error
      */
     private function createDocumentSwitch()
