@@ -53,6 +53,7 @@ class OrderProduct
     
     /** @var bool */
     private $hasIVA = false;
+    private $fiscalZone;
 
     /**
      * OrderProduct constructor.
@@ -60,11 +61,12 @@ class OrderProduct
      * @param WC_Order $wcOrder
      * @param int $order
      */
-    public function __construct($product, $wcOrder, $order = 0)
+    public function __construct($product, $wcOrder, $order = 0, $fiscalZone = 'es')
     {
         $this->product = $product;
         $this->wc_order = $wcOrder;
         $this->order = $order;
+        $this->fiscalZone = $fiscalZone;
     }
 
     /**
@@ -75,8 +77,8 @@ class OrderProduct
     {
         $this
             ->setName()
-            ->setPrice()
             ->setQty()
+            ->setPrice()
             ->setSummary()
             ->setProductId()
             ->setDiscount()
@@ -161,11 +163,17 @@ class OrderProduct
      */
     public function setPrice()
     {
-        $this->price = (float)$this->product->get_subtotal() / (float)$this->product->get_quantity();
-
+        $this->price = (float)$this->product->get_subtotal() / $this->qty;
         $refundedValue = $this->wc_order->get_total_refunded_for_item($this->product->get_id());
-        if ((float)$refundedValue > 0) {
-            $this->price -= (float)$refundedValue;
+
+        if ($refundedValue !== 0) {
+            $refundedValue /= $this->qty;
+
+            $this->price -= $refundedValue;
+        }
+
+        if ($this->price < 0) {
+            $this->price = 0;
         }
 
         return $this;
@@ -177,10 +185,10 @@ class OrderProduct
     public function setQty()
     {
         $this->qty = (float)$this->product->get_quantity();
+        $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->product->get_id()));
 
-        $refundedQty = $this->wc_order->get_qty_refunded_for_item($this->product->get_id());
-        if ((float)$refundedQty > 0) {
-            $this->qty -= (float)$refundedQty;
+        if ($refundedQty !== 0) {
+            $this->qty -= $refundedQty;
         }
 
         return $this;
@@ -271,8 +279,8 @@ class OrderProduct
         }
 
         //normal set of taxes
-        $taxRate = 0;
         $taxes = $this->product->get_taxes();
+
         foreach ($taxes['subtotal'] as $taxId => $value) {
             if (!empty($value)) {
                 $taxRate = preg_replace('/[^0-9.]/', '', WC_Tax::get_rate_percent($taxId));
@@ -299,12 +307,12 @@ class OrderProduct
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate);
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
         
         $tax = [];
         $tax['taxId'] = (int) $moloniTax['taxId'];
         $tax['value'] = (float) $taxRate;
-        $tax['ordering'] = (int) (count($this->taxes) + 1);
+        $tax['ordering'] = count($this->taxes) + 1;
         $tax['cumulative'] = (bool) 0;
 
         if ((int) $moloniTax['type'] === 1) {
@@ -315,8 +323,13 @@ class OrderProduct
     }
 
     /**
+     * Set order product warehouse
+     *
      * @param bool|int $warehouseId
+     *
      * @return OrderProduct
+     *
+     * @throws Error
      */
     private function setWarehouse($warehouseId = false)
     {

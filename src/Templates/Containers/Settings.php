@@ -92,6 +92,20 @@
 
             <tr>
                 <th>
+                    <label for="document_fiscal_zone_based_on"><?= __('Documents fiscal zone', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="document_fiscal_zone_based_on" name='opt[document_fiscal_zone_based_on]' class='inputOut'>
+                        <option value='company' <?= (defined('DOCUMENT_FISCAL_ZONE_BASED_ON') && DOCUMENT_FISCAL_ZONE_BASED_ON === 'company' ? 'selected' : '') ?>><?= __('Company', 'moloni_es') ?></option>
+                        <option value='billing' <?= (defined('DOCUMENT_FISCAL_ZONE_BASED_ON') && DOCUMENT_FISCAL_ZONE_BASED_ON === 'billing' ? 'selected' : '') ?>><?= __('Costumer billing address', 'moloni_es') ?></option>
+<!--                    <option value='shipping' <?/*= (defined('DOCUMENT_FISCAL_ZONE_BASED_ON') && DOCUMENT_FISCAL_ZONE_BASED_ON === 'shipping' ? 'selected' : '') */?>><?/*= __('Costumer shipping address', 'moloni_es') */?></option> -->
+                    </select>
+                    <p class='description'><?= __('Which fiscal zone to use when converting orders in documents', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
                     <label for="shipping_info"><?= __('Shipping info' , 'moloni_es') ?></label>
                 </th>
                 <td>

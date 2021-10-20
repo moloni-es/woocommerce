@@ -51,16 +51,18 @@ class OrderShipping
     private $has_stock = 0;
 
     private $hasIVA = false;
+    private $fiscalZone;
 
     /**
      * OrderProduct constructor.
      * @param WC_Order $order
      * @param int $index
      */
-    public function __construct($order, $index = 0)
+    public function __construct($order, $index = 0, $fiscalZone = 'es')
     {
         $this->order = $order;
         $this->index = $index;
+        $this->fiscalZone = $fiscalZone;
     }
 
     /**
@@ -215,7 +217,7 @@ class OrderShipping
         //Normal way
         $taxRate = round(($shippingTotal * 100) / $this->order->get_shipping_total());
 
-        if ((float)$taxRate > 0) {
+        if ($taxRate > 0) {
             $this->taxes[] = $this->setTax($taxRate);
         }
 
@@ -236,15 +238,15 @@ class OrderShipping
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate);
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
 
         $tax = [];
-        $tax['taxId'] = (int) $moloniTax['taxId'];
-        $tax['value'] = (float) $taxRate;
-        $tax['ordering'] = (int) (count($this->taxes) + 1);
-        $tax['cumulative'] = (bool) 0;
+        $tax['taxId'] = (int)$moloniTax['taxId'];
+        $tax['value'] = (float)$moloniTax['value'];
+        $tax['ordering'] = count($this->taxes) + 1;
+        $tax['cumulative'] = false;
 
-        if ((int) $moloniTax['type'] === 1) {
+        if ((int)$moloniTax['type'] === 1) {
             $this->hasIVA = true;
         }
 

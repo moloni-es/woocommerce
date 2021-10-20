@@ -2,11 +2,11 @@
 
 namespace MoloniES\Controllers;
 
+use MoloniES\API\Companies;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\API\Taxes;
 use MoloniES\API\Warehouses;
 use MoloniES\Error;
-use MoloniES\Log;
 use MoloniES\Tools;
 use WC_Product;
 use WC_Tax;
@@ -321,7 +321,6 @@ class Product
     {
         //if a tax is set in settings (should not be used by the client)
         if(defined('TAX_ID') && TAX_ID > 0) {
-
             $variables = [
                 'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID
@@ -352,20 +351,20 @@ class Product
             $productTaxes = $this->product->get_tax_class();
             $taxRates = WC_Tax::get_base_tax_rates($productTaxes);
 
-            foreach ($taxRates as $order => $taxRate) {
-                $moloniTax = Tools::getTaxFromRate((float)$taxRate['rate']);
+            // Get company setting to associate country code
+            $companyCountryCode = Companies::queryCompany(['companyId' => (int)MOLONIES_COMPANY_ID]);
+            $companyCountryCode = $companyCountryCode['data']['company']['data']['fiscalZone']['fiscalZone'];
 
-                if (!$moloniTax) {
-                    continue;
-                }
+            foreach ($taxRates as $order => $taxRate) {
+                $moloniTax = Tools::getTaxFromRate((float)$taxRate['rate'], $companyCountryCode);
 
                 $tax = [];
-                $tax['taxId'] = (int) $moloniTax['taxId'];
-                $tax['value'] = (float) $taxRate['rate'];
-                $tax['ordering'] = (int) $order;
+                $tax['taxId'] = (int)$moloniTax['taxId'];
+                $tax['value'] = (float)$moloniTax['value'];
+                $tax['ordering'] = (int)$order;
                 $tax['cumulative'] = false;
 
-                if ((float)$taxRate['rate'] > 0) {
+                if ($moloniTax['value'] > 0) {
                     $this->taxes[] = $tax;
                 }
 

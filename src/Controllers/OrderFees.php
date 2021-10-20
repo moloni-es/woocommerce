@@ -46,21 +46,23 @@ class OrderFees
 
     private $type = 2;
     private $summary = '';
-    private $ean = '';
     private $unit_id;
     private $has_stock = 0;
 
     private $hasIVA = false;
+    private $fiscalZone;
 
     /**
      * OrderProduct constructor.
+     *
      * @param WC_Order_Item_Fee $fee
      * @param int $index
      */
-    public function __construct($fee, $index = 0)
+    public function __construct($fee, $index = 0, $fiscalZone = 'es')
     {
         $this->fee = $fee;
         $this->index = $index;
+        $this->fiscalZone = $fiscalZone;
     }
 
     /**
@@ -163,7 +165,6 @@ class OrderFees
         return $this;
     }
 
-
     /**
      * Set the discount in percentage
      * @return $this
@@ -191,12 +192,12 @@ class OrderFees
 
             $query = (Taxes::queryTax($variables))['data']['tax']['data'];
 
-            $tax['taxId'] = (int) $query['taxId'];
-            $tax['value'] = (float) $query['value'];
+            $tax['taxId'] = (int)$query['taxId'];
+            $tax['value'] = (float)$query['value'];
             $tax['ordering'] = 1;
             $tax['cumulative'] = false;
 
-            $unitPrice = (float) $this->price + (float) $this->fee->get_total_tax();
+            $unitPrice = (float)$this->price + (float)$this->fee->get_total_tax();
 
             $this->price = ($unitPrice * 100);
             $this->price /= (100 + $tax['value']);
@@ -220,7 +221,7 @@ class OrderFees
             $taxRate = round(($taxedValue * 100) / (float)$this->fee->get_amount());
         }
 
-        if ((float)$taxRate > 0) {
+        if ($taxRate > 0) {
             $this->taxes[] = $this->setTax($taxRate);
         }
 
@@ -241,13 +242,13 @@ class OrderFees
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate);
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
 
         $tax = [];
-        $tax['taxId'] = (int) $moloniTax['taxId'];
-        $tax['value'] = (float) $taxRate;
-        $tax['ordering'] = (int) (count($this->taxes) + 1);
-        $tax['cumulative'] = (bool) 0;
+        $tax['taxId'] = (int)$moloniTax['taxId'];
+        $tax['value'] = (float)$moloniTax['value'];
+        $tax['ordering'] = count($this->taxes) + 1;
+        $tax['cumulative'] = false;
 
         if ((int) $moloniTax['type'] === 1) {
             $this->hasIVA = true;

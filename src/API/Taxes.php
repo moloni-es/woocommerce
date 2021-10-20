@@ -28,6 +28,11 @@ class Taxes
                     value
                     type
                     fiscalZone
+                    flags
+                    {
+                        flagId
+                        name
+                    }
                     country
                     {
                         countryId
@@ -76,6 +81,11 @@ class Taxes
                     value
                     type
                     fiscalZone
+                    flags
+                    {
+                        flagId
+                        name
+                    }
                     country
                     {
                         countryId
