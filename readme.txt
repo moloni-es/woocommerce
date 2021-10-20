@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.26
+Stable tag: 1.0.27
 Tested up to: 5.8.1
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.27 =
+* Updated fiscal zone behavior
+
 = 1.0.26 =
 * Added option to choose where to base fiscal zone
 * Fix tax fetch
