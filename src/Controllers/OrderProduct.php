@@ -178,9 +178,10 @@ class OrderProduct
     {
         $this->qty = (float)$this->product->get_quantity();
 
-        $refundedQty = $this->wc_order->get_qty_refunded_for_item($this->product->get_id());
-        if ((float)$refundedQty > 0) {
-            $this->qty -= (float)$refundedQty;
+        $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->product->get_id()));
+
+        if ($refundedQty !== 0) {
+            $this->qty -= $refundedQty;
         }
 
         return $this;
