@@ -31,9 +31,7 @@ class Curl
      * @var array
      */
     private static $complexAllowedCachedMethods = [
-        'countries/countries',
         'currencies/currencies',
-        'taxes/taxes',
         'paymentmethods/paymentMethods'
     ];
 

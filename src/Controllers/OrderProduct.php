@@ -271,8 +271,8 @@ class OrderProduct
         }
 
         //normal set of taxes
-        $taxRate = 0;
         $taxes = $this->product->get_taxes();
+
         foreach ($taxes['subtotal'] as $taxId => $value) {
             if (!empty($value)) {
                 $taxRate = preg_replace('/[^0-9.]/', '', WC_Tax::get_rate_percent($taxId));
@@ -299,12 +299,12 @@ class OrderProduct
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate);
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->wc_order->get_billing_country());
         
         $tax = [];
         $tax['taxId'] = (int) $moloniTax['taxId'];
         $tax['value'] = (float) $taxRate;
-        $tax['ordering'] = (int) (count($this->taxes) + 1);
+        $tax['ordering'] = count($this->taxes) + 1;
         $tax['cumulative'] = (bool) 0;
 
         if ((int) $moloniTax['type'] === 1) {
@@ -315,8 +315,13 @@ class OrderProduct
     }
 
     /**
+     * Set order product warehouse
+     *
      * @param bool|int $warehouseId
+     *
      * @return OrderProduct
+     *
+     * @throws Error
      */
     private function setWarehouse($warehouseId = false)
     {

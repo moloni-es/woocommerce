@@ -2,6 +2,7 @@
 
 namespace MoloniES;
 
+use MoloniES\API\FiscalZone;
 use MoloniES\API\Taxes;
 use MoloniES\API\Countries;
 use MoloniES\API\Currencies;
@@ -13,12 +14,13 @@ use MoloniES\API\Currencies;
  */
 class Tools
 {
-
     /**
      * Creates reference for product if missing
+     *
      * @param string $string
      * @param int $productId
      * @param int $variationId
+     *
      * @return string
      */
     public static function createReferenceFromString($string, $productId = 0, $variationId = 0)
@@ -42,61 +44,93 @@ class Tools
     }
 
     /**
-     * Get a tax id given a tax rate
-     * As a fallback if we don't find a tax with the same rate we return the company default
-     * @param $taxRate
-     * @return mixed
+     * Create moloni tax based on value and country code
+     *
+     * @param float $taxRate Tax value
+     * @param string $countryCode Country code
+     *
+     * @return array
+     *
      * @throws Error
      */
-    public static function getTaxIdFromRate($taxRate)
-    {
-        $defaultTax = 0;
+    public static function createTaxFromRateAndCode($taxRate, $countryCode = 'es') {
+        $taxCreateVariables = [
+            'companyId' => (int)MOLONIES_COMPANY_ID,
+            'data' => [
+                'visible' => 1,
+                'name' => 'VAT - ' . strtoupper($countryCode) . ' - ' . $taxRate . '%',
+                'fiscalZone' => $countryCode,
+                'countryId' => self::getCountryIdFromCode($countryCode),
+                'type' => 1,
+                'fiscalZoneFinanceType' => 1,
+                'isDefault' => false,
+                'value' => (float)$taxRate
+            ]
+        ];
+        $countryCodeTaxSettingsVariables = [
+            'companyId' => (int)MOLONIES_COMPANY_ID,
+            'fiscalZone' => $countryCode
+        ];
 
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID];
-        $taxesList = Taxes::queryTaxes($variables);
+        $countryCodeTaxSettings = FiscalZone::queryFiscalZoneTaxSettings($countryCodeTaxSettingsVariables);
+        $countryCodeTaxSettings = $countryCodeTaxSettings['data']['fiscalZoneTaxSettings']['fiscalZoneModes'][0]; // Remove some nodes from array
 
-        if (!empty($taxesList) && is_array($taxesList)) {
-            foreach ($taxesList as $tax) {
-                if ((int)$tax['isDefault'] === 1) {
-                    $defaultTax = $tax['taxId'];
-                }
-
-                if ((float)$tax['value'] === (float)$taxRate) {
-                    return $tax['taxId'];
-                }
-            }
+        if (($countryCodeTaxSettings['visible'] === 'TYPESELECTED' || $countryCodeTaxSettings['visible'] === 'ALWAYS') &&
+            $countryCodeTaxSettings['type'] === 'VALUES') {
+            $taxCreateVariables['data']['fiscalZoneFinanceTypeMode'] = 'NOR';
         }
 
-        return $defaultTax;
+        return Taxes::mutationTaxCreate($taxCreateVariables);
     }
 
     /**
      * Get full tax Object given a tax rate
      * As a fallback if we don't find a tax with the same rate we return the company default
-     * @param $taxRate
+     *
+     * @param float $taxRate Tax value
+     * @param string $countryCode Country code
+     *
      * @return mixed
+     *
      * @throws Error
      */
-    public static function getTaxFromRate($taxRate)
+    public static function getTaxFromRate($taxRate, $countryCode = 'es')
     {
-        $defaultTax = 0;
+        $moloniTax = [];
+        $countryCode = strtolower((string)$countryCode);
 
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID];
-        $taxesList = Taxes::queryTaxes($variables);
+        $queryVariables = [
+            'companyId' => (int)MOLONIES_COMPANY_ID,
+            'options' => [
+                'filter' => [
+                    'field' => 'value',
+                    'comparison' => 'eq',
+                    'value' => (string)$taxRate
+                ],
+                'search' => [
+                    'field' => 'fiscalZone',
+                    'value' => $countryCode
+                ]
+            ]
+        ];
 
-        if (!empty($taxesList) && is_array($taxesList)) {
-            foreach ($taxesList as $tax) {
-                if ((int)$tax['isDefault'] === 1) {
-                    $defaultTax = $tax;
-                }
+        $taxes = Taxes::queryTaxes($queryVariables);
 
-                if ((float)$tax['value'] === (float)$taxRate) {
-                    return $tax;
+        if (!empty($taxes) && is_array($taxes)) {
+            foreach ($taxes as $tax) {
+                if (empty($tax['flags'])) {
+                    $moloniTax = $tax;
+
+                    break;
                 }
             }
         }
 
-        return $defaultTax;
+        if (empty($moloniTax)) {
+            $moloniTax = self::createTaxFromRateAndCode($taxRate, $countryCode);
+        }
+
+        return $moloniTax;
     }
 
     /**
@@ -107,24 +141,28 @@ class Tools
      */
     public static function getCountryIdFromCode($countryCode)
     {
-        $variables = ['options' => [
-            'search' => [
-                'field' => 'iso3166_1',
-                'value' => $countryCode
+        $variables = [
+            'options' => [
+                'filter' => [
+                    'field' => 'iso3166_1',
+                    'comparison' => 'eq',
+                    'value' => $countryCode
+                ]
             ]
-        ]];
+        ];
+        $countryId = 1;
+
         $countriesList = Countries::queryCountries($variables);
 
         if (!empty($countriesList) && is_array($countriesList)) {
             foreach ($countriesList as $country) {
                 if (strtoupper($country['iso3166_1']) === strtoupper($countryCode)) {
-                    return $country['countryId'];
-                    break;
+                    $countryId = $country['countryId'];
                 }
             }
         }
 
-        return '1';
+        return $countryId;
     }
 
     /**

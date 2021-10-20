@@ -227,7 +227,7 @@ class Documents
             $feePrice = abs($item['line_total']);
 
             if ($feePrice > 0) {
-                $newOrderFee = new OrderFees($item, count($this->products));
+                $newOrderFee = new OrderFees($item, count($this->products), $this->order->get_billing_country());
                 $this->products[] = $newOrderFee->create()->mapPropsToValues();
             }
         }

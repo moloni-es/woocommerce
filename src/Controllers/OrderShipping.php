@@ -215,7 +215,7 @@ class OrderShipping
         //Normal way
         $taxRate = round(($shippingTotal * 100) / $this->order->get_shipping_total());
 
-        if ((float)$taxRate > 0) {
+        if ($taxRate > 0) {
             $this->taxes[] = $this->setTax($taxRate);
         }
 
@@ -236,15 +236,15 @@ class OrderShipping
      */
     private function setTax($taxRate)
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate);
+        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->order->get_billing_country());
 
         $tax = [];
-        $tax['taxId'] = (int) $moloniTax['taxId'];
-        $tax['value'] = (float) $taxRate;
-        $tax['ordering'] = (int) (count($this->taxes) + 1);
-        $tax['cumulative'] = (bool) 0;
+        $tax['taxId'] = (int)$moloniTax['taxId'];
+        $tax['value'] = (float)$moloniTax['value'];
+        $tax['ordering'] = count($this->taxes) + 1;
+        $tax['cumulative'] = false;
 
-        if ((int) $moloniTax['type'] === 1) {
+        if ((int)$moloniTax['type'] === 1) {
             $this->hasIVA = true;
         }
 
