@@ -217,7 +217,7 @@ class Documents
                 break;
         }
 
-        if ($fiscalZone === null) {
+        if (empty($fiscalZone)) {
             $fiscalZone = $this->company['fiscalZone']['fiscalZone'];
         }
 
