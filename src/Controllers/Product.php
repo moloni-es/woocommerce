@@ -53,12 +53,19 @@ class Product
     {
         $this->setReference();
 
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = ['companyId' => (int)MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
-                    'field' => 'reference',
-                    'comparison' => 'eq',
-                    'value' => $this->reference,
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $this->reference,
+                    ],
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'gte',
+                        'value' => '0',
+                    ]
                 ],
                 "includeVariants" => true
             ]
