@@ -151,12 +151,19 @@ class SyncProducts
     {
         $productsList = [];
 
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = ['companyId' => (int)MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
-                    'field' => 'updatedAt',
-                    'comparison' => 'gte',
-                    'value' => $this->since
+                    [
+                        'field' => 'updatedAt',
+                        'comparison' => 'gte',
+                        'value' => $this->since
+                    ],
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'gte',
+                        'value' => '0',
+                    ]
                 ],
                 "includeVariants" => true
             ]

@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.28
+Stable tag: 1.0.29
 Tested up to: 5.8.1
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,12 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.29 =
+* Fetch invisible products when searching for products
+* Updated translations
+* Updated logs when syncing products
+* Tested up to version 5.9.0 of WooCommerce
+
 = 1.0.28 =
 * Fix fiscal zone verification
 
