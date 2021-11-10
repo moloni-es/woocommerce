@@ -44,12 +44,12 @@ class ProductUpdate
                         if (!$productObj->loadbyreference()) {
                             $productObj->create();
                             if ($productObj->product_id > 0) {
-                                Log::write(__('Product created on Moloni' , 'moloni_es'));
+                                Log::write(__('Product created on Moloni', 'moloni_es') . ': ' . $productObj->reference);
                                 notice::addmessagesuccess(__('Product created on Moloni' , 'moloni_es'));
                             }
                         } else {
                             $productObj->update();
-                            Log::write(__('Product updated on Moloni' , 'moloni_es'));
+                            Log::write(__('Product updated on Moloni', 'moloni_es') . ': ' . $productObj->reference);
                             notice::addmessageinfo(__('Product updated on Moloni' , 'moloni_es'));
                         }
                     }
