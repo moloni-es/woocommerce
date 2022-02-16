@@ -119,16 +119,14 @@ class Model
             } else {
                 $recheckTokens = self::getTokensRow();
 
-                switch (true) {
-                    case empty($recheckTokens):
-                    case empty($recheckTokens['access_expire']):
-                    case empty($recheckTokens['refresh_expire']):
-                    case $recheckTokens['access_expire'] === $access_expire:
-                    case $recheckTokens['refresh_expire'] === $refresh_expire:
-                        $wpdb->query('TRUNCATE moloni_es_api');
+                if (empty($recheckTokens) ||
+                    empty($recheckTokens['main_token']) ||
+                    empty($recheckTokens['refresh_token']) ||
+                    $recheckTokens['main_token'] === $tokensRow['main_token'] ||
+                    $recheckTokens['refresh_token'] === $tokensRow['refresh_token']) {
+                    self::resetTokens();
 
-                        return false;
-
+                    return false;
                 }
             }
         }
