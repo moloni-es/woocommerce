@@ -720,29 +720,33 @@ class Documents
     private function checkForWarnings()
     {
         if ((!isset($_GET['force']) || sanitize_text_field($_GET['force']) !== 'true') && $this->isReferencedInDatabase()) {
-            $viewUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true');
+            $errorMsg = sprintf(__('The order %s document was previously generated!','moloni_es') , $this->order->get_order_number());
 
-            throw new Error(
-                sprintf(__('The order %s document was previously generated!','moloni_es') , $this->order->get_order_number()) .
-                " <a href='" . esc_url($viewUrl) . "'>" . __('Generate again','moloni_es') . '</a>'
-            );
+            if ($this->isHook === false) {
+                $viewUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true');
+                $errorMsg .= " <a href='" . esc_url($viewUrl) . "'>" . __('Generate again','moloni_es') . '</a>';
+            }
+
+            throw new Error($errorMsg);
         }
 
-        if ($this->isHook === false &&
-            !isset($_GET['fiscalZone']) &&
+        if (!isset($_GET['fiscalZone']) &&
             !empty($this->company['fiscalZone']['fiscalZone']) &&
             !empty($this->order->get_billing_country()) &&
             $this->company['fiscalZone']['fiscalZone'] !== $this->order->get_billing_country()) {
-            $billingFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=billing');
-            $baseFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=base');
+            $errorMsg = sprintf(__('The order client and your company have different fiscal zones.','moloni_es') , $this->order->get_order_number());
 
-            throw new Error(
-                sprintf(__('The order client and your company have different fiscal zones.','moloni_es') , $this->order->get_order_number()) .
-                "<br>" .
-                " <a href='" . esc_url($billingFiscalZoneUrl) . "'>" . __('Use client billing fiscal zone','moloni_es') . '</a>' .
-                "<br>" .
-                " <a href='" . esc_url($baseFiscalZoneUrl) . "'>" . __('Use company fiscal zone','moloni_es') . '</a>'
-            );
+            if ($this->isHook === false) {
+                $billingFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=billing');
+                $baseFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=base');
+
+                $errorMsg .= "<br>";
+                $errorMsg .= " <a href='" . esc_url($billingFiscalZoneUrl) . "'>" . __('Use client billing fiscal zone','moloni_es') . '</a>';
+                $errorMsg .= "<br>";
+                $errorMsg .= " <a href='" . esc_url($baseFiscalZoneUrl) . "'>" . __('Use company fiscal zone','moloni_es') . '</a>';
+            }
+
+            throw new Error($errorMsg);
         }
     }
 
