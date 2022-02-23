@@ -17,21 +17,26 @@ class Model
     public static function getTokensRow()
     {
         global $wpdb;
+
         return $wpdb->get_row('SELECT * FROM moloni_es_api ORDER BY id DESC', ARRAY_A);
     }
 
     /**
      * Adds client id and secret to the database
-     * @param $clientId
-     * @param $clientSecret
-     * @return array|false
+     *
+     * @param int $clientId
+     * @param string $clientSecret
+     *
+     * @return true
      */
     public static function setClient($clientId, $clientSecret)
     {
         global $wpdb;
+
         $wpdb->query('TRUNCATE moloni_es_api');
         $wpdb->insert('moloni_es_api', ['client_id' => $clientId, 'client_secret' => $clientSecret]);
-        return self::getTokensRow();
+
+        return true;
     }
 
     /**
@@ -44,8 +49,10 @@ class Model
     public static function setTokens($accessToken, $refreshToken)
     {
         global $wpdb;
+
         $wpdb->update('moloni_es_api', ['main_token' => $accessToken, 'refresh_token' => $refreshToken], ['id' => 1]);
-        return self::getTokensRow();
+
+        return true;
     }
 
     /**
@@ -82,6 +89,7 @@ class Model
 
         $access_expire = false;
         $refresh_expire = false;
+
         if (!isset($tokensRow['access_expire']) && !isset($tokensRow['refresh_expire'])) {
             $wpdb->query('ALTER TABLE moloni_es_api ADD access_expire varchar(250)');
             $wpdb->query('ALTER TABLE moloni_es_api ADD refresh_expire varchar(250)');
@@ -92,28 +100,38 @@ class Model
 
         if ($refresh_expire !== false && $refresh_expire < time()) {
             $wpdb->query('TRUNCATE moloni_es_api');
+
             return false;
         }
 
         if (!$access_expire || $access_expire < time()) {
             $results = Curl::refresh($tokensRow['client_id'], $tokensRow['client_secret'], $tokensRow['refresh_token']);
 
-            if (!isset($results['accessToken']) || !isset($results['refreshToken'])) {
-                $wpdb->query('TRUNCATE moloni_es_api');
-                return false;
-            }
+            if (isset($results['accessToken'], $results['refreshToken'])) {
+                $wpdb->update('moloni_es_api', [
+                    'main_token' => $results['accessToken'],
+                    'refresh_token' => $results['refreshToken'],
+                    'access_expire' => time() + 3000,
+                    'refresh_expire' => time() + 864000
+                ], [
+                    'id' => $tokensRow['id']
+                ]);
+            } else {
+                $recheckTokens = self::getTokensRow();
 
-            $wpdb->update(
-                'moloni_es_api', [
-                'main_token' => $results['accessToken'],
-                'refresh_token' => $results['refreshToken'],
-                'access_expire' => time() + 3000,
-                'refresh_expire' => time() + 864000
-            ], ['id' => $tokensRow['id']]
-            );
+                if (empty($recheckTokens) ||
+                    empty($recheckTokens['main_token']) ||
+                    empty($recheckTokens['refresh_token']) ||
+                    $recheckTokens['main_token'] === $tokensRow['main_token'] ||
+                    $recheckTokens['refresh_token'] === $tokensRow['refresh_token']) {
+                    self::resetTokens();
+
+                    return false;
+                }
+            }
         }
 
-        return self::getTokensRow();
+        return true;
     }
 
     /**
@@ -122,6 +140,7 @@ class Model
     public static function defineValues()
     {
         $tokensRow = self::getTokensRow();
+
         define('MOLONI_SESSION_ID', $tokensRow['id']);
         define('MOLONI_ACCESS_TOKEN', $tokensRow['main_token']);
 
@@ -139,6 +158,7 @@ class Model
         $results = $wpdb->get_results('SELECT * FROM moloni_es_api_config ORDER BY id DESC', ARRAY_A);
         foreach ($results as $result) {
             $setting = strtoupper($result['config']);
+
             if (!defined($setting)) {
                 define($setting, $result['selected']);
             }
@@ -169,13 +189,16 @@ class Model
 
     /**
      * Resets database table
-     * @return array|false
+     *
+     * @return true
      */
     public static function resetTokens()
     {
         global $wpdb;
+
         $wpdb->query('TRUNCATE moloni_es_api');
-        return self::getTokensRow();
+
+        return true;
     }
 
     /**

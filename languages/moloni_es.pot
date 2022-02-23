@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-20 16:09+0000\n"
+"POT-Creation-Date: 2022-02-16 14:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Automatically create document when an order is paid"
 msgstr ""
 
-#: src/Hooks/OrderPaid.php:31
+#: src/Hooks/OrderPaid.php:30
 msgid "Automatically generating the order document"
 msgstr ""
 
@@ -77,7 +77,7 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: src/Start.php:66
+#: src/Start.php:67
 msgid "Changes saved."
 msgstr ""
 
@@ -293,7 +293,7 @@ msgstr ""
 msgid "Error creating payment method"
 msgstr ""
 
-#: src/Controllers/Product.php:104
+#: src/Controllers/Product.php:111
 #, php-format
 msgid "Error creating product %s"
 msgstr ""
@@ -302,15 +302,15 @@ msgstr ""
 msgid "Error getting product"
 msgstr ""
 
-#: src/Controllers/OrderFees.php:133
+#: src/Controllers/OrderFees.php:140
 msgid "Error inserting order fees"
 msgstr ""
 
-#: src/Controllers/OrderShipping.php:130
+#: src/Controllers/OrderShipping.php:137
 msgid "Error inserting shipping"
 msgstr ""
 
-#: src/Controllers/Product.php:128
+#: src/Controllers/Product.php:135
 #, php-format
 msgid "Error updating product %s"
 msgstr ""
@@ -328,7 +328,7 @@ msgstr ""
 msgid "Exemption reason"
 msgstr ""
 
-#: src/Crons.php:51 src/Hooks/ProductUpdate.php:61 src/Hooks/OrderPaid.php:42
+#: src/Crons.php:51 src/Hooks/ProductUpdate.php:61 src/Hooks/OrderPaid.php:43
 msgid "Fatal error: "
 msgstr ""
 
@@ -408,8 +408,8 @@ msgstr ""
 msgid "Maturity date"
 msgstr ""
 
-#: src/Controllers/Product.php:309 src/Controllers/OrderFees.php:162
-#: src/Controllers/OrderShipping.php:159
+#: src/Controllers/Product.php:316 src/Controllers/OrderFees.php:169
+#: src/Controllers/OrderShipping.php:166
 msgid "Measure unit not set!"
 msgstr ""
 
@@ -470,12 +470,12 @@ msgstr ""
 msgid "No products to update since %s"
 msgstr ""
 
-#: src/WebHooks/Properties.php:45 src/Controllers/Product.php:231
-#: src/Controllers/OrderFees.php:141 src/Controllers/OrderShipping.php:138
+#: src/WebHooks/Properties.php:45 src/Controllers/Product.php:238
+#: src/Controllers/OrderFees.php:148 src/Controllers/OrderShipping.php:145
 msgid "Online Store"
 msgstr ""
 
-#: src/Curl.php:95 src/Curl.php:236
+#: src/Curl.php:94 src/Curl.php:234
 msgid "Oops, an error was encountered..."
 msgstr ""
 
@@ -493,6 +493,10 @@ msgstr ""
 #: src/Plugin.php:182
 #, php-format
 msgid "Order %s has been marked as generated!"
+msgstr ""
+
+#: src/Hooks/OrderPaid.php:39
+msgid "Order document created successfully"
 msgstr ""
 
 #: src/Controllers/OrderProduct.php:206
@@ -746,12 +750,12 @@ msgstr ""
 msgid "The document is only sent to the customer if it is inserted as closed"
 msgstr ""
 
-#: src/Controllers/Documents.php:726
+#: src/Controllers/Documents.php:723
 #, php-format
 msgid "The order %s document was previously generated!"
 msgstr ""
 
-#: src/Controllers/Documents.php:740
+#: src/Controllers/Documents.php:737
 msgid "The order client and your company have different fiscal zones."
 msgstr ""
 
@@ -764,7 +768,7 @@ msgstr ""
 msgid "There are %s products up to date."
 msgstr ""
 
-#: src/Hooks/OrderPaid.php:38
+#: src/Hooks/OrderPaid.php:37
 msgid "There was an error generating the document: "
 msgstr ""
 
@@ -793,11 +797,11 @@ msgstr ""
 msgid "updated"
 msgstr ""
 
-#: src/Controllers/Documents.php:742
+#: src/Controllers/Documents.php:744
 msgid "Use client billing fiscal zone"
 msgstr ""
 
-#: src/Controllers/Documents.php:744
+#: src/Controllers/Documents.php:746
 msgid "Use company fiscal zone"
 msgstr ""
 
@@ -857,7 +861,7 @@ msgstr ""
 msgid "Warning, cannot insert Invoice + Receipt documents as a draft"
 msgstr ""
 
-#: src/Controllers/SyncProducts.php:169
+#: src/Controllers/SyncProducts.php:176
 msgid "Warning, error getting products via API"
 msgstr ""
 
@@ -932,6 +936,6 @@ msgstr ""
 msgid "Yes, i confirm"
 msgstr ""
 
-#: src/Start.php:157
+#: src/Start.php:159
 msgid "You have no companies available in your account!"
 msgstr ""

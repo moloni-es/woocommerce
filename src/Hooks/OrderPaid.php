@@ -27,8 +27,7 @@ class OrderPaid
     {
         try {
             if (Start::login(true) && defined("INVOICE_AUTO") && INVOICE_AUTO) {
-                Log::setFileName('DocumentsAuto');
-                Log::write(__("Automatically generating the order document",'moloni_es') . $orderId);
+                Log::write(__("Automatically generating the order document",'moloni_es') . ': ' . $orderId);
                 $document = new Documents($orderId);
                 $document->isHook = true;
 
@@ -36,6 +35,8 @@ class OrderPaid
 
                 if ($newDocument->getError()) {
                     Log::write(__("There was an error generating the document: ",'moloni_es') . strip_tags($newDocument->getError()->getDecodedMessage()));
+                } else {
+                    Log::write(__("Order document created successfully",'moloni_es') . ': ' . $orderId);
                 }
             }
         } catch (Exception $ex) {
