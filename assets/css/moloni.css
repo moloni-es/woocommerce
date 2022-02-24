@@ -24,6 +24,10 @@ hr {
     border-radius: 3px;
 }
 
+.inputOut--sm {
+    width: 162px;
+}
+
 /* ============= Login ==============*/
 #formLogin {
     width: 574px;
@@ -189,4 +193,14 @@ li#toplevel_page_moloni img {
     color: #fff;
     text-decoration: none;
     text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+}
+
+/** =========== Settings ========== */
+
+#formOpcoes .custom-address__wrapper {
+    display: none;
+}
+
+#formOpcoes .custom-address__line {
+    margin-top: 0.5rem;
 }

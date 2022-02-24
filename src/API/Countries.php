@@ -49,7 +49,7 @@ class Countries
             }
         }';
 
-        return Curl::complex('countries/countries', $query, $variables, 'countries');
+        return Curl::simple('countries/countries', $query, $variables);
     }
 
     /**

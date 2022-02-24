@@ -1,4 +1,5 @@
 <?php use \MoloniES\API\Companies; ?>
+<?php use MoloniES\API\Countries; ?>
 <?php use \MoloniES\API\Documents; ?>
 <?php use \MoloniES\API\Warehouses; ?>
 <?php use \MoloniES\API\MeasurementUnits; ?>
@@ -10,14 +11,29 @@
 <?php
     $variables = ['companyId' => (int) MOLONIES_COMPANY_ID];
     $company = Companies::queryCompany($variables);
+    $documentSets = Documents::queryDocumentSets($variables);
+    $paymentMethods = PaymentMethods::queryPaymentMethods($variables);
+    $maturityDates = MaturityDates::queryMaturityDates($variables);
+    $warehouses = Warehouses::queryWarehouses($variables);
+    $measurementUnits = MeasurementUnits::queryMeasurementUnits($variables);
+    $taxes = Taxes::queryTaxes($variables);
+
+    $countries = Countries::queryCountries([
+        'companyId' => (int)MOLONIES_COMPANY_ID,
+        'options' => [
+            'defaultLanguageId' => 2
+        ]
+    ]);
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=settings') ?>' id='formOpcoes'>
     <input type='hidden' value='save' name='action'>
     <div>
+        <!-- Documents -->
         <h2 class="title"><?= __('Documents' , 'moloni_es') ?></h2>
         <table class="form-table">
             <tbody>
+            <!-- Slug -->
             <tr>
                 <th>
                     <label for="company_slug"><?= __('Company slug','moloni_es') ?></label>
@@ -28,6 +44,8 @@
                            style="width: 330px;">
                 </td>
             </tr>
+
+            <!-- Document type -->
             <tr>
                 <th>
                     <label for="document_type"><?= __('Document type','moloni_es') ?></label>
@@ -62,6 +80,7 @@
                 </td>
             </tr>
 
+            <!-- Document status -->
             <tr>
                 <th>
                     <label for="document_status"><?= __('Document status' , 'moloni_es') ?></label>
@@ -75,13 +94,13 @@
                 </td>
             </tr>
 
+            <!-- Document set -->
             <tr>
                 <th>
                     <label for="document_set_id"><?= __('Document set' , 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="document_set_id" name='opt[document_set_id]' class='inputOut'>
-                        <?php $documentSets = Documents::queryDocumentSets($variables);?>
                         <?php foreach ($documentSets as $documentSet) : ?>
                             <option value='<?= $documentSet['documentSetId'] ?>' <?= (defined('DOCUMENT_SET_ID') && (int)DOCUMENT_SET_ID === $documentSet['documentSetId'] ? 'selected' : '') ?>><?= $documentSet['name'] ?></option>
                         <?php endforeach; ?>
@@ -90,6 +109,7 @@
                 </td>
             </tr>
 
+            <!-- Shipping info -->
             <tr>
                 <th>
                     <label for="shipping_info"><?= __('Shipping info' , 'moloni_es') ?></label>
@@ -103,6 +123,56 @@
                 </td>
             </tr>
 
+            <!-- Load address -->
+            <tr id="load_address_line" style="display: none;">
+                <th>
+                    <label for="load_address"><?= __('Load address', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="load_address" name='opt[load_address]' class='inputOut'>
+                        <?php $activeLoadAddress = defined('LOAD_ADDRESS') ? (int)LOAD_ADDRESS : 0; ?>
+
+                        <option value='0' <?= ($activeLoadAddress === 0 ? 'selected' : '') ?>><?= __('Company address', 'moloni_es') ?></option>
+                        <option value='1' <?= ($activeLoadAddress === 1 ? 'selected' : '') ?>><?= __('Custom', 'moloni_es') ?></option>
+                    </select>
+
+                    <div class="custom-address__wrapper" id="load_address_custom_line">
+                        <div class="custom-address__line">
+                            <input name="opt[load_address_custom_address]" id="load_address_custom_address"
+                                   value="<?= defined('LOAD_ADDRESS_CUSTOM_ADDRESS') ? LOAD_ADDRESS_CUSTOM_ADDRESS : '' ?>"
+                                   placeholder="Morada" type="text" class="inputOut">
+                        </div>
+                        <div class="custom-address__line">
+                            <input name="opt[load_address_custom_code]" id="load_address_custom_code"
+                                   value="<?= defined('LOAD_ADDRESS_CUSTOM_CODE') ? LOAD_ADDRESS_CUSTOM_CODE : '' ?>"
+                                   placeholder="Código Postal" type="text" class="inputOut inputOut--sm">
+                            <input name="opt[load_address_custom_city]" id="load_address_custom_city"
+                                   value="<?= defined('LOAD_ADDRESS_CUSTOM_CITY') ? LOAD_ADDRESS_CUSTOM_CITY : '' ?>"
+                                   placeholder="Localidade" type="text" class="inputOut inputOut--sm">
+                        </div>
+                        <div class="custom-address__line">
+                            <select id="load_address_custom_country" name="opt[load_address_custom_country]"
+                                    class="inputOut inputOut--sm">
+                                <?php $activeCountry = defined('LOAD_ADDRESS_CUSTOM_COUNTRY') ? (int)LOAD_ADDRESS_CUSTOM_COUNTRY : 0; ?>
+
+                                <option value='0' <?= ($activeCountry === 0 ? 'selected' : '') ?>><?=
+                                    __('Choose an option' , 'moloni_es') ?>
+                                </option>
+
+                                <?php foreach ($countries['data']['countries']['data'] as $country) : ?>
+                                    <option value='<?= $country['countryId'] ?>' <?= $activeCountry === (int)$country['countryId'] ? 'selected' : '' ?>>
+                                        <?= $country['title'] ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <p class='description'><?= __('Load address used in shipping informations', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <!-- Send e-mail -->
             <tr>
                 <th>
                     <label for="email_send"><?= __('Send e-mail' , 'moloni_es') ?></label>
@@ -115,15 +185,14 @@
                     <p class='description'><?= __('The document is only sent to the customer if it is inserted as closed' , 'moloni_es') ?></p>
                 </td>
             </tr>
-
             </tbody>
         </table>
 
+        <!-- Products -->
         <h2 class="title"><?= __('Products' , 'moloni_es') ?></h2>
         <table class="form-table">
             <tbody>
 
-            <?php $warehouses = Warehouses::queryWarehouses($variables); ?>
             <?php if (count($warehouses) > 1): ?>
                 <tr>
 
@@ -151,7 +220,6 @@
                 </th>
                 <td>
                     <select id="measure_unit_id" name='opt[measure_unit]' class='inputOut'>
-                        <?php $measurementUnits = MeasurementUnits::queryMeasurementUnits($variables); ?>
                         <?php if (is_array($measurementUnits)): ?>
                             <?php foreach ($measurementUnits as $measurementUnit) : ?>
                                 <option value='<?= $measurementUnit['measurementUnitId'] ?>' <?= (defined('MEASURE_UNIT') && (int)MEASURE_UNIT === $measurementUnit['measurementUnitId'] ? 'selected' : '') ?>><?= $measurementUnit['name'] ?></option>
@@ -182,7 +250,6 @@
                 <td>
                     <select id="tax_id" name='opt[tax_id]' class='inputOut'>
                         <option value='0' <?= (defined('TAX_ID') && (int)TAX_ID === 0 ? 'selected' : '') ?>><?= __('Use WooCommerce value' , 'moloni_es') ?></option>
-                        <?php $taxes = Taxes::queryTaxes($variables); ?>
                         <?php if (is_array($taxes)): ?>
                             <?php foreach ($taxes as $tax) : ?>
                                 <option value='<?= $tax['taxId'] ?>' <?= (defined('TAX_ID') && (int)TAX_ID === $tax['taxId'] ? 'selected' : '') ?>><?= $tax['name'] . ' ('.$tax['value'].'%)'?></option>
@@ -200,7 +267,6 @@
                 <td>
                     <select id="tax_id_shipping" name='opt[tax_id_shipping]' class='inputOut'>
                         <option value='0' <?= (defined('TAX_ID_SHIPPING') && (int)TAX_ID_SHIPPING === 0 ? 'selected' : '') ?>><?= __('Use WooCommerce value'  , 'moloni_es') ?></option>
-                        <?php $taxes = Taxes::queryTaxes($variables); ?>
                         <?php if (is_array($taxes)): ?>
                             <?php foreach ($taxes as $tax) : ?>
                                 <option value='<?= $tax['taxId'] ?>' <?= (defined('TAX_ID_SHIPPING') && (int)TAX_ID_SHIPPING === $tax['taxId'] ? 'selected' : '') ?>><?= $tax['name'] . ' ('.$tax['value'].'%)'?></option>
@@ -237,6 +303,7 @@
             </tbody>
         </table>
 
+        <!-- Customer -->
         <h2 class="title"><?= __('Customer\'s'  , 'moloni_es') ?></h2>
         <table class="form-table">
             <tbody>
@@ -271,7 +338,6 @@
                 <td>
                     <select id="maturity_date_id" name='opt[maturity_date]' class='inputOut'>
                         <option value='0' <?= (defined('MATURITY_DATE') && (int)MATURITY_DATE === 0 ? 'selected' : '') ?>><?= __('Choose an option' , 'moloni_es') ?></option>
-                        <?php $maturityDates = MaturityDates::queryMaturityDates($variables); ?>
                         <?php if (is_array($maturityDates)): ?>
                             <?php foreach ($maturityDates as $maturityDate) : ?>
                                 <option value='<?= $maturityDate['maturityDateId'] ?>' <?= (defined('MATURITY_DATE') && (int)MATURITY_DATE === $maturityDate['maturityDateId'] ? 'selected' : '') ?>><?= $maturityDate['name'] ?></option>
@@ -289,7 +355,6 @@
                 <td>
                     <select id="payment_method_id" name='opt[payment_method]' class='inputOut'>
                         <option value='0' <?= (defined('PAYMENT_METHOD') && (int)PAYMENT_METHOD === 0 ? 'selected' : '') ?>><?= __('Choose an option' , 'moloni_es') ?></option>
-                        <?php $paymentMethods = PaymentMethods::queryPaymentMethods($variables); ?>
                         <?php if (is_array($paymentMethods)): ?>
                             <?php foreach ($paymentMethods as $paymentMethod) : ?>
                                 <option value='<?= $paymentMethod['paymentMethodId'] ?>' <?= (defined('PAYMENT_METHOD') && (int)PAYMENT_METHOD === $paymentMethod['paymentMethodId'] ? 'selected' : '') ?>><?= $paymentMethod['name'] ?></option>
@@ -328,6 +393,9 @@
 
             </tbody>
         </table>
-
     </div>
 </form>
+
+<script>
+    Moloni.Settings.init();
+</script>
