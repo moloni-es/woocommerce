@@ -67,6 +67,7 @@ Via FTP
 == Changelog ==
 = 1.0.31 =
 * FEATURE: New setting to set shipping load address
+* FEATURE: Order shipping name is now used to set delivery method name
 * Tested up to version 5.9.1 of WordPress
 * Tested up to version 6.2.1 of WooCommerce
 
