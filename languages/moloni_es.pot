@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-24 12:24+0000\n"
+"POT-Creation-Date: 2022-03-11 12:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -660,6 +660,10 @@ msgstr ""
 
 #: src/Activators/Install.php:22
 msgid "Requires WooCommerce 3.0.0 or above."
+msgstr ""
+
+#: src/Model.php:136
+msgid "Reseting tokens after 3 tries"
 msgstr ""
 
 #: src/Templates/Containers/PendingOrders.php:21
