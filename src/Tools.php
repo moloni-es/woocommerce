@@ -158,6 +158,8 @@ class Tools
             foreach ($countriesList as $country) {
                 if (strtoupper($country['iso3166_1']) === strtoupper($countryCode)) {
                     $countryId = $country['countryId'];
+
+                    break;
                 }
             }
         }

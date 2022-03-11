@@ -32,7 +32,6 @@ class Start
         $developerId = isset($_POST['developer_id']) ? sanitize_text_field(trim($_POST['developer_id'])) : '';
         $clientSecret = isset($_POST['client_secret']) ? sanitize_text_field(trim($_POST['client_secret'])) : '';
         $code = isset($_GET['code']) ? sanitize_text_field(trim($_GET['code'])) : '';
-        $tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : '';
 
         if ($ajax) {
             self::$ajax = true;
@@ -63,35 +62,7 @@ class Start
         }
 
         if ($action === 'save') {
-            add_settings_error('general', 'settings_updated', __('Changes saved.', 'moloni_es'), 'updated');
-            $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
-
-            if ($tab === 'automation') {
-                //Verifies checkboxes because they are not set if not checked
-                $syncOptions = [
-                    'sync_fields_description',
-                    'sync_fields_visibility',
-                    'sync_fields_stock',
-                    'sync_fields_name',
-                    'sync_fields_price',
-                    'sync_fields_categories',
-                    'sync_fields_ean',
-                    'sync_fields_image'
-                ];
-
-                foreach ($syncOptions as $option) { //for each sync opt check if it is set
-                    if (!isset($options[$option])) {
-                        $options[$option] = 0;
-                    }
-                }
-            }
-
-            foreach ($options as $option => $value) {
-                $option = sanitize_text_field($option);
-                $value = sanitize_text_field($value);
-
-                Model::setOption($option, $value);
-            }
+            self::saveSettings();
         }
 
         $tokensRow = Model::getTokensRow();
@@ -140,15 +111,17 @@ class Start
     {
         try {
             $companiesIds = Companies::queryMe();
+
             foreach ($companiesIds['data']['me']['data']['userCompanies'] as $company) {
                 $variables = [
                     'companyId' => $company['company']['companyId'],
-                    'options' => ['defaultLanguageId' => 1]
+                    'options' => [
+                        'defaultLanguageId' => 2
+                    ]
                 ];
                 $query = Companies::queryCompany($variables);
                 $companies[] = $query['data']['company']['data'];
             }
-
         } catch (Error $e) {
             $companies = [];
         }
@@ -160,4 +133,41 @@ class Start
         }
     }
 
+    /**
+     * Save plugin settings
+     *
+     * @return void
+     */
+    private static function saveSettings() {
+        add_settings_error('general', 'settings_updated', __('Changes saved.', 'moloni_es'), 'updated');
+        $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
+        $tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : '';
+
+        if ($tab === 'automation') {
+            //Verifies checkboxes because they are not set if not checked
+            $syncOptions = [
+                'sync_fields_description',
+                'sync_fields_visibility',
+                'sync_fields_stock',
+                'sync_fields_name',
+                'sync_fields_price',
+                'sync_fields_categories',
+                'sync_fields_ean',
+                'sync_fields_image'
+            ];
+
+            foreach ($syncOptions as $option) { //for each sync opt check if it is set
+                if (!isset($options[$option])) {
+                    $options[$option] = 0;
+                }
+            }
+        }
+
+        foreach ($options as $option => $value) {
+            $option = sanitize_text_field($option);
+            $value = sanitize_text_field($value);
+
+            Model::setOption($option, $value);
+        }
+    }
 }

@@ -2,8 +2,8 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.30
-Tested up to: 5.9.0
+Stable tag: 1.0.31
+Tested up to: 5.9.1
 Requires PHP: 5.6
 Requires at least: 5.0
 License: GPLv2 or later
@@ -65,6 +65,12 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.31 =
+* FEATURE: New setting to set shipping load address
+* FEATURE: Order shipping name is now used to set delivery method name
+* Tested up to version 5.9.1 of WordPress
+* Tested up to version 6.2.1 of WooCommerce
+
 = 1.0.30 =
 * Prevent random logouts while refreshing tokens
 * Improved logs in automatic actions

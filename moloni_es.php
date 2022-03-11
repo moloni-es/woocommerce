@@ -3,7 +3,7 @@
  *
  *   Plugin Name:  Moloni España
  *   Description:  Simple invoicing integration with Moloni ES
- *   Version:      1.0.30
+ *   Version:      1.0.31
  *   Author:       Moloni.es
  *   Author URI:   https://moloni.es
  *   License:      GPL2
@@ -49,6 +49,7 @@ register_activation_hook(__FILE__, '\MoloniES\Activators\Install::run');
 register_deactivation_hook(__FILE__, '\MoloniES\Activators\Remove::run');
 
 add_action('plugins_loaded', Start::class);
+add_action('admin_enqueue_scripts', '\MoloniES\Scripts\Enqueue::defines');
 
 function Start()
 {

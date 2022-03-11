@@ -3,7 +3,6 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\Companies;
-use MoloniES\API\DeliveryMethods;
 use MoloniES\API\Documents as APIDocuments;
 use MoloniES\Curl;
 use MoloniES\Error;
@@ -355,23 +354,10 @@ class Documents
     public function setShippingInfo()
     {
         if ((defined('SHIPPING_INFO') && SHIPPING_INFO) || $this->documentType === 'billsOfLading') {
-            $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => '1'
-                    ]
-                ]
-            ];
-            $deliveryMethods = DeliveryMethods::queryDeliveryMethods($variables);
+            $shippingName = $this->order->get_shipping_method();
 
-            if (empty($deliveryMethods)) {
-                $this->deliveryMethodId = null;
-            } else {
-                //use the first result because can only exist one default delivery method
-                $this->deliveryMethodId = $deliveryMethods[0]['deliveryMethodId'];
+            if (empty($shippingName)) {
+                return $this;
             }
 
             $this->deliveryUnloadZipCode = $this->order->get_shipping_postcode();
@@ -379,12 +365,24 @@ class Documents
                 $this->deliveryUnloadZipCode = Tools::zipCheck($this->deliveryUnloadZipCode);
             }
 
+            $deliveryMethod = new DeliveryMethod($shippingName);
+            if (!$deliveryMethod->loadByName()) {
+                $deliveryMethod->create();
+            }
+
+            if (empty($deliveryMethod->delivery_method_id)) {
+                $deliveryMethod->loadDefault();
+            }
+
+            $this->deliveryMethodId = $deliveryMethod->delivery_method_id;
             $this->deliveryLoadDate = date('Y-m-d H:i:s');
 
-            $this->deliveryLoadAddress = $this->company['address'];
-            $this->deliveryLoadCity = $this->company['city'];
-            $this->deliveryLoadZipCode = $this->company['zipCode'];
-            $this->deliveryLoadCountryId = (int) $this->company['country']['countryId'];
+            $loadAddress = $this->getLoadAddress();
+
+            $this->deliveryLoadAddress = $loadAddress['address'];
+            $this->deliveryLoadCity = $loadAddress['city'];
+            $this->deliveryLoadZipCode = $loadAddress['zipCode'];
+            $this->deliveryLoadCountryId = $loadAddress['country'];
 
             $this->deliveryUnloadAddress = $this->order->get_shipping_address_1() . ' ' . $this->order->get_shipping_address_2();
             $this->deliveryUnloadCity = $this->order->get_shipping_city();
@@ -405,7 +403,7 @@ class Documents
             return DOCUMENT_SET_ID;
         }
 
-        throw new Error(__('Série de documentos em falta. <br>Por favor seleccione uma série nas opções do plugin', false));
+        throw new Error(__('Document set missing. <br>Please select a document set in settings', 'moloni_es'));
     }
 
     /**
@@ -544,7 +542,7 @@ class Documents
             case 'invoiceReceipt':
 
                 if (!defined('DOCUMENT_STATUS') || (int) DOCUMENT_STATUS === 0) {
-                    throw new Error(__('Warning, cannot insert Invoice + Receipt documents as a draft','moloni_es'));
+                    throw new Error(__('Warning, cannot insert Invoice + Receipt documents as a draft', 'moloni_es'));
                 }
 
                 $mutation = (APIDocuments::mutationInvoiceCreate($this->mapPropsToValues()))['data']['invoiceCreate']['data'];
@@ -748,6 +746,39 @@ class Documents
 
             throw new Error($errorMsg);
         }
+    }
+
+    /**
+     * Returns load address to be used in the document
+     *
+     * @return array
+     *
+     * @throws Error
+     */
+    private function getLoadAddress() {
+        $loadSetting = defined('LOAD_ADDRESS') ? (int)LOAD_ADDRESS : 0;
+
+        if ($loadSetting === 1 &&
+            defined('LOAD_ADDRESS_CUSTOM_ADDRESS') &&
+            defined('LOAD_ADDRESS_CUSTOM_CITY') &&
+            defined('LOAD_ADDRESS_CUSTOM_CODE') &&
+            defined('LOAD_ADDRESS_CUSTOM_COUNTRY')) {
+            $address = [
+                'address' => LOAD_ADDRESS_CUSTOM_ADDRESS,
+                'city' => LOAD_ADDRESS_CUSTOM_CITY,
+                'zipCode' => LOAD_ADDRESS_CUSTOM_CODE,
+                'country' => (int)LOAD_ADDRESS_CUSTOM_COUNTRY,
+            ];
+        } else {
+            $address = [
+                'address' => $this->company['address'],
+                'city' => $this->company['city'],
+                'zipCode' => $this->company['zipCode'],
+                'country' => (int)$this->company['country']['countryId'],
+            ];
+        }
+
+        return $address;
     }
 
     /**

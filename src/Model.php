@@ -79,10 +79,13 @@ class Model
     /**
      * Checks if tokens need to be refreshed and refreshes them
      * If it fails, log user out
-     * @return array|false
+     *
+     * @param int $retryNumber Number of current retries
+     *
+     * @return bool
      * @global $wpdb
      */
-    public static function refreshTokens()
+    public static function refreshTokens($retryNumber = 0)
     {
         global $wpdb;
         $tokensRow = self::getTokensRow();
@@ -124,6 +127,14 @@ class Model
                     empty($recheckTokens['refresh_token']) ||
                     $recheckTokens['main_token'] === $tokensRow['main_token'] ||
                     $recheckTokens['refresh_token'] === $tokensRow['refresh_token']) {
+                    if ($retryNumber <= 3) {
+                        $retryNumber++;
+
+                        return self::refreshTokens($retryNumber);
+                    }
+
+                    Log::write(__('Reseting tokens after 3 tries','moloni_es'));
+
                     self::resetTokens();
 
                     return false;
