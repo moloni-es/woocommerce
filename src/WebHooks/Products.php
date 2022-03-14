@@ -26,7 +26,8 @@ class Products
         //create a new route
         register_rest_route('moloni/v1', 'products/(?P<hash>[a-f0-9]{32}$)', [
             'methods' => 'POST',
-            'callback' => [$this, 'products']
+            'callback' => [$this, 'products'],
+            'permission_callback' => '__return_true'
         ]);
     }
 
