@@ -150,12 +150,13 @@ class Tools
                 ]
             ]
         ];
-        $countryId = 1;
+        $countryId = 70;
 
         $countriesList = Countries::queryCountries($variables);
 
-        if (!empty($countriesList) && is_array($countriesList)) {
-            foreach ($countriesList as $country) {
+        if (isset($countriesList['data']['countries']['data']) &&
+            is_array($countriesList['data']['countries']['data']) ) {
+            foreach ($countriesList['data']['countries']['data'] as $country) {
                 if (strtoupper($country['iso3166_1']) === strtoupper($countryCode)) {
                     $countryId = $country['countryId'];
 
