@@ -19,7 +19,6 @@ class Plugin
     {
         $this->translations();
         $this->actions();
-        $this->crons();
     }
 
     /**
@@ -43,19 +42,6 @@ class Plugin
         new Hooks\OrderPaid($this);
         new WebHooks\WebHook();
         new Ajax($this);
-    }
-
-    /**
-     * Setting up the crons if needed
-     */
-    private function crons()
-    {
-        add_filter('cron_schedules', '\MoloniES\Crons::addCronInterval');
-        add_action('moloniesProductsSync', '\MoloniES\Crons::productsSync');
-
-        if (!wp_next_scheduled('moloniesProductsSync')) {
-            wp_schedule_event(time(), 'everyficeminutes', 'moloniesProductsSync');
-        }
     }
 
     /**
