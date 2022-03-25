@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.32
+Stable tag: 1.0.33
 Tested up to: 5.9.2
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.33 =
+* FIX: Prevent API inconsistency
+* DEPRECATION: Removed synchronization with crons
+
 = 1.0.32 =
 * FIX: Fix customers country fetch
 * Tested up to version 5.9.2 of WordPress
