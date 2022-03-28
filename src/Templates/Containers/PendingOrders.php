@@ -65,10 +65,26 @@
                         }
 
                         ?>
-                    <td><?= (isset($order['info'][VAT_FIELD]) && !empty($order['info'][VAT_FIELD])) ? $order['info'][VAT_FIELD] : 'n/a' ?></td>
+                    <td>
+                        <?php
+                        if (defined('VAT_FIELD') && isset($order['info'][VAT_FIELD]) && !empty($order['info'][VAT_FIELD])) {
+                            echo $order['info'][VAT_FIELD];
+                        } else {
+                            echo 'n/a';
+                        }
+                        ?>
+                    </td>
                     <td><?= $order['info']['_order_total'] . $order['info']['_order_currency'] ?></td>
                     <td><?= $order['status'] ?></td>
-                    <td><?= $order['info']['_completed_date'] ?></td>
+                    <td>
+                        <?php
+                        if (isset($order['info']['_completed_date'])) {
+                            echo $order['info']['_completed_date'];
+                        } else {
+                            echo 'n/a';
+                        }
+                        ?>
+                    </td>
                     <td class="order_status column-order_status" style="text-align: right">
                         <form action="<?= admin_url('admin.php') ?>">
                             <input type="hidden" name="page" value="molonies">

@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.33
+Stable tag: 1.0.34
 Tested up to: 5.9.2
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.34 =
+* FIX: Removed some PHP warnings
+* Tested up to version 6.3.1 of WooCommerce
+
 = 1.0.33 =
 * FIX: Prevent API inconsistency
 * DEPRECATION: Removed synchronization with crons
