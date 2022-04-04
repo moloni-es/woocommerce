@@ -363,16 +363,17 @@ class Products
         $parentId = 0;
 
         foreach ($namesArray as $prod_cat) {
-            if (!term_exists($prod_cat, 'product_cat', $parentId)) {
-                $term = wp_insert_term($prod_cat, 'product_cat', ['parent' => $parentId]);
-                $parentId = $term['term_id'];
+            $existingTerm = term_exists($prod_cat, 'product_cat', $parentId);
 
-                array_unshift($categoriesIds, $term['term_id']);
+            if (!$existingTerm) {
+                $newTerm = wp_insert_term($prod_cat, 'product_cat', ['parent' => $parentId]);
+                $parentId = $newTerm['term_id'];
+
+                array_unshift($categoriesIds, $newTerm['term_id']);
             } else {
-                $term_s = get_term_by('name', $prod_cat, 'product_cat');
-                $parentId = $term_s->term_id;
+                $parentId = $existingTerm['term_id'];
 
-                array_unshift($categoriesIds, $term_s->term_id);
+                array_unshift($categoriesIds, $existingTerm['term_id']);
             }
         }
 
