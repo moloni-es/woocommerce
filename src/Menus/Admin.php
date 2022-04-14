@@ -7,6 +7,9 @@ use MoloniES\Plugin;
 class Admin
 {
 
+    /** @var int This should be the same as WooCommerce to keep menus together */
+    private $menuPosition = 56;
+
     public $parent;
 
     /**
@@ -16,7 +19,7 @@ class Admin
     public function __construct($parent)
     {
         $this->parent = $parent;
-        add_action('admin_menu', [$this, 'admin_menu'], 55.6);
+        add_action('admin_menu', [$this, 'admin_menu'], $this->menuPosition);
         add_action('admin_notices', '\MoloniES\Notice::showMessages');
     }
 
@@ -24,7 +27,16 @@ class Admin
     {
         if (current_user_can('manage_woocommerce')) {
             $logoDir = MOLONI_ES_IMAGES_URL . 'small_logo.png';
-            add_menu_page(__('Moloni', 'moloni_es'), __('Moloni', 'moloni_es'), 'manage_woocommerce', 'molonies', [$this->parent, 'run'], $logoDir, 55.5);
+
+            add_menu_page(
+                __('Moloni', 'moloni_es'),
+                __('Moloni', 'moloni_es'),
+                'manage_woocommerce',
+                'molonies',
+                [$this->parent, 'run'],
+                $logoDir,
+                $this->menuPosition
+            );
         }
     }
 }
