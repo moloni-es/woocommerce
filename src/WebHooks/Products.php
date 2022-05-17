@@ -140,12 +140,10 @@ class Products
             if ((float)$currentStock === (float)$newStock) {
                 Log::write(sprintf(__('Product with reference %1$s already was up-to-date %2$s | %3$s', 'moloni_es'), $moloniProduct['reference'], $currentStock, $newStock));
             } else {
-                update_post_meta($wcProductId, '_stock', $newStock);
-                update_post_meta($wcProductId, '_stock_status', ($newStock > 0 ? 'instock' : 'onbackorder'));
-                update_post_meta($wcProductId, 'outofstock', ($newStock > 0 ? '0' : '1'));
-
                 Log::write(sprintf(__('Product with reference %1$s was updated from %2$s to %3$s', 'moloni_es'), $moloniProduct['reference'], $currentStock, $newStock));
             }
+
+            wc_update_product_stock($wcProductId, $newStock);
         } else {
             Log::write(sprintf(__('Product not found in WooCommerce or without active stock: %s', 'moloni_es'), $moloniProduct['reference']));
         }
