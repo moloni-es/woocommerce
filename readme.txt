@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.36
+Stable tag: 1.0.37
 Tested up to: 5.9.3
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -65,6 +65,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.37 =
+* FIX: Replaced stock quantity setter method
+* Tested up to version 6.5.1 of WooCommerce
+
 = 1.0.36 =
 * FIX: Fix plugin menu position
 * Tested up to version 5.9.3 of WordPress
