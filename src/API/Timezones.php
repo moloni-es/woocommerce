@@ -15,7 +15,7 @@ class Timezones
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryTimezones($variables)
+    public static function queryTimezones($variables = [])
     {
         $query = 'query timezones($options: TimezoneOptions)
         {

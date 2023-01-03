@@ -15,7 +15,7 @@ class PaymentMethods
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryPaymentMethod($variables)
+    public static function queryPaymentMethod($variables = [])
     {
         $query = 'query paymentMethod($companyId: Int!,$paymentMethodId: Int!)
         {
@@ -47,7 +47,7 @@ class PaymentMethods
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryPaymentMethods($variables)
+    public static function queryPaymentMethods($variables = [])
     {
         $query = 'query paymentMethods($companyId: Int!,$options: PaymentMethodOptions)
         {
@@ -86,7 +86,7 @@ class PaymentMethods
      * @return mixed
      * @throws Error
      */
-    public static function mutationPaymentMethodCreate($variables)
+    public static function mutationPaymentMethodCreate($variables = [])
     {
         $query = 'mutation paymentMethodCreate($companyId: Int!,$data: PaymentMethodInsert!)
         {

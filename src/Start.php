@@ -47,6 +47,7 @@ class Start
         if (!empty($code)) {
             $tokensRow = Model::getTokensRow();
             $login = Curl::login($code, $tokensRow['client_id'], $tokensRow['client_secret']);
+
             if ($login && isset($login['accessToken']) && isset($login['refreshToken'])) {
                 Model::setTokens($login['accessToken'], $login['refreshToken']);
             } else {
@@ -70,13 +71,14 @@ class Start
         if (!empty($tokensRow['main_token']) && !empty($tokensRow['refresh_token'])) {
             Model::refreshTokens();
             Model::defineValues();
-            if (defined('MOLONIES_COMPANY_ID')) {
+
+            if (Storage::$MOLONI_ES_COMPANY_ID) {
                 Model::defineConfigs();
                 return true;
             }
 
             if (isset($_GET['companyId'])) {
-                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => MOLONI_SESSION_ID]);
+                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => Storage::$MOLONI_ES_SESSION_ID]);
                 Model::defineValues();
                 Model::defineConfigs();
                 //Creates hook in moloni

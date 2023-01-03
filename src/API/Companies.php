@@ -35,14 +35,14 @@ class Companies
     }
 
     /**
-     * Gets the information of the companies that the logged in user has access
+     * Gets the information of the companies that the logged-in user has access
      *
      * @param array $variables variables of the query
      *
      * @return array returns an array with the companies information
      * @throws Error
      */
-    public static function queryCompany($variables)
+    public static function queryCompany($variables = [])
     {
         $query = 'query company($companyId: Int!,$options: CompanyOptionsSingle){ 
             company(companyId: $companyId,options: $options) { 

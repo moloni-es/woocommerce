@@ -38,7 +38,7 @@ class Payment
      */
     public function loadByName()
     {
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'search' => [
                     'field' => 'name',
@@ -83,7 +83,6 @@ class Payment
     private function mapPropsToValues()
     {
         return [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'name' => $this->name
             ]

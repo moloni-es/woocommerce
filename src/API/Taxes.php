@@ -15,7 +15,7 @@ class Taxes
      * @return array returns an array with taxes information
      * @throws Error
      */
-    public static function queryTaxes($variables)
+    public static function queryTaxes($variables = [])
     {
         $query = 'query taxes($companyId: Int!,$options: TaxOptions)
         {
@@ -68,7 +68,7 @@ class Taxes
      * @return array returns an array with taxes information
      * @throws Error
      */
-    public static function queryTax($variables)
+    public static function queryTax($variables = [])
     {
         $query = 'query tax($companyId: Int!,$taxId: Int!)
         {
@@ -112,7 +112,7 @@ class Taxes
      * @return array returns data about the created tax
      * @throws Error
      */
-    public static function mutationTaxCreate($variables)
+    public static function mutationTaxCreate($variables = [])
     {
         $query = 'mutation taxCreate($companyId: Int!,$data: TaxInsert!)
         {

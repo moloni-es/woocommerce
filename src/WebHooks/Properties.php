@@ -39,7 +39,6 @@ class Properties
             }
 
             $variables = [
-                'companyId' => (int)MOLONIES_COMPANY_ID,
                 'search' => [
                     'field' => 'name',
                     'value' => __('Online Store', 'moloni_es')

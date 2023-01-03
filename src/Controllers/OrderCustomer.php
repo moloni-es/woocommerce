@@ -54,7 +54,6 @@ class OrderCustomer
         $this->email = $this->order->get_billing_email();
 
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'name' => $this->getCustomerName(),
                 'address' => $this->getCustomerBillingAddress(),
@@ -215,7 +214,6 @@ class OrderCustomer
     public static function getCustomerNextNumber()
     {
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
                     'field' => 'number',
@@ -279,7 +277,6 @@ class OrderCustomer
         $result = false;
 
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
                     'field' => '',

@@ -151,7 +151,7 @@ class SyncProducts
     {
         $productsList = [];
 
-        $variables = ['companyId' => (int)MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'filter' => [
                     [

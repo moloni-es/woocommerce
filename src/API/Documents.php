@@ -13,7 +13,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function queryDocument($variables)
+    public static function queryDocument($variables = [])
     {
         $query='query document($companyId: Int!,$documentId: Int!,$options: DocumentOptionsSingle)
         {
@@ -55,7 +55,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryDocumentSets($variables)
+    public static function queryDocumentSets($variables = [])
     {
         $query = 'query documentSets($companyId: Int!,$options: DocumentSetOptions)
         {
@@ -94,7 +94,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryInvoice($variables)
+    public static function queryInvoice($variables = [])
     {
         $query = 'query invoice($companyId: Int!,$documentId: Int!,$options: InvoiceOptionsSingle)
         {
@@ -131,7 +131,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryInvoices($variables)
+    public static function queryInvoices($variables = [])
     {
         $query = 'query invoices($companyId: Int!,$options: InvoiceOptions)
         {
@@ -177,7 +177,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationInvoiceCreate($variables)
+    public static function mutationInvoiceCreate($variables = [])
     {
         $query = 'mutation invoiceCreate($companyId: Int!,$data: InvoiceInsert!,$options: InvoiceMutateOptions)
         {
@@ -211,7 +211,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationInvoiceUpdate($variables)
+    public static function mutationInvoiceUpdate($variables = [])
     {
         $query = 'mutation invoiceUpdate($companyId: Int!,$data: InvoiceUpdate!)
         {
@@ -241,7 +241,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryReceipt($variables)
+    public static function queryReceipt($variables = [])
     {
         $query = 'query receipt($companyId: Int!,$documentId: Int!,$options: ReceiptOptionsSingle)
         {
@@ -278,7 +278,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryReceipts($variables)
+    public static function queryReceipts($variables = [])
     {
         $query = 'query receipts($companyId: Int!,$options: ReceiptOptions)
         {
@@ -324,7 +324,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationReceiptCreate($variables)
+    public static function mutationReceiptCreate($variables = [])
     {
         $query = 'mutation receiptCreate($companyId: Int!,$data: ReceiptInsert!,$options: ReceiptMutateOptions)
         {
@@ -360,7 +360,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationReceiptUpdate($variables)
+    public static function mutationReceiptUpdate($variables = [])
     {
         $query = 'mutation receiptUpdate($companyId: Int!,$data: ReceiptUpdate!)
         {
@@ -390,7 +390,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryCreditNote($variables)
+    public static function queryCreditNote($variables = [])
     {
         $query = 'query creditNote($companyId: Int!,$documentId: Int!,$options: CreditNoteOptionsSingle)
         {
@@ -427,7 +427,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryCreditNotes($variables)
+    public static function queryCreditNotes($variables = [])
     {
         $query = 'query creditNotes($companyId: Int!,$options: CreditNoteOptions)
         {
@@ -473,7 +473,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationCreditNoteCreate($variables)
+    public static function mutationCreditNoteCreate($variables = [])
     {
         $query = 'mutation creditNoteCreate($companyId: Int!,$data: CreditNoteInsert!,$options:CreditNoteMutateOptions)
         {
@@ -510,7 +510,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function querySimplifiedInvoice($variables)
+    public static function querySimplifiedInvoice($variables = [])
     {
         $query = 'query simplifiedInvoice($companyId: Int!,$documentId: Int!,$options: SimplifiedInvoiceOptionsSingle)
         {
@@ -547,7 +547,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function querySimplifiedInvoices($variables)
+    public static function querySimplifiedInvoices($variables = [])
     {
         $query = 'query simplifiedInvoices($companyId: Int!,$options: SimplifiedInvoiceOptions)
         {
@@ -593,7 +593,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationSimplifiedInvoiceCreate($variables)
+    public static function mutationSimplifiedInvoiceCreate($variables = [])
     {
         $query = 'mutation simplifiedInvoiceCreate($companyId: Int!,$data: SimplifiedInvoiceInsert!,$options: SimplifiedInvoiceMutateOptions)
         {
@@ -631,7 +631,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationSimplifiedInvoiceUpdate($variables)
+    public static function mutationSimplifiedInvoiceUpdate($variables = [])
     {
         $query = 'mutation simplifiedInvoiceUpdate($companyId: Int!,$data: SimplifiedInvoiceUpdate!)
         {
@@ -661,7 +661,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryPurchaseOrder($variables)
+    public static function queryPurchaseOrder($variables = [])
     {
         $query = 'query purchaseOrder($companyId: Int!,$documentId: Int!,$options: PurchaseOrderOptionsSingle)
         {
@@ -698,7 +698,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function queryPurchaseOrders($variables)
+    public static function queryPurchaseOrders($variables = [])
     {
         $query = 'query purchaseOrders($companyId: Int!,$options: PurchaseOrderOptions)
         {
@@ -744,7 +744,7 @@ class Documents
      * @return mixed Api data
      * @throws Error
      */
-    public static function mutationPurchaseOrderCreate($variables)
+    public static function mutationPurchaseOrderCreate($variables = [])
     {
         $query = 'mutation purchaseOrderCreate($companyId: Int!,$data: PurchaseOrderInsert!,$options: PurchaseOrderMutateOptions)
         {
@@ -780,7 +780,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationPurchaseOrderUpdate($variables)
+    public static function mutationPurchaseOrderUpdate($variables = [])
     {
         $query = 'mutation purchaseOrderUpdate($companyId: Int!,$data: PurchaseOrderUpdate!)
         {
@@ -810,7 +810,7 @@ class Documents
      * @return void Api data
      * @throws Error
      */
-    public static function queryProFormaInvoice($variables)
+    public static function queryProFormaInvoice($variables = [])
     {
         $query = 'query proFormaInvoice($companyId: Int!,$documentId: Int!,$options: ProFormaInvoiceOptionsSingle)
         {
@@ -847,7 +847,7 @@ class Documents
      * @return array|bool Api data
      * @throws Error
      */
-    public static function queryProFormaInvoices($variables)
+    public static function queryProFormaInvoices($variables = [])
     {
         $query = 'query proFormaInvoices($companyId: Int!,$options: ProFormaInvoiceOptions)
         {
@@ -893,7 +893,7 @@ class Documents
      * @return mixed Api data
      * @throws Error
      */
-    public static function mutationProFormaInvoiceCreate($variables)
+    public static function mutationProFormaInvoiceCreate($variables = [])
     {
         $query = 'mutation proFormaInvoiceCreate($companyId: Int!,$data: ProFormaInvoiceInsert!,$options: ProFormaInvoiceMutateOptions)
         {
@@ -931,7 +931,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationProFormaInvoiceUpdate($variables)
+    public static function mutationProFormaInvoiceUpdate($variables = [])
     {
         $query = 'mutation proFormaInvoiceUpdate($companyId: Int!,$data: ProFormaInvoiceUpdate!)
         {
@@ -961,7 +961,7 @@ class Documents
      * @return array Api data
      * @throws Error
      */
-    public static function mutationBillsOfLadingCreate($variables)
+    public static function mutationBillsOfLadingCreate($variables = [])
     {
         $query = 'mutation billsOfLadingCreate($companyId: Int!,$data: BillsOfLadingInsert!, $options: BillsOfLadingMutateOptions)
         {
@@ -994,7 +994,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationBillsOfLadingUpdate($variables)
+    public static function mutationBillsOfLadingUpdate($variables = [])
     {
         $query = 'mutation billsOfLadingUpdate($companyId: Int!,$data: BillsOfLadingUpdate!)
         {
@@ -1028,7 +1028,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function querySimplifiedInvoiceGetPDFToken($variables)
+    public static function querySimplifiedInvoiceGetPDFToken($variables = [])
     {
         $query = 'query simplifiedInvoiceGetPDFToken($documentId: Int!)
         {
@@ -1059,7 +1059,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryInvoiceGetPDFToken($variables)
+    public static function queryInvoiceGetPDFToken($variables = [])
     {
         $query = 'query invoiceGetPDFToken($documentId: Int!)
         {
@@ -1090,7 +1090,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryReceiptGetPDFToken($variables)
+    public static function queryReceiptGetPDFToken($variables = [])
     {
         $query = 'query receiptGetPDFToken($documentId: Int!)
         {
@@ -1121,7 +1121,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryCreditNoteGetPDFToken($variables)
+    public static function queryCreditNoteGetPDFToken($variables = [])
     {
         $query = 'query creditNoteGetPDFToken($documentId: Int!)
         {
@@ -1152,7 +1152,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryProFormaInvoiceGetPDFToken($variables)
+    public static function queryProFormaInvoiceGetPDFToken($variables = [])
     {
         $query = 'query proFormaInvoiceGetPDFToken($documentId: Int!)
         {
@@ -1183,7 +1183,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryPurchaseOrderGetPDFToken($variables)
+    public static function queryPurchaseOrderGetPDFToken($variables = [])
     {
         $query = 'query purchaseOrderGetPDFToken($documentId: Int!)
         {
@@ -1213,7 +1213,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function queryBillsOfLadingGetPDFToken($variables)
+    public static function queryBillsOfLadingGetPDFToken($variables = [])
     {
         $query = 'query billsOfLadingGetPDFToken($documentId: Int!)
         {
@@ -1244,7 +1244,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function mutationSimplifiedInvoiceGetPDF($variables)
+    public static function mutationSimplifiedInvoiceGetPDF($variables = [])
     {
         $query = 'mutation simplifiedInvoiceGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1262,7 +1262,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function mutationInvoiceGetPDF($variables)
+    public static function mutationInvoiceGetPDF($variables = [])
     {
         $query = 'mutation invoiceGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1280,7 +1280,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function mutationReceiptGetPDF($variables)
+    public static function mutationReceiptGetPDF($variables = [])
     {
         $query = 'mutation receiptGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1298,7 +1298,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function mutationCreditNoteGetPDF($variables)
+    public static function mutationCreditNoteGetPDF($variables = [])
     {
         $query = 'mutation creditNoteGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1316,7 +1316,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function mutationProFormaInvoiceGetPDF($variables)
+    public static function mutationProFormaInvoiceGetPDF($variables = [])
     {
         $query = 'mutation proFormaInvoiceGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1334,7 +1334,7 @@ class Documents
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function mutationPurchaseOrderGetPDF($variables)
+    public static function mutationPurchaseOrderGetPDF($variables = [])
     {
         $query = 'mutation purchaseOrderGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1350,7 +1350,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationBillsOfLadingGetPDF($variables)
+    public static function mutationBillsOfLadingGetPDF($variables = [])
     {
         $query = 'mutation billsOfLadingGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -1366,7 +1366,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationInvoiceSendMail($variables)
+    public static function mutationInvoiceSendMail($variables = [])
     {
         $query = 'mutation invoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
@@ -1382,7 +1382,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationProFormaInvoiceSendMail($variables)
+    public static function mutationProFormaInvoiceSendMail($variables = [])
     {
         $query = 'mutation proFormaInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
@@ -1398,7 +1398,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationPurchaseOrderSendMail($variables)
+    public static function mutationPurchaseOrderSendMail($variables = [])
     {
         $query = 'mutation purchaseOrderSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
@@ -1414,7 +1414,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationReceiptSendMail($variables)
+    public static function mutationReceiptSendMail($variables = [])
     {
         $query = 'mutation receiptSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
@@ -1430,7 +1430,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationSimplifiedInvoiceSendMail($variables)
+    public static function mutationSimplifiedInvoiceSendMail($variables = [])
     {
         $query = 'mutation simplifiedInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {
@@ -1446,7 +1446,7 @@ class Documents
      * @return mixed
      * @throws Error
      */
-    public static function mutationBillsOfLadingSendMail($variables)
+    public static function mutationBillsOfLadingSendMail($variables = [])
     {
         $query = 'mutation billsOfLadingSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
         {

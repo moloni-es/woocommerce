@@ -116,7 +116,7 @@ class Documents
     public function createDocument()
     {
         try {
-            $this->company = (Companies::queryCompany(['companyId' => (int)MOLONIES_COMPANY_ID]))['data']['company']['data'];
+            $this->company = (Companies::queryCompany())['data']['company']['data'];
             $this->customer_id = (new OrderCustomer($this->order))->create();
             $this->document_set_id = $this->getDocumentSetId();
 
@@ -422,7 +422,6 @@ class Documents
     private function mapPropsToValues()
     {
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'fiscalZone' => $this->fiscalZone,
                 'customerId' => (int) $this->customer_id,
@@ -474,7 +473,6 @@ class Documents
         $mutation = [];
 
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'documents' => [
                 $this->documentId
             ],
@@ -573,7 +571,6 @@ class Documents
                 $this->documentId = null;
 
                 $variables= [
-                    'companyId' => (int) MOLONIES_COMPANY_ID,
                     'data' => [
                         'documentSetId' => (int) $this->document_set_id,
                         'date' => $this->date,
@@ -624,7 +621,6 @@ class Documents
         $mutation = [];
 
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'documentId' => (int) $this->documentId,
         ];
 
@@ -669,7 +665,6 @@ class Documents
         $mutation = [];
 
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'documentId' => (int) $this->documentId,
                 'status' => 1
@@ -790,7 +785,6 @@ class Documents
     public static function showDocument($documentId)
     {
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'documentId' => $documentId
         ];
 

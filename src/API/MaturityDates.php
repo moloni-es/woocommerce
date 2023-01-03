@@ -15,7 +15,7 @@ class MaturityDates
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryMaturityDates($variables)
+    public static function queryMaturityDates($variables = [])
     {
         $query = 'query maturityDates($companyId: Int!,$options: MaturityDateOptions){
             maturityDates(companyId: $companyId, options: $options) {

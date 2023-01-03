@@ -16,7 +16,7 @@ class Log
                 throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
             }
 
-            $fileName = (defined('MOLONIES_COMPANY_ID') ? MOLONIES_COMPANY_ID : '000')
+            $fileName = (Storage::$MOLONI_ES_COMPANY_ID ?: '000')
                 . (self::$fileName ?: date('Ymd'))
                 . '.log';
 
@@ -29,7 +29,7 @@ class Log
 
     public static function getFileUrl()
     {
-        $fileName = (defined('MOLONIES_COMPANY_ID') ? MOLONIES_COMPANY_ID : '000')
+        $fileName = (Storage::$MOLONI_ES_COMPANY_ID ?: '000')
             . (self::$fileName ? self::$fileName . '.log' : date('Ymd'))
             . '.log';
 

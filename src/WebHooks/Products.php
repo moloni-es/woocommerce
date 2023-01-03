@@ -48,7 +48,6 @@ class Products
             }
 
             $variables = [
-                'companyId' => (int)MOLONIES_COMPANY_ID,
                 'productId' => (int)sanitize_text_field($parameters['productId'])
             ];
 
@@ -485,7 +484,6 @@ class Products
 
         do {
             $variables = [
-                'companyId' => (int)MOLONIES_COMPANY_ID,
                 'productCategoryId' => (int)$moloniId
             ];
 

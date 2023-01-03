@@ -99,7 +99,7 @@ class OrderShipping
      */
     private function setProductId()
     {
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'filter' => [
                     [
@@ -200,7 +200,6 @@ class OrderShipping
         if(defined('TAX_ID_SHIPPING') && TAX_ID_SHIPPING > 0) {
 
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID_SHIPPING
             ];
 
@@ -284,7 +283,6 @@ class OrderShipping
             unset($variables['ordering']);
 
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'data' => $variables
             ];
 

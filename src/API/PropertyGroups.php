@@ -13,7 +13,7 @@ class PropertyGroups
      * @return array|bool
      * @throws Error
      */
-    public static function queryPropertyGroups($variables)
+    public static function queryPropertyGroups($variables = [])
     {
         $query = 'query propertyGroups($companyId: Int!,$options: PropertyGroupOptions)
         {
@@ -66,7 +66,7 @@ class PropertyGroups
      * @return array|bool
      * @throws Error
      */
-    public static function queryPropertyGroup($variables)
+    public static function queryPropertyGroup($variables = [])
     {
         $query = 'query propertyGroup($companyId: Int!,$propertyGroupId: String!)
         {
@@ -110,7 +110,7 @@ class PropertyGroups
      * @return array|bool
      * @throws Error
      */
-    public static function mutationPropertyGroupUpdate($variables)
+    public static function mutationPropertyGroupUpdate($variables = [])
     {
         $query = 'mutation propertyGroupUpdate($companyId: Int!,$data: PropertyGroupUpdate!)
         {
@@ -154,7 +154,7 @@ class PropertyGroups
      * @return array
      * @throws Error
      */
-    public static function mutationPropertyGroupCreate($variables)
+    public static function mutationPropertyGroupCreate($variables = [])
     {
         $query = 'mutation propertyGroupCreate($companyId: Int!,$data: PropertyGroupInsert!)
         {

@@ -152,11 +152,12 @@ class Model
     {
         $tokensRow = self::getTokensRow();
 
-        define('MOLONI_SESSION_ID', $tokensRow['id']);
-        define('MOLONI_ACCESS_TOKEN', $tokensRow['main_token']);
+
+        Storage::$MOLONI_ES_SESSION_ID = $tokensRow['id'];
+        Storage::$MOLONI_ES_ACCESS_TOKEN = $tokensRow['main_token'];
 
         if (!empty($tokensRow['company_id'])) {
-            define('MOLONIES_COMPANY_ID', $tokensRow['company_id']);
+            Storage::$MOLONI_ES_COMPANY_ID = (int)$tokensRow['company_id'];
         }
     }
 
@@ -218,7 +219,7 @@ class Model
      */
     public static function createHash()
     {
-        return hash('md5', (int)MOLONIES_COMPANY_ID);
+        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID);
     }
 
     /**
@@ -228,7 +229,7 @@ class Model
      */
     public static function checkHash($hash)
     {
-        return hash('md5', (int)MOLONIES_COMPANY_ID) === $hash;
+        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID) === $hash;
     }
 
 }

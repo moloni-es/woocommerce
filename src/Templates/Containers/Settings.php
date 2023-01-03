@@ -15,17 +15,15 @@ if (!defined('ABSPATH')) {
 <?php use \MoloniES\Model; ?>
 
 <?php
-    $variables = ['companyId' => (int) MOLONIES_COMPANY_ID];
-    $company = Companies::queryCompany($variables);
-    $documentSets = Documents::queryDocumentSets($variables);
-    $paymentMethods = PaymentMethods::queryPaymentMethods($variables);
-    $maturityDates = MaturityDates::queryMaturityDates($variables);
-    $warehouses = Warehouses::queryWarehouses($variables);
-    $measurementUnits = MeasurementUnits::queryMeasurementUnits($variables);
-    $taxes = Taxes::queryTaxes($variables);
+    $company = Companies::queryCompany();
+    $documentSets = Documents::queryDocumentSets();
+    $paymentMethods = PaymentMethods::queryPaymentMethods();
+    $maturityDates = MaturityDates::queryMaturityDates();
+    $warehouses = Warehouses::queryWarehouses();
+    $measurementUnits = MeasurementUnits::queryMeasurementUnits();
+    $taxes = Taxes::queryTaxes();
 
     $countries = Countries::queryCountries([
-        'companyId' => (int)MOLONIES_COMPANY_ID,
         'options' => [
             'defaultLanguageId' => 2
         ]

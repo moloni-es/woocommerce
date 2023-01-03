@@ -15,7 +15,7 @@ class Currencies
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryCurrencies($variables)
+    public static function queryCurrencies($variables = [])
     {
         $query = 'query currencies($options: CurrencyOptions)
         {

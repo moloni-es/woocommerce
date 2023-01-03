@@ -33,7 +33,7 @@ class ProductCategory
      */
     public function loadByName()
     {
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'filter' => [
                     'field' => 'parentId',
@@ -84,7 +84,6 @@ class ProductCategory
     private function mapPropsToValues()
     {
         return [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'name' => $this->name,
                 'parentId' =>  $this->parent_id === 0 ? null : (int)$this->parent_id

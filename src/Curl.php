@@ -51,18 +51,22 @@ class Curl
      * @return mixed
      * @throws Error
      */
-    public static function simple($action, $query, $variables)
+    public static function simple($action, $query, $variables = [])
     {
         if (isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
             return self::$cache[$action];
+        }
+
+        if (Storage::$MOLONI_ES_COMPANY_ID) {
+            $variables['companyId'] = Storage::$MOLONI_ES_COMPANY_ID;
         }
 
         $data = json_encode(['query' => $query, 'variables' => $variables]);
 
         $args = [
             'headers' => [
-                'Content-Type' => 'application/json' ,
-                'Authorization' => 'Bearer '. MOLONI_ACCESS_TOKEN
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN
             ],
             'body' => $data
         ];
@@ -80,7 +84,7 @@ class Curl
         self::$logs[] = $log;
 
         //errors sometimes come inside data/query(or mutation)
-        $keyString = substr($action, strpos($action,'/') + strlen('/'));
+        $keyString = substr($action, strpos($action, '/') + strlen('/'));
 
         if (!empty($parsed['data'][$keyString]['data']) ||
             (!isset($parsed['errors']) && (empty($parsed['data'][$keyString]['errors'])))) {
@@ -92,7 +96,7 @@ class Curl
             return $parsed;
         }
 
-        throw new Error(__('Oops, an error was encountered...','moloni_es'), $log);
+        throw new Error(__('Oops, an error was encountered...', 'moloni_es'), $log);
     }
 
     /**
@@ -137,7 +141,6 @@ class Curl
     /**
      * Uploads a file
      *
-     * @param $action
      * @param $query
      * @param $variables
      * @param $file
@@ -156,7 +159,7 @@ class Curl
         ];
 
         $headers = [
-            'Authorization' => 'Bearer '. MOLONI_ACCESS_TOKEN,
+            'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN,
             'Content-type' => 'multipart/form-data; boundary=' . $boundary,
         ];
 
@@ -208,7 +211,7 @@ class Curl
      *
      * @throws Error
      */
-    public static function login($code,$clientId,$clientSecret)
+    public static function login($code, $clientId, $clientSecret)
     {
         $url = self::$url . '/auth/grant';
 
@@ -232,7 +235,7 @@ class Curl
             'received' => $parsed
         ];
 
-        throw new Error(__('Oops, an error was encountered...','moloni_es'), $log);
+        throw new Error(__('Oops, an error was encountered...', 'moloni_es'), $log);
     }
 
     /**
@@ -244,7 +247,7 @@ class Curl
      *
      * @return bool|mixed
      */
-    public static function refresh($clientId,$clientSecret,$refreshToken)
+    public static function refresh($clientId, $clientSecret, $refreshToken)
     {
         $url = self::$url . '/auth/grant';
 
@@ -257,6 +260,7 @@ class Curl
         $raw = wp_remote_retrieve_body($response);
 
         $res_txt = json_decode($raw, true);
+
         if (!isset($res_txt['error'])) {
             return ($res_txt);
         }

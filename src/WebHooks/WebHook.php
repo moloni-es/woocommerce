@@ -5,6 +5,7 @@ namespace MoloniES\WebHooks;
 use MoloniES\API\Hooks;
 use MoloniES\Error;
 use MoloniES\Model;
+use MoloniES\Storage;
 
 class WebHook
 {
@@ -51,7 +52,6 @@ class WebHook
         self::deleteHooks(); //prevent multiple hooks doing the same
 
         $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'data' => []
         ];
 
@@ -73,17 +73,16 @@ class WebHook
      */
     public static function deleteHooks()
     {
-        if (!defined('MOLONIES_COMPANY_ID')) {
+        if (!Storage::$MOLONI_ES_COMPANY_ID) {
             return;
         }
 
-        //Load required variables (MOLONIES_COMPANY_ID)
+        //Load required variables (Storage:$MOLONI_ES_COMPANY_ID)
         Model::defineValues();
 
         $ids = [];
 
         $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'data' => [
                 'search' => [
                     'field' => 'url',

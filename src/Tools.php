@@ -55,7 +55,6 @@ class Tools
      */
     public static function createTaxFromRateAndCode($taxRate, $countryCode = 'es') {
         $taxCreateVariables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'data' => [
                 'visible' => 1,
                 'name' => 'VAT - ' . strtoupper($countryCode) . ' - ' . $taxRate . '%',
@@ -68,7 +67,6 @@ class Tools
             ]
         ];
         $countryCodeTaxSettingsVariables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'fiscalZone' => $countryCode
         ];
 
@@ -100,7 +98,6 @@ class Tools
         $countryCode = strtolower((string)$countryCode);
 
         $queryVariables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
                     'field' => 'value',

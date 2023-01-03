@@ -16,7 +16,7 @@ class Hooks
      * @return array Api data
      * @throws Error
      */
-    public static function queryHooks($variables)
+    public static function queryHooks($variables = [])
     {
         $query = 'query hooks($companyId: Int!,$options: HookOptions)
         {
@@ -47,7 +47,7 @@ class Hooks
      * @return array Api data
      * @throws Error
      */
-    public static function mutationHookCreate($variables)
+    public static function mutationHookCreate($variables = [])
     {
         $query = 'mutation hookCreate($companyId: Int!,$data: HookInsert!)
         {
@@ -78,7 +78,7 @@ class Hooks
      * @return array Api data
      * @throws Error
      */
-    public static function mutationHookDelete($variables)
+    public static function mutationHookDelete($variables = [])
     {
         $query = 'mutation hookDelete($companyId: Int!,$hookId: [String!]!)
         {
