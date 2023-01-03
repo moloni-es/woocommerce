@@ -49,6 +49,7 @@ class Companies
                 data 
                 { 
                     companyId
+                    isConfirmed
                     name
                     email
                     address

@@ -122,8 +122,14 @@ class Start
                         'defaultLanguageId' => 2
                     ]
                 ];
-                $query = Companies::queryCompany($variables);
-                $companies[] = $query['data']['company']['data'];
+
+                $query = Companies::queryCompany($variables)['data']['company']['data'];
+
+                if (!$query['isConfirmed']) {
+                    continue;
+                }
+
+                $companies[] = $query;
             }
         } catch (Error $e) {
             $companies = [];
