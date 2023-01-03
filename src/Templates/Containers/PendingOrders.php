@@ -1,3 +1,9 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <?php use \MoloniES\Controllers\Documents; ?>
 <?php use \MoloniES\Controllers\PendingOrders; ?>
 
@@ -135,7 +141,7 @@
 
         <?php else : ?>
             <tr>
-                <td colspan="7">
+                <td colspan="8">
                     <?= __('No orders to be generated were found!','moloni_es') ?>
                 </td>
             </tr>

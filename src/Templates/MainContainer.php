@@ -1,3 +1,9 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <div class="header">
     <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.png" width='300px' alt="MoloniES">
 </div>

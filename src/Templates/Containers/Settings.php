@@ -1,3 +1,9 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <?php use \MoloniES\API\Companies; ?>
 <?php use MoloniES\API\Countries; ?>
 <?php use \MoloniES\API\Documents; ?>

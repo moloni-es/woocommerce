@@ -1,4 +1,11 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <?php use MoloniES\Log; ?>
+
 <br>
 <table class="wc_status_table wc_status_table--tools widefat">
     <tbody class="tools">

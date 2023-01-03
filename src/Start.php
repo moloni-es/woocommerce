@@ -94,9 +94,8 @@ class Start
 
     /**
      * Shows a login form
-     * @param bool|string $error Is used in include
      */
-    public static function loginForm($error = false)
+    public static function loginForm()
     {
         if (!self::$ajax) {
             include(MOLONI_ES_TEMPLATE_DIR . 'LoginForm.php');
@@ -109,6 +108,10 @@ class Start
      */
     public static function companiesForm()
     {
+        if (self::$ajax) {
+            return;
+        }
+
         try {
             $companiesIds = Companies::queryMe();
 
@@ -126,11 +129,7 @@ class Start
             $companies = [];
         }
 
-        if (empty($companies)) {
-            self::loginForm(__('You have no companies available in your account!', 'moloni_es'));
-        } else if (!self::$ajax) {
-            include(MOLONI_ES_TEMPLATE_DIR . 'CompanySelect.php');
-        }
+        include(MOLONI_ES_TEMPLATE_DIR . 'CompanySelect.php');
     }
 
     /**
