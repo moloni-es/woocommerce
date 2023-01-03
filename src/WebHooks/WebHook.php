@@ -68,10 +68,15 @@ class WebHook
 
     /**
      * Deletes the created hooks
+     *
      * @throws Error
      */
     public static function deleteHooks()
     {
+        if (!defined('MOLONIES_COMPANY_ID')) {
+            return;
+        }
+
         //Load required variables (MOLONIES_COMPANY_ID)
         Model::defineValues();
 
