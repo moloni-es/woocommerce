@@ -4,7 +4,6 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php use \MoloniES\Controllers\Documents; ?>
 <?php use \MoloniES\Controllers\PendingOrders; ?>
 
 <?php
@@ -13,10 +12,6 @@ $orders = PendingOrders::getAllAvailable();
 ?>
 
 <div class="wrap">
-    <?php if (isset($document) && $document instanceof Documents && $document->getError()) : ?>
-        <?php $document->getError()->showError(); ?>
-    <?php endif; ?>
-
     <h3><?= __('Here you can see all the orders you have to generate' , 'moloni_es') ?></h3>
 
     <div class="tablenav top">

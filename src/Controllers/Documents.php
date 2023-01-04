@@ -111,76 +111,74 @@ class Documents
 
     /**
      * Creates an document
+     *
      * @return $this
+     *
+     * @throws Error
      */
     public function createDocument()
     {
-        try {
-            $this->company = (Companies::queryCompany())['data']['company']['data'];
-            $this->customer_id = (new OrderCustomer($this->order))->create();
-            $this->document_set_id = $this->getDocumentSetId();
+        $this->company = (Companies::queryCompany())['data']['company']['data'];
+        $this->customer_id = (new OrderCustomer($this->order))->create();
+        $this->document_set_id = $this->getDocumentSetId();
 
-            $this->date = date('Y-m-d H:i:s');
-            $this->expiration_date = date('Y-m-d H:i:s');
+        $this->date = date('Y-m-d H:i:s');
+        $this->expiration_date = date('Y-m-d H:i:s');
 
-            $this->ourReference = '#' . $this->order->get_order_number();
-            $this->yourReference = '#' . $this->order->get_order_number();
+        $this->ourReference = '#' . $this->order->get_order_number();
+        $this->yourReference = '#' . $this->order->get_order_number();
 
-            $this->checkForWarnings();
+        $this->checkForWarnings();
 
-            $this
-                ->setFiscalZone()
-                ->setProducts()
-                ->setShipping()
-                ->setFees()
-                ->setExchangeRate()
-                ->setShippingInfo()
-                ->setPaymentMethod()
-                ->setNotes();
+        $this
+            ->setFiscalZone()
+            ->setProducts()
+            ->setShipping()
+            ->setFees()
+            ->setExchangeRate()
+            ->setShippingInfo()
+            ->setPaymentMethod()
+            ->setNotes();
 
-            $insertedDocument = $this->createDocumentSwitch();
+        $insertedDocument = $this->createDocumentSwitch();
 
-            if (!isset($insertedDocument['documentId'])) {
-                throw new Error(sprintf(__('Warning, there was an error inserting the document %s','moloni_es'), $this->order->get_order_number()),Curl::getLog());
+        if (!isset($insertedDocument['documentId'])) {
+            throw new Error(sprintf(__('Warning, there was an error inserting the document %s','moloni_es'), $this->order->get_order_number()),Curl::getLog());
+        }
+
+        $this->documentId = $insertedDocument['documentId'];
+
+        $this->saveRecord();
+
+        // If the documents is going to be inserted as closed
+        if (defined('DOCUMENT_STATUS') && DOCUMENT_STATUS) {
+
+            // Validate if the document totals match can be closed
+            $orderTotal = ((float)$this->order->get_total() - (float)$this->order->get_total_refunded());
+            $documentTotal = (float)$insertedDocument['currencyExchangeTotalValue'] > 0 ? (float)$insertedDocument['currencyExchangeTotalValue'] : (float)$insertedDocument['totalValue'];
+
+            if ($orderTotal !== $documentTotal) {
+                $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
+
+                throw new Error(
+                    __('The document has been inserted but the totals do not match. ' , 'moloni_es') .
+                    '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document','moloni_es') . '</a>'
+                );
             }
 
-            $this->documentId = $insertedDocument['documentId'];
+            $this->closeDocument();
+            $this->createPDF();
 
-            $this->saveRecord();
+            // Send email to the client
+            if (defined('EMAIL_SEND') && EMAIL_SEND) {
+                $this->order->add_order_note(__('Document sent by email to the customer','moloni_es'));
 
-            // If the documents is going to be inserted as closed
-            if (defined('DOCUMENT_STATUS') && DOCUMENT_STATUS) {
-
-                // Validate if the document totals match can be closed
-                $orderTotal = ((float)$this->order->get_total() - (float)$this->order->get_total_refunded());
-                $documentTotal = (float)$insertedDocument['currencyExchangeTotalValue'] > 0 ? (float)$insertedDocument['currencyExchangeTotalValue'] : (float)$insertedDocument['totalValue'];
-
-                if ($orderTotal !== $documentTotal) {
-                    $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
-
-                    throw new Error(
-                        __('The document has been inserted but the totals do not match. ' , 'moloni_es') .
-                        '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document','moloni_es') . '</a>'
-                    );
-                }
-
-                $this->closeDocument();
-                $this->createPDF();
-
-                // Send email to the client
-                if (defined('EMAIL_SEND') && EMAIL_SEND) {
-                    $this->order->add_order_note(__('Document sent by email to the customer','moloni_es'));
-
-                    $this->sendEmail();
-                }
-
-                $this->order->add_order_note(__('Document inserted in Moloni','moloni_es'));
-            } else {
-                $this->order->add_order_note(__('Document inserted as a draft in Moloni','moloni_es'));
+                $this->sendEmail();
             }
-        } catch (Error $error) {
-            $this->documentId = 0;
-            $this->error = $error;
+
+            $this->order->add_order_note(__('Document inserted in Moloni','moloni_es'));
+        } else {
+            $this->order->add_order_note(__('Document inserted as a draft in Moloni','moloni_es'));
         }
 
         return $this;

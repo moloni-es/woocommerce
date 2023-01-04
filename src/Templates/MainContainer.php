@@ -34,6 +34,11 @@ if (!defined('ABSPATH')) {
 </nav>
 
 <?php
+
+if (isset($pluginErrorException) && $pluginErrorException instanceof \MoloniES\Error) {
+    $pluginErrorException->showError();
+}
+
 $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
 
 switch ($tab) {

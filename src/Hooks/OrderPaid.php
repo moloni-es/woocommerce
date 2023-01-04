@@ -3,6 +3,7 @@
 namespace MoloniES\Hooks;
 
 use Exception;
+use MoloniES\Error;
 use MoloniES\Log;
 use MoloniES\Plugin;
 use MoloniES\Start;
@@ -30,15 +31,12 @@ class OrderPaid
                 Log::write(__("Automatically generating the order document",'moloni_es') . ': ' . $orderId);
                 $document = new Documents($orderId);
                 $document->isHook = true;
+                $document->createDocument();
 
-                $newDocument = $document->createDocument();
-
-                if ($newDocument->getError()) {
-                    Log::write(__("There was an error generating the document: ",'moloni_es') . strip_tags($newDocument->getError()->getDecodedMessage()));
-                } else {
-                    Log::write(__("Order document created successfully",'moloni_es') . ': ' . $orderId);
-                }
+                Log::write(__("Order document created successfully",'moloni_es') . ': ' . $orderId);
             }
+        } catch (Error $ex) {
+            Log::write(__("There was an error generating the document: ",'moloni_es') . strip_tags($ex->getDecodedMessage()));
         } catch (Exception $ex) {
             Log::write(__("Fatal error: ",'moloni_es') . $ex->getMessage());
         }

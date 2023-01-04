@@ -72,8 +72,10 @@ class Plugin
     public function run()
     {
         try {
+            $authenticated = Start::login();
+
             /** If the user is not logged in show the login form */
-            if (Start::login()) {
+            if ($authenticated) {
                 $action = isset($_REQUEST['action']) ? sanitize_text_field($_REQUEST['action']) : '';
 
                 switch ($action) {
@@ -90,7 +92,7 @@ class Plugin
                         break;
 
                     case 'genInvoice':
-                        $document = $this->createDocument();
+                        $this->createDocument();
                         break;
 
                     case 'syncStocks':
@@ -105,13 +107,13 @@ class Plugin
                         $this->openDocument();
                         break;
                 }
-
-                if (!wp_doing_ajax()) {
-                    include MOLONI_ES_TEMPLATE_DIR . 'MainContainer.php';
-                }
             }
         } catch (Error $error) {
-            $error->showError();
+            $pluginErrorException = $error;
+        }
+
+        if (isset($authenticated) && $authenticated && !wp_doing_ajax()) {
+            include MOLONI_ES_TEMPLATE_DIR . 'MainContainer.php';
         }
     }
 
@@ -119,8 +121,6 @@ class Plugin
 
     /**
      * Create a new document
-     *
-     * @return Documents
      *
      * @throws Error
      */
@@ -131,12 +131,11 @@ class Plugin
         $document = new Documents($orderId);
         $document->createDocument();
 
-        if ($document->documentId) {
+        if ($document->documentId > 0) {
             $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $document->documentId)) . '" target="_BLANK">' . __('View document', 'moloni_es') . '</a>';
+
             add_settings_error('molonies', 'moloni-document-created-success', __('Document was created!', 'moloni_es') . $viewUrl, 'updated');
         }
-
-        return $document;
     }
 
     /**
