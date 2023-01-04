@@ -117,7 +117,7 @@ class OrderView
         <a type="button"
            class="button button-primary"
            target="_BLANK"
-           href="<?= esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $documentId)) ?>"
+           href="<?= admin_url('admin.php?page=molonies&action=getInvoice&id=' . $documentId) ?>"
            style="margin-top: 10px; margin-left: 10px; float:right;"
         >
             <?= __('See document', 'moloni_es') ?>
@@ -139,7 +139,7 @@ class OrderView
         <a type="button"
            class="button"
            target="_BLANK"
-           href="<?= esc_url(admin_url('admin.php?page=molonies&action=genInvoice&id=' . $order->get_id())) ?>"
+           href="<?= admin_url('admin.php?page=molonies&action=genInvoice&id=' . $order->get_id()) ?>"
            style="margin-top: 10px; float:right;"
         >
             <?= __('Generate again', 'moloni_es') ?>
@@ -169,7 +169,7 @@ class OrderView
 
         <script>
             function createMoloniDocument() {
-                var redirectUrl = "<?= esc_url(admin_url('admin.php?page=molonies&action=genInvoice&id=' . $order->get_id())) ?>";
+                var redirectUrl = "<?= admin_url('admin.php?page=molonies&action=genInvoice&id=' . $order->get_id()) ?>";
 
                 if (document.getElementById('moloni_document_type')) {
                     redirectUrl += '&document_type=' + document.getElementById('moloni_document_type').value;
