@@ -3,9 +3,10 @@
 namespace MoloniES\Controllers;
 
 use Exception;
-use MoloniES\API\Products;
-use MoloniES\Error;
+use WC_Product;
 use MoloniES\Log;
+use MoloniES\Error;
+use MoloniES\API\Products;
 
 class SyncProducts
 {
@@ -15,9 +16,6 @@ class SyncProducts
     private $updated = [];
     private $equal = [];
     private $notFound = [];
-
-    /** @var string Switch this between outofstock or onbackorder */
-    private $outOfStockStatus = 'onbackorder';
 
     /**
      * SyncProducts constructor.
@@ -39,6 +37,7 @@ class SyncProducts
 
     /**
      * Run the sync operation
+     *
      * @return SyncProducts
      */
     public function run()
@@ -49,12 +48,16 @@ class SyncProducts
 
         if (!empty($updatedProducts) && is_array($updatedProducts)) {
             $this->found = count($updatedProducts);
+
             Log::write(sprintf(__('Found %s products','moloni_es'),$this->found));
+
             foreach ($updatedProducts as $product) {
                 try {
                     $wcProductId = wc_get_product_id_by_sku($product['reference']);
-                    if ($product['hasStock'] && $wcProductId > 0 && (get_post_meta($wcProductId,'_manage_stock'))[0] !== 'no') {
-                        $currentStock = get_post_meta($wcProductId, '_stock', true);
+                    $wcProduct = wc_get_product($wcProductId);
+
+                    if ($product['hasStock'] && $wcProduct && $wcProduct->managing_stock()) {
+                        $currentStock = $wcProduct->get_stock_quantity();
                         $newStock = $product['stock'];
 
                         if ((float)$currentStock === (float)$newStock) {
@@ -90,7 +93,7 @@ class SyncProducts
     }
 
     /**
-     * Get the amount of records update
+     * Get the amount of records updates
      * @return int
      */
     public function countUpdated()

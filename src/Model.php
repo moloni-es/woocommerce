@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection SqlNoDataSourceInspection
- * @noinspection SqlResolve
- */
-
 namespace MoloniES;
 
 class Model
@@ -167,7 +162,9 @@ class Model
     public static function defineConfigs()
     {
         global $wpdb;
+
         $results = $wpdb->get_results('SELECT * FROM moloni_es_api_config ORDER BY id DESC', ARRAY_A);
+
         foreach ($results as $result) {
             $setting = strtoupper($result['config']);
 
@@ -179,23 +176,33 @@ class Model
 
     /**
      * Get all available custom fields
+     *
      * @return array
      */
     public static function getCustomFields()
     {
         global $wpdb;
 
-        $results = $wpdb->get_results(
-            'SELECT DISTINCT meta_key FROM ' . $wpdb->prefix . 'postmeta ORDER BY `' . $wpdb->prefix . 'postmeta`.`meta_key`',
-            ARRAY_A
-        );
+        if (Storage::$USES_NEW_ORDERS_SYSTEM) {
+            $results = $wpdb->get_results(
+                "SELECT DISTINCT meta_key FROM " . $wpdb->prefix . "wc_orders_meta ORDER BY `" . $wpdb->prefix . "wc_orders_meta`.`meta_key` ASC",
+                ARRAY_A
+            );
+        } else {
+            $results = $wpdb->get_results(
+                "SELECT DISTINCT meta_key FROM " . $wpdb->prefix . "postmeta ORDER BY `" . $wpdb->prefix . "postmeta`.`meta_key` ASC",
+                ARRAY_A
+            );
+        }
 
         $customFields = [];
+
         if ($results && is_array($results)) {
             foreach ($results as $result) {
                 $customFields[] = $result;
             }
         }
+
         return $customFields;
     }
 
@@ -231,5 +238,4 @@ class Model
     {
         return hash('md5', Storage::$MOLONI_ES_COMPANY_ID) === $hash;
     }
-
 }

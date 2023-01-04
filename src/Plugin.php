@@ -2,8 +2,12 @@
 
 namespace MoloniES;
 
-use MoloniES\Controllers\Documents;
+use MoloniES\Helpers\Context;
 use MoloniES\WebHooks\WebHook;
+use MoloniES\Controllers\Documents;
+use MoloniES\Controllers\PendingOrders;
+use MoloniES\Hooks\WoocommerceInitialize;
+use WC_Order;
 
 /**
  * Main constructor
@@ -17,14 +21,27 @@ class Plugin
      */
     public function __construct()
     {
+        $this->onStart();
         $this->translations();
         $this->actions();
+    }
+
+    //            Privates            //
+
+    /**
+     * Place to run code before starting
+     *
+     * @return void
+     */
+    private function onStart()
+    {
+        Storage::$USES_NEW_ORDERS_SYSTEM = Context::isNewOrdersSystemEnabled();
     }
 
     /**
      * Loads translations
      */
-    public function translations()
+    private function translations()
     {
         //loads translations files
         load_plugin_textdomain('moloni_es', FALSE, basename(dirname(MOLONI_ES_PLUGIN_FILE)) . '/languages/');
@@ -35,6 +52,7 @@ class Plugin
      */
     private function actions()
     {
+        new WoocommerceInitialize($this);
         new Menus\Admin($this);
         new Hooks\ProductUpdate($this);
         new Hooks\ProductView($this);
@@ -43,6 +61,8 @@ class Plugin
         new WebHooks\WebHook();
         new Ajax($this);
     }
+
+    //            Publics            //
 
     /**
      * Main function
@@ -57,7 +77,7 @@ class Plugin
 
                 switch ($action) {
                     case 'remInvoice':
-                        $this->removeOrder((int)(sanitize_text_field($_GET['id'])));
+                        $this->removeOrder();
                         break;
 
                     case 'remInvoiceAll':
@@ -69,9 +89,7 @@ class Plugin
                         break;
 
                     case 'genInvoice':
-                        $orderId = (int)(sanitize_text_field($_REQUEST['id']));
-                        /** @noinspection PhpUnusedLocalVariableInspection */
-                        $document = $this->createDocument($orderId);
+                        $document = $this->createDocument();
                         break;
 
                     case 'syncStocks':
@@ -79,21 +97,11 @@ class Plugin
                         break;
 
                     case 'remLogs':
-                        Log::removeLogs();
-                        add_settings_error('molonies', 'moloni-rem-logs', __('Logs cleanup is complete.', 'moloni_es'), 'updated');
+                        $this->removeLogs();
                         break;
 
                     case 'getInvoice':
-                        $document = false;
-                        $documentId = (int)(sanitize_text_field($_REQUEST['id']));
-
-                        if ($documentId > 0) {
-                            $document = Documents::showDocument($documentId);
-                        }
-
-                        if (!$document) {
-                            add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
-                        }
+                        $this->openDocument();
                         break;
                 }
 
@@ -106,14 +114,19 @@ class Plugin
         }
     }
 
+    //            Actions            //
+
     /**
      * Create a new document
-     * @param $orderId
+     *
      * @return Documents
+     *
      * @throws Error
      */
-    private function createDocument($orderId)
+    private function createDocument()
     {
+        $orderId = (int)(sanitize_text_field($_REQUEST['id']));
+
         $document = new Documents($orderId);
         $document->createDocument();
 
@@ -126,13 +139,51 @@ class Plugin
     }
 
     /**
-     * Remove order from pending list
-     * @param int $orderId
+     * Open Moloni document
+     *
+     * @return void
+     *
+     * @throws Error
      */
-    private function removeOrder($orderId)
+    private function openDocument()
     {
+        $document = false;
+        $documentId = (int)(sanitize_text_field($_REQUEST['id']));
+
+        if ($documentId > 0) {
+            $document = Documents::showDocument($documentId);
+        }
+
+        if (!$document) {
+            add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
+        }
+    }
+
+    /**
+     * Delete logs
+     *
+     * @return void
+     */
+    private function removeLogs()
+    {
+        Log::removeLogs();
+
+        add_settings_error('molonies', 'moloni-rem-logs', __('Logs cleanup is complete.', 'moloni_es'), 'updated');
+    }
+
+    /**
+     * Remove order from pending list
+     */
+    private function removeOrder()
+    {
+        $orderId = (int)(sanitize_text_field($_GET['id']));
+
         if (isset($_GET['confirm']) && sanitize_text_field($_GET['confirm']) === 'true') {
-            add_post_meta($orderId, '_molonies_sent', '-1', true);
+            $order = wc_get_order($orderId);
+            $order->add_meta_data('_molonies_sent', '-1');
+            $order->add_order_note(__('Order marked as created'));
+            $order->save();
+
             add_settings_error(
                 'molonies',
                 'moloni-order-remove-success',
@@ -154,18 +205,26 @@ class Plugin
     private function removeOrdersAll()
     {
         if (isset($_GET['confirm']) && sanitize_text_field($_GET['confirm']) === 'true') {
-            $allOrders = Controllers\PendingOrders::getAllAvailable();
-            if (!empty($allOrders) && is_array($allOrders)) {
+            /** @var WC_Order[] $allOrders */
+            $allOrders = PendingOrders::getAllAvailable();
+
+            if (!empty($allOrders)) {
                 foreach ($allOrders as $order) {
-                    add_post_meta($order['id'], '_molonies_sent', '-1', true);
+                    $order->add_meta_data('_molonies_sent', '-1');
+                    $order->add_order_note(__('Order marked as created'));
+                    $order->save();
                 }
+
                 add_settings_error('molonies', 'moloni-order-all-remove-success', __('All orders have been marked as generated!', 'moloni_es'), 'updated');
             } else {
                 add_settings_error('molonies', 'moloni-order-all-remove-not-found', __('No order found to generate!', 'moloni_es'));
             }
         } else {
+            $url = esc_url(admin_url('admin.php?page=molonies&action=remInvoiceAll&confirm=true'));
+
             add_settings_error(
-                'molonies', 'moloni-order-remove', __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . esc_url(admin_url('admin.php?page=molonies&action=remInvoiceAll&confirm=true')) . "'>" . __('Yes, i confirm', 'moloni_es') . "</a>"
+                'molonies', 'moloni-order-remove',
+                __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . $url . "'>" . __('Yes, i confirm', 'moloni_es') . "</a>"
             );
         }
     }
@@ -197,14 +256,14 @@ class Plugin
      */
     private function reinstallWebhooks()
     {
-        $type = '';
-
         try {
             WebHook::createHooks();
+
             $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
             $type = 'updated';
         } catch (Error $e) {
             $msg = __('Something went wrong reinstalling Moloni Webhooks.', 'moloni_es');
+            $type = 'error';
         }
 
         add_settings_error('molonies', 'moloni-webhooks-reinstall-error', $msg, $type);

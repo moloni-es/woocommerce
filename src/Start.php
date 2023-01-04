@@ -22,7 +22,6 @@ class Start
      * Handles session, login and settings
      * @param bool $ajax
      * @return bool
-     * @throws Error
      */
     public static function login($ajax = false)
     {

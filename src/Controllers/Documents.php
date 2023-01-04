@@ -145,7 +145,8 @@ class Documents
             }
 
             $this->documentId = $insertedDocument['documentId'];
-            add_post_meta($this->orderId, '_molonies_sent', $this->documentId, true);
+
+            $this->saveRecord();
 
             // If the documents is going to be inserted as closed
             if (defined('DOCUMENT_STATUS') && DOCUMENT_STATUS) {
@@ -156,6 +157,7 @@ class Documents
 
                 if ($orderTotal !== $documentTotal) {
                     $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
+
                     throw new Error(
                         __('The document has been inserted but the totals do not match. ' , 'moloni_es') .
                         '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document','moloni_es') . '</a>'
@@ -410,9 +412,20 @@ class Documents
      * Checks if this document is referenced in database
      * @return bool
      */
-    public function isReferencedInDatabase()
+    private function isReferencedInDatabase()
     {
-        return $this->order->get_meta('_molonies_sent') ? true : false;
+        return empty($this->order->get_meta('_molonies_sent'));
+    }
+
+    /**
+     * Save document id on order meta
+     *
+     * @return void
+     */
+    private function saveRecord()
+    {
+        $this->order->add_meta_data('_molonies_sent', $this->documentId);
+        $this->order->save();
     }
 
     /**
@@ -555,7 +568,9 @@ class Documents
 
                 if ($orderTotal !== $documentTotal) {
                     $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $mutation['documentId']);
-                    add_post_meta($this->orderId, '_molonies_sent', $mutation['documentId'], true);
+
+                    $this->saveRecord();
+
                     throw new Error(
                         __('The document has been inserted but the totals do not match. ' , 'moloni_es') .
                         '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('View document' , 'moloni_es') . '</a>'
@@ -833,14 +848,9 @@ class Documents
 
             header('Location: https://mediaapi.moloni.org' . $result['path'] . '?jwt=' . $result['token']);
         } else {
-            if (defined('COMPANY_SLUG')) {
-                $slug = COMPANY_SLUG;
-            } else {
-                $slug = $invoice['company']['slug'];
-            }
-
-            header('Location: https://ac.moloni.es/' . $slug . '/' . $invoice['documentType']['apiCodePlural'] . '/view/' . $invoice['documentId']);
+            header('Location: https://ac.moloni.es/' . $invoice['company']['slug'] . '/' . $invoice['documentType']['apiCodePlural'] . '/view/' . $invoice['documentId']);
         }
+
         exit;
     }
 }

@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 <div id='formLogin'>
     <a href='<?= esc_url( 'https://moloni.es' ); ?>' target='_BLANK'>
-        <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.png" width='300px' alt="Moloni">
+        <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.svg" width='300px' alt="Moloni">
     </a>
     <hr>
     <form id='formPerm' method='POST' action='<?= admin_url('admin.php?page=molonies') ?>'>

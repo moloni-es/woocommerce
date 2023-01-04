@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="header">
-    <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.png" width='300px' alt="MoloniES">
+    <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.svg" width='300px' alt="Moloni">
 </div>
 
 <?php settings_errors();?>
