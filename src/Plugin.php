@@ -4,10 +4,10 @@ namespace MoloniES;
 
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
-use MoloniES\WebHooks\WebHook;
 use MoloniES\Controllers\Documents;
 use MoloniES\Controllers\PendingOrders;
 use MoloniES\Hooks\WoocommerceInitialize;
+use MoloniES\WebHooks\WebHook;
 use WC_Order;
 
 /**
@@ -59,7 +59,7 @@ class Plugin
         new Hooks\ProductView($this);
         new Hooks\OrderView($this);
         new Hooks\OrderPaid($this);
-        new WebHooks\WebHook();
+        new WebHook();
         new Ajax($this);
     }
 
