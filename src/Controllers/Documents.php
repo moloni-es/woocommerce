@@ -412,7 +412,7 @@ class Documents
      */
     private function isReferencedInDatabase()
     {
-        return empty($this->order->get_meta('_molonies_sent'));
+        return !empty($this->order->get_meta('_molonies_sent'));
     }
 
     /**

@@ -84,6 +84,7 @@ class Start
                 Model::defineConfigs();
 
                 try {
+                    WebHooks::deleteHooks();
                     WebHooks::createHooks();
                 } catch (Error $e) {}
 

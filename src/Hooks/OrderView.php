@@ -68,7 +68,7 @@ class OrderView
 
                 $this->getDocumentCreateButton($order, __('Generate again' , 'moloni_es'));
             } else {
-                $this->getDocumentCreateButton($order, __('Generate document on Moloni' , 'moloni_es'));
+                $this->getDocumentCreateButton($order, __('Create' , 'moloni_es'));
                 $this->getDocumentTypeSelect();
             }
 
