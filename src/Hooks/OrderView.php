@@ -56,6 +56,7 @@ class OrderView
 
             if ($documentId > 0) {
                 echo __('The document has already been generated in Moloni' , 'moloni_es');
+                echo '<br>';
 
                 $this->seeDocument($documentId);
                 $this->getRecreateDocumentButton($order);

@@ -59,8 +59,8 @@ class OrderCustomer
                 'address' => $this->getCustomerBillingAddress(),
                 'zipCode' => $this->getCustomerZip(),
                 'city' => $this->getCustomerBillingCity(),
-                'countryId' => (int) $this->getCustomerCountryId(),
-                'languageId' => (int) $this->getCustomerLanguageId(),
+                'countryId' => (int)$this->getCustomerCountryId(),
+                'languageId' => (int)$this->getCustomerLanguageId(),
                 'email' => $this->email,
                 'phone' => $this->order->get_billing_phone(),
                 'contactName' => $this->contactName,
@@ -75,7 +75,7 @@ class OrderCustomer
             unset($variables['data']['email']);
         }
 
-        if (!$customerExists) {
+        if (empty($customerExists)){
             $variables['data']['vat'] = $this->vat;
             $variables['data']['number'] = self::getCustomerNextNumber();
             $result = Customers::mutationCustomerCreate($variables);
@@ -268,8 +268,9 @@ class OrderCustomer
 
     /**
      * Search for a customer based on $this->vat or $this->email
-     * @param string|bool $forField
-     * @return bool
+     *
+     * @return bool|array
+     *
      * @throws Error
      */
     public function searchForCustomer()
@@ -286,7 +287,7 @@ class OrderCustomer
             ]
         ];
 
-        if ($this->vat !== null) {
+        if (!empty($this->vat)) {
             $variables['options']['filter']['field'] = 'vat';
             $variables['options']['filter']['value'] = $this->vat;
 
