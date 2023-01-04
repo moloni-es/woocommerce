@@ -3,6 +3,7 @@
 namespace MoloniES;
 
 use MoloniES\API\Companies;
+use MoloniES\Helpers\WebHooks;
 use MoloniES\WebHooks\WebHook;
 
 /**
@@ -55,8 +56,9 @@ class Start
         }
 
         if ($action === 'logout') {
-            //Deletes the created hooks in Moloni
-            WebHook::deleteHooks();
+            try {
+                WebHooks::deleteHooks();
+            } catch (Error $e) {}
 
             Model::resetTokens();
         }
@@ -80,8 +82,11 @@ class Start
                 $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => Storage::$MOLONI_ES_SESSION_ID]);
                 Model::defineValues();
                 Model::defineConfigs();
-                //Creates hook in moloni
-                WebHook::createHooks();
+
+                try {
+                    WebHooks::createHooks();
+                } catch (Error $e) {}
+
                 return true;
             }
 

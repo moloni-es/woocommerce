@@ -3,6 +3,7 @@
 namespace MoloniES;
 
 use MoloniES\Helpers\Context;
+use MoloniES\Helpers\WebHooks;
 use MoloniES\WebHooks\WebHook;
 use MoloniES\Controllers\Documents;
 use MoloniES\Controllers\PendingOrders;
@@ -257,7 +258,8 @@ class Plugin
     private function reinstallWebhooks()
     {
         try {
-            WebHook::createHooks();
+            WebHooks::deleteHooks();
+            WebHooks::createHooks();
 
             $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
             $type = 'updated';
