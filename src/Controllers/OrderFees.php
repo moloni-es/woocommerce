@@ -179,7 +179,6 @@ class OrderFees
     private function setDiscount()
     {
         $this->discount = $this->price <= 0 ? 100 : 0;
-        $this->discount = $this->discount < 0 ? 0 : ($this->discount > 100) ? 100 : $this->discount;
 
         return $this;
     }
