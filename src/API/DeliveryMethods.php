@@ -45,7 +45,7 @@ class DeliveryMethods
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryDeliveryMethods($variables)
+    public static function queryDeliveryMethods($variables = [])
     {
         $query = 'query deliveryMethods($companyId: Int!,$options: DeliveryMethodOptions)
         {

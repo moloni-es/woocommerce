@@ -1,14 +1,17 @@
-<?php use \MoloniES\Controllers\Documents; ?>
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <?php use \MoloniES\Controllers\PendingOrders; ?>
 
-<?php $orders = PendingOrders::getAllAvailable(); ?>
+<?php
+/** @var WC_Order[] $orders */
+$orders = PendingOrders::getAllAvailable();
+?>
 
 <div class="wrap">
-
-    <?php if (isset($document) && $document instanceof Documents && $document->getError()) : ?>
-        <?php $document->getError()->showError(); ?>
-    <?php endif; ?>
-
     <h3><?= __('Here you can see all the orders you have to generate' , 'moloni_es') ?></h3>
 
     <div class="tablenav top">
@@ -45,41 +48,55 @@
 
         <?php if (!empty($orders) && is_array($orders)) : ?>
 
-            <!-- Lets draw a list of all the available orders -->
+            <!-- Let's draw a list of all the available orders -->
             <?php foreach ($orders as $order) : ?>
-                <tr id="moloni-pending-order-row-<?= $order['id'] ?>">
+                <tr id="moloni-pending-order-row-<?= $order->get_id() ?>">
                     <td class="">
-                        <label for="moloni-pending-order-<?= $order['id'] ?>" class="screen-reader-text"></label>
-                        <input id="moloni-pending-order-<?= $order['id'] ?>" type="checkbox"
-                               value="<?= $order['id'] ?>">
+                        <label for="moloni-pending-order-<?= $order->get_id() ?>" class="screen-reader-text"></label>
+                        <input id="moloni-pending-order-<?= $order->get_id() ?>" type="checkbox"
+                               value="<?= $order->get_id() ?>">
                     </td>
                     <td>
-                        <a href=<?= esc_url(admin_url('post.php?post=' . $order['id'] . '&action=edit')) ?>>#<?= $order['number'] ?></a>
+                        <a target="_blank" href=<?= $order->get_edit_order_url() ?>>#<?= $order->get_order_number() ?></a>
                     </td>
                     <td>
                         <?php
-                        if (isset($order['info']['_billing_first_name']) && !empty($order['info']['_billing_first_name'])) {
-                            echo $order['info']['_billing_first_name'] . ' ' . $order['info']['_billing_last_name'];
+                        if (!empty($order->get_billing_first_name())) {
+                            echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
                         } else {
                             echo __('Unknown','moloni_es');
                         }
-
                         ?>
                     <td>
                         <?php
-                        if (defined('VAT_FIELD') && isset($order['info'][VAT_FIELD]) && !empty($order['info'][VAT_FIELD])) {
-                            echo $order['info'][VAT_FIELD];
+                        $vat = '';
+
+                        if (defined('VAT_FIELD')) {
+                            $meta = $order->get_meta(VAT_FIELD);
+
+                            $vat = $meta;
+                        }
+
+                        echo empty($vat) ? 'n/a' : $vat;
+                        ?>
+                    </td>
+                    <td><?= $order->get_total() . $order->get_currency() ?></td>
+                    <td>
+                        <?php
+                        $availableStatus = wc_get_order_statuses();
+                        $needle = 'wc-' . $order->get_status();
+
+                        if (isset($availableStatus[$needle])) {
+                            echo $availableStatus[$needle];
                         } else {
-                            echo 'n/a';
+                            echo $needle;
                         }
                         ?>
                     </td>
-                    <td><?= $order['info']['_order_total'] . $order['info']['_order_currency'] ?></td>
-                    <td><?= $order['status'] ?></td>
                     <td>
                         <?php
-                        if (isset($order['info']['_completed_date'])) {
-                            echo $order['info']['_completed_date'];
+                        if (!empty($order->get_date_paid())) {
+                            echo date('Y-m-d H:i:s', strtotime($order->get_date_paid()));
                         } else {
                             echo 'n/a';
                         }
@@ -89,7 +106,7 @@
                         <form action="<?= admin_url('admin.php') ?>">
                             <input type="hidden" name="page" value="molonies">
                             <input type="hidden" name="action" value="genInvoice">
-                            <input type="hidden" name="id" value="<?= $order['id'] ?>">
+                            <input type="hidden" name="id" value="<?= $order->get_id() ?>">
 
                             <select name="document_type" style="margin-right: 5px; max-width: 45%;">
                                 <option value='invoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
@@ -125,7 +142,7 @@
 
 
                             <a class="wp-core-ui button-secondary" style="width: 80px; text-align: center"
-                               href="<?= esc_url(admin_url('admin.php?page=molonies&action=remInvoice&id=' . $order['id'])) ?>">
+                               href="<?= esc_url(admin_url('admin.php?page=molonies&action=remInvoice&id=' . $order->get_id())) ?>">
                                 <?= __('Remove' , 'moloni_es') ?>
                             </a>
                         </form>
@@ -135,7 +152,7 @@
 
         <?php else : ?>
             <tr>
-                <td colspan="7">
+                <td colspan="8">
                     <?= __('No orders to be generated were found!','moloni_es') ?>
                 </td>
             </tr>

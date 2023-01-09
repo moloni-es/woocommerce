@@ -29,15 +29,7 @@ class Ajax
                     $document->isHook = true;
                     $document->createDocument();
 
-                    if (!$document->getError()) {
-                        wp_send_json(['valid' => 1, 'message' => sprintf(__('Document %s successfully inserted','moloni_es'), $document->order->get_order_number())]);
-                    }
-
-                    wp_send_json([
-                        'valid' => 0,
-                        'message' => $document->getError()->getDecodedMessage(),
-                        'description' => $document->getError()->getError()
-                    ]);
+                    wp_send_json(['valid' => 1, 'message' => sprintf(__('Document %s successfully inserted','moloni_es'), $document->order->get_order_number())]);
                 } catch (Error $e) {
                     wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);
                 }

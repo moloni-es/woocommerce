@@ -15,7 +15,7 @@ class Warehouses
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryWarehouses($variables)
+    public static function queryWarehouses($variables = [])
     {
         $query = 'query warehouses($companyId: Int!,$options: WarehouseOptions)
         {

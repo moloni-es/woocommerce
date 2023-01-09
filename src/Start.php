@@ -3,6 +3,7 @@
 namespace MoloniES;
 
 use MoloniES\API\Companies;
+use MoloniES\Helpers\WebHooks;
 use MoloniES\WebHooks\WebHook;
 
 /**
@@ -22,7 +23,6 @@ class Start
      * Handles session, login and settings
      * @param bool $ajax
      * @return bool
-     * @throws Error
      */
     public static function login($ajax = false)
     {
@@ -47,6 +47,7 @@ class Start
         if (!empty($code)) {
             $tokensRow = Model::getTokensRow();
             $login = Curl::login($code, $tokensRow['client_id'], $tokensRow['client_secret']);
+
             if ($login && isset($login['accessToken']) && isset($login['refreshToken'])) {
                 Model::setTokens($login['accessToken'], $login['refreshToken']);
             } else {
@@ -55,8 +56,9 @@ class Start
         }
 
         if ($action === 'logout') {
-            //Deletes the created hooks in Moloni
-            WebHook::deleteHooks();
+            try {
+                WebHooks::deleteHooks();
+            } catch (Error $e) {}
 
             Model::resetTokens();
         }
@@ -70,17 +72,22 @@ class Start
         if (!empty($tokensRow['main_token']) && !empty($tokensRow['refresh_token'])) {
             Model::refreshTokens();
             Model::defineValues();
-            if (defined('MOLONIES_COMPANY_ID')) {
+
+            if (Storage::$MOLONI_ES_COMPANY_ID) {
                 Model::defineConfigs();
                 return true;
             }
 
             if (isset($_GET['companyId'])) {
-                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => MOLONI_SESSION_ID]);
+                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => Storage::$MOLONI_ES_SESSION_ID]);
                 Model::defineValues();
                 Model::defineConfigs();
-                //Creates hook in moloni
-                WebHook::createHooks();
+
+                try {
+                    WebHooks::deleteHooks();
+                    WebHooks::createHooks();
+                } catch (Error $e) {}
+
                 return true;
             }
 
@@ -94,9 +101,8 @@ class Start
 
     /**
      * Shows a login form
-     * @param bool|string $error Is used in include
      */
-    public static function loginForm($error = false)
+    public static function loginForm()
     {
         if (!self::$ajax) {
             include(MOLONI_ES_TEMPLATE_DIR . 'LoginForm.php');
@@ -109,6 +115,10 @@ class Start
      */
     public static function companiesForm()
     {
+        if (self::$ajax) {
+            return;
+        }
+
         try {
             $companiesIds = Companies::queryMe();
 
@@ -119,18 +129,20 @@ class Start
                         'defaultLanguageId' => 2
                     ]
                 ];
-                $query = Companies::queryCompany($variables);
-                $companies[] = $query['data']['company']['data'];
+
+                $query = Companies::queryCompany($variables)['data']['company']['data'];
+
+                if (!$query['isConfirmed']) {
+                    continue;
+                }
+
+                $companies[] = $query;
             }
         } catch (Error $e) {
             $companies = [];
         }
 
-        if (empty($companies)) {
-            self::loginForm(__('You have no companies available in your account!', 'moloni_es'));
-        } else if (!self::$ajax) {
-            include(MOLONI_ES_TEMPLATE_DIR . 'CompanySelect.php');
-        }
+        include(MOLONI_ES_TEMPLATE_DIR . 'CompanySelect.php');
     }
 
     /**

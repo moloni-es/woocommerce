@@ -101,7 +101,7 @@ class OrderFees
      */
     private function setProductId()
     {
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'filter' => [
                     [
@@ -193,7 +193,6 @@ class OrderFees
         // If a tax is set in settings (should not be used by the client)
         if(defined('TAX_ID') && TAX_ID > 0) {
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID
             ];
 
@@ -288,7 +287,6 @@ class OrderFees
             unset($variables['ordering']);
 
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'data' => $variables
             ];
 

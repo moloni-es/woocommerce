@@ -29,7 +29,6 @@ class DeliveryMethod
     public function loadByName()
     {
         $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
                     'field' => 'name',
@@ -59,7 +58,6 @@ class DeliveryMethod
     public function loadDefault()
     {
         $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'options' => [
                 'filter' => [
                     'field' => 'isDefault',
@@ -87,7 +85,6 @@ class DeliveryMethod
     public function create()
     {
         $variables = [
-            'companyId' => (int)MOLONIES_COMPANY_ID,
             'data' => [
                 'name' => $this->name,
                 'isDefault' => false

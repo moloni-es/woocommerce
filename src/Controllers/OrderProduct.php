@@ -251,7 +251,6 @@ class OrderProduct
         if(defined('TAX_ID') && TAX_ID > 0) {
 
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID
             ];
 
@@ -341,16 +340,14 @@ class OrderProduct
         if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int) MOLONI_PRODUCT_WAREHOUSE > 0) {
             $this->warehouseId = (int) MOLONI_PRODUCT_WAREHOUSE;
         } else {
-            $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
-            ];
-
-            $results = Warehouses::queryWarehouses($variables);
+            $results = Warehouses::queryWarehouses();
 
             $this->warehouse_id = $results[0]['warehouseId']; //fail safe
             foreach ($results as $result) {
                 if ((bool) $result['isDefault'] === true) {
                     $this->warehouse_id = $result['warehouseId'];
+
+                    break;
                 }
             }
         }

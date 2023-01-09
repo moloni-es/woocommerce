@@ -48,7 +48,6 @@ class Products
             }
 
             $variables = [
-                'companyId' => (int)MOLONIES_COMPANY_ID,
                 'productId' => (int)sanitize_text_field($parameters['productId'])
             ];
 
@@ -132,9 +131,11 @@ class Products
             return;
         }
 
+        $wcProduct = wc_get_product($wcProductId);
+
         //if it exists and manage stock is set to true, update it
-        if ($wcProductId > 0 && (get_post_meta($wcProductId, '_manage_stock'))[0] !== 'no') {
-            $currentStock = get_post_meta($wcProductId, '_stock', true);
+        if ($wcProduct && $wcProduct->managing_stock()) {
+            $currentStock = $wcProduct->get_stock_quantity();
             $newStock = $moloniProduct['stock'];
 
             if ((float)$currentStock === (float)$newStock) {
@@ -485,7 +486,6 @@ class Products
 
         do {
             $variables = [
-                'companyId' => (int)MOLONIES_COMPANY_ID,
                 'productCategoryId' => (int)$moloniId
             ];
 

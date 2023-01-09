@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @noinspection SqlNoDataSourceInspection
- * @noinspection SqlResolve
- */
-
 namespace MoloniES;
 
 class Model
@@ -152,11 +147,12 @@ class Model
     {
         $tokensRow = self::getTokensRow();
 
-        define('MOLONI_SESSION_ID', $tokensRow['id']);
-        define('MOLONI_ACCESS_TOKEN', $tokensRow['main_token']);
+
+        Storage::$MOLONI_ES_SESSION_ID = $tokensRow['id'];
+        Storage::$MOLONI_ES_ACCESS_TOKEN = $tokensRow['main_token'];
 
         if (!empty($tokensRow['company_id'])) {
-            define('MOLONIES_COMPANY_ID', $tokensRow['company_id']);
+            Storage::$MOLONI_ES_COMPANY_ID = (int)$tokensRow['company_id'];
         }
     }
 
@@ -166,7 +162,9 @@ class Model
     public static function defineConfigs()
     {
         global $wpdb;
+
         $results = $wpdb->get_results('SELECT * FROM moloni_es_api_config ORDER BY id DESC', ARRAY_A);
+
         foreach ($results as $result) {
             $setting = strtoupper($result['config']);
 
@@ -178,23 +176,33 @@ class Model
 
     /**
      * Get all available custom fields
+     *
      * @return array
      */
     public static function getCustomFields()
     {
         global $wpdb;
 
-        $results = $wpdb->get_results(
-            'SELECT DISTINCT meta_key FROM ' . $wpdb->prefix . 'postmeta ORDER BY `' . $wpdb->prefix . 'postmeta`.`meta_key`',
-            ARRAY_A
-        );
+        if (Storage::$USES_NEW_ORDERS_SYSTEM) {
+            $results = $wpdb->get_results(
+                "SELECT DISTINCT meta_key FROM " . $wpdb->prefix . "wc_orders_meta ORDER BY `" . $wpdb->prefix . "wc_orders_meta`.`meta_key` ASC",
+                ARRAY_A
+            );
+        } else {
+            $results = $wpdb->get_results(
+                "SELECT DISTINCT meta_key FROM " . $wpdb->prefix . "postmeta ORDER BY `" . $wpdb->prefix . "postmeta`.`meta_key` ASC",
+                ARRAY_A
+            );
+        }
 
         $customFields = [];
+
         if ($results && is_array($results)) {
             foreach ($results as $result) {
                 $customFields[] = $result;
             }
         }
+
         return $customFields;
     }
 
@@ -218,7 +226,7 @@ class Model
      */
     public static function createHash()
     {
-        return hash('md5', (int)MOLONIES_COMPANY_ID);
+        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID);
     }
 
     /**
@@ -228,7 +236,6 @@ class Model
      */
     public static function checkHash($hash)
     {
-        return hash('md5', (int)MOLONIES_COMPANY_ID) === $hash;
+        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID) === $hash;
     }
-
 }

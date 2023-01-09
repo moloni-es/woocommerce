@@ -15,7 +15,7 @@ class FiscalZone
      * @return array returns the Graphql response array or an error array
      * @throws Error
      */
-    public static function queryFiscalZoneTaxSettings($variables)
+    public static function queryFiscalZoneTaxSettings($variables = [])
     {
         $query = 'query fiscalZoneTaxSettings($companyId: Int!,$fiscalZone: String!)
         {

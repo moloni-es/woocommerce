@@ -2,8 +2,10 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.37
-Tested up to: 5.9.3
+Stable tag: 1.0.38
+Tested up to: 6.1.1
+WC tested up to: 7.2.2
+
 Requires PHP: 5.6
 Requires at least: 5.0
 License: GPLv2 or later
@@ -25,7 +27,7 @@ Moloni is always updated with the latest features and tax changes according to t
 * Automatic sending of the document to the customer
 * Automatic creation of customers and articles
 * Customize your billing details
-* Access issued documents without leaving Wordpress
+* Access issued documents without leaving WordPress
 
 All technical and commercial support given to users of the plugin is provided by the Moloni Customer Support team.
 
@@ -49,7 +51,7 @@ Once you have a plugin for the contributor installed, just select in the setting
 
 
 == Installation ==
-This plugin can be installed via FTP or using the Wordpress plugin installer.
+This plugin can be installed via FTP or using the WordPress plugin installer.
 
 Via FTP
 1. Upload the plugin files to the `/wp-content/plugins/moloni_es` directory
@@ -65,6 +67,14 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.38 =
+* FIX: Small fixes and improvements
+* FEATURE: New logos and banners
+* FEATURE: New empty state in company select
+* FEATURE: Added support for WooCommerce HPOS orders system
+* Tested up to version 6.1.1 of WordPress
+* Tested up to version 7.2.2 of WooCommerce
+
 = 1.0.37 =
 * FIX: Replaced stock quantity setter method
 * Tested up to version 6.5.1 of WooCommerce
@@ -178,7 +188,7 @@ Via FTP
 * Changed the way an item stocked is handled during stock synchronization
 * Fixed behaviour in hooks when using WooCommerce Rest API that injected login form if plugin did not have valid account
 * Fixed error when costumer email was empty
-* Tested up to version 5.7 of Wordpress
+* Tested up to version 5.7 of WordPress
 * Tested up to version 5.2.0 of WooCommerce
 * Tested up to version 8.0 of PHP
 

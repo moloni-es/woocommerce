@@ -1,5 +1,11 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <div class="header">
-    <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.png" width='300px' alt="MoloniES">
+    <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.svg" width='300px' alt="Moloni">
 </div>
 
 <?php settings_errors();?>
@@ -28,6 +34,11 @@
 </nav>
 
 <?php
+
+if (isset($pluginErrorException) && $pluginErrorException instanceof \MoloniES\Error) {
+    $pluginErrorException->showError();
+}
+
 $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
 
 switch ($tab) {

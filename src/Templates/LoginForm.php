@@ -1,6 +1,12 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
+
 <div id='formLogin'>
     <a href='<?= esc_url( 'https://moloni.es' ); ?>' target='_BLANK'>
-        <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.png" width='300px' alt="Moloni">
+        <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.svg" width='300px' alt="Moloni">
     </a>
     <hr>
     <form id='formPerm' method='POST' action='<?= admin_url('admin.php?page=molonies') ?>'>
@@ -14,13 +20,6 @@
                 <td><label for='client_secret'><?= __('Client Secret','moloni_es') ?></label></td>
                 <td><input id="client_secret" type='text' name='client_secret'></td>
             </tr>
-
-            <?php if ($error): ?>
-                <tr>
-                    <td></td>
-                    <td style='text-align: center;'><?= $error ?></td>
-                </tr>
-            <?php endif; ?>
 
             <tr>
                 <td></td>

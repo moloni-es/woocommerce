@@ -53,7 +53,7 @@ class Product
     {
         $this->setReference();
 
-        $variables = ['companyId' => (int)MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'filter' => [
                     [
@@ -142,7 +142,6 @@ class Product
     {
         if (defined('SYNC_IMAGES') && SYNC_IMAGES && $this->image !== null) {
             $variables = [
-                'companyId' => (int)MOLONIES_COMPANY_ID,
                 'data' => [
                     'productId' => (int)$this->product_id,
                     'img' => null
@@ -329,7 +328,6 @@ class Product
         //if a tax is set in settings (should not be used by the client)
         if(defined('TAX_ID') && TAX_ID > 0) {
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID
             ];
 
@@ -359,7 +357,7 @@ class Product
             $taxRates = WC_Tax::get_base_tax_rates($productTaxes);
 
             // Get company setting to associate country code
-            $companyCountryCode = Companies::queryCompany(['companyId' => (int)MOLONIES_COMPANY_ID]);
+            $companyCountryCode = Companies::queryCompany();
             $companyCountryCode = $companyCountryCode['data']['company']['data']['fiscalZone']['fiscalZone'];
 
             foreach ($taxRates as $order => $taxRate) {
@@ -404,19 +402,18 @@ class Product
             return $this;
         }
 
-        if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int) MOLONI_PRODUCT_WAREHOUSE > 0) {
-            $this->warehouseId = (int) MOLONI_PRODUCT_WAREHOUSE;
+        if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int)MOLONI_PRODUCT_WAREHOUSE > 0) {
+            $this->warehouseId = (int)MOLONI_PRODUCT_WAREHOUSE;
         } else {
-            $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
-            ];
-
-            $results = Warehouses::queryWarehouses($variables);
+            $results = Warehouses::queryWarehouses();
 
             $this->warehouseId = $results[0]['warehouseId']; //fail safe
+
             foreach ($results as $result) {
-                if ((bool) $result['isDefault'] === true) {
+                if ((bool)$result['isDefault'] === true) {
                     $this->warehouseId = $result['warehouseId'];
+
+                    break;
                 }
             }
         }
@@ -447,7 +444,6 @@ class Product
     private function mapPropsToValues()
     {
         $variables = [
-            'companyId' => (int) MOLONIES_COMPANY_ID,
             'data' => [
                 'productCategoryId' => (int)$this->category_id,
                 'type' => (int)$this->type,

@@ -99,7 +99,7 @@ class OrderShipping
      */
     private function setProductId()
     {
-        $variables = ['companyId' => (int) MOLONIES_COMPANY_ID,
+        $variables = [
             'options' => [
                 'filter' => [
                     [
@@ -176,7 +176,6 @@ class OrderShipping
     private function setDiscount()
     {
         $this->discount = $this->price <= 0 ? 100 : 0;
-        $this->discount = $this->discount < 0 ? 0 : $this->discount > 100 ? 100 : $this->discount;
 
         return $this;
     }
@@ -200,7 +199,6 @@ class OrderShipping
         if(defined('TAX_ID_SHIPPING') && TAX_ID_SHIPPING > 0) {
 
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'taxId' => (int) TAX_ID_SHIPPING
             ];
 
@@ -284,7 +282,6 @@ class OrderShipping
             unset($variables['ordering']);
 
             $variables = [
-                'companyId' => (int) MOLONIES_COMPANY_ID,
                 'data' => $variables
             ];
 
