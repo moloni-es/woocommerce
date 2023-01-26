@@ -2,9 +2,9 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.38
+Stable tag: 1.0.39
 Tested up to: 6.1.1
-WC tested up to: 7.2.2
+WC tested up to: 7.3.0
 
 Requires PHP: 5.6
 Requires at least: 5.0
@@ -67,6 +67,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.39 =
+* FIX: Fixed error on product edit in older versions of WooCommerce
+* Tested up to version 7.3.0 of WooCommerce
+
 = 1.0.38 =
 * FIX: Small fixes and improvements
 * FEATURE: New logos and banners
