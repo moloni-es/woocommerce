@@ -66,7 +66,7 @@ class SyncProducts
                         } else {
                             Log::write(sprintf(__('Product with reference %1$s was updated from %2$s to %3$s','moloni_es'),$product['reference'],$currentStock,$newStock));
                             $this->updated[$product['reference']] = sprintf(__('Product with reference %1$s was updated from %2$s to %3$s','moloni_es'),$product['reference'],$currentStock,$newStock);
-                            wc_update_product_stock($wcProductId, $newStock);
+                            wc_update_product_stock($wcProduct, $newStock);
                         }
                     } else {
                         Log::write(sprintf(__('Product not found in WooCommerce or without active stock: %s' , 'moloni_es') , $product['reference']));
