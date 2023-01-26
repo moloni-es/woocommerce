@@ -4,6 +4,7 @@ namespace MoloniES\Hooks;
 
 use WP_Post;
 use WC_Order;
+use Exception;
 use MoloniES\Start;
 use MoloniES\Plugin;
 use MoloniES\Helpers\MoloniOrder;
@@ -35,9 +36,13 @@ class OrderView
 
     public function moloni_add_meta_box()
     {
-        $screen = wc_get_container()->get(CustomOrdersTableController::class)->custom_orders_table_usage_is_enabled()
-            ? wc_get_page_screen_id('shop-order')
-            : 'shop_order';
+        $screen = 'shop_order';
+
+        try {
+            if (class_exists(CustomOrdersTableController::class) && wc_get_container()->get(CustomOrdersTableController::class)->custom_orders_table_usage_is_enabled()) {
+                $screen = wc_get_page_screen_id('shop-order');
+            }
+        } catch (Exception $ex) {}
 
         add_meta_box('moloni_add_meta_box', 'Moloni', [$this, 'showMoloniView'], $screen, 'side', 'core');
     }

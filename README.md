@@ -5,7 +5,7 @@
 ![WordPress Plugin: Required WP Version](https://img.shields.io/badge/WordPress-%3E%3D%205.0-orange)
 ![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.1.1%20tested-orange)
 ![WooCommerce: Required Version](https://img.shields.io/badge/WooCommerce-%3E%3D%203.0.0-orange)
-![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-7.2.0%20tested-orange)
+![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-7.3.0%20tested-orange)
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
@@ -14,8 +14,8 @@
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
 **Tested up to:**      6.1.1  
-**WC tested up to**    7.2.2  
-**Stable tag:**        1.0.38  
+**WC tested up to**    7.3.0  
+**Stable tag:**        1.0.39  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -70,6 +70,11 @@ This plugin can be installed via FTP or using the WordPress plugin installer.
 Released plugin version 1.0.0.
 
 ## Changelog
+
+### 1.0.39
+* FIX: Fixed error on product edit in older versions of WooCommerce
+* Tested up to version 7.3.0 of WooCommerce
+
 ### 1.0.38
 * FIX: Small fixes and improvements
 * FEATURE: New logos and banners
