@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.39
+Stable tag: 1.0.40
 Tested up to: 6.1.1
 WC tested up to: 7.3.0
 
@@ -67,6 +67,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.40 =
+* Validate Spanish VAT numbers
+
 = 1.0.39 =
 * FIX: Fixed error on product edit in older versions of WooCommerce
 * Tested up to version 7.3.0 of WooCommerce

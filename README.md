@@ -15,7 +15,7 @@
 **Requires PHP:**      7.2  
 **Tested up to:**      6.1.1  
 **WC tested up to**    7.3.0  
-**Stable tag:**        1.0.39  
+**Stable tag:**        1.0.40  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -70,6 +70,9 @@ This plugin can be installed via FTP or using the WordPress plugin installer.
 Released plugin version 1.0.0.
 
 ## Changelog
+
+### 1.0.40
+* Validate Spanish VAT numbers
 
 ### 1.0.39
 * FIX: Fixed error on product edit in older versions of WooCommerce
