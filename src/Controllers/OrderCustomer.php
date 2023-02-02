@@ -246,9 +246,11 @@ class OrderCustomer
         try {
             $query = Customers::queryCustomerNextNumber($variables);
 
-            if (isset($query['data']['customerNextNumber']['data'])) {
-                $nextNumber = $query['data']['customerNextNumber']['data'];
+            if (!isset($query['data']['customerNextNumber']['data'])) {
+                throw new Error('Something went wrong!');
             }
+
+            $nextNumber = $query['data']['customerNextNumber']['data'];
         } catch (Error $e) {
             $nextNumber = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
             $nextNumber .= '1';
