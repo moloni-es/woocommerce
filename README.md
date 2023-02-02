@@ -72,7 +72,8 @@ Released plugin version 1.0.0.
 ## Changelog
 
 ### 1.0.40
-* Validate Spanish VAT numbers
+* FEATURE: Validate Spanish VAT numbers
+* FEATURE: New way to set new customers numbers
 
 ### 1.0.39
 * FIX: Fixed error on product edit in older versions of WooCommerce
