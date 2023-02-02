@@ -118,6 +118,7 @@ class Products
                     type
                     reference
                     summary
+                    notes
                     price
                     priceWithTaxes
                     hasStock
@@ -154,6 +155,7 @@ class Products
                         name
                         reference
                         summary
+                        notes
                         price
                         priceWithTaxes
                         hasStock
@@ -244,6 +246,7 @@ class Products
                     type
                     reference
                     summary
+                    notes
                     price
                     priceWithTaxes
                     hasStock
@@ -267,6 +270,8 @@ class Products
                     {
                         productId
                         name
+                        summary
+                        notes
                         reference
                     }
                     parent

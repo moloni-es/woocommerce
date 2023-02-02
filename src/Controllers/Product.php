@@ -26,6 +26,7 @@ class Product
     public $reference;
     public $name;
     private $summary = '';
+    private $notes = '';
     private $ean = '';
     public $price;
     private $unit_id;
@@ -75,12 +76,14 @@ class Product
 
         if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
             $product = $searchProduct[0];
+
             $this->product_id = $product['productId'];
             $this->category_id = $product['productCategory']['productCategoryId'];
             $this->has_stock = $product['hasStock'];
             $this->stock = $product['stock'];
             $this->price = $product['price'];
             $this->warehouseId = $product['warehouse']['warehouseId'];
+
             return $this;
         }
 
@@ -164,6 +167,8 @@ class Product
             ->setType()
             ->setName()
             ->setPrice()
+            ->setSummary()
+            ->setNotes()
             ->setEan()
             ->setUnitId()
             ->setWarehouse()
@@ -298,6 +303,42 @@ class Product
         if (!empty($metaBarcode)) {
             $this->ean = $metaBarcode;
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets summary
+     *
+     * @return $this
+     */
+    private function setSummary()
+    {
+        $summary = $this->product->get_short_description();
+
+        if (empty($summary)) {
+            $summary = '';
+        }
+
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Sets notes
+     *
+     * @return $this
+     */
+    private function setNotes()
+    {
+        $notes = $this->product->get_description();
+
+        if (empty($notes)) {
+            $notes = '';
+        }
+
+        $this->notes = $notes;
 
         return $this;
     }
@@ -452,6 +493,7 @@ class Product
                 'measurementUnitId' => (int)$this->unit_id,
                 'price' => $this->price,
                 'summary' => $this->summary,
+                'notes' => $this->notes,
                 'exemptionReason' => $this->exemption_reason,
                 'hasStock' => (bool)$this->has_stock,
                 'taxes' => $this->taxes,
