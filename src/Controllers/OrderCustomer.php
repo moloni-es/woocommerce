@@ -230,32 +230,26 @@ class OrderCustomer
      */
     public static function getCustomerNextNumber()
     {
+        $neddle = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
+        $neddle .= '%';
+
         $variables = [
             'options' => [
                 'filter' => [
                     'field' => 'number',
                     'comparison' => 'like',
-                    'value' => CLIENT_PREFIX . '%'
-                ],
-                'order' => [
-                    'field' => 'createdAt',
-                    'sort' => 'DESC'
-                ],
-                'pagination' => [
-                    'page' => 1,
-                    'qty' => 1
+                    'value' => $neddle
                 ]
             ]
         ];
 
-        $result = (Customers::queryCustomers($variables))['data']['customers']['data'];
+        $query = Customers::queryCustomerNextNumber($variables);
 
-        if (empty($result)) {
-            $nextNumber = CLIENT_PREFIX . '1';
+        if (isset($query['data']['customerNextNumber']['data']) && !empty($query['data']['customerNextNumber']['data'])) {
+            $nextNumber = $query['data']['customerNextNumber']['data'];
         } else {
-            //go straight for the first result because we only ask for 1
-            $lastNumber = substr($result[0]['number'], strlen(CLIENT_PREFIX));
-            $nextNumber = CLIENT_PREFIX . self::sugereProximoNumero($lastNumber);
+            $nextNumber = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
+            $nextNumber .= '1';
         }
 
         return $nextNumber;
