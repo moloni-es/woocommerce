@@ -225,8 +225,8 @@ class OrderCustomer
 
     /**
      * Get the customer next available number for incremental inserts
+     *
      * @return int
-     * @throws Error
      */
     public static function getCustomerNextNumber()
     {
@@ -243,11 +243,13 @@ class OrderCustomer
             ]
         ];
 
-        $query = Customers::queryCustomerNextNumber($variables);
+        try {
+            $query = Customers::queryCustomerNextNumber($variables);
 
-        if (isset($query['data']['customerNextNumber']['data']) && !empty($query['data']['customerNextNumber']['data'])) {
-            $nextNumber = $query['data']['customerNextNumber']['data'];
-        } else {
+            if (isset($query['data']['customerNextNumber']['data'])) {
+                $nextNumber = $query['data']['customerNextNumber']['data'];
+            }
+        } catch (Error $e) {
             $nextNumber = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
             $nextNumber .= '1';
         }
