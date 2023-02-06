@@ -3,7 +3,9 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\Customers;
+use MoloniES\Enums\Countries;
 use MoloniES\Error;
+use MoloniES\Helpers\Customer;
 use MoloniES\Tools;
 use WC_Order;
 
@@ -50,8 +52,10 @@ class OrderCustomer
      */
     public function create()
     {
-        $this->vat = $this->getVatNumber();
+        $this->countryId = $this->getCustomerCountryId();
+        $this->languageId = $this->getCustomerLanguageId();
         $this->email = $this->order->get_billing_email();
+        $this->vat = $this->getVatNumber();
 
         $variables = [
             'data' => [
@@ -59,8 +63,8 @@ class OrderCustomer
                 'address' => $this->getCustomerBillingAddress(),
                 'zipCode' => $this->getCustomerZip(),
                 'city' => $this->getCustomerBillingCity(),
-                'countryId' => (int)$this->getCustomerCountryId(),
-                'languageId' => (int)$this->getCustomerLanguageId(),
+                'countryId' => $this->countryId,
+                'languageId' => $this->languageId,
                 'email' => $this->email,
                 'phone' => $this->order->get_billing_phone(),
                 'contactName' => $this->contactName,
@@ -112,17 +116,30 @@ class OrderCustomer
             }
         }
 
-        $billingCountry = $this->order->get_billing_country();
-
         // Do some more verifications if the vat number is Portuguese
-        if ($billingCountry === 'PT') {
+        if ($this->countryId === Countries::PORTUGAL) {
             // Remove the PT part from the beginning
             if (stripos($vat, strtoupper('PT')) === 0) {
                 $vat = str_ireplace('PT', '', $vat);
             }
 
             // Check if the vat is one of this
-            if (empty($vat) || in_array($vat, $this->invalidVats, false)) {
+            if (empty($vat) || in_array($vat, $this->invalidVats)) {
+                $vat = null;
+            }
+        }
+
+        // Do some more verifications if the vat number is Spanish
+        if ($this->countryId === Countries::SPAIN) {
+            if (stripos($vat, strtoupper('ES')) === 0) {
+                $vat = str_ireplace('ES', '', $vat);
+            }
+
+            if (empty($vat) || in_array($vat, $this->invalidVats)) {
+                $vat = null;
+            }
+
+            if (!empty($vat) && !Customer::isVatEsValid($vat)) {
                 $vat = null;
             }
         }
@@ -208,37 +225,35 @@ class OrderCustomer
 
     /**
      * Get the customer next available number for incremental inserts
+     *
      * @return int
-     * @throws Error
      */
     public static function getCustomerNextNumber()
     {
+        $neddle = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
+        $neddle .= '%';
+
         $variables = [
             'options' => [
                 'filter' => [
                     'field' => 'number',
                     'comparison' => 'like',
-                    'value' => CLIENT_PREFIX . '%'
-                ],
-                'order' => [
-                    'field' => 'createdAt',
-                    'sort' => 'DESC'
-                ],
-                'pagination' => [
-                    'page' => 1,
-                    'qty' => 1
+                    'value' => $neddle
                 ]
             ]
         ];
 
-        $result = (Customers::queryCustomers($variables))['data']['customers']['data'];
+        try {
+            $query = Customers::queryCustomerNextNumber($variables);
 
-        if (empty($result)) {
-            $nextNumber = CLIENT_PREFIX . '1';
-        } else {
-            //go straight for the first result because we only ask for 1
-            $lastNumber = substr($result[0]['number'], strlen(CLIENT_PREFIX));
-            $nextNumber = CLIENT_PREFIX . self::sugereProximoNumero($lastNumber);
+            if (!isset($query['data']['customerNextNumber']['data'])) {
+                throw new Error('Something went wrong!');
+            }
+
+            $nextNumber = $query['data']['customerNextNumber']['data'];
+        } catch (Error $e) {
+            $nextNumber = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
+            $nextNumber .= '1';
         }
 
         return $nextNumber;
@@ -252,9 +267,8 @@ class OrderCustomer
     public function getCustomerCountryId()
     {
         $countryCode = $this->order->get_billing_country();
-        $this->countryId = Tools::getCountryIdFromCode($countryCode);
 
-        return $this->countryId;
+        return (int)Tools::getCountryIdFromCode($countryCode);
     }
 
     /**
@@ -262,8 +276,7 @@ class OrderCustomer
      */
     public function getCustomerLanguageId()
     {
-        $this->languageId = in_array($this->countryId, [1]) ? 1 : 2;
-        return $this->languageId;
+        return $this->countryId === Countries::PORTUGAL ? 1 : 2;
     }
 
     /**

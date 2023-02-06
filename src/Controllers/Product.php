@@ -26,6 +26,7 @@ class Product
     public $reference;
     public $name;
     private $summary = '';
+    private $notes = '';
     private $ean = '';
     public $price;
     private $unit_id;
@@ -75,12 +76,14 @@ class Product
 
         if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
             $product = $searchProduct[0];
+
             $this->product_id = $product['productId'];
             $this->category_id = $product['productCategory']['productCategoryId'];
             $this->has_stock = $product['hasStock'];
             $this->stock = $product['stock'];
             $this->price = $product['price'];
             $this->warehouseId = $product['warehouse']['warehouseId'];
+
             return $this;
         }
 
@@ -140,7 +143,7 @@ class Product
      */
     private function uploadImage()
     {
-        if (defined('SYNC_IMAGES') && SYNC_IMAGES && $this->image !== null) {
+        if ($this->shouldSyncImages()) {
             $variables = [
                 'data' => [
                     'productId' => (int)$this->product_id,
@@ -164,6 +167,8 @@ class Product
             ->setType()
             ->setName()
             ->setPrice()
+            ->setSummary()
+            ->setNotes()
             ->setEan()
             ->setUnitId()
             ->setWarehouse()
@@ -249,18 +254,19 @@ class Product
 
     /**
      * Sets type
+     *
      * @return $this
      */
     private function setType()
     {
         // 1 - Product, 2 - Service, 3 - Other
-        // If the product is virtual or downloadable then its a service
+        // If the product is virtual or downloadable then it's a service
         if ($this->product->is_virtual() || $this->product->is_downloadable()) {
             $this->type = 2;
             $this->has_stock = 0;
         } else {
             $this->type = 1;
-            $this->has_stock = 1;
+            $this->has_stock = $this->product->managing_stock() ? 1 : 0;
             $this->stock = (float)$this->product->get_stock_quantity();
         }
 
@@ -284,6 +290,7 @@ class Product
     private function setPrice()
     {
         $this->price = (float)wc_get_price_excluding_tax($this->product);
+
         return $this;
     }
 
@@ -298,6 +305,42 @@ class Product
         if (!empty($metaBarcode)) {
             $this->ean = $metaBarcode;
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets summary
+     *
+     * @return $this
+     */
+    private function setSummary()
+    {
+        $summary = $this->product->get_short_description();
+
+        if (empty($summary)) {
+            $summary = '';
+        }
+
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Sets notes
+     *
+     * @return $this
+     */
+    private function setNotes()
+    {
+        $notes = $this->product->get_description();
+
+        if (empty($notes)) {
+            $notes = '';
+        }
+
+        $this->notes = $notes;
 
         return $this;
     }
@@ -439,49 +482,116 @@ class Product
 
     /**
      * Map this object properties to an array to insert/update a moloni document
+     *
      * @return array
      */
     private function mapPropsToValues()
     {
         $variables = [
             'data' => [
-                'productCategoryId' => (int)$this->category_id,
-                'type' => (int)$this->type,
-                'reference' => $this->reference,
-                'name' => $this->name,
-                'measurementUnitId' => (int)$this->unit_id,
-                'price' => $this->price,
-                'summary' => $this->summary,
                 'exemptionReason' => $this->exemption_reason,
-                'hasStock' => (bool)$this->has_stock,
                 'taxes' => $this->taxes,
-                'img' => null
             ],
         ];
 
-        if(!empty($this->product_id)) {
+        if(empty($this->product_id)) {
+            $variables['data']['reference'] = $this->reference;
+            $variables['data']['type'] = (int)$this->type;
+            $variables['data']['measurementUnitId'] = (int)$this->unit_id;
+            $variables['data']['hasStock'] = (bool)$this->has_stock;
+        } else {
             $variables['data']['productId'] = (int)$this->product_id;
-        } else if ((bool) $this->has_stock === true) {
-            $variables['data']['warehouseId'] = (int) $this->warehouseId;
-            $variables['data']['warehouses'] = [
-                'warehouseId' => (int) $this->warehouseId,
-                'stock' => (float) $this->stock
-            ];
         }
 
-        if (!empty($this->ean)) {
-            $variables['data']['identifications'] = [
-                [
-                    'type' => 'EAN13',
-                    'text' => $this->ean
-                ]
-            ];
+        if ($this->shouldSyncCategories()) {
+            $variables['data']['productCategoryId'] = (int)$this->category_id;
         }
 
-        if (defined('SYNC_IMAGES') && SYNC_IMAGES) {
+        if ($this->shouldSyncName()) {
+            $variables['data']['name'] = $this->name;
+        }
+
+        if ($this->shouldSyncPrice()) {
+            $variables['data']['price'] = $this->price;
+        }
+
+        if ($this->shouldSyncDescription()) {
+            $variables['data']['summary'] = $this->summary;
+            $variables['data']['notes'] = $this->notes;
+        }
+
+        if ($this->shouldSyncEan()) {
+            if (!empty($this->ean)) {
+                $variables['data']['identifications'] = [
+                    [
+                        'type' => 'EAN13',
+                        'text' => $this->ean
+                    ]
+                ];
+            }
+        }
+
+        if ($this->shouldSyncImages()) {
             $variables['data']['img'] = null;
         }
 
+        if ($this->shouldSyncStock()) {
+            $variables['data']['warehouseId'] = (int)$this->warehouseId;
+            $variables['data']['warehouses'] = [
+                'warehouseId' => (int)$this->warehouseId,
+                'stock' => (float)$this->stock
+            ];
+        }
+
         return $variables;
+    }
+
+    //       Auxiliary       //
+
+    private function shouldSyncName()
+    {
+        if (empty($this->product_id)) {
+            return true;
+        }
+
+        return defined('SYNC_FIELDS_NAME') && (int)SYNC_FIELDS_NAME === 1;
+    }
+
+    private function shouldSyncPrice()
+    {
+        if (empty($this->product_id)) {
+            return true;
+        }
+
+        return defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1;
+    }
+
+    private function shouldSyncDescription()
+    {
+        return defined('SYNC_FIELDS_DESCRIPTION') && (int)SYNC_FIELDS_DESCRIPTION === 1;
+    }
+
+    private function shouldSyncEan()
+    {
+        return defined('SYNC_FIELDS_EAN') && (int)SYNC_FIELDS_EAN === 1;
+    }
+
+    private function shouldSyncImages()
+    {
+        return !empty($this->image) && defined('SYNC_IMAGES') && (int)SYNC_IMAGES === 1;
+    }
+
+    private function shouldSyncStock()
+    {
+        return empty($this->product_id) && (bool)$this->has_stock === true;
+    }
+
+    private function shouldSyncCategories()
+    {
+        if (empty($this->product_id)) {
+            return true;
+        }
+
+        return defined('SYNC_FIELDS_CATEGORIES') && (int)SYNC_FIELDS_CATEGORIES === 1;
     }
 }

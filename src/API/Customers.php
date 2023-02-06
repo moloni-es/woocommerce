@@ -149,4 +149,31 @@ class Customers
 
         return Curl::simple('customers/customers', $query, $variables);
     }
+
+    /**
+     * Gets the next number available for customers
+     *
+     * @param array $variables variables of the request
+     *
+     * @return array Api data
+     *
+     * @throws Error
+     */
+    public static function queryCustomerNextNumber($variables = [])
+    {
+        $query = 'query customerNextNumber($companyId: Int!, $options: GetNextCustomerNumberOptions)
+        {
+            customerNextNumber(companyId: $companyId, options: $options)
+            {
+                data
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return Curl::simple('customers/customerNextNumber', $query, $variables);
+    }
 }

@@ -173,8 +173,8 @@ class Products
         $wcProduct->set_sku($moloniProduct['reference']); //required
 
         if (defined('SYNC_FIELDS_DESCRIPTION') && (int)SYNC_FIELDS_DESCRIPTION === 1) {
-            $wcProduct->set_description($moloniProduct['summary']);
             $wcProduct->set_short_description($moloniProduct['summary']);
+            $wcProduct->set_description($moloniProduct['notes']);
         }
 
         if (defined('SYNC_FIELDS_PRICE') && (int)SYNC_FIELDS_PRICE === 1) {
