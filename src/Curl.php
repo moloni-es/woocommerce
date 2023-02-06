@@ -68,7 +68,8 @@ class Curl
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN
             ],
-            'body' => $data
+            'body' => $data,
+            'timeout' => 45
         ];
 
         $response = wp_remote_post(self::$url, $args);
@@ -184,6 +185,7 @@ class Curl
         wp_remote_post(self::$url, [
                 'headers' => $headers,
                 'body' => $payload,
+                'timeout' => 45
             ]
         );
 
@@ -220,7 +222,7 @@ class Curl
         $postFields .= '&clientSecret=' . $clientSecret;
         $postFields .= '&code=' . $code;
 
-        $response = wp_remote_post($url, ['body' => $postFields]);
+        $response = wp_remote_post($url, ['body' => $postFields, 'timeout' => 45]);
 
         $raw = wp_remote_retrieve_body($response);
         $parsed = json_decode($raw, true);
@@ -256,7 +258,7 @@ class Curl
         $postFields .= '&clientSecret=' . $clientSecret;
         $postFields .= '&refreshToken=' . $refreshToken;
 
-        $response = wp_remote_post($url, ['body' => $postFields]);
+        $response = wp_remote_post($url, ['body' => $postFields, 'timeout' => 45]);
         $raw = wp_remote_retrieve_body($response);
 
         $res_txt = json_decode($raw, true);
