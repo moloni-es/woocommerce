@@ -11,23 +11,27 @@ if (!defined('ABSPATH')) {
 <?php settings_errors();?>
 
 <nav class="nav-tab-wrapper woo-nav-tab-wrapper">
+    <?php
+    $tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
+    ?>
+
     <a href="<?= esc_url(admin_url('admin.php?page=molonies')) ?>"
-       class="nav-tab <?= (isset($_GET['tab'])) ?: 'nav-tab-active' ?>">
+       class="nav-tab <?=  ($tab === '') ? 'nav-tab-active' : '' ?>">
         <?= __('Orders','moloni_es') ?>
     </a>
 
     <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=settings')) ?>"
-       class="nav-tab <?= ($_GET['tab'] === 'settings') ? 'nav-tab-active' : '' ?>">
+       class="nav-tab <?= ($tab === 'settings') ? 'nav-tab-active' : '' ?>">
         <?= __('Settings','moloni_es') ?>
     </a>
 
     <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=automation')) ?>"
-       class="nav-tab <?= ($_GET['tab'] === 'automation') ? 'nav-tab-active' : '' ?>">
+       class="nav-tab <?= ($tab === 'automation') ? 'nav-tab-active' : '' ?>">
         <?= __('Automation','moloni_es') ?>
     </a>
 
     <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=tools')) ?>"
-       class="nav-tab <?= ($_GET['tab'] === 'tools') ? 'nav-tab-active' : '' ?>">
+       class="nav-tab <?= ($tab === 'tools') ? 'nav-tab-active' : '' ?>">
         <?= __('Tools','moloni_es') ?>
     </a>
 
@@ -38,8 +42,6 @@ if (!defined('ABSPATH')) {
 if (isset($pluginErrorException) && $pluginErrorException instanceof \MoloniES\Error) {
     $pluginErrorException->showError();
 }
-
-$tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : '';
 
 switch ($tab) {
     case 'tools':
