@@ -15,7 +15,7 @@
 **Requires PHP:**      7.2  
 **Tested up to:**      6.1.1  
 **WC tested up to**    7.3.0  
-**Stable tag:**        1.0.40  
+**Stable tag:**        1.0.41  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -70,6 +70,9 @@ This plugin can be installed via FTP or using the WordPress plugin installer.
 Released plugin version 1.0.0.
 
 ## Changelog
+
+### 1.0.41
+* FIX: Fix PHP 8 erros
 
 ### 1.0.40
 * FEATURE: Validate Spanish VAT numbers
