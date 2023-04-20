@@ -3,9 +3,9 @@
 ![WordPress Plugin Required PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-blue)
 ![WordPress Plugin: Tested PHP Version](https://img.shields.io/badge/php-8.1%20tested-blue)
 ![WordPress Plugin: Required WP Version](https://img.shields.io/badge/WordPress-%3E%3D%205.0-orange)
-![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.1.1%20tested-orange)
+![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.2%20tested-orange)
 ![WooCommerce: Required Version](https://img.shields.io/badge/WooCommerce-%3E%3D%203.0.0-orange)
-![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-7.3.0%20tested-orange)
+![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-7.5.1%20tested-orange)
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
@@ -13,9 +13,9 @@
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
-**Tested up to:**      6.1.1  
-**WC tested up to**    7.3.0  
-**Stable tag:**        1.0.41  
+**Tested up to:**      6.2  
+**WC tested up to**    7.5.1  
+**Stable tag:**        1.0.42  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -70,6 +70,10 @@ This plugin can be installed via FTP or using the WordPress plugin installer.
 Released plugin version 1.0.0.
 
 ## Changelog
+
+### 1.0.42
+* Tested up to version 6.2.0 of WordPress
+* Tested up to version 7.5.1 of WooCommerce
 
 ### 1.0.41
 * FIX: Fix PHP 8 erros

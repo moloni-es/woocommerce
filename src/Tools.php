@@ -100,9 +100,16 @@ class Tools
         $queryVariables = [
             'options' => [
                 'filter' => [
-                    'field' => 'value',
-                    'comparison' => 'eq',
-                    'value' => (string)$taxRate
+                    [
+                        'field' => 'value',
+                        'comparison' => 'eq',
+                        'value' => (string)$taxRate
+                    ],
+                    [
+                        'field' => 'flags',
+                        'comparison' => 'eq',
+                        'value' => '0'
+                    ]
                 ],
                 'search' => [
                     'field' => 'fiscalZone',
@@ -113,14 +120,8 @@ class Tools
 
         $taxes = Taxes::queryTaxes($queryVariables);
 
-        if (!empty($taxes) && is_array($taxes)) {
-            foreach ($taxes as $tax) {
-                if (empty($tax['flags'])) {
-                    $moloniTax = $tax;
-
-                    break;
-                }
-            }
+        if (!empty($taxes) && isset($taxes[0]['taxId'])) {
+            $moloniTax = $taxes[0];
         }
 
         if (empty($moloniTax)) {

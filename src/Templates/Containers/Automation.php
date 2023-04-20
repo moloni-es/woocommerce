@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
                         <option value='0' <?= (defined('MOLONI_STOCK_SYNC') && MOLONI_STOCK_SYNC === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
                         <option value='1' <?= (defined('MOLONI_STOCK_SYNC') && MOLONI_STOCK_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
                     </select>
-                    <p class='description'><?= __('Automatic stock synchronization (runs every 5 minutes and updates the stock of items based on Moloni)', 'moloni_es') ?></p>
+                    <p class='description'><?= __('Automatic stock synchronization', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -46,7 +46,7 @@ if (!defined('ABSPATH')) {
                         <option value='0' <?= (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
                         <option value='1' <?= (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
                     </select>
-                    <p class='description'><?= __('When saving a product in WooCommerce, the plugin will automatically create the product in Moloni or update if it already exists', 'moloni_es') ?></p>
+                    <p class='description'><?= __('When saving a product in WooCommerce, the plugin will automatically create the product in Moloni or update if it already exists (only if product has SKU set)', 'moloni_es') ?></p>
                 </td>
             </tr>
 

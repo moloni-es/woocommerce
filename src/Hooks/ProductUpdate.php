@@ -31,7 +31,7 @@ class ProductUpdate
             $product = wc_get_product($productid);
 
             try {
-                if ($product->get_status() !== 'draft' && start::login(true)) {
+                if ($product->get_status() !== 'draft' && !empty($product->get_sku()) && start::login(true)) {
                     /** @noinspection NestedPositiveIfStatementsInspection */
                     if (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC) {
                         $productObj = new product($product);
