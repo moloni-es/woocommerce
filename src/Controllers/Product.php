@@ -578,7 +578,7 @@ class Product
 
     private function shouldSyncImages()
     {
-        return !empty($this->image) && defined('SYNC_IMAGES') && (int)SYNC_IMAGES === 1;
+        return !empty($this->image) && defined('SYNC_FIELDS_IMAGE') && (int)SYNC_FIELDS_IMAGE === 1;
     }
 
     private function shouldSyncStock()

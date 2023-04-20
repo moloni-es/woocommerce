@@ -15,7 +15,7 @@
 **Requires PHP:**      7.2  
 **Tested up to:**      6.2  
 **WC tested up to**    7.5.1  
-**Stable tag:**        1.0.42  
+**Stable tag:**        1.0.43  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -70,6 +70,9 @@ This plugin can be installed via FTP or using the WordPress plugin installer.
 Released plugin version 1.0.0.
 
 ## Changelog
+
+### 1.0.43
+* Fix image syncronization
 
 ### 1.0.42
 * Tested up to version 6.2.0 of WordPress
