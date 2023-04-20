@@ -154,6 +154,10 @@ class Curl
         $boundary = 'MOLONIRULES';
         $query = str_replace(["\n", "\r"], '', $query);
 
+        if (Storage::$MOLONI_ES_COMPANY_ID) {
+            $variables['companyId'] = Storage::$MOLONI_ES_COMPANY_ID;
+        }
+
         $data = [
             'operations' => json_encode(['query' => $query, 'variables' => $variables]),
             'map' => '{ "0": ["variables.data.img"] }'
