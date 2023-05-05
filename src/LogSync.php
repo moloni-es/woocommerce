@@ -12,11 +12,13 @@ class LogSync
 
     /**
      * Procedure to check if an entity has been synced recently
+     *
      * @param $typeId int
      * @param $entityId int
+     *
      * @return bool
      */
-    public static function wasSyncedRecently($typeId, $entityId)
+    public static function wasSyncedRecently(int $typeId, int $entityId): bool
     {
         self::deleteOldLogs(); //delete old logs before checking entry
 
@@ -30,16 +32,18 @@ class LogSync
     }
 
     /**
-     * Checks for an log entry
-     * @param $typeId
-     * @param $entityId
+     * Checks for a log entry
+     *
+     * @param int $typeId
+     * @param int $entityId
+     *
      * @return bool
      */
-    public static function getOne($typeId, $entityId)
+    public static function getOne(int $typeId, int $entityId): bool
     {
         global $wpdb;
 
-        $query = 'SELECT COUNT(*) FROM moloni_sync_logs 
+        $query = 'SELECT COUNT(*) FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs 
             where `type_id` = ' . $typeId . ' AND `entity_id` =' . $entityId;
 
         $queryResult = $wpdb->get_row($query, ARRAY_A);
@@ -49,49 +53,43 @@ class LogSync
 
     /**
      * Gets all database entries
-     * @return array|object|null
      */
     public static function getAll()
     {
         global $wpdb;
 
-        $query = 'SELECT * FROM moloni_sync_logs';
+        $query = 'SELECT * FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs';
 
         return $wpdb->get_results($query, ARRAY_A);
     }
 
     /**
      * Adds a new log
-     * @param $typeId int
-     * @param $entityId int
-     * @return bool
+     *
+     * @param int $typeId
+     * @param int $entityId
      */
-    public static function addLog($typeId, $entityId)
+    public static function addLog(int $typeId, int $entityId)
     {
         global $wpdb;
 
         $wpdb->insert(
-            'moloni_sync_logs',
+            $wpdb->get_blog_prefix() . 'moloni_es_sync_logs',
             [
                 'type_id' => $typeId,
                 'entity_id' => $entityId,
                 'sync_date' => time() + self::$logValidity,
             ]
         );
-
-        return true;
     }
 
     /**
      * Deletes logs that have more than defined seconds (default 20)
-     * @return bool
      */
-    public static function deleteOldLogs()
+    public static function deleteOldLogs(): void
     {
         global $wpdb;
 
-        $wpdb->query('DELETE FROM moloni_sync_logs WHERE sync_date < ' . time());
-
-        return true;
+        $wpdb->query('DELETE FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs WHERE sync_date < ' . time());
     }
 }

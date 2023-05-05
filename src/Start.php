@@ -4,13 +4,12 @@ namespace MoloniES;
 
 use MoloniES\API\Companies;
 use MoloniES\Helpers\WebHooks;
-use MoloniES\WebHooks\WebHook;
 
 /**
  * Class Start
  * This is one of the main classes of the module
  * Every call should pass here before
- * This will render the login form or the company form or it will return a bol
+ * This will render the login form or the company form, or it will return a bool
  * This will also handle the tokens
  * @package Moloni
  */
@@ -21,21 +20,21 @@ class Start
 
     /**
      * Handles session, login and settings
-     * @param bool $ajax
+     *
+     * @param bool|null $ajax
+     *
      * @return bool
+     *
+     * @throws Error
      */
-    public static function login($ajax = false)
+    public static function login(?bool $ajax = false): bool
     {
-        global $wpdb;
+        self::$ajax = $ajax;
 
         $action = isset($_REQUEST['action']) ? sanitize_text_field(trim($_REQUEST['action'])) : '';
         $developerId = isset($_POST['developer_id']) ? sanitize_text_field(trim($_POST['developer_id'])) : '';
         $clientSecret = isset($_POST['client_secret']) ? sanitize_text_field(trim($_POST['client_secret'])) : '';
         $code = isset($_GET['code']) ? sanitize_text_field(trim($_GET['code'])) : '';
-
-        if ($ajax) {
-            self::$ajax = true;
-        }
 
         if (!empty($developerId) && !empty($clientSecret)) {
             Model::setClient($developerId, $clientSecret);
@@ -79,7 +78,13 @@ class Start
             }
 
             if (isset($_GET['companyId'])) {
-                $wpdb->update('moloni_es_api', ['company_id' => (int)(sanitize_text_field($_GET['companyId']))], ['id' => Storage::$MOLONI_ES_SESSION_ID]);
+                global $wpdb;
+
+                $wpdb->update($wpdb->get_blog_prefix() . 'moloni_es_api',
+                    ['company_id' => (int)(sanitize_text_field($_GET['companyId']))],
+                    ['id' => Storage::$MOLONI_ES_SESSION_ID]
+                );
+
                 Model::defineValues();
                 Model::defineConfigs();
 
@@ -153,7 +158,8 @@ class Start
     private static function saveSettings() {
         add_settings_error('general', 'settings_updated', __('Changes saved.', 'moloni_es'), 'updated');
         $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
-        $tab = isset($_REQUEST['tab']) ? $_REQUEST['tab'] : '';
+
+        $tab = $_REQUEST['tab'] ?? '';
 
         if ($tab === 'automation') {
             //Verifies checkboxes because they are not set if not checked

@@ -39,7 +39,11 @@ class Crons
                 Log::write(__('Starting automatic stock synchronization...','moloni_es'));
                 if (!defined('MOLONI_STOCK_SYNC_TIME')) {
                     define('MOLONI_STOCK_SYNC_TIME', (time() - 600));
-                    $wpdb->insert('moloni_es_api_config', ['config' => 'moloni_stock_sync_time', 'selected' => MOLONI_STOCK_SYNC_TIME]);
+
+                    $wpdb->insert($wpdb->get_blog_prefix() . 'moloni_es_api_config', [
+                        'config' => 'moloni_stock_sync_time',
+                        'selected' => MOLONI_STOCK_SYNC_TIME
+                    ]);
                 }
 
                 (new SyncProducts(MOLONI_STOCK_SYNC_TIME))->run();
