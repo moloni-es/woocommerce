@@ -42,6 +42,13 @@ class Curl
     private static $url = 'https://api.moloni.es/v1';
 
     /**
+     * Plugin user agent ID
+     *
+     * @var string
+     */
+    private static $userAgent = 'WordpressPlugin/2.0';
+
+    /**
      * Makes a simple API post request
      *
      * @param $action
@@ -66,7 +73,8 @@ class Curl
         $args = [
             'headers' => [
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN
+                'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN,
+                'user-agent' => self::$userAgent
             ],
             'body' => $data,
             'timeout' => 45
@@ -148,7 +156,7 @@ class Curl
      *
      * @return true
      */
-    public static function uploadImage($query, $variables, $file)
+    public static function uploadImage($query, $variables, $file): bool
     {
         $payload = '';
         $boundary = 'MOLONIRULES';
@@ -186,10 +194,13 @@ class Curl
         $payload .= "\r\n";
         $payload .= '--' . $boundary . '--';
 
-        wp_remote_post(self::$url, [
+        wp_remote_post(
+            self::$url,
+            [
                 'headers' => $headers,
                 'body' => $payload,
-                'timeout' => 45
+                'timeout' => 45,
+                'user-agent' => self::$userAgent
             ]
         );
 
@@ -199,7 +210,7 @@ class Curl
     /**
      * Returns the last curl request made from the logs
      *
-     * @return array
+     * @return mixed
      */
     public static function getLog()
     {
@@ -226,7 +237,10 @@ class Curl
         $postFields .= '&clientSecret=' . $clientSecret;
         $postFields .= '&code=' . $code;
 
-        $response = wp_remote_post($url, ['body' => $postFields, 'timeout' => 45]);
+        $response = wp_remote_post(
+            $url,
+            ['body' => $postFields, 'timeout' => 45]
+        );
 
         $raw = wp_remote_retrieve_body($response);
         $parsed = json_decode($raw, true);
@@ -262,7 +276,10 @@ class Curl
         $postFields .= '&clientSecret=' . $clientSecret;
         $postFields .= '&refreshToken=' . $refreshToken;
 
-        $response = wp_remote_post($url, ['body' => $postFields, 'timeout' => 45]);
+        $response = wp_remote_post(
+            $url,
+            ['body' => $postFields, 'timeout' => 45, 'user-agent' => self::$userAgent]
+        );
         $raw = wp_remote_retrieve_body($response);
 
         $res_txt = json_decode($raw, true);
