@@ -2,11 +2,6 @@
 
 namespace MoloniES\WebHooks;
 
-use MoloniES\API\Hooks;
-use MoloniES\Error;
-use MoloniES\Model;
-use MoloniES\Storage;
-
 class WebHook
 {
     /**

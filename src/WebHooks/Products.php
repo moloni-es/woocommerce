@@ -4,12 +4,12 @@ namespace MoloniES\WebHooks;
 
 use Exception;
 use MoloniES\API\Categories;
-use MoloniES\Error;
+use MoloniES\API\Products as ApiProducts;
+use MoloniES\Exceptions\Error;
 use MoloniES\Log;
 use MoloniES\LogSync;
 use MoloniES\Model;
 use MoloniES\Start;
-use MoloniES\API\Products as ApiProducts;
 use WC_Data_Exception;
 use WC_Product;
 use WC_Product_Attribute;

@@ -2,11 +2,14 @@
 
 namespace MoloniES;
 
-use MoloniES\Helpers\Context;
-use MoloniES\Helpers\WebHooks;
 use MoloniES\Controllers\Documents;
 use MoloniES\Controllers\PendingOrders;
+use MoloniES\Exceptions\Error;
+use MoloniES\Helpers\Context;
+use MoloniES\Helpers\WebHooks;
 use MoloniES\Hooks\WoocommerceInitialize;
+use MoloniES\Services\Documents\OpenDocument;
+use MoloniES\Services\Orders\CreateMoloniDocument;
 use MoloniES\WebHooks\WebHook;
 use WC_Order;
 
@@ -128,11 +131,11 @@ class Plugin
     {
         $orderId = (int)(sanitize_text_field($_REQUEST['id']));
 
-        $document = new Documents($orderId);
-        $document->createDocument();
+        $service = new CreateMoloniDocument($orderId);
+        $service->run();
 
-        if ($document->documentId > 0) {
-            $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $document->documentId)) . '" target="_BLANK">' . __('View document', 'moloni_es') . '</a>';
+        if ($service->getDocumentId() > 0) {
+            $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $service->getDocumentId())) . '" target="_BLANK">' . __('View document', 'moloni_es') . '</a>';
 
             add_settings_error('molonies', 'moloni-document-created-success', __('Document was created!', 'moloni_es') . $viewUrl, 'updated');
         }
@@ -147,16 +150,13 @@ class Plugin
      */
     private function openDocument()
     {
-        $document = false;
         $documentId = (int)(sanitize_text_field($_REQUEST['id']));
 
         if ($documentId > 0) {
-            $document = Documents::showDocument($documentId);
+            new OpenDocument($documentId);
         }
 
-        if (!$document) {
-            add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
-        }
+        add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
     }
 
     /**

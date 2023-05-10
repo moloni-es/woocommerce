@@ -3,12 +3,12 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 
 class Customers
 {
     /**
-     * Creates an costumer
+     * Creates a costumer
      *
      * @param array $variables variables of the request
      *

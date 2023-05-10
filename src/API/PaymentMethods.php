@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 
 class PaymentMethods
 {

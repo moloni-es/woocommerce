@@ -4,7 +4,7 @@ namespace MoloniES\Controllers;
 
 use MoloniES\API\Customers;
 use MoloniES\Enums\Countries;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Helpers\Customer;
 use MoloniES\Tools;
 use WC_Order;
@@ -211,15 +211,10 @@ class OrderCustomer
      * If the customer is Portuguese validate the Vat Number
      * @return string
      */
-    public function getCustomerZip()
+    public function getCustomerZip(): string
     {
-        $zipCode = $this->order->get_billing_postcode();
+        $this->zipCode = $this->order->get_billing_postcode();
 
-        if ($this->order->get_billing_country() === 'PT') {
-            $zipCode = Tools::zipCheck($zipCode);
-        }
-
-        $this->zipCode = $zipCode;
         return $this->zipCode;
     }
 

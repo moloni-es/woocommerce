@@ -3,6 +3,7 @@
 namespace MoloniES;
 
 use MoloniES\API\Companies;
+use MoloniES\Exceptions\Error;
 use MoloniES\Helpers\WebHooks;
 
 /**

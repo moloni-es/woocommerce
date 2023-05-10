@@ -4,7 +4,7 @@ namespace MoloniES\WebHooks;
 
 use Exception;
 use MoloniES\API\PropertyGroups;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Log;
 use MoloniES\Model;
 use MoloniES\Start;

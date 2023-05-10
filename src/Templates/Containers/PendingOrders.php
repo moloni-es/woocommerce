@@ -4,7 +4,8 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php use \MoloniES\Controllers\PendingOrders; ?>
+<?php use MoloniES\Enums\DocumentTypes; ?>
+<?php use MoloniES\Controllers\PendingOrders; ?>
 
 <?php
 /** @var WC_Order[] $orders */
@@ -109,29 +110,19 @@ $orders = PendingOrders::getAllAvailable();
                             <input type="hidden" name="id" value="<?= $order->get_id() ?>">
 
                             <select name="document_type" style="margin-right: 5px; max-width: 45%;">
-                                <option value='invoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
-                                    <?= __('Invoice' , 'moloni_es') ?>
-                                </option>
+                                <?php
+                                $documentType = '';
 
-                                <option value='invoiceReceipt' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoiceReceipt' ? 'selected' : '') ?>>
-                                    <?= __('Invoice + Receipt' , 'moloni_es') ?>
-                                </option>
+                                if (defined('DOCUMENT_TYPE') && !empty(DOCUMENT_TYPE)) {
+                                    $documentType = DOCUMENT_TYPE;
+                                }
+                                ?>
 
-                                <option value='simplifiedInvoice'<?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'simplifiedInvoice' ? 'selected' : '') ?>>
-                                    <?= __('Simplified Invoice' , 'moloni_es') ?>
-                                </option>
-
-                                <option value='billsOfLading' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'billsOfLading' ? 'selected' : '') ?>>
-                                    <?= __('Bill of lading' , 'moloni_es') ?>
-                                </option>
-
-                                <option value='purchaseOrder' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'purchaseOrder' ? 'selected' : '') ?>>
-                                    <?= __('Purchase Order' , 'moloni_es') ?>
-                                </option>
-
-                                <option value='proFormaInvoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'proFormaInvoice' ? 'selected' : '') ?>>
-                                    <?= __('Pro Forma Invoice' , 'moloni_es') ?>
-                                </option>
+                                <?php foreach (DocumentTypes::AVAILABLE_TYPES as $id => $name) : ?>
+                                    <option value='<?= $id ?>' <?= ($documentType === $id ? 'selected' : '') ?>>
+                                        <?= __($name, 'moloni_es') ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
 
                             <input type="submit"

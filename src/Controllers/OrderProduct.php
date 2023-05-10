@@ -4,7 +4,7 @@ namespace MoloniES\Controllers;
 
 use MoloniES\API\Taxes;
 use MoloniES\API\Warehouses;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Tools;
 use WC_Order;
 use WC_Order_Item_Product;

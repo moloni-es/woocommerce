@@ -3,6 +3,8 @@
 namespace MoloniES;
 
 use MoloniES\Controllers\Documents;
+use MoloniES\Exceptions\Error;
+use MoloniES\Services\Orders\CreateMoloniDocument;
 
 class Ajax
 {
@@ -22,17 +24,13 @@ class Ajax
     {
         try {
             if (Start::login(true)) {
-                $orderId = (int)$_REQUEST['id'];
+                $service = new CreateMoloniDocument((int)$_REQUEST['id']);
+                $service->run();
 
-                try {
-                    $document = new Documents($orderId);
-                    $document->isHook = true;
-                    $document->createDocument();
-
-                    wp_send_json(['valid' => 1, 'message' => sprintf(__('Document %s successfully inserted','moloni_es'), $document->order->get_order_number())]);
-                } catch (Error $e) {
-                    wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);
-                }
+                wp_send_json([
+                    'valid' => 1,
+                    'message' => sprintf(__('Document %s successfully inserted', 'moloni_es'), $service->getOrderNumber())
+                ]);
             }
         } catch (Error $e) {
             wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);

@@ -4,19 +4,23 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php use \MoloniES\API\Companies; ?>
+<?php use MoloniES\Model;?>
+<?php use MoloniES\Enums\DocumentStatus; ?>
+<?php use MoloniES\Enums\DocumentTypes; ?>
+<?php use MoloniES\Exceptions\Error; ?>
+<?php use MoloniES\API\Taxes; ?>
+<?php use MoloniES\API\Companies; ?>
 <?php use MoloniES\API\Countries; ?>
-<?php use \MoloniES\API\Documents; ?>
-<?php use \MoloniES\API\Warehouses; ?>
-<?php use \MoloniES\API\MeasurementUnits; ?>
-<?php use \MoloniES\API\MaturityDates; ?>
-<?php use \MoloniES\API\PaymentMethods; ?>
-<?php use \MoloniES\API\Taxes; ?>
-<?php use \MoloniES\Model; ?>
+<?php use MoloniES\API\DocumentSets; ?>
+<?php use MoloniES\API\Warehouses; ?>
+<?php use MoloniES\API\MaturityDates; ?>
+<?php use MoloniES\API\PaymentMethods; ?>
+<?php use MoloniES\API\MeasurementUnits; ?>
 
 <?php
+try {
     $company = Companies::queryCompany();
-    $documentSets = Documents::queryDocumentSets();
+    $documentSets = DocumentSets::queryDocumentSets();
     $paymentMethods = PaymentMethods::queryPaymentMethods();
     $maturityDates = MaturityDates::queryMaturityDates();
     $warehouses = Warehouses::queryWarehouses();
@@ -28,6 +32,10 @@ if (!defined('ABSPATH')) {
             'defaultLanguageId' => 2
         ]
     ]);
+} catch (Error $e) {
+    $e->showError();
+    return;
+}
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=settings') ?>' id='formOpcoes'>
@@ -56,31 +64,23 @@ if (!defined('ABSPATH')) {
                 </th>
                 <td>
                     <select id="document_type" name='opt[document_type]' class='inputOut'>
-                        <option value='invoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
-                            <?= __('Invoice' , 'moloni_es') ?>
-                        </option>
+                        <?php
+                        $documentType = '';
 
-                        <option value='invoiceReceipt' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoiceReceipt' ? 'selected' : '') ?>>
-                            <?= __('Invoice + Receipt' , 'moloni_es') ?>
-                        </option>
+                        if (defined('DOCUMENT_TYPE') && !empty(DOCUMENT_TYPE)) {
+                            $documentType = DOCUMENT_TYPE;
+                        }
+                        ?>
 
-                        <option value='simplifiedInvoice'<?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'simplifiedInvoice' ? 'selected' : '') ?>>
-                            <?= __('Simplified Invoice' , 'moloni_es') ?>
-                        </option>
-
-                        <option value='billsOfLading' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'billsOfLading' ? 'selected' : '') ?>>
-                            <?= __('Bill of lading' , 'moloni_es') ?>
-                        </option>
-
-                        <option value='purchaseOrder' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'purchaseOrder' ? 'selected' : '') ?>>
-                            <?= __('Purchase Order','moloni_es') ?>
-                        </option>
-
-                        <option value='proFormaInvoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'proFormaInvoice' ? 'selected' : '') ?>>
-                            <?= __('Pro Forma Invoice' , 'moloni_es') ?>
-                        </option>
+                        <?php foreach (DocumentTypes::AVAILABLE_TYPES as $id => $name) : ?>
+                            <option value='<?= $id ?>' <?= ($documentType === $id ? 'selected' : '') ?>>
+                                <?= __($name, 'moloni_es') ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
-                    <p class='description'><?= __('Required' , 'moloni_es') ?></p>
+                    <p class='description'>
+                        <?= __('Required' , 'moloni_es') ?>
+                    </p>
                 </td>
             </tr>
 
@@ -91,10 +91,44 @@ if (!defined('ABSPATH')) {
                 </th>
                 <td>
                     <select id="document_status" name='opt[document_status]' class='inputOut'>
-                        <option value='0' <?= (defined('DOCUMENT_STATUS') && DOCUMENT_STATUS === '0' ? 'selected' : '') ?>><?= __('Draft' , 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('DOCUMENT_STATUS') && DOCUMENT_STATUS === '1' ? 'selected' : '') ?>><?= __('Closed' , 'moloni_es') ?></option>
+                        <?php
+                        $documentStatus = 0;
+
+                        if (defined('DOCUMENT_STATUS') && !empty(DOCUMENT_STATUS)) {
+                            $documentStatus = (int)DOCUMENT_STATUS;
+                        }
+                        ?>
+
+                        <option value='0' <?= ($documentStatus === DocumentStatus::DRAFT ? 'selected' : '') ?>><?= __('Draft' , 'moloni_es') ?></option>
+                        <option value='1' <?= ($documentStatus === DocumentStatus::CLOSED ? 'selected' : '') ?>><?= __('Closed' , 'moloni_es') ?></option>
                     </select>
-                    <p class='description'><?= __('Required' , 'moloni_es') . ' ' . __('(Invoice + Receipt cannot be created in draft.)','moloni_es') ?></p>
+                    <p class='description'><?= __('Required' , 'moloni_es') . ' ' . __('(Invoice + Receipt cannot be created in draft)','moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <!-- Bill of lading -->
+            <tr id="create_bill_of_lading_line">
+                <th>
+                    <label for="create_bill_of_lading"><?= __('Create bill of lading') ?></label>
+                </th>
+                <td>
+                    <?php
+                    $createBillOfLading = 0;
+
+                    if (defined('CREATE_BILL_OF_LADING')) {
+                        $createBillOfLading = (int)CREATE_BILL_OF_LADING;
+                    }
+                    ?>
+
+                    <select id="create_bill_of_lading" name='opt[create_bill_of_lading]' class='inputOut'>
+                        <option value='0' <?= ($createBillOfLading === 0 ? 'selected' : '') ?>>
+                            <?= __('No') ?>
+                        </option>
+                        <option value='1' <?= ($createBillOfLading === 1 ? 'selected' : '') ?>>
+                            <?= __('Yes') ?>
+                        </option>
+                    </select>
+                    <p class='description'><?= __('Choose if you want to create a Bill of Lading associated with the main document') ?></p>
                 </td>
             </tr>
 

@@ -6,7 +6,7 @@ use MoloniES\API\Companies;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\API\Taxes;
 use MoloniES\API\Warehouses;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Tools;
 use WC_Product;
 use WC_Tax;
@@ -189,7 +189,7 @@ class Product
      * Sets product reference
      * @return $this
      */
-    private function setReference()
+    private function setReference(): Product
     {
         $this->reference = $this->product->get_sku();
 

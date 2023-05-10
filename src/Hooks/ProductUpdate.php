@@ -4,7 +4,7 @@ namespace MoloniES\Hooks;
 
 use Exception;
 use MoloniES\Controllers\Product;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Log;
 use MoloniES\LogSync;
 use MoloniES\Notice;

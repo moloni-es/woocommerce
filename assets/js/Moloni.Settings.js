@@ -8,8 +8,14 @@ Moloni.Settings = (function($) {
     }
 
     function startObservers() {
+        documentStatusChange();
+
         shippingInfoChange();
         loadAddressChange();
+    }
+
+    function documentStatusChange() {
+        toggleLineObserver('document_status' , 'create_bill_of_lading_line');
     }
 
     function shippingInfoChange() {

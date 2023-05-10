@@ -39,7 +39,7 @@ if (!defined('ABSPATH')) {
 
 <?php
 
-if (isset($pluginErrorException) && $pluginErrorException instanceof \MoloniES\Error) {
+if (isset($pluginErrorException) && $pluginErrorException instanceof \MoloniES\Exceptions\Error) {
     $pluginErrorException->showError();
 }
 

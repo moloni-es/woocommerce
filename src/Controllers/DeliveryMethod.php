@@ -3,7 +3,7 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\DeliveryMethods;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 
 class DeliveryMethod
 {
@@ -55,7 +55,7 @@ class DeliveryMethod
      *
      * @throws Error
      */
-    public function loadDefault()
+    public function loadDefault(): bool
     {
         $variables = [
             'options' => [

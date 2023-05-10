@@ -3,10 +3,9 @@
 namespace MoloniES\Controllers;
 
 use Exception;
-use WC_Product;
-use MoloniES\Log;
-use MoloniES\Error;
 use MoloniES\API\Products;
+use MoloniES\Exceptions\Error;
+use MoloniES\Log;
 
 class SyncProducts
 {

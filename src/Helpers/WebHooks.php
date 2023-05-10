@@ -3,7 +3,7 @@
 namespace MoloniES\Helpers;
 
 use MoloniES\API\Hooks;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Model;
 use MoloniES\Storage;
 

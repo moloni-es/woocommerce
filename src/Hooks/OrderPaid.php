@@ -3,11 +3,12 @@
 namespace MoloniES\Hooks;
 
 use Exception;
-use MoloniES\Error;
+use MoloniES\Controllers\Documents;
+use MoloniES\Exceptions\Error;
 use MoloniES\Log;
 use MoloniES\Plugin;
+use MoloniES\Services\Orders\CreateMoloniDocument;
 use MoloniES\Start;
-use MoloniES\Controllers\Documents;
 
 class OrderPaid
 {
@@ -18,9 +19,10 @@ class OrderPaid
      *
      * @param Plugin $parent
      */
-    public function __construct($parent)
+    public function __construct(Plugin $parent)
     {
         $this->parent = $parent;
+
         add_action('woocommerce_order_status_completed', [$this, 'documentCreate']);
     }
 
@@ -29,9 +31,9 @@ class OrderPaid
         try {
             if (Start::login(true) && defined("INVOICE_AUTO") && INVOICE_AUTO) {
                 Log::write(__("Automatically generating the order document",'moloni_es') . ': ' . $orderId);
-                $document = new Documents($orderId);
-                $document->isHook = true;
-                $document->createDocument();
+
+                $service = new CreateMoloniDocument($orderId);
+                $service->run();
 
                 Log::write(__("Order document created successfully",'moloni_es') . ': ' . $orderId);
             }

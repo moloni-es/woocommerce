@@ -2,8 +2,8 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\Error;
 use MoloniES\API\Categories;
+use MoloniES\Exceptions\Error;
 
 /**
  * Class Product Category

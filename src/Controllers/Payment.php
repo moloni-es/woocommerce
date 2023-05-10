@@ -15,7 +15,7 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\PaymentMethods;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 
 class Payment
 {

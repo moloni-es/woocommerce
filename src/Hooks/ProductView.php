@@ -4,7 +4,7 @@ namespace MoloniES\Hooks;
 
 use Exception;
 use MoloniES\Controllers\Product;
-use MoloniES\Error;
+use MoloniES\Exceptions\Error;
 use MoloniES\Plugin;
 use MoloniES\Start;
 use WC_Product;

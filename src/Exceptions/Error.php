@@ -1,8 +1,9 @@
 <?php
 
-namespace MoloniES;
+namespace MoloniES\Exceptions;
 
 use Exception;
+use MoloniES\Curl;
 
 class Error extends Exception
 {
@@ -11,10 +12,13 @@ class Error extends Exception
 
     /**
      * Throws a new error with a message and a log from the last request made
+     *
      * @param $message
      * @param bool $request
      * @param int $code
      * @param Exception|null $previous
+     *
+     * @return void
      */
     public function __construct($message, $request = false, $code = 0, Exception $previous = null)
     {
@@ -24,16 +28,9 @@ class Error extends Exception
 
     public function showError()
     {
-        /** @noinspection PhpUnusedLocalVariableInspection */
         $message = $this->getDecodedMessage();
-
-        /** @noinspection PhpUnusedLocalVariableInspection */
         $url = $this->request['url'] ?: '';
-
-        /** @noinspection PhpUnusedLocalVariableInspection */
         $sent = $this->request['sent'] ?: [];
-
-        /** @noinspection PhpUnusedLocalVariableInspection */
         $received = $this->request['received'] ?: [];
 
         include MOLONI_ES_TEMPLATE_DIR . 'Messages/DocumentError.php';
@@ -49,9 +46,10 @@ class Error extends Exception
     /**
      * Returns the default error message from construct
      * Or tries to translate the error from Moloni API
+     *
      * @return string
      */
-    public function getDecodedMessage()
+    public function getDecodedMessage(): string
     {
         $errorMessage = '<b>' . $this->getMessage() . '</b>';
 

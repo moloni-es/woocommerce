@@ -2,6 +2,8 @@
 
 namespace MoloniES;
 
+use MoloniES\Exceptions\Error;
+
 class Curl
 {
     /**
