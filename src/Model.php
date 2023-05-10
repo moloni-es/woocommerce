@@ -2,6 +2,8 @@
 
 namespace MoloniES;
 
+use MoloniES\Services\Mails\AuthenticationExpired;
+
 class Model
 {
     /**
@@ -129,6 +131,11 @@ class Model
                         $retryNumber++;
 
                         return self::refreshTokens($retryNumber);
+                    }
+
+                    // Send e-mail notification if email is set
+                    if (defined('ALERT_EMAIL') && !empty(ALERT_EMAIL)) {
+                        new AuthenticationExpired(ALERT_EMAIL);
                     }
 
                     Log::write(__('Reseting tokens after 3 tries','moloni_es'));

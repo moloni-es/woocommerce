@@ -420,6 +420,27 @@ try {
                     <p class='description'><?= __('Custom field associated with the customer\'s VAT'  , 'moloni_es') ?></p>
                 </td>
             </tr>
+            </tbody>
+        </table>
+
+        <!-- Advanced -->
+        <h2 class="title"><?= __('Advanced'  , 'moloni_es') ?></h2>
+        <table class="form-table">
+            <tbody>
+
+            <!-- Send alert e-mail -->
+            <tr>
+                <th>
+                    <label for="alert_email"><?= __('Alert e-mail' , 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <input id="alert_email" name="opt[alert_email]" type="text"
+                           value="<?= (defined('ALERT_EMAIL') ? ALERT_EMAIL : '') ?>"
+                           class="inputOut">
+
+                    <p class='description'><?= __('Receive alerts for when an error occurs (document creation/authentication lost).' , 'moloni_es') ?></p>
+                </td>
+            </tr>
 
             <tr>
                 <th></th>

@@ -2,6 +2,7 @@
 
 namespace MoloniES\Controllers;
 
+use MoloniES\Exceptions\Warning;
 use WC_Order;
 use WC_Order_Item_Fee;
 use WC_Order_Item_Product;
@@ -173,6 +174,7 @@ class Documents
      * @return $this
      *
      * @throws Error
+     * @throws Warning
      */
     public function createDocument(): Documents
     {
@@ -229,19 +231,7 @@ class Documents
         $this->saveRecord();
 
         if ($this->shouldCloseDocument()) {
-            $orderTotal = ((float)$this->order->get_total() - (float)$this->order->get_total_refunded());
-            $documentTotal = $this->getDocumentExchageTotal();
-
-            if (abs($orderTotal - $documentTotal) < 0.01) {
-                $this->closeDocument();
-            } else {
-                $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
-
-                throw new Error(
-                    __('The document has been inserted but the totals do not match. ', 'moloni_es') .
-                    '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document', 'moloni_es') . '</a>'
-                );
-            }
+            $this->closeDocument();
         } else {
             $note = __('Document inserted as a draft in Moloni', 'moloni_es');
             $note .= " (" . $this->documentTypeName . ")";
@@ -255,10 +245,27 @@ class Documents
     /**
      * Close a document based on its id
      *
-     * @throws Error
+     * @throws Warning
      */
     public function closeDocument()
     {
+        $orderTotal = ((float)$this->order->get_total() - (float)$this->order->get_total_refunded());
+        $documentTotal = $this->getDocumentExchageTotal();
+
+        if (abs($orderTotal - $documentTotal) > 0.01) {
+            $note = __('Document inserted as a draft in Moloni', 'moloni_es');
+            $note .= " (" . $this->documentTypeName . ")";
+
+            $this->order->add_order_note($note);
+
+            $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
+
+            throw new Warning(
+                __('The document has been inserted but the totals do not match. ', 'moloni_es') .
+                '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document', 'moloni_es') . '</a>'
+            );
+        }
+
         $keyString = '';
         $mutation = [];
 
