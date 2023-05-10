@@ -2,16 +2,21 @@
 
 namespace MoloniES;
 
-use MoloniES\Controllers\Documents;
-use MoloniES\Controllers\PendingOrders;
+use WC_Order;
+use MoloniES\Menus\Admin;
+use MoloniES\WebHooks\WebHook;
 use MoloniES\Exceptions\Error;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
+use MoloniES\Hooks\OrderPaid;
+use MoloniES\Hooks\OrderView;
+use MoloniES\Hooks\ProductView;
+use MoloniES\Hooks\ProductUpdate;
+use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
+use MoloniES\Controllers\PendingOrders;
 use MoloniES\Services\Documents\OpenDocument;
 use MoloniES\Services\Orders\CreateMoloniDocument;
-use MoloniES\WebHooks\WebHook;
-use WC_Order;
 
 /**
  * Main constructor
@@ -57,11 +62,12 @@ class Plugin
     private function actions()
     {
         new WoocommerceInitialize($this);
-        new Menus\Admin($this);
-        new Hooks\ProductUpdate($this);
-        new Hooks\ProductView($this);
-        new Hooks\OrderView($this);
-        new Hooks\OrderPaid($this);
+        new Admin($this);
+        new ProductUpdate($this);
+        new ProductView($this);
+        new OrderView($this);
+        new OrderPaid($this);
+        new UpgradeProcess($this);
         new WebHook();
         new Ajax($this);
     }
