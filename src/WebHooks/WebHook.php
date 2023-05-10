@@ -19,6 +19,5 @@ class WebHook
     public function setWebHooks()
     {
         new Products();
-        //new Properties(); //todo: endpoints missing from the API
     }
 }
