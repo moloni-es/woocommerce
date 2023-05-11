@@ -354,22 +354,29 @@ class OrderProduct
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function mapPropsToValues()
+    public function mapPropsToValues(): array
     {
-        return [
+        $props = [
             'productId' => (int) $this->product_id,
             'name' => $this->name,
             'price' => (float) $this->price,
             'summary' => $this->summary,
-            'exemptionReason' => $this->exemption_reason,
+            'exemptionReason' => '',
             'ordering' => $this->order,
             'qty' => (float) $this->qty,
             'discount' => (float) $this->discount,
-            'taxes' => $this->taxes,
+            'taxes' => [],
             'warehouseId' => (int) $this->warehouse_id
         ];
+
+        if (!empty($this->taxes)) {
+            $props['taxes'] = $this->taxes;
+        }
+
+        if (!empty($this->exemption_reason)) {
+            $props['exemptionReason'] = $this->exemption_reason;
+        }
+
+        return $props;
     }
 }
