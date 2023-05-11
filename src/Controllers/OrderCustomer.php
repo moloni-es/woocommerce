@@ -144,7 +144,11 @@ class OrderCustomer
             }
         }
 
-        return $vat;
+        if ($vat === null) {
+            return null;
+        }
+
+        return substr($vat, 0, 30);
     }
 
     /**

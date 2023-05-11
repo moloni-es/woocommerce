@@ -188,20 +188,12 @@ class Documents
      * Set fiscal zone
      *
      * @return $this
-     *
-     * @throws Error
      */
     public function setFiscalZone()
     {
         $fiscalZone = null;
 
-        if (isset($_GET['fiscalZone']) && !empty($_GET['fiscalZone'])) {
-            $validValue = sanitize_text_field($_GET['fiscalZone']);
-        } else {
-            $validValue = get_option('woocommerce_tax_based_on');
-        }
-
-        switch ($validValue) {
+        switch (get_option('woocommerce_tax_based_on')) {
             case 'billing':
                 $fiscalZone = $this->order->get_billing_country();
 
@@ -731,25 +723,6 @@ class Documents
             if ($this->isHook === false) {
                 $viewUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true');
                 $errorMsg .= " <a href='" . esc_url($viewUrl) . "'>" . __('Generate again','moloni_es') . '</a>';
-            }
-
-            throw new Error($errorMsg);
-        }
-
-        if (!isset($_GET['fiscalZone']) &&
-            !empty($this->company['fiscalZone']['fiscalZone']) &&
-            !empty($this->order->get_billing_country()) &&
-            $this->company['fiscalZone']['fiscalZone'] !== $this->order->get_billing_country()) {
-            $errorMsg = sprintf(__('The order client and your company have different fiscal zones.','moloni_es') , $this->order->get_order_number());
-
-            if ($this->isHook === false) {
-                $billingFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=billing');
-                $baseFiscalZoneUrl = admin_url('admin.php?page=molonies&action=genInvoice&id=' . $this->orderId . '&force=true&fiscalZone=base');
-
-                $errorMsg .= "<br>";
-                $errorMsg .= " <a href='" . esc_url($billingFiscalZoneUrl) . "'>" . __('Use client billing fiscal zone','moloni_es') . '</a>';
-                $errorMsg .= "<br>";
-                $errorMsg .= " <a href='" . esc_url($baseFiscalZoneUrl) . "'>" . __('Use company fiscal zone','moloni_es') . '</a>';
             }
 
             throw new Error($errorMsg);
