@@ -54,8 +54,14 @@ class Products
             $moloniProduct = ApiProducts::queryProduct($variables); //get product that was received from the hook
             $moloniProduct = $moloniProduct['data']['product']['data'];
 
+            /** We only want to update the main product */
             if ($moloniProduct['parent'] !== null) {
-                return; //we only want to update the main product
+                return;
+            }
+
+            /** Do not sync shipping product */
+            if (in_array(strtolower($moloniProduct['reference']), ['shipping', 'envio', 'envío', 'fee', 'tarifa'])) {
+                return;
             }
 
             //switch between operations
