@@ -185,35 +185,11 @@ class OrderFees
 
     /**
      * Set the taxes of a product
+     *
      * @throws Error
      */
-    private function setTaxes()
+    private function setTaxes(): OrderFees
     {
-        // If a tax is set in settings (should not be used by the client)
-        if(defined('TAX_ID') && TAX_ID > 0) {
-            $variables = [
-                'taxId' => (int) TAX_ID
-            ];
-
-            $query = (Taxes::queryTax($variables))['data']['tax']['data'];
-
-            $tax['taxId'] = (int)$query['taxId'];
-            $tax['value'] = (float)$query['value'];
-            $tax['ordering'] = 1;
-            $tax['cumulative'] = false;
-
-            $unitPrice = (float)$this->price + (float)$this->fee->get_total_tax();
-
-            $this->price = ($unitPrice * 100);
-            $this->price /= (100 + $tax['value']);
-
-            $this->taxes = $tax;
-            $this->exemption_reason = '';
-
-            return $this;
-        }
-
-        //Normal way
         $taxedArray = $this->fee->get_taxes();
         $taxedValue = 0.0;
         $taxRate = 0.0;
@@ -232,8 +208,8 @@ class OrderFees
 
         if (!$this->hasIVA) {
             $this->exemption_reason = defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '';
-            $this->taxes=[];
-        }else {
+            $this->taxes = [];
+        } else {
             $this->exemption_reason = '';
         }
 

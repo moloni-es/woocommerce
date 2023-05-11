@@ -182,41 +182,19 @@ class OrderShipping
 
     /**
      * Set the taxes of a product
+     *
      * @throws Error
      */
-    private function setTaxes()
+    private function setTaxes(): OrderShipping
     {
         $shippingTotal = 0;
 
-        foreach ($this->order->get_shipping_methods() as $item_id => $item) {
+        foreach ($this->order->get_shipping_methods() as $item) {
             $taxes = $item->get_taxes();
-            foreach ($taxes['total'] as $tax_rate_id => $tax) {
+
+            foreach ($taxes['total'] as $tax) {
                 $shippingTotal += (float)$tax;
             }
-        }
-
-        //if a tax is set in settings (should not be used by the client)
-        if(defined('TAX_ID_SHIPPING') && TAX_ID_SHIPPING > 0) {
-
-            $variables = [
-                'taxId' => (int) TAX_ID_SHIPPING
-            ];
-
-            $query = (Taxes::queryTax($variables))['data']['tax']['data'];
-
-            $tax = [];
-            $tax['taxId'] = (int) $query['taxId'];
-            $tax['value'] = (float) $query['value'];
-            $tax['ordering'] = 1;
-            $tax['cumulative'] = false;
-
-            $this->price = (($this->price + $shippingTotal) * 100);
-            $this->price = $this->price / (100 + $tax['value']);
-
-            $this->taxes = $tax;
-            $this->exemption_reason = '';
-
-            return $this;
         }
 
         //Normal way
@@ -228,7 +206,7 @@ class OrderShipping
 
         if (!$this->hasIVA) {
             $this->exemption_reason = defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '';
-            $this->taxes=[];
+            $this->taxes = [];
         } else {
             $this->exemption_reason = '';
         }
@@ -241,7 +219,7 @@ class OrderShipping
      * @return array
      * @throws Error
      */
-    private function setTax($taxRate)
+    private function setTax(float $taxRate)
     {
         $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
 

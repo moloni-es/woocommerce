@@ -283,40 +283,6 @@ try {
 
             <tr>
                 <th>
-                    <label for="tax_id"><?= __('Products tax' , 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="tax_id" name='opt[tax_id]' class='inputOut'>
-                        <option value='0' <?= (defined('TAX_ID') && (int)TAX_ID === 0 ? 'selected' : '') ?>><?= __('Use WooCommerce value' , 'moloni_es') ?></option>
-                        <?php if (is_array($taxes)): ?>
-                            <?php foreach ($taxes as $tax) : ?>
-                                <option value='<?= $tax['taxId'] ?>' <?= (defined('TAX_ID') && (int)TAX_ID === $tax['taxId'] ? 'selected' : '') ?>><?= $tax['name'] . ' ('.$tax['value'].'%)'?></option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                    <p class='description'><?= sprintf(__('Use if you do not have tax applied to %s' , 'moloni_es'),'products') ?></p>
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="tax_id_shipping"><?= __('Shipping tax' , 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="tax_id_shipping" name='opt[tax_id_shipping]' class='inputOut'>
-                        <option value='0' <?= (defined('TAX_ID_SHIPPING') && (int)TAX_ID_SHIPPING === 0 ? 'selected' : '') ?>><?= __('Use WooCommerce value'  , 'moloni_es') ?></option>
-                        <?php if (is_array($taxes)): ?>
-                            <?php foreach ($taxes as $tax) : ?>
-                                <option value='<?= $tax['taxId'] ?>' <?= (defined('TAX_ID_SHIPPING') && (int)TAX_ID_SHIPPING === $tax['taxId'] ? 'selected' : '') ?>><?= $tax['name'] . ' ('.$tax['value'].'%)'?></option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                    <p class='description'><?= sprintf(__('Use if you do not have tax applied to %s' , 'moloni_es'),'shipping') ?></p>
-                </td>
-            </tr>
-
-            <tr>
-                <th>
                     <label for="exemption_reason"><?= __('Exemption reason' , 'moloni_es') ?></label>
                 </th>
                 <td>

@@ -120,8 +120,6 @@ class Install
                 ('maturity_date', 'Maturity date'),
                 ('document_status', 'Choose the status of the document (closed or in draft)'),
                 ('document_type', 'Choose the type of documents you want to issue'),
-                ('tax_id', 'Choose a rate to apply to products'),
-                ('tax_id_shipping', 'Choose a rate to apply to shipping'),
                 ('client_prefix', 'WC', 'Customer reference prefix'),
                 ('product_prefix', 'Product reference prefix'),
                 ('update_final_consumer', 'Update customer'),

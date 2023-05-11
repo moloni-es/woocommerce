@@ -363,33 +363,13 @@ class Product
 
     /**
      * Sets the taxes of a product or its exemption reason
+     *
      * @return $this
+     *
      * @throws Error
      */
-    private function setTaxes()
+    private function setTaxes(): Product
     {
-        //if a tax is set in settings (should not be used by the client)
-        if(defined('TAX_ID') && TAX_ID > 0) {
-            $variables = [
-                'taxId' => (int) TAX_ID
-            ];
-
-            $query = (Taxes::queryTax($variables))['data']['tax']['data'];
-
-            $tax['taxId'] = (int) $query['taxId'];
-            $tax['value'] = (float) $query['value'];
-            $tax['ordering'] = 1;
-            $tax['cumulative'] = false;
-
-            $this->price = (($this->product->get_total) * 100);
-            $this->price = $this->price / (100 + $tax['value']);
-
-            $this->taxes = $tax;
-            $this->exemption_reason = '';
-
-            return $this;
-        }
-
         //normal set of taxes
         $hasIVA = false;
 
@@ -424,7 +404,7 @@ class Product
 
         if (!$hasIVA) {
             $this->exemption_reason = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
-            $this->taxes=[];
+            $this->taxes = [];
         } else {
             $this->exemption_reason = '';
         }

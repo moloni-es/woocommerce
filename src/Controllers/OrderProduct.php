@@ -243,46 +243,17 @@ class OrderProduct
 
     /**
      * Set the taxes of a product
+     *
      * @throws Error
      */
-    private function setTaxes()
+    private function setTaxes(): OrderProduct
     {
-        //if a tax is set in settings (should not be used by the client)
-        if(defined('TAX_ID') && TAX_ID > 0) {
-
-            $variables = [
-                'taxId' => (int) TAX_ID
-            ];
-
-            $query = (Taxes::queryTax($variables))['data']['tax']['data'];
-
-            $tax['taxId'] = (int) $query['taxId'];
-            $tax['value'] = (float) $query['value'];
-            $tax['ordering'] = 1;
-            $tax['cumulative'] = false;
-
-            $unitPrice = (((float) $this->product->get_subtotal() + (float) $this->product->get_subtotal_tax())) / (float)$this->product->get_quantity();
-
-            $refundedValue = $this->wc_order->get_total_refunded_for_item($this->product->get_id());
-            if ((float)$refundedValue > 0) {
-                $unitPrice -= (float)$refundedValue;
-            }
-
-            $this->price = ($unitPrice * 100);
-            $this->price = $this->price / (100 + $tax['value']);
-
-            $this->taxes = $tax;
-            $this->exemption_reason = '';
-
-            return $this;
-        }
-
-        //normal set of taxes
         $taxes = $this->product->get_taxes();
 
         foreach ($taxes['subtotal'] as $taxId => $value) {
             if (!empty($value)) {
                 $taxRate = preg_replace('/[^0-9.]/', '', WC_Tax::get_rate_percent($taxId));
+
                 if ((float)$taxRate > 0) {
                     $this->taxes[] = $this->setTax($taxRate);
                 }
@@ -291,7 +262,7 @@ class OrderProduct
 
         if (!$this->hasIVA) {
             $this->exemption_reason = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
-            $this->taxes=[];
+            $this->taxes = [];
         } else {
             $this->exemption_reason = '';
         }
