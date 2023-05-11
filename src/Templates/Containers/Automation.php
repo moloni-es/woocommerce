@@ -1,4 +1,8 @@
 <?php
+
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\AutomaticDocumentsStatus;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -17,10 +21,35 @@ if (!defined('ABSPATH')) {
                 </th>
                 <td>
                     <select id="invoice_auto" name='opt[invoice_auto]' class='inputOut'>
-                        <option value='0' <?= (defined('INVOICE_AUTO') && INVOICE_AUTO === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('INVOICE_AUTO') && INVOICE_AUTO === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                        <?php $invoiceAuto = defined('INVOICE_AUTO') ? (int)INVOICE_AUTO : Boolean::NO; ?>
+
+                        <option value='0' <?= ($invoiceAuto === Boolean::NO ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= ($invoiceAuto === Boolean::YES ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
                     </select>
                     <p class='description'><?= __('Automatically create document when an order is paid', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <tr id="invoice_auto_status_line" <?= ($invoiceAuto === Boolean::NO ? 'style="display: none;"' : '') ?>>
+                <th>
+                    <label for="invoice_auto_status"><?= __('Create documents when the order is', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="invoice_auto_status" name='opt[invoice_auto_status]' class='inputOut'>
+                        <?php $invoiceAutoStatus = defined('INVOICE_AUTO_STATUS') ? INVOICE_AUTO_STATUS : ''; ?>
+
+                        <option value='completed' <?= ($invoiceAutoStatus === AutomaticDocumentsStatus::COMPLETED ? 'selected' : '') ?>>
+                            <?= __('Complete', 'moloni_es') ?>
+                        </option>
+                        <option value='processing' <?= ($invoiceAutoStatus === AutomaticDocumentsStatus::PROCESSING ? 'selected' : '') ?>>
+                            <?= __('Processing', 'moloni_es') ?>
+                        </option>
+                    </select>
+                    <p class='description'><?= __('Documents will be created automatically once they are in the selected state', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -136,3 +165,7 @@ if (!defined('ABSPATH')) {
         </table>
     </div>
 </form>
+
+<script>
+    Moloni.Automations.init();
+</script>

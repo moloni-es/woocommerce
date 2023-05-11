@@ -29,7 +29,11 @@ class Enqueue
                 wp_enqueue_script('moloni-settings-js', plugins_url('assets/js/Moloni.Settings.js', MOLONI_ES_PLUGIN_FILE));
             }
 
-            if (!in_array($tab, ['settings', 'tools', 'automation'])) {
+            if ($tab === 'automation') {
+                wp_enqueue_script('moloni-automations-js', plugins_url('assets/js/Moloni.Automations.js', MOLONI_ES_PLUGIN_FILE));
+            }
+
+            if (empty($tab)) {
                 wp_enqueue_script('moloni-actions-bulk-documentes-js', plugins_url('assets/js/BulkDocuments.js', MOLONI_ES_PLUGIN_FILE));
 
                 //send translated strings to the javascript file
