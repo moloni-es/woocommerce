@@ -13,7 +13,7 @@ use MoloniES\API\Documents\PurchaseOrder;
 use MoloniES\API\Documents\Receipt;
 use MoloniES\API\Documents\SimplifiedInvoice;
 
-class DownloadDocument
+class DownloadDocumentPDF
 {
     private $documentId;
 

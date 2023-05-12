@@ -51,8 +51,6 @@ class OpenDocument
         $invoice = $invoice['data']['document']['data'];
 
         if ((int)$invoice['status'] === 1) {
-            unset($variables['companyId']);
-
             $mutation = [];
             $keyString = '';
 

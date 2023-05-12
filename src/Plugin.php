@@ -18,7 +18,7 @@ use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
 use MoloniES\Controllers\PendingOrders;
 use MoloniES\Services\Documents\OpenDocument;
-use MoloniES\Services\Documents\DownloadDocument;
+use MoloniES\Services\Documents\DownloadDocumentPDF;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 
 /**
@@ -180,7 +180,7 @@ class Plugin
         $documentId = (int)$_REQUEST['id'];
 
         if ($documentId > 0) {
-            new DownloadDocument($documentId);
+            new DownloadDocumentPDF($documentId);
         }
     }
 
