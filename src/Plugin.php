@@ -2,6 +2,7 @@
 
 namespace MoloniES;
 
+use MoloniES\Enums\Boolean;
 use WC_Order;
 use MoloniES\Menus\Admin;
 use MoloniES\WebHooks\WebHook;
@@ -264,7 +265,15 @@ class Plugin
     {
         try {
             WebHooks::deleteHooks();
-            WebHooks::createHooks();
+
+            if (defined('HOOK_STOCK_UPDATE') && (int)HOOK_STOCK_UPDATE === Boolean::YES) {
+                WebHooks::createHook('Product', 'stockChanged');
+            }
+
+            if (defined('HOOK_PRODUCT_SYNC') && (int)HOOK_PRODUCT_SYNC === Boolean::YES) {
+                WebHooks::createHook('Product', 'create');
+                WebHooks::createHook('Product', 'update');
+            }
 
             $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
             $type = 'updated';

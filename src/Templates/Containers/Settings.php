@@ -25,7 +25,6 @@ try {
     $maturityDates = MaturityDates::queryMaturityDates();
     $warehouses = Warehouses::queryWarehouses();
     $measurementUnits = MeasurementUnits::queryMeasurementUnits();
-    $taxes = Taxes::queryTaxes();
 
     $countries = Countries::queryCountries([
         'options' => [
@@ -39,7 +38,7 @@ try {
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=settings') ?>' id='formOpcoes'>
-    <input type='hidden' value='save' name='action'>
+    <input type='hidden' value='saveSettings' name='action'>
     <div>
         <!-- Documents -->
         <h2 class="title"><?= __('Documents' , 'moloni_es') ?></h2>
@@ -265,19 +264,6 @@ try {
                         <?php endif; ?>
                     </select>
                     <p class='description'><?= __('Required' , 'moloni_es') ?></p>
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="sync_images"><?= __('Sync images', 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="sync_images" name='opt[sync_images]' class='inputOut'>
-                        <option value='0' <?= (defined('SYNC_IMAGES') && SYNC_IMAGES === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('SYNC_IMAGES') && SYNC_IMAGES === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
-                    </select>
-                    <p class='description'><?= __('When creating products in Moloni, the image will also be synchronized', 'moloni_es') ?></p>
                 </td>
             </tr>
 

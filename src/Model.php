@@ -157,9 +157,8 @@ class Model
     {
         $tokensRow = self::getTokensRow();
 
-
-        Storage::$MOLONI_ES_SESSION_ID = $tokensRow['id'];
-        Storage::$MOLONI_ES_ACCESS_TOKEN = $tokensRow['main_token'];
+        Storage::$MOLONI_ES_SESSION_ID = $tokensRow['id'] ?? '';
+        Storage::$MOLONI_ES_ACCESS_TOKEN = $tokensRow['main_token'] ?? '';
 
         if (!empty($tokensRow['company_id'])) {
             Storage::$MOLONI_ES_COMPANY_ID = (int)$tokensRow['company_id'];
@@ -224,6 +223,10 @@ class Model
     public static function resetTokens(): void
     {
         global $wpdb;
+
+        Storage::$MOLONI_ES_ACCESS_TOKEN = '';
+        Storage::$MOLONI_ES_COMPANY_ID = '';
+        Storage::$MOLONI_ES_SESSION_ID = '';
 
         $wpdb->query('TRUNCATE ' . $wpdb->get_blog_prefix() . 'moloni_es_api');
     }

@@ -3,6 +3,7 @@
 namespace MoloniES;
 
 use MoloniES\API\Companies;
+use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\Error;
 use MoloniES\Helpers\WebHooks;
 
@@ -55,16 +56,19 @@ class Start
             }
         }
 
-        if ($action === 'logout') {
-            try {
-                WebHooks::deleteHooks();
-            } catch (Error $e) {}
+        switch ($action) {
+            case 'logout':
+                self::logout();
 
-            Model::resetTokens();
-        }
+                break;
+            case 'saveSettings':
+                self::saveSettings();
 
-        if ($action === 'save') {
-            self::saveSettings();
+                break;
+            case 'saveAutomations':
+                self::saveAutomations();
+
+                break;
         }
 
         $tokensRow = Model::getTokensRow();
@@ -75,6 +79,7 @@ class Start
 
             if (Storage::$MOLONI_ES_COMPANY_ID) {
                 Model::defineConfigs();
+
                 return true;
             }
 
@@ -89,21 +94,20 @@ class Start
                 Model::defineValues();
                 Model::defineConfigs();
 
-                try {
-                    WebHooks::deleteHooks();
-                    WebHooks::createHooks();
-                } catch (Error $e) {}
-
                 return true;
             }
 
             self::companiesForm();
+
             return false;
         }
 
         self::loginForm();
+
         return false;
     }
+
+    //          Form pages          //
 
     /**
      * Shows a login form
@@ -151,6 +155,22 @@ class Start
         include(MOLONI_ES_TEMPLATE_DIR . 'CompanySelect.php');
     }
 
+    //          Auth          //
+
+    /**
+     * Removes plugin authentication
+     *
+     * @return void
+     */
+    private static function logout() {
+        try {
+            WebHooks::deleteHooks();
+            Model::resetTokens();
+        } catch (Error $e) {}
+    }
+
+    //          Settings/Automations          //
+
     /**
      * Save plugin settings
      *
@@ -158,30 +178,66 @@ class Start
      */
     private static function saveSettings() {
         add_settings_error('general', 'settings_updated', __('Changes saved.', 'moloni_es'), 'updated');
+
         $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
 
-        $tab = $_REQUEST['tab'] ?? '';
+        self::saveOptions($options);
+    }
 
-        if ($tab === 'automation') {
-            //Verifies checkboxes because they are not set if not checked
-            $syncOptions = [
-                'sync_fields_description',
-                'sync_fields_visibility',
-                'sync_fields_stock',
-                'sync_fields_name',
-                'sync_fields_price',
-                'sync_fields_categories',
-                'sync_fields_ean',
-                'sync_fields_image'
-            ];
+    /**
+     * Save plugin automations
+     *
+     * @return void
+     */
+    private static function saveAutomations() {
+        add_settings_error('general', 'automations_updated', __('Changes saved.', 'moloni_es'), 'updated');
 
-            foreach ($syncOptions as $option) { //for each sync opt check if it is set
-                if (!isset($options[$option])) {
-                    $options[$option] = 0;
-                }
+        $options = is_array($_POST['opt']) ? $_POST['opt'] : [];
+
+        /** Verifies checkboxes because they are not set if not checked */
+        $syncOptions = [
+            'sync_fields_description',
+            'sync_fields_visibility',
+            'sync_fields_stock',
+            'sync_fields_name',
+            'sync_fields_price',
+            'sync_fields_categories',
+            'sync_fields_ean',
+            'sync_fields_image'
+        ];
+
+        /** for each sync opt check if it is set */
+        foreach ($syncOptions as $option) {
+            if (!isset($options[$option])) {
+                $options[$option] = 0;
             }
         }
 
+        self::saveOptions($options);
+
+        try {
+            WebHooks::deleteHooks();
+
+            if (isset($options['hook_stock_update']) && (int)$options['hook_stock_update'] === Boolean::YES) {
+                WebHooks::createHook('Product', 'stockChanged');
+            }
+
+            if (isset($options['hook_product_sync']) && (int)$options['hook_product_sync'] === Boolean::YES) {
+                WebHooks::createHook('Product', 'create');
+                WebHooks::createHook('Product', 'update');
+            }
+        } catch (Error $e) {}
+    }
+
+    /**
+     * Save data in settings table
+     *
+     * @param array $options
+     *
+     * @return void
+     */
+    private static function saveOptions(array $options)
+    {
         foreach ($options as $option => $value) {
             $option = sanitize_text_field($option);
             $value = sanitize_text_field($value);

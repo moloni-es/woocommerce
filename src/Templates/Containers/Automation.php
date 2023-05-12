@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=automation') ?>' id='formOpcoes'>
-    <input type='hidden' value='save' name='action'>
+    <input type='hidden' value='saveAutomations' name='action'>
     <div>
         <h2 class="title"><?= __('Automation', 'moloni_es') ?></h2>
         <table class="form-table">
