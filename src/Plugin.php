@@ -2,13 +2,14 @@
 
 namespace MoloniES;
 
-use MoloniES\Enums\Boolean;
 use WC_Order;
+use MoloniES\Enums\Boolean;
 use MoloniES\Menus\Admin;
 use MoloniES\WebHooks\WebHook;
 use MoloniES\Exceptions\Error;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
+use MoloniES\Hooks\OrderList;
 use MoloniES\Hooks\OrderPaid;
 use MoloniES\Hooks\OrderView;
 use MoloniES\Hooks\ProductView;
@@ -17,6 +18,7 @@ use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
 use MoloniES\Controllers\PendingOrders;
 use MoloniES\Services\Documents\OpenDocument;
+use MoloniES\Services\Documents\DownloadDocument;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 
 /**
@@ -69,6 +71,7 @@ class Plugin
         new OrderView($this);
         new OrderPaid($this);
         new UpgradeProcess($this);
+        new OrderList($this);
         new WebHook();
         new Ajax($this);
     }
@@ -116,6 +119,9 @@ class Plugin
                     case 'getInvoice':
                         $this->openDocument();
                         break;
+                    case 'downloadDocument':
+                        $this->downloadDocument();
+                        break;
                 }
             }
         } catch (Error $error) {
@@ -152,8 +158,6 @@ class Plugin
      * Open Moloni document
      *
      * @return void
-     *
-     * @throws Error
      */
     private function openDocument()
     {
@@ -164,6 +168,20 @@ class Plugin
         }
 
         add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
+    }
+
+    /**
+     * Download Moloni document
+     *
+     * @return void
+     */
+    private function downloadDocument(): void
+    {
+        $documentId = (int)$_REQUEST['id'];
+
+        if ($documentId > 0) {
+            new DownloadDocument($documentId);
+        }
     }
 
     /**

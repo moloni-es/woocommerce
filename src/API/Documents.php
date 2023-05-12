@@ -25,12 +25,12 @@ class Documents
                 {
                     documentId
                     status
+                    pdfExport
                     documentType
                     {
                         documentTypeId
                         apiCode
                         apiCodePlural
-                        
                     }
                     company
                     {

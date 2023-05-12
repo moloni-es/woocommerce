@@ -5,10 +5,10 @@ if (!defined('ABSPATH')) {
 ?>
 
 <?php use MoloniES\Model;?>
+<?php use MoloniES\Enums\Boolean;?>
 <?php use MoloniES\Enums\DocumentStatus; ?>
 <?php use MoloniES\Enums\DocumentTypes; ?>
 <?php use MoloniES\Exceptions\Error; ?>
-<?php use MoloniES\API\Taxes; ?>
 <?php use MoloniES\API\Companies; ?>
 <?php use MoloniES\API\Countries; ?>
 <?php use MoloniES\API\DocumentSets; ?>
@@ -222,6 +222,27 @@ try {
                     <p class='description'><?= __('The document is only sent to the customer if it is inserted as closed' , 'moloni_es') ?></p>
                 </td>
             </tr>
+
+            <!-- Listagem de encomendas -->
+            <tr>
+                <th>
+                    <label for="moloni_show_download_column"><?= __('WooCommerce order list', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="moloni_show_download_column" name='opt[moloni_show_download_column]' class='inputOut'>
+                        <?php $moloniShowDownloadColumn = defined('MOLONI_SHOW_DOWNLOAD_COLUMN') ? (int)MOLONI_SHOW_DOWNLOAD_COLUMN : Boolean::NO; ?>
+
+                        <option value='0' <?= ($moloniShowDownloadColumn === Boolean::NO ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= ($moloniShowDownloadColumn === Boolean::YES ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
+                    </select>
+                    <p class='description'><?= __('Add, in WooCommerce, a column in the order list with fast download of PDF documents', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
             </tbody>
         </table>
 
