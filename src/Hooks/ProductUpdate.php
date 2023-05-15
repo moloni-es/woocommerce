@@ -3,15 +3,15 @@
 namespace MoloniES\Hooks;
 
 use Exception;
-use WC_Product;
 use MoloniES\Controllers\Product;
-use MoloniES\Enums\LogSyncType;
+use MoloniES\Enums\SyncLogsType;
 use MoloniES\Exceptions\Error;
-use MoloniES\LogSync;
+use MoloniES\Helpers\SyncLogs;
 use MoloniES\Notice;
 use MoloniES\Plugin;
 use MoloniES\Start;
 use MoloniES\Storage;
+use WC_Product;
 
 class ProductUpdate
 {
@@ -88,7 +88,13 @@ class ProductUpdate
      */
     private function shouldRunHook(int $productId): bool
     {
-        return !LogSync::wasSyncedRecently(LogSyncType::WC_PRODUCT, $productId);
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT, $productId)) {
+            return false;
+        }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT, $productId);
+
+        return true;
     }
 
     /**

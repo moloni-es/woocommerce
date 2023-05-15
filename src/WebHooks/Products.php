@@ -5,9 +5,10 @@ namespace MoloniES\WebHooks;
 use Exception;
 use MoloniES\API\Categories;
 use MoloniES\API\Products as ApiProducts;
+use MoloniES\Enums\SyncLogsType;
 use MoloniES\Exceptions\Error;
+use MoloniES\Helpers\SyncLogs;
 use MoloniES\Log;
-use MoloniES\LogSync;
 use MoloniES\Model;
 use MoloniES\Start;
 use MoloniES\Storage;
@@ -102,7 +103,7 @@ class Products
 
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
 
-        if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
+        if ($wcProductId > 0 && !$this->shouldRunHook($wcProductId)) {
             return;
         }
 
@@ -135,7 +136,7 @@ class Products
 
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
 
-        if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
+        if (empty($wcProductId) || !$this->shouldRunHook($wcProductId)) {
             return;
         }
 
@@ -460,12 +461,30 @@ class Products
     /////////////////////////// AUXILIARY METHODS ///////////////////////////
 
     /**
+     * Check if hook should be run
+     *
+     * @param int $productId
+     *
+     * @return bool
+     */
+    private function shouldRunHook(int $productId): bool
+    {
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT, $productId)) {
+            return false;
+        }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT, $productId);
+
+        return true;
+    }
+
+    /**
      * Returns product variants attributes
      * [att1 => [prop1, prop3, prop3], att2 => [prop1]]
      * @param $moloniProduct
      * @return array
      */
-    public static function getAttributes($moloniProduct): array
+    private static function getAttributes($moloniProduct): array
     {
         $attributes = [];
 
@@ -501,7 +520,7 @@ class Products
      * @return array|bool
      * @throws Error
      */
-    public static function getCategoriesFromMoloni($moloniCategoryId)
+    private static function getCategoriesFromMoloni($moloniCategoryId)
     {
         $moloniId = $moloniCategoryId;//current category id
         $moloniCategoriesTree = [];

@@ -23,7 +23,7 @@ class Ajax
 
     public function genInvoice()
     {
-        if (Start::login(true)) {
+        if (!Start::login(true)) {
             return;
         }
 
@@ -46,7 +46,7 @@ class Ajax
                 ]
             );
 
-            wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);
+            wp_send_json(['valid' => 1, 'message' => $e->getMessage(), 'description' => $e->getError()]);
         } catch (Error $e) {
             Storage::$LOGGER->critical(
                 sprintf(__('There was an error when generating the document (%s)'), $orderName),
