@@ -138,7 +138,12 @@ class Model
                         new AuthenticationExpired(ALERT_EMAIL);
                     }
 
-                    Log::write(__('Reseting tokens after 3 tries','moloni_es'));
+                    Storage::$LOGGER->critical(
+                        sprintf(
+                            __('Reseting tokens after %s tries', 'moloni_es'),
+                            $retryNumber
+                        )
+                    );
 
                     self::resetTokens();
 

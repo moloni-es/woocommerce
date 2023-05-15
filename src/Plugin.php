@@ -3,10 +3,13 @@
 namespace MoloniES;
 
 use WC_Order;
+use MoloniES\Controllers\Logs;
+use MoloniES\Exceptions\Warning;
 use MoloniES\Enums\Boolean;
 use MoloniES\Menus\Admin;
 use MoloniES\WebHooks\WebHook;
 use MoloniES\Exceptions\Error;
+use MoloniES\Helpers\Logger;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
 use MoloniES\Hooks\OrderList;
@@ -48,6 +51,7 @@ class Plugin
     private function onStart()
     {
         Storage::$USES_NEW_ORDERS_SYSTEM = Context::isNewOrdersSystemEnabled();
+        Storage::$LOGGER = new Logger();
     }
 
     /**
@@ -138,14 +142,36 @@ class Plugin
     /**
      * Create a new document
      *
-     * @throws Error
+     * @throws Warning|Error
      */
     private function createDocument()
     {
-        $orderId = (int)(sanitize_text_field($_REQUEST['id']));
+        $service = new CreateMoloniDocument((int)(sanitize_text_field($_REQUEST['id'])));
+        $orderName = $service->getOrderNumber();
 
-        $service = new CreateMoloniDocument($orderId);
-        $service->run();
+        try {
+            $service->run();
+        } catch (Exceptions\Warning $e) {
+            Storage::$LOGGER->alert(
+                sprintf(__('There was an warning when generating the document (%s)'), $orderName),
+                [
+                    'message' => $e->getMessage(),
+                    'request' => $e->getRequest()
+                ]
+            );
+
+            throw $e;
+        } catch (Error $e) {
+            Storage::$LOGGER->critical(
+                sprintf(__('There was an error when generating the document (%s)'), $orderName),
+                [
+                    'message' => $e->getMessage(),
+                    'request' => $e->getRequest()
+                ]
+            );
+
+            throw $e;
+        }
 
         if ($service->getDocumentId() > 0) {
             $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $service->getDocumentId())) . '" target="_BLANK">' . __('View document', 'moloni_es') . '</a>';
@@ -191,7 +217,7 @@ class Plugin
      */
     private function removeLogs()
     {
-        Log::removeLogs();
+        Logs::removeOlderLogs();
 
         add_settings_error('molonies', 'moloni-rem-logs', __('Logs cleanup is complete.', 'moloni_es'), 'updated');
     }
@@ -261,18 +287,27 @@ class Plugin
     {
         $date = isset($_GET['since']) ? sanitize_text_field($_GET['since']) : gmdate('Y-m-d', strtotime('-1 week'));
 
-        $syncStocksResult = (new Controllers\SyncProducts($date))->run();
+        $service = (new Controllers\SyncProducts($date))->run();
 
-        if ($syncStocksResult->countUpdated() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('%s products updated.', 'moloni_es'), $syncStocksResult->countUpdated()), 'updated');
+        if ($service->countUpdated() > 0) {
+            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('%s products updated.', 'moloni_es'), $service->countUpdated()), 'updated');
         }
 
-        if ($syncStocksResult->countEqual() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('There are %s products up to date.', 'moloni_es'), $syncStocksResult->countEqual()), 'updated');
+        if ($service->countEqual() > 0) {
+            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('There are %s products up to date.', 'moloni_es'), $service->countEqual()), 'updated');
         }
 
-        if ($syncStocksResult->countNotFound() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-not-found', sprintf(__('%s products were not found in WooCommerce.', 'moloni_es'), $syncStocksResult->countNotFound()));
+        if ($service->countNotFound() > 0) {
+            add_settings_error('molonies', 'moloni-sync-stocks-not-found', sprintf(__('%s products were not found in WooCommerce.', 'moloni_es'), $service->countNotFound()));
+        }
+
+        if ($service->countFoundRecord() > 0) {
+            Storage::$LOGGER->info(__('Manual stock sync', 'moloni_es'), [
+                'since' => $service->getSince(),
+                'equal' => $service->getEqual(),
+                'not_found' => $service->getNotFound(),
+                'get_updated' => $service->getUpdated(),
+            ]);
         }
     }
 

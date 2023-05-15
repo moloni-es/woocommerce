@@ -3,6 +3,7 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\Exceptions\Warning;
+use MoloniES\Storage;
 use WC_Order;
 use WC_Order_Item_Fee;
 use WC_Order_Item_Product;
@@ -239,6 +240,8 @@ class Documents
             $this->order->add_order_note($note);
         }
 
+        $this->saveLog();
+
         return $this;
     }
 
@@ -363,6 +366,26 @@ class Documents
             ->setDelivery()
             ->setPaymentMethod()
             ->setNotes();
+    }
+
+    /**
+     * Save document log
+     *
+     * @return void
+     */
+    private function saveLog(): void
+    {
+        $message = sprintf(
+            __('%s was created with success (%s)', 'moloni_es'),
+            $this->documentTypeName,
+            $this->ourReference
+        );
+
+        Storage::$LOGGER->info($message, [
+            'order_id' => $this->order->get_id(),
+            'document_id' => $this->documentSetId,
+            'document_status' => $this->documentStatus,
+        ]);
     }
 
     /**

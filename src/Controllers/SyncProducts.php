@@ -6,6 +6,7 @@ use Exception;
 use MoloniES\API\Products;
 use MoloniES\Exceptions\Error;
 use MoloniES\Log;
+use MoloniES\Storage;
 
 class SyncProducts
 {
@@ -39,20 +40,18 @@ class SyncProducts
      *
      * @return SyncProducts
      */
-    public function run()
+    public function run(): SyncProducts
     {
-        Log::write(sprintf(__('Syncing products since %s' , 'moloni_es') , $this->since));
-
         $updatedProducts = $this->getAllMoloniProducts();
 
-        if (!empty($updatedProducts) && is_array($updatedProducts)) {
+        if (!empty($updatedProducts)) {
             $this->found = count($updatedProducts);
 
-            Log::write(sprintf(__('Found %s products','moloni_es'),$this->found));
-
             foreach ($updatedProducts as $product) {
+                $moloniReference = $product['reference'];
+
                 try {
-                    $wcProductId = wc_get_product_id_by_sku($product['reference']);
+                    $wcProductId = wc_get_product_id_by_sku($moloniReference);
                     $wcProduct = wc_get_product($wcProductId);
 
                     if ($product['hasStock'] && $wcProduct && $wcProduct->managing_stock()) {
@@ -60,23 +59,35 @@ class SyncProducts
                         $newStock = $product['stock'];
 
                         if ((float)$currentStock === (float)$newStock) {
-                            Log::write(sprintf(__('Product with reference %1$s already was up-to-date %2$s | %3$s','moloni_es'),$product['reference'],$currentStock,$newStock));
-                            $this->equal[$product['reference']] = sprintf(__('Product with reference %s was already up-to-date' , 'moloni_es') , $product['reference']);
+                            $this->equal[$moloniReference] = sprintf(
+                                __('Product was already was up-to-date %s | %s (%s)', 'moloni_es'),
+                                $currentStock,
+                                $newStock,
+                                $moloniReference
+                            );
                         } else {
-                            Log::write(sprintf(__('Product with reference %1$s was updated from %2$s to %3$s','moloni_es'),$product['reference'],$currentStock,$newStock));
-                            $this->updated[$product['reference']] = sprintf(__('Product with reference %1$s was updated from %2$s to %3$s','moloni_es'),$product['reference'],$currentStock,$newStock);
+                            $this->updated[$moloniReference] = sprintf(
+                                __('Product was updated from %s to %s (%s)', 'moloni_es'),
+                                $currentStock,
+                                $newStock,
+                                $moloniReference
+                            );
+
                             wc_update_product_stock($wcProduct, $newStock);
                         }
                     } else {
-                        Log::write(sprintf(__('Product not found in WooCommerce or without active stock: %s' , 'moloni_es') , $product['reference']));
-                        $this->notFound[$product['reference']] = __('Product not found in WooCommerce or without active stock','moloni_es');
+                        $this->notFound[$moloniReference] = sprintf(
+                            __('Product not found in WooCommerce or without active stock (%s)', 'moloni_es'),
+                            $moloniReference
+                        );
                     }
                 } catch (Exception $error) {
-                    Log::write(sprintf(__('Error: %s','moloni_es') , $error->getMessage()));
+                    Storage::$LOGGER->critical(__('Fatal error'), [
+                        'action' => 'stock:sync:service',
+                        'exception' => $error->getMessage()
+                    ]);
                 }
             }
-        } else {
-            Log::write(sprintf(__('No products to update since %s','moloni_es') , $this->since));
         }
 
         return $this;
@@ -84,72 +95,90 @@ class SyncProducts
 
     /**
      * Get the amount of records found
+     *
      * @return int
      */
-    public function countFoundRecord()
+    public function countFoundRecord(): int
     {
         return $this->found;
     }
 
     /**
      * Get the amount of records updates
+     *
      * @return int
      */
-    public function countUpdated()
+    public function countUpdated(): int
     {
         return count($this->updated);
     }
 
     /**
      * Get the amount of records that had the same stock count
+     *
      * @return int
      */
-    public function countEqual()
+    public function countEqual(): int
     {
         return count($this->equal);
     }
 
     /**
      * Get the amount of products not found in WooCommerce
+     *
      * @return int
      */
-    public function countNotFound()
+    public function countNotFound(): int
     {
         return count($this->notFound);
     }
 
     /**
      * Return the updated products
+     *
      * @return array
      */
-    public function getUpdated()
+    public function getUpdated(): array
     {
         return $this->updated;
     }
 
     /**
      * Return the list of products that had the same stock as in WooCommerce
+     *
      * @return array
      */
-    public function getEqual()
+    public function getEqual(): array
     {
         return $this->equal;
     }
 
     /**
      * Return the list of products update in Moloni but not found in WooCommerce
+     *
      * @return array
      */
-    public function getNotFound()
+    public function getNotFound(): array
     {
         return $this->notFound;
     }
 
     /**
+     * Get date used to fetch
+     *
+     * @return false|string
+     */
+    public function getSince()
+    {
+        return $this->since ?? '';
+    }
+
+    /**
      * Get ALL moloni Products
+     *
      * @return array
      */
-    private function getAllMoloniProducts()
+    private function getAllMoloniProducts(): array
     {
         $productsList = [];
 
@@ -175,7 +204,12 @@ class SyncProducts
             $fetched = Products::queryProducts($variables);
         } catch (Error $e) {
             $fetched = [];
-            Log::write(__('Warning, error getting products via API','moloni_es'));
+
+            Storage::$LOGGER->critical(__('Warning, error getting products via API', 'moloni_es'), [
+                'action' => 'stock:sync:service',
+                'message' => $e->getMessage(),
+                'exception' => $e->getRequest(),
+            ]);
         }
 
         if (isset($fetched[0]['productId'])) {
@@ -184,5 +218,4 @@ class SyncProducts
 
         return $productsList;
     }
-
 }

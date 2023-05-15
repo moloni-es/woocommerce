@@ -10,6 +10,7 @@ use MoloniES\Log;
 use MoloniES\LogSync;
 use MoloniES\Model;
 use MoloniES\Start;
+use MoloniES\Storage;
 use WC_Data_Exception;
 use WC_Product;
 use WC_Product_Attribute;
@@ -102,14 +103,16 @@ class Products
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
 
         if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
-            Log::write('Product has already been synced (Moloni -> WooCommerce)');
             return;
         }
 
         $wcProduct = $this->setProduct($moloniProduct, $wcProductId);
 
         $action = $wcProductId === 0 ? __('created', 'moloni_es') : __('updated', 'moloni_es');
-        Log::write(sprintf(__('Product %s in WooCommerce: %s', 'moloni_es'), $action, $moloniProduct['reference']));
+
+        Storage::$LOGGER->info(
+            sprintf(__('Product %s in WooCommerce (%s)', 'moloni_es'), $action, $moloniProduct['reference'])
+        );
 
         //Variants need to be added after the parent is added
         //Check if user wants to update products with variants, or is a new product
@@ -133,7 +136,6 @@ class Products
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
 
         if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
-            Log::write('Product has already been synced (WooCommerce -> Moloni)');
             return;
         }
 
@@ -145,14 +147,29 @@ class Products
             $newStock = $moloniProduct['stock'];
 
             if ((float)$currentStock === (float)$newStock) {
-                Log::write(sprintf(__('Product with reference %1$s already was up-to-date %2$s | %3$s', 'moloni_es'), $moloniProduct['reference'], $currentStock, $newStock));
+                $msg = sprintf(
+                    __('Product was already was up-to-date %s | %s (%s)', 'moloni_es'),
+                    $currentStock,
+                    $newStock,
+                    $moloniProduct['reference']
+                );
             } else {
-                Log::write(sprintf(__('Product with reference %1$s was updated from %2$s to %3$s', 'moloni_es'), $moloniProduct['reference'], $currentStock, $newStock));
+                $msg = sprintf(
+                    __('Product was updated from %s to %s (%s)', 'moloni_es'),
+                    $currentStock,
+                    $newStock,
+                    $moloniProduct['reference']
+                );
             }
+
+            Storage::$LOGGER->info($msg);
 
             wc_update_product_stock($wcProductId, $newStock);
         } else {
-            Log::write(sprintf(__('Product not found in WooCommerce or without active stock: %s', 'moloni_es'), $moloniProduct['reference']));
+            Storage::$LOGGER->warning(sprintf(
+                __('Product not found in WooCommerce or without active stock (%s)', 'moloni_es'),
+                $moloniProduct['reference']
+            ));
         }
     }
 
@@ -164,7 +181,7 @@ class Products
      * @throws Error
      * @throws WC_Data_Exception
      */
-    public function setProduct($moloniProduct, $wcId)
+    public function setProduct(array $moloniProduct, int $wcId): WC_Product
     {
         if ($wcId === 0) { //create a new product
             $wcProduct = new WC_Product();
@@ -237,7 +254,7 @@ class Products
      * @param WC_Product $wcProduct
      * @throws WC_Data_Exception
      */
-    public function setVariants($moloniProduct, $wcProduct)
+    public function setVariants($moloniProduct, WC_Product $wcProduct)
     {
         // Variants ids found
         $relevantIds = [];
@@ -302,10 +319,13 @@ class Products
             $objVariation->save();
 
             if ($existsInWC !== 0) {
-                Log::write(sprintf(__('Variant updated in WooCommerce: %s', 'moloni_es'), $variation['reference']));
-
+                Storage::$LOGGER->info(
+                    sprintf(__('Variant updated in WooCommerce (%s)', 'moloni_es'), $variation['reference'])
+                );
             } else {
-                Log::write(sprintf(__('Variant created in WooCommerce: %s', 'moloni_es'), $variation['reference']));
+                Storage::$LOGGER->info(
+                    sprintf(__('Variant created in WooCommerce (%s)', 'moloni_es'), $variation['reference'])
+                );
             }
 
             $relevantIds[] = $objVariation->get_id();
@@ -322,7 +342,9 @@ class Products
 
                 $tempWcProduct->delete(true);
 
-                Log::write(sprintf(__('Variant deleted in WooCommerce: %s', 'moloni_es'), $tempReference));
+                Storage::$LOGGER->info(
+                    sprintf(__('Variant deleted in WooCommerce (%s)', 'moloni_es'), $tempReference)
+                );
             }
         }
     }
@@ -333,7 +355,7 @@ class Products
      * @param $wcProductId int
      * @return void
      */
-    public function setAttributes($moloniProduct, $wcProductId)
+    public function setAttributes(array $moloniProduct, int $wcProductId)
     {
         $attributes = self::getAttributes($moloniProduct);
         $productAttributes = [];
@@ -359,7 +381,7 @@ class Products
      * @return array
      * @throws Error
      */
-    public function setCategories($moloniCategoryId)
+    public function setCategories($moloniCategoryId): array
     {
 
         $namesArray = self::getCategoriesFromMoloni($moloniCategoryId); //all names from category tree
@@ -393,7 +415,7 @@ class Products
      *
      * @return bool
      */
-    public function setImages($moloniProduct, &$wcProduct)
+    public function setImages($moloniProduct, WC_Product &$wcProduct): bool
     {
         require_once(ABSPATH . 'wp-admin/includes/image.php');
 
@@ -402,7 +424,6 @@ class Products
         $imgRequest = wp_remote_get($imageUrl);
 
         if (is_wp_error($imgRequest)) {
-            Log::write('Could not get image content.');
             return false;
         }
 
@@ -444,7 +465,7 @@ class Products
      * @param $moloniProduct
      * @return array
      */
-    public static function getAttributes($moloniProduct)
+    public static function getAttributes($moloniProduct): array
     {
         $attributes = [];
 
@@ -463,13 +484,13 @@ class Products
     }
 
     /**
-     * Cleans an string to be used as an attribute identifier
+     * Cleans a string to be used as an attribute identifier
      *
-     * @param string $string String to clean
+     * @param string|null $string String to clean
      *
      * @return string Clean string
      */
-    private static function cleanAttributeString($string = '')
+    private static function cleanAttributeString(?string $string = ''): string
     {
         return trim($string);
     }
@@ -484,7 +505,7 @@ class Products
     {
         $moloniId = $moloniCategoryId;//current category id
         $moloniCategoriesTree = [];
-        $failsafe = 0; //we dont want the while loop to be stuck
+        $failsafe = 0; //we don't want the while loop to be stuck
 
         if ($moloniCategoryId === null) {
             return $moloniCategoriesTree; //can happen because product can have no category in moloni.es

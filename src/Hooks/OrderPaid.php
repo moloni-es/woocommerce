@@ -14,6 +14,7 @@ use MoloniES\Start;
 use MoloniES\Plugin;
 use MoloniES\Exceptions\Error;
 use MoloniES\Services\Orders\CreateMoloniDocument;
+use MoloniES\Storage;
 
 class OrderPaid
 {
@@ -39,34 +40,45 @@ class OrderPaid
                 $service = new CreateMoloniDocument($orderId);
                 $orderName = $service->getOrderNumber() ?? '';
 
-                Log::write(strtr(
+                Storage::$LOGGER->info(sprintf(
                     __("Automatically generating order document in status '{0}' ({1})", 'moloni_es'),
-                    [
-                        '{0}' => __('Complete', 'moloni_es'),
-                        '{1}' => $orderName
-                    ]
+                    __('Complete', 'moloni_es'),
+                    $orderName
                 ));
 
                 try {
                     $service->run();
 
                     $this->throwMessages($service);
-
-                    Log::write(__("Order document created successfully", 'moloni_es') . ': ' . $orderId);
                 } catch (Warning $e) {
                     $this->sendWarningEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
-                    Log::write(__("There was an error generating the document: ", 'moloni_es') . strip_tags($e->getDecodedMessage()));
+                    Storage::$LOGGER->alert(
+                        sprintf(__('There was an warning when generating the document (%s)'), $orderName),
+                        [
+                            'message' => $e->getMessage(),
+                            'request' => $e->getRequest()
+                        ]
+                    );
                 } catch (Error $e) {
                     $this->sendErrorEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
-                    Log::write(__("There was an error generating the document: ", 'moloni_es') . strip_tags($e->getDecodedMessage()));
+                    Storage::$LOGGER->critical(
+                        sprintf(__('There was an error when generating the document (%s)'), $orderName),
+                        [
+                            'message' => $e->getMessage(),
+                            'request' => $e->getRequest()
+                        ]
+                    );
                 }
             }
         } catch (Exception $ex) {
-            Log::write(__("Fatal error: ", 'moloni_es') . $ex->getMessage());
+            Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
+                'action' => 'automatic:document:create:complete',
+                'exception' => $ex->getMessage()
+            ]);
         }
     }
 
@@ -77,34 +89,45 @@ class OrderPaid
                 $service = new CreateMoloniDocument($orderId);
                 $orderName = $service->getOrderNumber() ?? '';
 
-                Log::write(strtr(
+                Storage::$LOGGER->info(sprintf(
                     __("Automatically generating order document in status '{0}' ({1})", 'moloni_es'),
-                    [
-                        '{0}' => __('Processing', 'moloni_es'),
-                        '{1}' => $orderName
-                    ]
+                    __('Processing', 'moloni_es'),
+                    $orderName
                 ));
 
                 try {
                     $service->run();
 
                     $this->throwMessages($service);
-
-                    Log::write(__("Order document created successfully", 'moloni_es') . ': ' . $orderId);
                 } catch (Warning $e) {
                     $this->sendWarningEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
-                    Log::write(__("There was an error generating the document: ", 'moloni_es') . strip_tags($e->getDecodedMessage()));
+                    Storage::$LOGGER->alert(
+                        sprintf(__('There was an warning when generating the document (%s)'), $orderName),
+                        [
+                            'message' => $e->getMessage(),
+                            'request' => $e->getRequest()
+                        ]
+                    );
                 } catch (Error $e) {
                     $this->sendErrorEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
-                    Log::write(__("There was an error generating the document: ", 'moloni_es') . strip_tags($e->getDecodedMessage()));
+                    Storage::$LOGGER->critical(
+                        sprintf(__('There was an error when generating the document (%s)'), $orderName),
+                        [
+                            'message' => $e->getMessage(),
+                            'request' => $e->getRequest()
+                        ]
+                    );
                 }
             }
         } catch (Exception $ex) {
-            Log::write(__("Fatal error: ", 'moloni_es') . $ex->getMessage());
+            Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
+                'action' => 'automatic:document:create:complete',
+                'exception' => $ex->getMessage()
+            ]);
         }
     }
 

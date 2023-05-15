@@ -50,31 +50,6 @@ if (!defined('ABSPATH')) {
 
     <tr>
         <th style="padding: 2rem">
-            <strong class="name"><?= __('View logs' , 'moloni_es') ?></strong>
-            <p class='description'><?= __('View sync logs from stocks/products' , 'moloni_es') ?></p>
-        </th>
-        <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large" href="<?= esc_url(Log::getFileUrl()) ?>" download>
-                <?= __('Download logs file' , 'moloni_es') ?>
-            </a>
-        </td>
-    </tr>
-
-    <tr>
-        <th style="padding: 2rem">
-            <strong class="name"><?= __('Delete logs' , 'moloni_es') ?></strong>
-            <p class='description'><?= __('Delete all log files from previous days' , 'moloni_es') ?></p>
-        </th>
-        <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large"
-               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=remLogs')) ?>'>
-                <?= __('Delete daily logs' , 'moloni_es') ?>
-            </a>
-        </td>
-    </tr>
-
-    <tr>
-        <th style="padding: 2rem">
             <strong class="name"><?= __('Logout' , 'moloni_es') ?></strong>
             <p class='description'><?= __('We will keep the data regarding the documents already issued' , 'moloni_es') ?></p>
         </th>

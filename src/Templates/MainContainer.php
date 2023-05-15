@@ -30,6 +30,11 @@ if (!defined('ABSPATH')) {
         <?= __('Automation','moloni_es') ?>
     </a>
 
+    <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=logs')) ?>"
+       class="nav-tab <?= $tab === 'logs' ? 'nav-tab-active' : '' ?>">
+        <?= __('Logs','moloni_es') ?>
+    </a>
+
     <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=tools')) ?>"
        class="nav-tab <?= ($tab === 'tools') ? 'nav-tab-active' : '' ?>">
         <?= __('Tools','moloni_es') ?>
@@ -52,6 +57,9 @@ switch ($tab) {
         break;
     case 'settings':
         include MOLONI_ES_TEMPLATE_DIR . 'Containers/Settings.php';
+        break;
+    case 'logs':
+        include MOLONI_ES_TEMPLATE_DIR . 'Containers/Logs.php';
         break;
     default:
         include MOLONI_ES_TEMPLATE_DIR . 'Containers/PendingOrders.php';
