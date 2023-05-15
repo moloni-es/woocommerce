@@ -244,7 +244,16 @@ class Curl
             ['body' => $postFields, 'timeout' => 45]
         );
 
+        if (is_wp_error($response)) {
+            throw new Error($response->get_error_message(), [
+                'code' => $response->get_error_code(),
+                'data' => $response->get_error_data(),
+                'message' => $response->get_error_message(),
+            ]);
+        }
+
         $raw = wp_remote_retrieve_body($response);
+
         $parsed = json_decode($raw, true);
 
         if (!isset($parsed['error'])) {
@@ -257,7 +266,7 @@ class Curl
             'received' => $parsed
         ];
 
-        throw new Error(__('Oops, an error was encountered...', 'moloni_es'), $log);
+        throw new Error(__('Invalid credentials', 'moloni_es'), $log);
     }
 
     /**

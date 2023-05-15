@@ -26,8 +26,6 @@ class Start
      * @param bool|null $ajax
      *
      * @return bool
-     *
-     * @throws Error
      */
     public static function login(?bool $ajax = false): bool
     {
@@ -39,19 +37,32 @@ class Start
         $code = isset($_GET['code']) ? sanitize_text_field(trim($_GET['code'])) : '';
 
         if (!empty($developerId) && !empty($clientSecret)) {
-            Model::setClient($developerId, $clientSecret);
-            $url = 'https://api.moloni.es/v1/auth/authorize?apiClientId=' . $developerId . '&redirectUri=' . urlencode(admin_url('admin.php?page=molonies'));
-            wp_redirect($url);
+            self::redirectToApi($developerId, $clientSecret);
             return true;
         }
 
         if (!empty($code)) {
-            $tokensRow = Model::getTokensRow();
-            $login = Curl::login($code, $tokensRow['client_id'], $tokensRow['client_secret']);
+            $loginValid = false;
+            $errorMessage = '';
+            $errorBag = [];
 
-            if ($login && isset($login['accessToken']) && isset($login['refreshToken'])) {
-                Model::setTokens($login['accessToken'], $login['refreshToken']);
-            } else {
+            try {
+                $tokensRow = Model::getTokensRow();
+
+                $login = Curl::login($code, $tokensRow['client_id'], $tokensRow['client_secret']);
+
+                if ($login && isset($login['accessToken']) && isset($login['refreshToken'])) {
+                    $loginValid = true;
+
+                    Model::setTokens($login['accessToken'], $login['refreshToken']);
+                }
+            } catch (Error $e) {
+                $errorMessage = $e->getMessage();
+                $errorBag = $e->getRequest();
+            }
+
+            if (!$loginValid) {
+                self::loginForm($errorMessage, $errorBag);
                 return false;
             }
         }
@@ -111,8 +122,11 @@ class Start
 
     /**
      * Shows a login form
+     *
+     * @param bool|string $errorMessage Is used in include
+     * @param bool|array $errorData Is used in include
      */
-    public static function loginForm()
+    public static function loginForm($errorMessage = false, $errorData = false)
     {
         if (!self::$ajax) {
             include(MOLONI_ES_TEMPLATE_DIR . 'LoginForm.php');
@@ -156,6 +170,20 @@ class Start
     }
 
     //          Auth          //
+
+    /**
+     * Redirects to API
+     *
+     * @return void
+     */
+    private static function redirectToApi(string $developerId, string $clientSecret)
+    {
+        Model::setClient($developerId, $clientSecret);
+
+        $url = 'https://api.moloni.es/v1/auth/authorize?apiClientId=' . $developerId . '&redirectUri=' . urlencode(admin_url('admin.php?page=molonies'));
+
+        wp_redirect($url);
+    }
 
     /**
      * Removes plugin authentication

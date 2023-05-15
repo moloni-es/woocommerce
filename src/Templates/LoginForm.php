@@ -4,6 +4,12 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
+<?php if (!empty($errorData) && is_array($errorData)): ?>
+    <pre style="display: none;" id="curl_error_data">
+            <?= print_r($errorData, true) ?>
+        </pre>
+<?php endif; ?>
+
 <div id='formLogin'>
     <a href='<?= esc_url( 'https://moloni.es' ); ?>' target='_BLANK'>
         <img src="<?= MOLONI_ES_IMAGES_URL ?>logo.svg" width='300px' alt="Moloni">
@@ -20,6 +26,15 @@ if (!defined('ABSPATH')) {
                 <td><label for='client_secret'><?= __('Client Secret','moloni_es') ?></label></td>
                 <td><input id="client_secret" type='text' name='client_secret'></td>
             </tr>
+
+            <?php if (!empty($errorMessage) && is_string($errorMessage)): ?>
+                <tr>
+                    <td></td>
+                    <td>
+                        <b><?= $errorMessage ?></b>
+                    </td>
+                </tr>
+            <?php endif; ?>
 
             <tr>
                 <td></td>
