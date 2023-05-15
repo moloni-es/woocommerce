@@ -378,7 +378,7 @@ class Documents
         $message = sprintf(
             __('%s was created with success (%s)', 'moloni_es'),
             $this->documentTypeName,
-            $this->ourReference
+            $this->order->get_order_number()
         );
 
         Storage::$LOGGER->info($message, [

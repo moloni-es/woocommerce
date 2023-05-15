@@ -4,6 +4,7 @@ namespace MoloniES;
 
 use MoloniES\Controllers\Documents;
 use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\Warning;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 
 class Ajax
@@ -14,7 +15,7 @@ class Ajax
      *
      * @param Plugin $parent
      */
-    public function __construct($parent)
+    public function __construct(Plugin $parent)
     {
         $this->parent = $parent;
         add_action('wp_ajax_genInvoice', [$this, 'genInvoice']);
@@ -22,17 +23,39 @@ class Ajax
 
     public function genInvoice()
     {
-        try {
-            if (Start::login(true)) {
-                $service = new CreateMoloniDocument((int)$_REQUEST['id']);
-                $service->run();
+        if (Start::login(true)) {
+            return;
+        }
 
-                wp_send_json([
-                    'valid' => 1,
-                    'message' => sprintf(__('Document %s successfully inserted', 'moloni_es'), $service->getOrderNumber())
-                ]);
-            }
+        $service = new CreateMoloniDocument((int)$_REQUEST['id']);
+        $orderName = $service->getOrderNumber() ?? '';
+
+        try {
+            $service->run();
+
+            wp_send_json([
+                'valid' => 1,
+                'message' => sprintf(__('Document %s successfully inserted', 'moloni_es'), $service->getOrderNumber())
+            ]);
+        } catch (Warning $e) {
+            Storage::$LOGGER->alert(
+                sprintf(__('There was an warning when generating the document (%s)'), $orderName),
+                [
+                    'message' => $e->getMessage(),
+                    'request' => $e->getRequest()
+                ]
+            );
+
+            wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);
         } catch (Error $e) {
+            Storage::$LOGGER->critical(
+                sprintf(__('There was an error when generating the document (%s)'), $orderName),
+                [
+                    'message' => $e->getMessage(),
+                    'request' => $e->getRequest()
+                ]
+            );
+
             wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);
         }
     }
