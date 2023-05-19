@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-20 12:01+0000\n"
+"POT-Creation-Date: 2023-05-19 11:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Create document automatically"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:105
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:111
 msgid "created"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Document set"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:406
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:398
 msgid "Document set missing. <br>Please select a document set in settings"
 msgstr ""
 
@@ -373,7 +373,7 @@ msgstr ""
 msgid "Found %s products"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:733
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:725
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:75
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:150
 msgid "Generate again"
@@ -508,7 +508,7 @@ msgid "Online Store"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Curl.php:100
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Curl.php:240
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Curl.php:244
 msgid "Oops, an error was encountered..."
 msgstr ""
 
@@ -567,9 +567,14 @@ msgstr ""
 msgid "Pro Forma Invoice"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:106
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:111
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:145
 #, php-format
 msgid "Product %s in WooCommerce: %s"
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:103
+msgid "Product already exists (Moloni -> WooCommerce)"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:47
@@ -577,12 +582,20 @@ msgstr ""
 msgid "Product created on Moloni"
 msgstr ""
 
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:134
+msgid "Product does not exist (Moloni -> WooCommerce)"
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:139
+msgid "Product has already been synced (Moloni -> WooCommerce)"
+msgstr ""
+
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/SyncProducts.php:73
 msgid "Product not found in WooCommerce or without active stock"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/SyncProducts.php:72
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:149
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:188
 #, php-format
 msgid "Product not found in WooCommerce or without active stock: %s"
 msgstr ""
@@ -593,14 +606,14 @@ msgid "Product updated on Moloni"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/SyncProducts.php:64
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:142
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:181
 #, php-format
 msgid "Product with reference %1$s already was up-to-date %2$s | %3$s"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/SyncProducts.php:67
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/SyncProducts.php:68
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:144
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:183
 #, php-format
 msgid "Product with reference %1$s was updated from %2$s to %3$s"
 msgstr ""
@@ -792,7 +805,7 @@ msgid "The document has already been generated in Moloni"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:164
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:573
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:565
 msgid "The document has been inserted but the totals do not match. "
 msgstr ""
 
@@ -800,13 +813,9 @@ msgstr ""
 msgid "The document is only sent to the customer if it is inserted as closed"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:729
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:721
 #, php-format
 msgid "The order %s document was previously generated!"
-msgstr ""
-
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:743
-msgid "The order client and your company have different fiscal zones."
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:83
@@ -843,16 +852,8 @@ msgstr ""
 msgid "Update stock"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:105
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:145
 msgid "updated"
-msgstr ""
-
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:750
-msgid "Use client billing fiscal zone"
-msgstr ""
-
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:752
-msgid "Use company fiscal zone"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:263
@@ -866,17 +867,17 @@ msgstr ""
 msgid "Use WooCommerce value"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:302
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:341
 #, php-format
 msgid "Variant created in WooCommerce: %s"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:319
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:358
 #, php-format
 msgid "Variant deleted in WooCommerce: %s"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:299
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:338
 #, php-format
 msgid "Variant updated in WooCommerce: %s"
 msgstr ""
@@ -887,7 +888,7 @@ msgid "VAT"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:135
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:574
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:566
 msgid "View document"
 msgstr ""
 
@@ -907,7 +908,7 @@ msgstr ""
 msgid "Warehouse"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:554
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:546
 msgid "Warning, cannot insert Invoice + Receipt documents as a draft"
 msgstr ""
 
@@ -920,7 +921,7 @@ msgid "Warning, there was an error inserting the customer."
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:146
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:560
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:552
 #, php-format
 msgid "Warning, there was an error inserting the document %s"
 msgstr ""
