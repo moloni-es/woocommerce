@@ -246,7 +246,7 @@ class Start
         try {
             WebHooks::deleteHooks();
 
-            if (isset($options['hook_stock_update']) && (int)$options['hook_stock_update'] === Boolean::YES) {
+            if (isset($options['hook_stock_sync']) && (int)$options['hook_stock_sync'] === Boolean::YES) {
                 WebHooks::createHook('Product', 'stockChanged');
             }
 

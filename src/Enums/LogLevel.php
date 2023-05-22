@@ -17,31 +17,31 @@ class LogLevel
     {
         return [
             [
-                'label' => __('Error'),
+                'label' => __('Error', 'moloni_es'),
                 'value' => self::ERROR
             ],
             [
-                'label' => __('Warning'),
+                'label' => __('Warning', 'moloni_es'),
                 'value' => self::WARNING
             ],
             [
-                'label' => __('Informative'),
+                'label' => __('Informative', 'moloni_es'),
                 'value' => self::INFO
             ],
             [
-                'label' => __('Alert'),
+                'label' => __('Alert', 'moloni_es'),
                 'value' => self::ALERT
             ],
             [
-                'label' => __('Critical'),
+                'label' => __('Critical', 'moloni_es'),
                 'value' => self::CRITICAL
             ],
             [
-                'label' => __('Emergency'),
+                'label' => __('Emergency', 'moloni_es'),
                 'value' => self::EMERGENCY
             ],
             [
-                'label' => __('Observation'),
+                'label' => __('Observation', 'moloni_es'),
                 'value' => self::NOTICE
             ]
         ];
@@ -51,21 +51,21 @@ class LogLevel
     {
         switch ($type) {
             case self::ERROR:
-                return __('Error');
+                return __('Error', 'moloni_es');
             case self::WARNING:
-                return __('Warning');
+                return __('Warning', 'moloni_es');
             case self::INFO:
-                return __('Informative');
+                return __('Informative', 'moloni_es');
             case self::DEBUG:
-                return __('Debug');
+                return __('Debug', 'moloni_es');
             case self::ALERT:
-                return __('Alert');
+                return __('Alert', 'moloni_es');
             case self::CRITICAL:
-                return __('Critical');
+                return __('Critical', 'moloni_es');
             case self::EMERGENCY:
-                return __('Emergency');
+                return __('Emergency', 'moloni_es');
             case self::NOTICE:
-                return __('Observation');
+                return __('Observation', 'moloni_es');
         }
 
         return $type;

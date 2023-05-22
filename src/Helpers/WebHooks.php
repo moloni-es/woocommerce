@@ -38,7 +38,7 @@ class WebHooks
             return;
         }
 
-        $url = get_site_url() . '/wp-json/' . self::$restApiNamespace . '/' . self::$routes[$model] . '/' . Model::createHash();
+        $url = get_site_url() . '/wp-json/' . self::$restApiNamespace . '/' . self::$routes[$model] . '/' . self::createHash();
 
         $variables['data'] = [
             'model' => $model,
@@ -80,5 +80,17 @@ class WebHooks
                 'hookId' => $ids
             ]);
         }
+    }
+
+    //            Privates            //
+
+    /**
+     * Creates hash from company id
+     *
+     * @return string
+     */
+    private static function createHash(): string
+    {
+        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID);
     }
 }

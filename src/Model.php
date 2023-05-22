@@ -138,7 +138,7 @@ class Model
                         new AuthenticationExpired(ALERT_EMAIL);
                     }
 
-                    Storage::$LOGGER->critical(
+                    Storage::$LOGGER->error(
                         sprintf(
                             __('Reseting tokens after %s tries', 'moloni_es'),
                             $retryNumber
@@ -234,27 +234,5 @@ class Model
         Storage::$MOLONI_ES_SESSION_ID = '';
 
         $wpdb->query('TRUNCATE ' . $wpdb->get_blog_prefix() . 'moloni_es_api');
-    }
-
-    /**
-     * Creates hash from company id
-     *
-     * @return string
-     */
-    public static function createHash(): string
-    {
-        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID);
-    }
-
-    /**
-     * Checks if hash with company id hash
-     *
-     * @param string $hash
-     *
-     * @return bool
-     */
-    public static function checkHash(string $hash): bool
-    {
-        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID) === $hash;
     }
 }

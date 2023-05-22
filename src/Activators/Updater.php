@@ -9,7 +9,7 @@ class Updater
     public function __construct()
     {
         $this->updateTableNames();
-        $this->createLogTableIfMissing();
+        $this->createTablesIfMissing();
     }
 
     //          Privates          //
@@ -55,7 +55,7 @@ class Updater
      *
      * @return void
      */
-    private function createLogTableIfMissing(): void
+    private function createTablesIfMissing(): void
     {
         global $wpdb;
 
@@ -65,9 +65,11 @@ class Updater
 
             foreach ($sites as $site) {
                 $this->runCreateLog($wpdb->get_blog_prefix($site->id));
+                $this->runCreateProductAssociations($wpdb->get_blog_prefix($site->id));
             }
         } else {
             $this->runCreateLog($wpdb->get_blog_prefix());
+            $this->runCreateProductAssociations($wpdb->get_blog_prefix());
         }
     }
 
@@ -109,6 +111,29 @@ class Updater
                 message TEXT,
                 context TEXT,
                 created_at TIMESTAMP default CURRENT_TIMESTAMP
+            ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;"
+        );
+    }
+
+    /**
+     * Create log table, if missing
+     *
+     * @param string $prefix Database prefix
+     *
+     * @return void
+     */
+    private function runCreateProductAssociations(string $prefix): void
+    {
+        global $wpdb;
+
+        $wpdb->query(
+            "CREATE TABLE IF NOT EXISTS `" . $prefix . "moloni_es_product_associations` (
+                id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                wc_product_id INT(11) NOT NULL,
+                wc_parent_id INT(11) DEFAULT 0,
+                ml_product_id INT(11) NOT NULL,
+                ml_parent_id INT(11) DEFAULT 0,
+                active INT(11) DEFAULT 1
             ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;"
         );
     }

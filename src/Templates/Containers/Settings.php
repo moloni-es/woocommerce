@@ -2,22 +2,20 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-?>
 
-<?php use MoloniES\Model;?>
-<?php use MoloniES\Enums\Boolean;?>
-<?php use MoloniES\Enums\DocumentStatus; ?>
-<?php use MoloniES\Enums\DocumentTypes; ?>
-<?php use MoloniES\Exceptions\Error; ?>
-<?php use MoloniES\API\Companies; ?>
-<?php use MoloniES\API\Countries; ?>
-<?php use MoloniES\API\DocumentSets; ?>
-<?php use MoloniES\API\Warehouses; ?>
-<?php use MoloniES\API\MaturityDates; ?>
-<?php use MoloniES\API\PaymentMethods; ?>
-<?php use MoloniES\API\MeasurementUnits; ?>
+use MoloniES\Model;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\DocumentStatus;
+use MoloniES\Enums\DocumentTypes;
+use MoloniES\Exceptions\Error;
+use MoloniES\API\Companies;
+use MoloniES\API\Countries;
+use MoloniES\API\DocumentSets;
+use MoloniES\API\Warehouses;
+use MoloniES\API\MaturityDates;
+use MoloniES\API\PaymentMethods;
+use MoloniES\API\MeasurementUnits;
 
-<?php
 try {
     $company = Companies::queryCompany();
     $documentSets = DocumentSets::queryDocumentSets();
@@ -41,13 +39,15 @@ try {
     <input type='hidden' value='saveSettings' name='action'>
     <div>
         <!-- Documents -->
-        <h2 class="title"><?= __('Documents' , 'moloni_es') ?></h2>
+        <h2 class="title">
+            <?= __('Document', 'moloni_es') ?>
+        </h2>
         <table class="form-table">
             <tbody>
             <!-- Slug -->
             <tr>
                 <th>
-                    <label for="company_slug"><?= __('Company slug','moloni_es') ?></label>
+                    <label for="company_slug"><?= __('Company slug', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <input id="company_slug" name="opt[company_slug]" type="text"
@@ -59,7 +59,7 @@ try {
             <!-- Document type -->
             <tr>
                 <th>
-                    <label for="document_type"><?= __('Document type','moloni_es') ?></label>
+                    <label for="document_type"><?= __('Document type', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="document_type" name='opt[document_type]' class='inputOut'>
@@ -78,7 +78,7 @@ try {
                         <?php endforeach; ?>
                     </select>
                     <p class='description'>
-                        <?= __('Required' , 'moloni_es') ?>
+                        <?= __('Required', 'moloni_es') ?>
                     </p>
                 </td>
             </tr>
@@ -86,7 +86,7 @@ try {
             <!-- Document status -->
             <tr>
                 <th>
-                    <label for="document_status"><?= __('Document status' , 'moloni_es') ?></label>
+                    <label for="document_status"><?= __('Document status', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="document_status" name='opt[document_status]' class='inputOut'>
@@ -98,10 +98,12 @@ try {
                         }
                         ?>
 
-                        <option value='0' <?= ($documentStatus === DocumentStatus::DRAFT ? 'selected' : '') ?>><?= __('Draft' , 'moloni_es') ?></option>
-                        <option value='1' <?= ($documentStatus === DocumentStatus::CLOSED ? 'selected' : '') ?>><?= __('Closed' , 'moloni_es') ?></option>
+                        <option
+                            value='0' <?= ($documentStatus === DocumentStatus::DRAFT ? 'selected' : '') ?>><?= __('Draft', 'moloni_es') ?></option>
+                        <option
+                            value='1' <?= ($documentStatus === DocumentStatus::CLOSED ? 'selected' : '') ?>><?= __('Closed', 'moloni_es') ?></option>
                     </select>
-                    <p class='description'><?= __('Required' , 'moloni_es') . ' ' . __('(Invoice + Receipt cannot be created in draft)','moloni_es') ?></p>
+                    <p class='description'><?= __('Required', 'moloni_es') . ' ' . __('(Invoice + Receipt cannot be created in draft)', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -134,12 +136,13 @@ try {
             <!-- Document set -->
             <tr>
                 <th>
-                    <label for="document_set_id"><?= __('Document set' , 'moloni_es') ?></label>
+                    <label for="document_set_id"><?= __('Document set', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="document_set_id" name='opt[document_set_id]' class='inputOut'>
                         <?php foreach ($documentSets as $documentSet) : ?>
-                            <option value='<?= $documentSet['documentSetId'] ?>' <?= (defined('DOCUMENT_SET_ID') && (int)DOCUMENT_SET_ID === $documentSet['documentSetId'] ? 'selected' : '') ?>><?= $documentSet['name'] ?></option>
+                            <option
+                                value='<?= $documentSet['documentSetId'] ?>' <?= (defined('DOCUMENT_SET_ID') && (int)DOCUMENT_SET_ID === $documentSet['documentSetId'] ? 'selected' : '') ?>><?= $documentSet['name'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <p class='description'><?= __('Required', 'moloni_es') ?></p>
@@ -149,14 +152,16 @@ try {
             <!-- Shipping info -->
             <tr>
                 <th>
-                    <label for="shipping_info"><?= __('Shipping info' , 'moloni_es') ?></label>
+                    <label for="shipping_info"><?= __('Shipping info', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="shipping_info" name='opt[shipping_info]' class='inputOut'>
-                        <option value='0' <?= (defined('SHIPPING_INFO') && SHIPPING_INFO === '0' ? 'selected' : '') ?>><?= __('No' , 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('SHIPPING_INFO') && SHIPPING_INFO === '1' ? 'selected' : '') ?>><?= __('Yes' , 'moloni_es') ?></option>
+                        <option
+                            value='0' <?= (defined('SHIPPING_INFO') && SHIPPING_INFO === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
+                        <option
+                            value='1' <?= (defined('SHIPPING_INFO') && SHIPPING_INFO === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
                     </select>
-                    <p class='description'><?= __('Put shipping info on documents' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Put shipping info on documents', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -169,8 +174,10 @@ try {
                     <select id="load_address" name='opt[load_address]' class='inputOut'>
                         <?php $activeLoadAddress = defined('LOAD_ADDRESS') ? (int)LOAD_ADDRESS : 0; ?>
 
-                        <option value='0' <?= ($activeLoadAddress === 0 ? 'selected' : '') ?>><?= __('Company address', 'moloni_es') ?></option>
-                        <option value='1' <?= ($activeLoadAddress === 1 ? 'selected' : '') ?>><?= __('Custom', 'moloni_es') ?></option>
+                        <option
+                            value='0' <?= ($activeLoadAddress === 0 ? 'selected' : '') ?>><?= __('Company address', 'moloni_es') ?></option>
+                        <option
+                            value='1' <?= ($activeLoadAddress === 1 ? 'selected' : '') ?>><?= __('Custom', 'moloni_es') ?></option>
                     </select>
 
                     <div class="custom-address__wrapper" id="load_address_custom_line">
@@ -193,11 +200,12 @@ try {
                                 <?php $activeCountry = defined('LOAD_ADDRESS_CUSTOM_COUNTRY') ? (int)LOAD_ADDRESS_CUSTOM_COUNTRY : 0; ?>
 
                                 <option value='0' <?= ($activeCountry === 0 ? 'selected' : '') ?>><?=
-                                    __('Choose an option' , 'moloni_es') ?>
+                                    __('Choose an option', 'moloni_es') ?>
                                 </option>
 
                                 <?php foreach ($countries['data']['countries']['data'] as $country) : ?>
-                                    <option value='<?= $country['countryId'] ?>' <?= $activeCountry === (int)$country['countryId'] ? 'selected' : '' ?>>
+                                    <option
+                                        value='<?= $country['countryId'] ?>' <?= $activeCountry === (int)$country['countryId'] ? 'selected' : '' ?>>
                                         <?= $country['title'] ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -212,14 +220,16 @@ try {
             <!-- Send e-mail -->
             <tr>
                 <th>
-                    <label for="email_send"><?= __('Send e-mail' , 'moloni_es') ?></label>
+                    <label for="email_send"><?= __('Send e-mail', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="email_send" name='opt[email_send]' class='inputOut'>
-                        <option value='0' <?= (defined('EMAIL_SEND') && EMAIL_SEND === '0' ? 'selected' : '') ?>><?= __('No' , 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('EMAIL_SEND') && EMAIL_SEND === '1' ? 'selected' : '') ?>><?= __('Yes' , 'moloni_es') ?></option>
+                        <option
+                            value='0' <?= (defined('EMAIL_SEND') && EMAIL_SEND === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
+                        <option
+                            value='1' <?= (defined('EMAIL_SEND') && EMAIL_SEND === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
                     </select>
-                    <p class='description'><?= __('The document is only sent to the customer if it is inserted as closed' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('The document is only sent to the customer if it is inserted as closed', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -247,89 +257,102 @@ try {
         </table>
 
         <!-- Products -->
-        <h2 class="title"><?= __('Products' , 'moloni_es') ?></h2>
+        <h2 class="title">
+            <?= __('Document', 'moloni_es') ?>
+            -
+            <?= __('Products', 'moloni_es') ?>
+        </h2>
         <table class="form-table">
             <tbody>
 
-            <?php if (count($warehouses) > 1): ?>
-                <tr>
+            <tr>
+                <th>
+                    <label for="moloni_product_warehouse"><?= __('Warehouse', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="moloni_product_warehouse" name='opt[moloni_product_warehouse]' class='inputOut'>
+                        <option value='0'>
+                            <?= __('Default warehouse', 'moloni_es') ?>
+                        </option>
 
-                    <th>
-                        <label for="moloni_product_warehouse"><?= __('Warehouse' , 'moloni_es') ?></label>
-                    </th>
-                    <td>
-                        <select id="moloni_product_warehouse" name='opt[moloni_product_warehouse]' class='inputOut'>
-                            <option value='0'><?= __('Default warehouse' , 'moloni_es') ?></option>
+                        <?php $moloniProductWarehouse = defined('MOLONI_PRODUCT_WAREHOUSE') ? (int)MOLONI_PRODUCT_WAREHOUSE : Boolean::NO; ?>
+
+                        <optgroup label="<?= __('Warehouses', 'moloni_es') ?>">
                             <?php foreach ($warehouses as $warehouse) : ?>
-                                <option value='<?= $warehouse['warehouseId'] ?>' <?= (defined('MOLONI_PRODUCT_WAREHOUSE') && (int)MOLONI_PRODUCT_WAREHOUSE === $warehouse['warehouseId'] ? 'selected' : '') ?>>
+                                <option
+                                    value='<?= $warehouse['warehouseId'] ?>' <?= ($moloniProductWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
                                     <?= $warehouse['name'] ?> (<?= $warehouse['number'] ?>)
                                 </option>
                             <?php endforeach; ?>
-
-                        </select>
-                        <p class='description'><?= __('Required', 'moloni_es') ?></p>
-                    </td>
-                </tr>
-            <?php endif; ?>
+                        </optgroup>
+                    </select>
+                    <p class='description'><?= __('Warehouse used in documents', 'moloni_es') ?></p>
+                </td>
+            </tr>
 
             <tr>
                 <th>
-                    <label for="measure_unit_id"><?= __('Measurement unit' , 'moloni_es') ?></label>
+                    <label for="measure_unit_id"><?= __('Measurement unit', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="measure_unit_id" name='opt[measure_unit]' class='inputOut'>
                         <?php if (is_array($measurementUnits)): ?>
                             <?php foreach ($measurementUnits as $measurementUnit) : ?>
-                                <option value='<?= $measurementUnit['measurementUnitId'] ?>' <?= (defined('MEASURE_UNIT') && (int)MEASURE_UNIT === $measurementUnit['measurementUnitId'] ? 'selected' : '') ?>><?= $measurementUnit['name'] ?></option>
+                                <option
+                                    value='<?= $measurementUnit['measurementUnitId'] ?>' <?= (defined('MEASURE_UNIT') && (int)MEASURE_UNIT === $measurementUnit['measurementUnitId'] ? 'selected' : '') ?>><?= $measurementUnit['name'] ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                    <p class='description'><?= __('Required' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Required', 'moloni_es') ?></p>
                 </td>
             </tr>
 
             <tr>
                 <th>
-                    <label for="exemption_reason"><?= __('Exemption reason' , 'moloni_es') ?></label>
+                    <label for="exemption_reason"><?= __('Exemption reason', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <input id="exemption_reason" name="opt[exemption_reason]" type="text"
                            value="<?= (defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '') ?>"
                            class="inputOut">
-                    <p class='description'><?= __('Will be used if items do not have tax' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Will be used if items do not have tax', 'moloni_es') ?></p>
                 </td>
             </tr>
 
             <tr>
                 <th>
-                    <label for="exemption_reason_shipping"><?= __('Shipping exemption reason' , 'moloni_es') ?></label>
+                    <label for="exemption_reason_shipping"><?= __('Shipping exemption reason', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <input id="exemption_reason_shipping" name="opt[exemption_reason_shipping]" type="text"
                            value="<?= (defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '') ?>"
                            class="inputOut">
-                    <p class='description'><?= __('Will be used if shipping does not have tax' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Will be used if shipping does not have tax', 'moloni_es') ?></p>
                 </td>
             </tr>
             </tbody>
         </table>
 
         <!-- Customer -->
-        <h2 class="title"><?= __('Customer\'s'  , 'moloni_es') ?></h2>
+        <h2 class="title">
+            <?= __('Document', 'moloni_es') ?>
+            -
+            <?= __('Customer\'s', 'moloni_es') ?>
+        </h2>
         <table class="form-table">
             <tbody>
             <tr>
                 <th>
-                    <label for="client_prefix"><?= __('Customer\'s number prefix' , 'moloni_es') ?></label>
+                    <label for="client_prefix"><?= __('Customer\'s number prefix', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <input id="client_prefix" name="opt[client_prefix]" type="text"
                            value="<?= (defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '') ?>"
                            class="inputOut" onchange="prefixPreview()">
-                    <div style="max-width: 80vw ;overflow:hidden;" >
-                        <a id="prefix_preview"><?= sprintf(__('(Example: %s1)' , 'moloni_es'),(defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '')) ?></a>
+                    <div style="max-width: 80vw ;overflow:hidden;">
+                        <a id="prefix_preview"><?= sprintf(__('(Example: %s1)', 'moloni_es'), (defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '')) ?></a>
                     </div>
-                    <p class='description'><?= __('Prefix used when creating customer\'s' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Prefix used when creating customer\'s', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -344,74 +367,82 @@ try {
 
             <tr>
                 <th>
-                    <label for="maturity_date_id"><?= __('Maturity date' , 'moloni_es') ?></label>
+                    <label for="maturity_date_id"><?= __('Maturity date', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="maturity_date_id" name='opt[maturity_date]' class='inputOut'>
-                        <option value='0' <?= (defined('MATURITY_DATE') && (int)MATURITY_DATE === 0 ? 'selected' : '') ?>><?= __('Choose an option' , 'moloni_es') ?></option>
+                        <option
+                            value='0' <?= (defined('MATURITY_DATE') && (int)MATURITY_DATE === 0 ? 'selected' : '') ?>><?= __('Choose an option', 'moloni_es') ?></option>
                         <?php if (is_array($maturityDates)): ?>
                             <?php foreach ($maturityDates as $maturityDate) : ?>
-                                <option value='<?= $maturityDate['maturityDateId'] ?>' <?= (defined('MATURITY_DATE') && (int)MATURITY_DATE === $maturityDate['maturityDateId'] ? 'selected' : '') ?>><?= $maturityDate['name'] ?></option>
+                                <option
+                                    value='<?= $maturityDate['maturityDateId'] ?>' <?= (defined('MATURITY_DATE') && (int)MATURITY_DATE === $maturityDate['maturityDateId'] ? 'selected' : '') ?>><?= $maturityDate['name'] ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                    <p class='description'><?= __('Default maturity date for customer\'s' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Default maturity date for customer\'s', 'moloni_es') ?></p>
                 </td>
             </tr>
 
             <tr>
                 <th>
-                    <label for="payment_method_id"><?= __('Payment method' , 'moloni_es') ?></label>
+                    <label for="payment_method_id"><?= __('Payment method', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="payment_method_id" name='opt[payment_method]' class='inputOut'>
-                        <option value='0' <?= (defined('PAYMENT_METHOD') && (int)PAYMENT_METHOD === 0 ? 'selected' : '') ?>><?= __('Choose an option' , 'moloni_es') ?></option>
+                        <option
+                            value='0' <?= (defined('PAYMENT_METHOD') && (int)PAYMENT_METHOD === 0 ? 'selected' : '') ?>><?= __('Choose an option', 'moloni_es') ?></option>
                         <?php if (is_array($paymentMethods)): ?>
                             <?php foreach ($paymentMethods as $paymentMethod) : ?>
-                                <option value='<?= $paymentMethod['paymentMethodId'] ?>' <?= (defined('PAYMENT_METHOD') && (int)PAYMENT_METHOD === $paymentMethod['paymentMethodId'] ? 'selected' : '') ?>><?= $paymentMethod['name'] ?></option>
+                                <option
+                                    value='<?= $paymentMethod['paymentMethodId'] ?>' <?= (defined('PAYMENT_METHOD') && (int)PAYMENT_METHOD === $paymentMethod['paymentMethodId'] ? 'selected' : '') ?>><?= $paymentMethod['name'] ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                    <p class='description'><?= __('Default payment method for customer\'s' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Default payment method for customer\'s', 'moloni_es') ?></p>
                 </td>
             </tr>
 
             <tr>
                 <th>
-                    <label for="vat_field"><?= __('Customer VAT' , 'moloni_es') ?></label>
+                    <label for="vat_field"><?= __('Customer VAT', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <select id="vat_field" name='opt[vat_field]' class='inputOut'>
-                        <option value='' <?= (defined('VAT_FIELD') && VAT_FIELD === '' ? 'selected' : '') ?>><?= __('Choose an option' , 'moloni_es') ?></option>
+                        <option
+                            value='' <?= (defined('VAT_FIELD') && VAT_FIELD === '' ? 'selected' : '') ?>><?= __('Choose an option', 'moloni_es') ?></option>
                         <?php $customFields = Model::getCustomFields(); ?>
                         <?php if (is_array($customFields)): ?>
                             <?php foreach ($customFields as $customField) : ?>
-                                <option value='<?= $customField['meta_key'] ?>' <?= (defined('VAT_FIELD') && VAT_FIELD === $customField['meta_key'] ? 'selected' : '') ?>><?= $customField['meta_key'] ?></option>
+                                <option
+                                    value='<?= $customField['meta_key'] ?>' <?= (defined('VAT_FIELD') && VAT_FIELD === $customField['meta_key'] ? 'selected' : '') ?>><?= $customField['meta_key'] ?></option>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                    <p class='description'><?= __('Custom field associated with the customer\'s VAT'  , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Custom field associated with the customer\'s VAT', 'moloni_es') ?></p>
                 </td>
             </tr>
             </tbody>
         </table>
 
         <!-- Advanced -->
-        <h2 class="title"><?= __('Advanced'  , 'moloni_es') ?></h2>
+        <h2 class="title">
+            <?= __('Advanced', 'moloni_es') ?>
+        </h2>
         <table class="form-table">
             <tbody>
 
             <!-- Send alert e-mail -->
             <tr>
                 <th>
-                    <label for="alert_email"><?= __('Alert e-mail' , 'moloni_es') ?></label>
+                    <label for="alert_email"><?= __('Alert e-mail', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <input id="alert_email" name="opt[alert_email]" type="text"
                            value="<?= (defined('ALERT_EMAIL') ? ALERT_EMAIL : '') ?>"
                            class="inputOut">
 
-                    <p class='description'><?= __('Receive alerts for when an error occurs (document creation/authentication lost).' , 'moloni_es') ?></p>
+                    <p class='description'><?= __('Receive alerts for when an error occurs (document creation/authentication lost).', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -419,7 +450,7 @@ try {
                 <th></th>
                 <td>
                     <input type="submit" name="submit" id="submit" class="button button-primary"
-                           value="<?= __('Save changes' , 'moloni_es') ?>">
+                           value="<?= __('Save changes', 'moloni_es') ?>">
                 </td>
             </tr>
 

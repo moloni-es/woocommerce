@@ -48,7 +48,7 @@ class Ajax
 
             wp_send_json(['valid' => 1, 'message' => $e->getMessage(), 'description' => $e->getError()]);
         } catch (Error $e) {
-            Storage::$LOGGER->critical(
+            Storage::$LOGGER->error(
                 sprintf(__('There was an error when generating the document (%s)'), $orderName),
                 [
                     'message' => $e->getMessage(),

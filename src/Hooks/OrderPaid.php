@@ -6,7 +6,6 @@ use Exception;
 use MoloniES\Enums\AutomaticDocumentsStatus;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\Warning;
-use MoloniES\Log;
 use MoloniES\Notice;
 use MoloniES\Services\Mails\DocumentFailed;
 use MoloniES\Services\Mails\DocumentWarning;
@@ -65,7 +64,7 @@ class OrderPaid
                     $this->sendErrorEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
-                    Storage::$LOGGER->critical(
+                    Storage::$LOGGER->error(
                         sprintf(__('There was an error when generating the document (%s)'), $orderName),
                         [
                             'message' => $e->getMessage(),
@@ -114,7 +113,7 @@ class OrderPaid
                     $this->sendErrorEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
-                    Storage::$LOGGER->critical(
+                    Storage::$LOGGER->error(
                         sprintf(__('There was an error when generating the document (%s)'), $orderName),
                         [
                             'message' => $e->getMessage(),
@@ -153,8 +152,6 @@ class OrderPaid
 
     /**
      * Verify if it can be created
-     *
-     * @throws Error
      */
     private function canCreateProcessingDocument(): bool
     {

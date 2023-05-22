@@ -6,7 +6,7 @@ use MoloniES\Storage;
 
 class Logs
 {
-    private static $limit = 3;
+    private static $limit = 10;
     private static $totalPages = 1;
     private static $currentPage = 1;
 

@@ -45,7 +45,7 @@ class ProductUpdate
                 Notice::addmessagecustom(htmlentities($error->geterror()));
             }
         } catch (exception $ex) {
-            Storage::$LOGGER->critical(__('Fatal error'), [
+            Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
                 'action' => 'automatic:product:save',
                 'exception' => $ex->getMessage()
             ]);

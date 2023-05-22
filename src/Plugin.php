@@ -162,7 +162,7 @@ class Plugin
 
             throw $e;
         } catch (Error $e) {
-            Storage::$LOGGER->critical(
+            Storage::$LOGGER->error(
                 sprintf(__('There was an error when generating the document (%s)'), $orderName),
                 [
                     'message' => $e->getMessage(),
@@ -319,7 +319,7 @@ class Plugin
         try {
             WebHooks::deleteHooks();
 
-            if (defined('HOOK_STOCK_UPDATE') && (int)HOOK_STOCK_UPDATE === Boolean::YES) {
+            if (defined('HOOK_STOCK_SYNC') && (int)HOOK_STOCK_SYNC === Boolean::YES) {
                 WebHooks::createHook('Product', 'stockChanged');
             }
 

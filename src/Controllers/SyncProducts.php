@@ -82,7 +82,7 @@ class SyncProducts
                         );
                     }
                 } catch (Exception $error) {
-                    Storage::$LOGGER->critical(__('Fatal error'), [
+                    Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
                         'action' => 'stock:sync:service',
                         'exception' => $error->getMessage()
                     ]);
@@ -205,7 +205,7 @@ class SyncProducts
         } catch (Error $e) {
             $fetched = [];
 
-            Storage::$LOGGER->critical(__('Warning, error getting products via API', 'moloni_es'), [
+            Storage::$LOGGER->error(__('Warning, error getting products via API', 'moloni_es'), [
                 'action' => 'stock:sync:service',
                 'message' => $e->getMessage(),
                 'exception' => $e->getRequest(),

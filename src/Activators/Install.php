@@ -111,6 +111,17 @@ class Install
                 created_at TIMESTAMP default CURRENT_TIMESTAMP
             ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;"
         );
+
+        $wpdb->query(
+            "CREATE TABLE IF NOT EXISTS `" . $prefix . "moloni_es_product_associations` (
+                id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                wc_product_id INT(11) NOT NULL,
+                wc_parent_id INT(11) DEFAULT 0,
+                ml_product_id INT(11) NOT NULL,
+                ml_parent_id INT(11) DEFAULT 0,
+                active INT(11) DEFAULT 1
+            ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;"
+        );
     }
 
     /**
