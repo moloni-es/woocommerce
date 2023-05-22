@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.44
+Stable tag: 1.0.45
 Tested up to: 6.2
 WC tested up to: 7.5.1
 
@@ -67,6 +67,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.45 =
+* Change Webhooks behaviour
+
 = 1.0.44 =
 * Use WooCommerce "woocommerce_tax_based_on" value when setting fiscal zone value
 

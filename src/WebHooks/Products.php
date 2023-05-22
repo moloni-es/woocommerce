@@ -61,8 +61,10 @@ class Products
             //switch between operations
             switch ($parameters['operation']) {
                 case 'create':
+                    $this->create($moloniProduct);
+                    break;
                 case 'update':
-                    $this->save($moloniProduct);
+                    $this->update($moloniProduct);
                     break;
                 case 'stockChanged':
                     //if the changed product was a variant (because stock changes happens at variant level)
@@ -84,10 +86,12 @@ class Products
 
     /**
      * Adds new product
+     *
      * @param $moloniProduct
+     *
      * @throws WC_Data_Exception|Error
      */
-    public function save($moloniProduct)
+    public function create($moloniProduct)
     {
         if (!defined('HOOK_PRODUCT_SYNC') || (int)HOOK_PRODUCT_SYNC === 0) {
             return;
@@ -95,19 +99,54 @@ class Products
 
         $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
 
+        if ($wcProductId > 0) {
+            Log::write(__('Product already exists (Moloni -> WooCommerce)', 'moloni_es'));
+            return;
+        }
+
+        $wcProduct = $this->setProduct($moloniProduct, 0);
+
+        LogSync::wasSyncedRecently(1, $wcProduct->get_id());
+
+        Log::write(sprintf(__('Product %s in WooCommerce: %s', 'moloni_es'), __('created', 'moloni_es'), $moloniProduct['reference']));
+
+        if (!empty($moloniProduct['variants'])) {
+            $this->setVariants($moloniProduct, $wcProduct);
+        }
+    }
+
+    /**
+     * Updates a product
+     *
+     * @param $moloniProduct
+     *
+     * @throws WC_Data_Exception|Error
+     */
+    public function update($moloniProduct)
+    {
+        if (!defined('HOOK_PRODUCT_SYNC') || (int)HOOK_PRODUCT_SYNC === 0) {
+            return;
+        }
+
+        $wcProductId = wc_get_product_id_by_sku($moloniProduct['reference']);
+
+        if ($wcProductId === 0) {
+            Log::write(__('Product does not exist (Moloni -> WooCommerce)', 'moloni_es'));
+            return;
+        }
+
         if (LogSync::wasSyncedRecently(1,$wcProductId) === true) {
-            Log::write('Product has already been synced (Moloni -> WooCommerce)');
+            Log::write(__('Product has already been synced (Moloni -> WooCommerce)', 'moloni_es'));
             return;
         }
 
         $wcProduct = $this->setProduct($moloniProduct, $wcProductId);
 
-        $action = $wcProductId === 0 ? __('created', 'moloni_es') : __('updated', 'moloni_es');
-        Log::write(sprintf(__('Product %s in WooCommerce: %s', 'moloni_es'), $action, $moloniProduct['reference']));
+        Log::write(sprintf(__('Product %s in WooCommerce: %s', 'moloni_es'), __('updated', 'moloni_es'), $moloniProduct['reference']));
 
         //Variants need to be added after the parent is added
         //Check if user wants to update products with variants, or is a new product
-        if ((defined('MOLONI_VARIANTS_SYNC') && (int)MOLONI_VARIANTS_SYNC === 1) || $wcProductId === 0) {
+        if ((defined('MOLONI_VARIANTS_SYNC') && (int)MOLONI_VARIANTS_SYNC === 1)) {
             if (!empty($moloniProduct['variants'])) {
                 $this->setVariants($moloniProduct, $wcProduct);
             }
