@@ -49,8 +49,8 @@ class OrderProduct
     private $discount;
 
     /** @var int */
-    private $warehouse_id;
-    
+    private $warehouse_id = 0;
+
     /** @var bool */
     private $hasIVA = false;
     private $fiscalZone;
@@ -278,7 +278,7 @@ class OrderProduct
     private function setTax($taxRate)
     {
         $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
-        
+
         $tax = [];
         $tax['taxId'] = (int) $moloniTax['taxId'];
         $tax['value'] = (float) $taxRate;
@@ -295,34 +295,13 @@ class OrderProduct
     /**
      * Set order product warehouse
      *
-     * @param bool|int $warehouseId
-     *
-     * @return OrderProduct
-     *
-     * @throws Error
+     * @return void
      */
-    private function setWarehouse($warehouseId = false)
+    private function setWarehouse(): void
     {
-        if ((int)$warehouseId > 0) {
-            $this->warehouse_id = $warehouseId;
-            return $this;
+        if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int)MOLONI_PRODUCT_WAREHOUSE > 0) {
+            $this->warehouse_id = (int)MOLONI_PRODUCT_WAREHOUSE;
         }
-
-        if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int) MOLONI_PRODUCT_WAREHOUSE > 0) {
-            $this->warehouseId = (int) MOLONI_PRODUCT_WAREHOUSE;
-        } else {
-            $results = Warehouses::queryWarehouses();
-
-            $this->warehouse_id = $results[0]['warehouseId']; //fail safe
-            foreach ($results as $result) {
-                if ((bool) $result['isDefault'] === true) {
-                    $this->warehouse_id = $result['warehouseId'];
-
-                    break;
-                }
-            }
-        }
-        return $this;
     }
 
     public function mapPropsToValues(): array
@@ -332,13 +311,16 @@ class OrderProduct
             'name' => $this->name,
             'price' => (float) $this->price,
             'summary' => $this->summary,
-            'exemptionReason' => '',
             'ordering' => $this->order,
             'qty' => (float) $this->qty,
             'discount' => (float) $this->discount,
+            'exemptionReason' => '',
             'taxes' => [],
-            'warehouseId' => (int) $this->warehouse_id
         ];
+
+        if (!empty($this->warehouse_id)) {
+            $props['warehouseId'] = $this->warehouse_id;
+        }
 
         if (!empty($this->taxes)) {
             $props['taxes'] = $this->taxes;
