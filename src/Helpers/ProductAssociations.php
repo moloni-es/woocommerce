@@ -54,6 +54,13 @@ class ProductAssociations
         );
     }
 
+    public static function deleteById($id): void
+    {
+        $condition = 'id = ' . (int)$id;
+
+        self::delete($condition);
+    }
+
     public static function deleteByWcId($wcId): void
     {
         $condition = 'wc_product_id = ' . (int)$wcId;
@@ -88,7 +95,7 @@ class ProductAssociations
     {
         global $wpdb;
 
-        $query = 'SELECT * FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs WHERE ';
+        $query = 'SELECT * FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_product_associations WHERE ';
         $query .= $condition;
 
         return $wpdb->get_row($query, ARRAY_A);
@@ -98,7 +105,7 @@ class ProductAssociations
     {
         global $wpdb;
 
-        $query = 'DELETE FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs WHERE ';
+        $query = 'DELETE FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_product_associations WHERE ';
         $query .= $condition;
 
         $wpdb->query($query);

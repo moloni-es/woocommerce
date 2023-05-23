@@ -16,8 +16,14 @@ try {
     return;
 }
 
-\MoloniES\Helpers\ProductAssociations::add(1,1,1,1);
+$slug = wc_get_attribute(1)->slug;
 
+wp_create_term(
+    'Fábio',
+    $slug
+);
+
+die;
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=automation') ?>' id='formOpcoes'>
