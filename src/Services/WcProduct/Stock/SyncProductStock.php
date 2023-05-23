@@ -9,12 +9,6 @@ use MoloniES\Services\WcProduct\Abstracts\WcStockSyncAbstract;
 
 class SyncProductStock extends WcStockSyncAbstract
 {
-    private $moloniProduct;
-    private $wcProduct;
-
-    private $resultMsg = '';
-    private $resultData = [];
-
     public function __construct(array $moloniProduct, WC_Product $wcProduct)
     {
         $this->moloniProduct = $moloniProduct;

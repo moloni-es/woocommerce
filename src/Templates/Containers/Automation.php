@@ -16,14 +16,10 @@ try {
     return;
 }
 
-$slug = wc_get_attribute(1)->slug;
-
-wp_create_term(
-    'Fábio',
-    $slug
-);
-
-die;
+/*$product = wc_get_product(36);
+$image = wp_get_attachment_image($product->get_image_id());
+var_dump($image);
+die;*/
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=automation') ?>' id='formOpcoes'>
