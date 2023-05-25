@@ -40,7 +40,7 @@ class OrderPaid
                 $orderName = $service->getOrderNumber() ?? '';
 
                 Storage::$LOGGER->info(sprintf(
-                    __("Automatically generating order document in status '{0}' ({1})", 'moloni_es'),
+                    __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
                     __('Complete', 'moloni_es'),
                     $orderName
                 ));
@@ -89,7 +89,7 @@ class OrderPaid
                 $orderName = $service->getOrderNumber() ?? '';
 
                 Storage::$LOGGER->info(sprintf(
-                    __("Automatically generating order document in status '{0}' ({1})", 'moloni_es'),
+                    __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
                     __('Processing', 'moloni_es'),
                     $orderName
                 ));

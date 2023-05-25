@@ -50,7 +50,7 @@ class CreateSimpleProduct extends MoloniProductSyncAbstract
 
     public function saveLog()
     {
-        $message = sprintf(__('Simple product created in Moloni ({0})', 'moloni_es'), $this->moloniProduct['reference']);
+        $message = sprintf(__('Simple product created in Moloni (%s)', 'moloni_es'), $this->moloniProduct['reference']);
 
         Storage::$LOGGER->info($message, [
             'moloniId' => $this->moloniProduct['productId'],

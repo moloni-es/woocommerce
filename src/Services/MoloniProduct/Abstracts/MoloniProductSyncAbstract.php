@@ -55,7 +55,13 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function setReference()
     {
-        $this->props['reference'] = $this->wcProduct->get_sku();
+        $reference = $this->wcProduct->get_sku();
+
+        if (empty($reference)) {
+            $reference = $this->createReferenceFromString($this->wcProduct->get_name());
+        }
+
+        $this->props['reference'] = $reference;
     }
 
     protected function setCategory()
@@ -299,7 +305,19 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function uploadImage()
     {
-        $url = wp_get_attachment_url($this->wcProduct->get_image_id());
+        $wcImageId = $this->wcProduct->get_image_id();
+        $oldMoloniImage = $this->moloniProduct['img'] ?? '';
+
+        if ($wcImageId > 0 && !empty($oldMoloniImage)) {
+            $wcImageName = get_the_title($wcImageId);
+
+            /** If images have the same name there is no need to update image */
+            if (str_contains($oldMoloniImage, $wcImageName)) {
+                return;
+            }
+        }
+
+        $url = wp_get_attachment_url($wcImageId);
 
         if ($url) {
             $uploads = wp_upload_dir();

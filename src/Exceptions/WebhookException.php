@@ -2,9 +2,7 @@
 
 namespace MoloniES\Exceptions;
 
-use Exception;
-
-class WebhookException extends Exception
+class WebhookException extends Error
 {
 
 }

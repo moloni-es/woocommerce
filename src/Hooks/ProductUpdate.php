@@ -134,6 +134,7 @@ class ProductUpdate
 
     private function fetchMoloniProduct()
     {
+        // todo: this
         $this->moloniProduct = [];
     }
 

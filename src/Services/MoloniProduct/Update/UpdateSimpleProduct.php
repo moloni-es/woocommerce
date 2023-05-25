@@ -2,8 +2,8 @@
 
 namespace MoloniES\Services\MoloniProduct\Update;
 
-use MoloniES\Storage;
 use WC_Product;
+use MoloniES\Storage;
 use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
 
@@ -54,7 +54,7 @@ class UpdateSimpleProduct extends MoloniProductSyncAbstract
 
     public function saveLog()
     {
-        $message = sprintf(__('Simple product updated in Moloni ({0})', 'moloni_es'), $this->moloniProduct['reference']);
+        $message = sprintf(__('Simple product updated in Moloni (%s)', 'moloni_es'), $this->moloniProduct['reference']);
 
         Storage::$LOGGER->info($message, [
             'moloniId' => $this->moloniProduct['productId'],
