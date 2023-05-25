@@ -183,7 +183,7 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function setPrice()
     {
-        $this->props['type'] = (float)wc_get_price_excluding_tax($this->wcProduct);
+        $this->props['price'] = (float)wc_get_price_excluding_tax($this->wcProduct);
     }
 
     protected function setSummary()

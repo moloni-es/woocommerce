@@ -3,6 +3,8 @@
 namespace MoloniES\Hooks;
 
 use Exception;
+use MoloniES\API\Products;
+use MoloniES\Helpers\ProductAssociations;
 use WC_Product;
 use MoloniES\Start;
 use MoloniES\Notice;
@@ -10,7 +12,6 @@ use MoloniES\Plugin;
 use MoloniES\Storage;
 use MoloniES\Exceptions\Error;
 use MoloniES\Helpers\SyncLogs;
-use MoloniES\Controllers\Product;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
 use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
@@ -132,17 +133,60 @@ class ProductUpdate
         $this->wcProduct = wc_get_product($this->wcProductId);
     }
 
-    private function fetchMoloniProduct()
+    private function fetchMoloniProduct(): void
     {
-        // todo: this
-        $this->moloniProduct = [];
+        /** Fetch by our associaitons table */
+
+        $association = ProductAssociations::findByWcId($this->wcProductId);
+
+        if (!empty($association)) {
+            $byId = Products::queryProduct(['productId' => $association['ml_product_id']]);
+            $byId = $byId['data']['product']['data'] ?? [];
+
+            if (!empty($byId)) {
+                $this->moloniProduct = $byId;
+
+                return;
+            }
+
+            ProductAssociations::deleteById($association['id']);
+        }
+
+        $variables = [
+            'options' => [
+                'filter' => [
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $this->wcProduct->get_sku(),
+                    ],
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'gte',
+                        'value' => '0',
+                    ]
+                ],
+                "includeVariants" => true
+            ]
+        ];
+
+        $byReference = Products::queryProducts($variables);
+
+        if (!empty($byReference) && isset($byReference[0]['productId'])) {
+            $this->moloniProduct = $byReference[0];
+        }
     }
 
     //          Auxiliary          //
 
     private function productIsValidToSync(): bool
     {
-        if (empty($this->wcProduct) || $this->wcProduct->get_status() === 'draft' || empty($this->wcProduct->get_sku())) {
+        if (
+            empty($this->wcProduct) ||
+            $this->wcProduct->get_status() === 'draft' ||
+            empty($this->wcProduct->get_sku()) ||
+            $this->wcProduct->get_parent_id() > 0
+        ) {
             return false;
         }
 
