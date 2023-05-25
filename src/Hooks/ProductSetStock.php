@@ -2,7 +2,15 @@
 
 namespace MoloniES\Hooks;
 
+use WC_Product;
+use MoloniES\Start;
 use MoloniES\Plugin;
+use MoloniES\API\Products;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\SyncLogsType;
+use MoloniES\Helpers\ProductAssociations;
+use MoloniES\Helpers\SyncLogs;
+use MoloniES\Services\MoloniProduct\Stock\SyncProductStock;
 
 class ProductSetStock
 {
@@ -17,17 +25,99 @@ class ProductSetStock
     {
         $this->parent = $parent;
 
-        add_action('woocommerce_product_set_stock', [$this, 'woocommerceProductSetStock']);
-        add_action('woocommerce_variation_set_stock', [$this, 'woocommerceVariationSetStock']);
+        add_action('woocommerce_product_set_stock', [$this, 'woocommerceSetStock']);
+        add_action('woocommerce_variation_set_stock', [$this, 'woocommerceSetStock']);
     }
 
-    public function woocommerceProductSetStock()
+    public function woocommerceSetStock(WC_Product $wcProduct)
     {
+        if (!$this->productIsValidToSync($wcProduct)) {
+            return;
+        }
 
+        $moloniProduct = $this->fetchMoloniProduct($wcProduct);
+
+        if (empty($moloniProduct)) {
+            return;
+        }
+
+        $service = new SyncProductStock($wcProduct, $moloniProduct);
+        $service->run();
+        $service->saveLog();
     }
 
-    public function woocommerceVariationSetStock()
-    {
+    //            Privates            //
 
+    private function fetchMoloniProduct(WC_Product $wcProduct): array
+    {
+        /** Fetch by our associaitons table */
+
+        $association = ProductAssociations::findByWcId($wcProduct->get_id());
+
+        if (!empty($association)) {
+            $byId = Products::queryProduct(['productId' => $association['ml_product_id']]);
+            $byId = $byId['data']['product']['data'] ?? [];
+
+            if (!empty($byId)) {
+                return $byId;
+            }
+
+            ProductAssociations::deleteById($association['id']);
+        }
+
+        $wcSku = $wcProduct->get_sku();
+
+        if (empty($wcSku)) {
+            return [];
+        }
+
+        $variables = [
+            'options' => [
+                'filter' => [
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $wcSku,
+                    ],
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'gte',
+                        'value' => '0',
+                    ]
+                ],
+                "includeVariants" => true
+            ]
+        ];
+
+        $byReference = Products::queryProducts($variables);
+
+        if (!empty($byReference) && isset($byReference[0]['productId'])) {
+            return $byReference[0];
+        }
+
+        return [];
+    }
+
+    //          Auxiliary          //
+
+    private function productIsValidToSync(?WC_Product $wcProduct): bool
+    {
+        if (!defined('MOLONI_STOCK_SYNC') || (int)MOLONI_STOCK_SYNC === Boolean::NO) {
+            return false;
+        }
+
+        if (empty($wcProduct) || $wcProduct->get_status() === 'draft') {
+            return false;
+        }
+
+        $wcProductId = $wcProduct->get_id();
+
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT, $wcProductId)) {
+            return false;
+        }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT, $wcProductId);
+
+        return Start::login(true);
     }
 }
