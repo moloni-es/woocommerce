@@ -129,9 +129,21 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
 
     protected function setImage()
     {
-        if (empty($this->moloniProduct['img'])) {
+        $moloniImage = $this->moloniProduct['img'] ?? '';
+
+        if (empty($moloniImage)) {
             $this->wcProduct->set_image_id('');
         } else {
+            $imageId = $this->wcProduct->get_image_id();
+
+            if ($imageId > 0) {
+                $currentImageTitle = get_the_title($imageId);
+
+                if (str_contains($moloniImage, $currentImageTitle)) {
+                    return;
+                }
+            }
+
             $imageId = (new FetchImageFromMoloni($this->moloniProduct['img']))->get();
 
             if ($imageId > 0) {

@@ -17,8 +17,11 @@ try {
 }
 
 /*$product = wc_get_product(36);
-$image = wp_get_attachment_image($product->get_image_id());
+$image = wp_get_attachment_image_src($product->get_image_id());
+$image2 = get_the_title($product->get_image_id());
 var_dump($image);
+echo '<br>';
+var_dump($image2);
 die;*/
 ?>
 

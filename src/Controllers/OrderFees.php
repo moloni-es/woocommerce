@@ -132,6 +132,7 @@ class OrderFees
             ->setUnitId();
 
         $insert = (Products::mutationProductCreate($this->mapPropsToValues(true)))['data']['productCreate']['data'];
+
         if (isset($insert['productId'])) {
             $this->product_id = $insert['productId'];
             return $this;
@@ -148,6 +149,7 @@ class OrderFees
         $categoryName = __('Online Store','moloni_es');
 
         $categoryObj = new ProductCategory($categoryName);
+
         if (!$categoryObj->loadByName()) {
             $categoryObj->create();
         }

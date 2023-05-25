@@ -2,6 +2,7 @@
 
 namespace MoloniES;
 
+use MoloniES\Hooks\ProductSetStock;
 use WC_Order;
 use MoloniES\Controllers\Logs;
 use MoloniES\Exceptions\Warning;
@@ -68,16 +69,22 @@ class Plugin
      */
     private function actions()
     {
-        new WoocommerceInitialize($this);
+        /** Admin pages */
         new Admin($this);
+        new Ajax($this);
+
+        /** Webservices */
+        new WebHook();
+
+        /** Hooks */
         new ProductUpdate($this);
         new ProductView($this);
+        new ProductSetStock($this);
         new OrderView($this);
         new OrderPaid($this);
-        new UpgradeProcess($this);
         new OrderList($this);
-        new WebHook();
-        new Ajax($this);
+        new UpgradeProcess($this);
+        new WoocommerceInitialize($this);
     }
 
     //            Publics            //
