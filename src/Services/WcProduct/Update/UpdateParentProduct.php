@@ -2,19 +2,14 @@
 
 namespace MoloniES\Services\WcProduct\Update;
 
-use MoloniES\Enums\Boolean;
-use MoloniES\Helpers\MoloniProduct;
+use WC_Product_Variable;
+use MoloniES\Storage;
 use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\WcProduct\Abstracts\WcProductSyncAbstract;
-use MoloniES\Services\WcProduct\Helpers\FetchImageFromMoloni;
-use MoloniES\Services\WcProduct\Helpers\FetchWcCategoriesFromMoloniCategoryId;
-use MoloniES\Storage;
-use WC_Product;
-use WC_Product_Attribute;
 
 class UpdateParentProduct extends WcProductSyncAbstract
 {
-    public function __construct(array $moloniProduct, WC_Product $wcProduct)
+    public function __construct(array $moloniProduct, WC_Product_Variable $wcProduct)
     {
         $this->moloniProduct = $moloniProduct;
         $this->wcProduct = $wcProduct;

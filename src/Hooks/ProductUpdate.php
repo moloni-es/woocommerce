@@ -106,7 +106,7 @@ class ProductUpdate
 
     private function create()
     {
-        if ($this->wcProduct->has_child()) {
+        if ($this->wcProduct->is_type('variable')) {
             $service = new CreateVariantProduct($this->wcProduct);
         } else {
             $service = new CreateSimpleProduct($this->wcProduct);
@@ -118,7 +118,7 @@ class ProductUpdate
 
     private function update()
     {
-        if ($this->wcProduct->has_child()) {
+        if ($this->wcProduct->is_type('variable')) {
             $service = new UpdateVariantProduct($this->wcProduct, $this->moloniProduct);
         } else {
             $service = new UpdateSimpleProduct($this->wcProduct, $this->moloniProduct);

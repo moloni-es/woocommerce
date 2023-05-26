@@ -46,6 +46,10 @@ class MoloniProduct
                 $propertyName = trim($property['property']['name']);
                 $propertyValue = trim($property['propertyValue']['value']);
 
+                if (!isset($attributes[$propertyName])) {
+                    $attributes[$propertyName] = [];
+                }
+
                 if (!in_array($propertyValue, $attributes[$propertyName], true)) {
                     $attributes[$propertyName][] = $propertyValue;
                 }

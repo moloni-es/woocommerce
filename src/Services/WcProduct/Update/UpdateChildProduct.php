@@ -3,13 +3,14 @@
 namespace MoloniES\Services\WcProduct\Update;
 
 use WC_Product;
+use WC_Product_Variation;
 use MoloniES\Storage;
 use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\WcProduct\Abstracts\WcProductSyncAbstract;
 
 class UpdateChildProduct extends WcProductSyncAbstract
 {
-    public function __construct(array $moloniProduct, WC_Product $wcProduct, WC_Product $wcProductParent)
+    public function __construct(array $moloniProduct, WC_Product_Variation $wcProduct, WC_Product $wcProductParent)
     {
         $this->moloniProduct = $moloniProduct;
 
@@ -19,6 +20,8 @@ class UpdateChildProduct extends WcProductSyncAbstract
 
     public function run()
     {
+        $this->setParent();
+
         if ($this->productShouldSyncName()) {
             $this->setName();
         }
@@ -43,8 +46,7 @@ class UpdateChildProduct extends WcProductSyncAbstract
             $this->setImage();
         }
 
-        $this->setAttributesOptions();
-        $this->setParent();
+        $this->setVariationOptions();
 
         $this->wcProduct->save();
 

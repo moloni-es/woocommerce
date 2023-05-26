@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\WcProduct\Abstracts;
 
+use stdClass;
 use WC_Product;
 use MoloniES\Enums\Boolean;
 use MoloniES\Helpers\MoloniProduct;
@@ -10,6 +11,7 @@ use MoloniES\Services\WcProduct\Interfaces\WcSyncInterface;
 use MoloniES\Services\WcProduct\Helpers\FetchImageFromMoloni;
 use MoloniES\Services\WcProduct\Helpers\FetchWcCategoriesFromMoloniCategoryId;
 use WC_Product_Attribute;
+use WP_Term;
 
 abstract class WcProductSyncAbstract implements WcSyncInterface
 {
@@ -156,40 +158,79 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
     {
         $attributes = MoloniProduct::parseParentVariantsAttributes($this->moloniProduct);
         $productAttributes = [];
+        $position = 0;
 
         foreach ($attributes as $name => $options) {
             $attrId = wc_attribute_taxonomy_id_by_name($name);
 
             if (empty($attrId)) {
                 $attrId = wc_create_attribute([
-                    'name' => $name,
+                    'name' => $name
                 ]);
-            }
 
-            $slug = wc_get_attribute($attrId)->slug;
+                $taxonomy = wc_get_attribute($attrId)->slug;
 
-            foreach ($options as $option) {
-                if (!term_exists($option, '', $attrId)) {
-                    wp_create_term($option, $slug);
-                }
+                register_taxonomy($taxonomy, ['product']);
+            } else {
+                $taxonomy = wc_get_attribute($attrId)->slug;
             }
 
             $attributeObj = new WC_Product_Attribute();
+
+            $termsIds = [];
+
+            foreach ($options as $option) {
+                term_exists($option, $taxonomy, $attrId);
+
+                if (empty($termId)) {
+                    wp_create_term($option, $taxonomy);
+                }
+
+                $termsIds[] = $option;
+            }
+
             $attributeObj->set_id($attrId);
-            $attributeObj->set_name($name);
-            $attributeObj->set_options($options);
+            $attributeObj->set_name($taxonomy);
+            $attributeObj->set_options($termsIds);
+            $attributeObj->set_position($position);
             $attributeObj->set_visible(true);
             $attributeObj->set_variation(true);
 
-            $productAttributes = $attributeObj;
+            $productAttributes[] = $attributeObj;
+
+            $position++;
         }
 
         $this->wcProduct->set_attributes($productAttributes);
     }
 
-    protected function setAttributesOptions()
+    protected function setVariationOptions()
     {
-        $attributes = MoloniProduct::parseVariantAttributes($this->moloniProduct);
+        $attributes = [];
+
+        foreach ($this->moloniProduct["propertyPairs"] as $value) {
+            $propertyName = trim($value['property']["name"]);
+            $propertyValue = trim($value['propertyValue']["value"]);
+
+            $attrId = wc_attribute_taxonomy_id_by_name($propertyName);
+            /** @var stdClass|null $attribute */
+            $attribute = wc_get_attribute($attrId);
+
+            if (empty($attribute)) {
+                continue;
+            }
+
+            $taxonomy = $attribute->slug;
+
+            /** @var WP_Term|null $term */
+            $term = get_term_by('name', $propertyValue, $taxonomy);
+
+            if (empty($term)) {
+                continue;
+            }
+
+            $attributes[$taxonomy] = $term->slug;
+        }
 
         $this->wcProduct->set_attributes($attributes);
     }

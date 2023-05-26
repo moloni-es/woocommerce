@@ -2,7 +2,7 @@
 
 namespace MoloniES\Services\WcProduct\Create;
 
-use WC_Product;
+use WC_Product_Variable;
 use MoloniES\Storage;
 use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\WcProduct\Abstracts\WcProductSyncAbstract;
@@ -12,7 +12,7 @@ class CreateParentProduct extends WcProductSyncAbstract
     public function __construct(array $moloniProduct)
     {
         $this->moloniProduct = $moloniProduct;
-        $this->wcProduct = new WC_Product();
+        $this->wcProduct = new WC_Product_Variable();
     }
 
     //            Publics            //

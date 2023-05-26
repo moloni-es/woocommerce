@@ -3,6 +3,7 @@
 namespace MoloniES\WebHooks;
 
 use Exception;
+use WC_Product_Variation;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
@@ -122,7 +123,7 @@ class Products
                     continue;
                 }
 
-                $service = new CreateChildProduct($this->moloniProduct, $wcParentProduct);
+                $service = new CreateChildProduct($variant, $wcParentProduct);
                 $service->run();
                 $service->saveLog();
             }
@@ -146,7 +147,7 @@ class Products
         }
 
         /** Both need to be the same kind */
-        if ($this->moloniProductHasVariants() !== $wcProduct->has_child()) {
+        if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
             return;
         }
 
@@ -195,7 +196,7 @@ class Products
         }
 
         /** Both need to be the same kind */
-        if ($this->moloniProductHasVariants() !== $wcProduct->has_child()) {
+        if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
             return;
         }
 
@@ -283,16 +284,16 @@ class Products
         return null;
     }
 
-    private function fetchWcProductVariation(array $moloniVariant)
+    private function fetchWcProductVariation(array $moloniVariant): ?WC_Product_Variation
     {
         /** Fetch by our associaitons table */
 
         $association = ProductAssociations::findByMoloniId($moloniVariant['productId']);
 
         if (!empty($association)) {
-            $wcProduct = wc_get_product($association['wc_product_id']);
+            $wcProduct = new WC_Product_Variation($association['wc_product_id']);
 
-            if (!empty($wcProduct)) {
+            if ($wcProduct->exists()) {
                 return $wcProduct;
             }
 
@@ -304,7 +305,11 @@ class Products
         $wcProductId = wc_get_product_id_by_sku($moloniVariant['reference']);
 
         if ($wcProductId > 0) {
-            return wc_get_product($wcProductId);
+            $wcProduct = new WC_Product_Variation($wcProductId);
+
+            if ($wcProduct->exists()) {
+                return $wcProduct;
+            }
         }
 
         /** Fetch by attribute match */

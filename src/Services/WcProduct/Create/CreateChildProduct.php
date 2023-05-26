@@ -6,19 +6,29 @@ use WC_Product;
 use MoloniES\Storage;
 use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\WcProduct\Abstracts\WcProductSyncAbstract;
+use WC_Product_Variation;
 
+/**
+ * God's gifts
+ *
+ * @see https://stackoverflow.com/questions/47518280/create-programmatically-a-woocommerce-product-variation-with-new-attribute-value
+ * @see https://stackoverflow.com/questions/52937409/create-programmatically-a-product-using-crud-methods-in-woocommerce-3/52941994#52941994
+ * @see https://stackoverflow.com/questions/53944532/auto-set-specific-attribute-term-value-to-purchased-products-on-woocommerce
+ * @see https://stackoverflow.com/questions/47518333/create-programmatically-a-variable-product-and-two-new-attributes-in-woocommerce
+ */
 class CreateChildProduct extends WcProductSyncAbstract
 {
     public function __construct(array $moloniProduct, WC_Product $wcParentProduct)
     {
         $this->moloniProduct = $moloniProduct;
 
-        $this->wcProduct = new WC_Product();
+        $this->wcProduct = new WC_Product_Variation();
         $this->wcProductParent = $wcParentProduct;
     }
 
     public function run()
     {
+        $this->setParent();
         $this->setName();
         $this->setReference();
 
@@ -38,8 +48,7 @@ class CreateChildProduct extends WcProductSyncAbstract
             $this->setImage();
         }
 
-        $this->setAttributesOptions();
-        $this->setParent();
+        $this->setVariationOptions();
 
         $this->wcProduct->save();
 
