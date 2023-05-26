@@ -2,8 +2,8 @@
 
 namespace MoloniES\Services\WcProduct\Helpers;
 
+use MoloniES\API\Categories;
 use MoloniES\Exceptions\Error;
-use MoloniES\Helpers\MoloniCategory;
 
 class FetchWcCategoriesFromMoloniCategoryId
 {
@@ -11,13 +11,18 @@ class FetchWcCategoriesFromMoloniCategoryId
 
     public function __construct(?int $categoryId = 0)
     {
-        $this->categoryId = $categoryId;
+        $this->categoryId = (int)$categoryId;
     }
 
     public function get(): array
     {
+        /** Can happen because product can have no category in Moloni */
+        if (empty($this->categoryId)) {
+            return [];
+        }
+
         try {
-            $namesArray = MoloniCategory::getFamlityTree($this->categoryId);
+            $namesArray = $this->getFamlityTree();
         } catch (Error $e) {
             return [];
         }
@@ -41,5 +46,34 @@ class FetchWcCategoriesFromMoloniCategoryId
         }
 
         return $categoriesIds;
+    }
+
+    /**
+     * Gets category ancesters names
+     *
+     * @throws Error
+     */
+    private function getFamlityTree(): array
+    {
+        $moloniId = $this->categoryId;
+        $moloniCategoriesTree = [];
+        $failsafe = 0;
+
+        do {
+            $query = (Categories::queryProductCategory(['productCategoryId' => (int)$moloniId]))['data']['productCategory']['data'];
+
+            array_unshift($moloniCategoriesTree, $query['name']); //order needs to be inverted
+
+            if ($query['parent'] === null) {
+                break;
+            }
+
+            /** Next current id is this category parent */
+            $moloniId = $query['parent']['productCategoryId'];
+
+            $failsafe++;
+        } while ($failsafe < 100);
+
+        return $moloniCategoriesTree; //returns the names of all categories (from this product only)
     }
 }

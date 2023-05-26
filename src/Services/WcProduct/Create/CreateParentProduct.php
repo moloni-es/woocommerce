@@ -2,10 +2,10 @@
 
 namespace MoloniES\Services\WcProduct\Create;
 
-use WC_Product_Variable;
-use MoloniES\Storage;
-use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\WcProduct\Abstracts\WcProductSyncAbstract;
+use MoloniES\Storage;
+use MoloniES\Tools\ProductAssociations;
+use WC_Product_Variable;
 
 class CreateParentProduct extends WcProductSyncAbstract
 {

@@ -2,15 +2,15 @@
 
 namespace MoloniES\Hooks;
 
-use WC_Product;
-use MoloniES\Start;
-use MoloniES\Plugin;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
-use MoloniES\Helpers\ProductAssociations;
-use MoloniES\Helpers\SyncLogs;
+use MoloniES\Plugin;
 use MoloniES\Services\MoloniProduct\Stock\SyncProductStock;
+use MoloniES\Start;
+use MoloniES\Tools\ProductAssociations;
+use MoloniES\Tools\SyncLogs;
+use WC_Product;
 
 class ProductSetStock
 {

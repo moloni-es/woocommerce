@@ -4,20 +4,20 @@ namespace MoloniES\Hooks;
 
 use Exception;
 use MoloniES\API\Products;
-use MoloniES\Helpers\ProductAssociations;
-use WC_Product;
-use MoloniES\Start;
-use MoloniES\Notice;
-use MoloniES\Plugin;
-use MoloniES\Storage;
-use MoloniES\Exceptions\Error;
-use MoloniES\Helpers\SyncLogs;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
+use MoloniES\Exceptions\Error;
+use MoloniES\Notice;
+use MoloniES\Plugin;
 use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
 use MoloniES\Services\MoloniProduct\Create\CreateVariantProduct;
 use MoloniES\Services\MoloniProduct\Update\UpdateSimpleProduct;
 use MoloniES\Services\MoloniProduct\Update\UpdateVariantProduct;
+use MoloniES\Start;
+use MoloniES\Storage;
+use MoloniES\Tools\ProductAssociations;
+use MoloniES\Tools\SyncLogs;
+use WC_Product;
 
 class ProductUpdate
 {

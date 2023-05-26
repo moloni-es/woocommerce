@@ -2,9 +2,9 @@
 
 namespace MoloniES\Services\MoloniProduct\Create;
 
-use WC_Product;
-use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
+use MoloniES\Tools\ProductAssociations;
+use WC_Product;
 
 class CreateVariantProduct extends MoloniProductSyncAbstract
 {
@@ -17,7 +17,36 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
 
     public function run()
     {
+        $this->setName();
+        $this->setReference();
+        $this->setPrice();
+        $this->setTaxes();
+        $this->setCategory();
+        $this->setType();
+        $this->setMeasureUnit();
 
+        if ($this->productShouldSyncDescription()) {
+            $this->setSummary();
+            $this->setNotes();
+        }
+
+        if ($this->productShouldSyncEAN()) {
+            $this->setEan();
+        }
+
+        if ($this->productShouldSyncStock()) {
+            $this->setStock();
+        }
+
+        $this->setVariants();
+
+        $this->insert();
+
+        $this->createAssociation();
+
+        if ($this->productShouldSyncImage()) {
+            $this->uploadImage();
+        }
     }
 
     public function saveLog()

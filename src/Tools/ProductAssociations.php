@@ -1,6 +1,6 @@
 <?php
 
-namespace MoloniES\Helpers;
+namespace MoloniES\Tools;
 
 use MoloniES\Enums\Boolean;
 

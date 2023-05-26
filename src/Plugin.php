@@ -2,29 +2,29 @@
 
 namespace MoloniES;
 
-use WC_Order;
 use MoloniES\Controllers\Logs;
-use MoloniES\Exceptions\Warning;
+use MoloniES\Controllers\PendingOrders;
 use MoloniES\Enums\Boolean;
-use MoloniES\Menus\Admin;
-use MoloniES\WebHooks\WebHook;
 use MoloniES\Exceptions\Error;
-use MoloniES\Helpers\Logger;
+use MoloniES\Exceptions\Warning;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
 use MoloniES\Hooks\OrderList;
 use MoloniES\Hooks\OrderPaid;
 use MoloniES\Hooks\OrderView;
-use MoloniES\Hooks\ProductView;
-use MoloniES\Hooks\ProductUpdate;
 use MoloniES\Hooks\ProductDelete;
 use MoloniES\Hooks\ProductSetStock;
+use MoloniES\Hooks\ProductUpdate;
+use MoloniES\Hooks\ProductView;
 use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
-use MoloniES\Controllers\PendingOrders;
-use MoloniES\Services\Documents\OpenDocument;
+use MoloniES\Menus\Admin;
 use MoloniES\Services\Documents\DownloadDocumentPDF;
+use MoloniES\Services\Documents\OpenDocument;
 use MoloniES\Services\Orders\CreateMoloniDocument;
+use MoloniES\Tools\Logger;
+use MoloniES\WebHooks\WebHook;
+use WC_Order;
 
 /**
  * Main constructor

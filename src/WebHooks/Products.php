@@ -3,14 +3,11 @@
 namespace MoloniES\WebHooks;
 
 use Exception;
-use WC_Product;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
 use MoloniES\Exceptions\Error;
 use MoloniES\Exceptions\WebhookException;
-use MoloniES\Helpers\ProductAssociations;
-use MoloniES\Helpers\SyncLogs;
 use MoloniES\Services\WcProduct\Create\CreateChildProduct;
 use MoloniES\Services\WcProduct\Create\CreateParentProduct;
 use MoloniES\Services\WcProduct\Create\CreateSimpleProduct;
@@ -20,6 +17,9 @@ use MoloniES\Services\WcProduct\Update\UpdateParentProduct;
 use MoloniES\Services\WcProduct\Update\UpdateSimpleProduct;
 use MoloniES\Start;
 use MoloniES\Storage;
+use MoloniES\Tools\ProductAssociations;
+use MoloniES\Tools\SyncLogs;
+use WC_Product;
 
 class Products
 {

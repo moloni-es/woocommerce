@@ -79,7 +79,7 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
     {
         $moloniCategoryId = $this->moloniProduct['productCategory']['productCategoryId'] ?? 0;
 
-        $categoryIds = (new FetchWcCategoriesFromMoloniCategoryId())->get($moloniCategoryId);
+        $categoryIds = (new FetchWcCategoriesFromMoloniCategoryId($moloniCategoryId))->get();
 
         if (!empty($categoryIds)) {
             $this->wcProduct->set_category_ids($categoryIds);

@@ -2,9 +2,9 @@
 
 namespace MoloniES\Services\MoloniProduct\Update;
 
-use WC_Product;
-use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
+use MoloniES\Tools\ProductAssociations;
+use WC_Product;
 
 class UpdateVariantProduct extends MoloniProductSyncAbstract
 {
@@ -18,7 +18,39 @@ class UpdateVariantProduct extends MoloniProductSyncAbstract
 
     public function run()
     {
+        $this->setProductId();
 
+        if ($this->productShouldSyncName()) {
+            $this->setName();
+        }
+
+        if ($this->productShouldSyncPrice()) {
+            $this->setPrice();
+            $this->setTaxes();
+        }
+
+        if ($this->productShouldSyncCategories()) {
+            $this->setCategory();
+        }
+
+        if ($this->productShouldSyncDescription()) {
+            $this->setSummary();
+            $this->setNotes();
+        }
+
+        if ($this->productShouldSyncEAN()) {
+            $this->setEan();
+        }
+
+        $this->setVariants();
+
+        $this->update();
+
+        $this->createAssociation();
+
+        if ($this->productShouldSyncImage()) {
+            $this->uploadImage();
+        }
     }
 
     public function saveLog()

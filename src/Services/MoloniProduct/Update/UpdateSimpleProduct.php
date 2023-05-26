@@ -2,10 +2,10 @@
 
 namespace MoloniES\Services\MoloniProduct\Update;
 
-use WC_Product;
-use MoloniES\Storage;
-use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
+use MoloniES\Storage;
+use MoloniES\Tools\ProductAssociations;
+use WC_Product;
 
 class UpdateSimpleProduct extends MoloniProductSyncAbstract
 {

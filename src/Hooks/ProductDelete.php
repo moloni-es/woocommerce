@@ -3,7 +3,7 @@
 namespace MoloniES\Hooks;
 
 use MoloniES\Plugin;
-use MoloniES\Helpers\ProductAssociations;
+use MoloniES\Tools\ProductAssociations;
 
 class ProductDelete
 {

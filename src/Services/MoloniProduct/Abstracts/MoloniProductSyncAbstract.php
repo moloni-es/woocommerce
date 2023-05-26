@@ -4,6 +4,8 @@ namespace MoloniES\Services\MoloniProduct\Abstracts;
 
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\ProductIdentificationType;
+use MoloniES\Services\MoloniProduct\Helpers\FindOrCreatePropertyGroup;
+use MoloniES\Services\MoloniProduct\Helpers\GetOrUpdatePropertyGroup;
 use WC_Tax;
 use WC_Product;
 use MoloniES\Tools;
@@ -244,7 +246,17 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function setVariants()
     {
+        $this->wcProduct->get_attributes();
+
         // todo: this
+
+        if (empty($this->moloniProduct)) {
+            $propertyGroup = (new FindOrCreatePropertyGroup())->handle();
+        } else {
+            $targetId = $this->moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
+
+            $propertyGroup = (new GetOrUpdatePropertyGroup($targetId))->handle();
+        }
     }
 
     //            Requests            //
