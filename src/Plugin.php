@@ -2,7 +2,6 @@
 
 namespace MoloniES;
 
-use MoloniES\Hooks\ProductSetStock;
 use WC_Order;
 use MoloniES\Controllers\Logs;
 use MoloniES\Exceptions\Warning;
@@ -18,6 +17,8 @@ use MoloniES\Hooks\OrderPaid;
 use MoloniES\Hooks\OrderView;
 use MoloniES\Hooks\ProductView;
 use MoloniES\Hooks\ProductUpdate;
+use MoloniES\Hooks\ProductDelete;
+use MoloniES\Hooks\ProductSetStock;
 use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
 use MoloniES\Controllers\PendingOrders;
@@ -78,6 +79,7 @@ class Plugin
 
         /** Hooks */
         new ProductUpdate($this);
+        new ProductDelete($this);
         new ProductView($this);
         new ProductSetStock($this);
         new OrderView($this);

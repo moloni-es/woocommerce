@@ -268,6 +268,11 @@ class Products
             hasStock
             stock
             deletable
+            parent
+            {
+                productId
+                name
+            }
             warehouse
             {
                 warehouseId

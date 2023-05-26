@@ -2,14 +2,14 @@
 
 namespace MoloniES\Services\WcProduct\Update;
 
-use WC_Product_Variable;
+use WC_Product;
 use MoloniES\Storage;
 use MoloniES\Helpers\ProductAssociations;
 use MoloniES\Services\WcProduct\Abstracts\WcProductSyncAbstract;
 
 class UpdateParentProduct extends WcProductSyncAbstract
 {
-    public function __construct(array $moloniProduct, WC_Product_Variable $wcProduct)
+    public function __construct(array $moloniProduct, WC_Product $wcProduct)
     {
         $this->moloniProduct = $moloniProduct;
         $this->wcProduct = $wcProduct;

@@ -3,7 +3,7 @@
 namespace MoloniES\WebHooks;
 
 use Exception;
-use WC_Product_Variation;
+use WC_Product;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
@@ -284,16 +284,16 @@ class Products
         return null;
     }
 
-    private function fetchWcProductVariation(array $moloniVariant): ?WC_Product_Variation
+    private function fetchWcProductVariation(array $moloniVariant): ?WC_Product
     {
         /** Fetch by our associaitons table */
 
         $association = ProductAssociations::findByMoloniId($moloniVariant['productId']);
 
         if (!empty($association)) {
-            $wcProduct = new WC_Product_Variation($association['wc_product_id']);
+            $wcProduct = wc_get_product($association['wc_product_id']);
 
-            if ($wcProduct->exists()) {
+            if (!empty($wcProduct)) {
                 return $wcProduct;
             }
 
@@ -305,9 +305,9 @@ class Products
         $wcProductId = wc_get_product_id_by_sku($moloniVariant['reference']);
 
         if ($wcProductId > 0) {
-            $wcProduct = new WC_Product_Variation($wcProductId);
+            $wcProduct = wc_get_product($wcProductId);
 
-            if ($wcProduct->exists()) {
+            if (!empty($wcProduct)) {
                 return $wcProduct;
             }
         }
