@@ -26,10 +26,6 @@ class UpdateChildProduct extends WcProductSyncAbstract
         }
 
         if ($this->productShouldSyncDescription()) {
-            $this->setReference();
-        }
-
-        if ($this->productShouldSyncDescription()) {
             $this->setDescripton();
         }
 

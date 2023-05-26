@@ -168,9 +168,9 @@ class Products
                 }
 
                 if (empty($wcProductVariation)) {
-                    $service = new CreateChildProduct($this->moloniProduct, $wcProduct);
+                    $service = new CreateChildProduct($variant, $wcProduct);
                 } else {
-                    $service = new UpdateChildProduct($this->moloniProduct, $wcProductVariation, $wcProduct);
+                    $service = new UpdateChildProduct($variant, $wcProductVariation, $wcProduct);
                 }
 
                 $service->run();
