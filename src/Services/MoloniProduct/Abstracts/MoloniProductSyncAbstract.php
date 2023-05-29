@@ -2,21 +2,22 @@
 
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
-use MoloniES\API\Products as ApiProducts;
-use MoloniES\Enums\ProductIdentificationType;
-use MoloniES\Services\MoloniProduct\Helpers\FindOrCreatePropertyGroup;
-use MoloniES\Services\MoloniProduct\Helpers\GetOrUpdatePropertyGroup;
-use WC_Tax;
-use WC_Product;
-use MoloniES\Tools;
-use MoloniES\API\Products;
 use MoloniES\API\Companies;
+use MoloniES\API\Products;
 use MoloniES\API\Warehouses;
+use MoloniES\Controllers\ProductCategory;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\ProductIdentificationType;
 use MoloniES\Enums\ProductType;
 use MoloniES\Exceptions\ServiceException;
-use MoloniES\Controllers\ProductCategory;
-use MoloniES\Traits\SyncFieldsSettingsTrait;
+use MoloniES\Services\MoloniProduct\Helpers\ProductVariant;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
 use MoloniES\Services\MoloniProduct\Interfaces\MoloniProductServiceInterface;
+use MoloniES\Tools;
+use MoloniES\Traits\SyncFieldsSettingsTrait;
+use WC_Product;
+use WC_Tax;
 
 abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterface
 {
@@ -246,17 +247,56 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function setVariants()
     {
-        $this->wcProduct->get_attributes();
-
-        // todo: this
-
         if (empty($this->moloniProduct)) {
-            $propertyGroup = (new FindOrCreatePropertyGroup())->handle();
+            $propertyGroup = (new FindOrCreatePropertyGroup($this->wcProduct))->handle();
         } else {
             $targetId = $this->moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
 
-            $propertyGroup = (new GetOrUpdatePropertyGroup($targetId))->handle();
+            /**
+             * Product already exists, so it has property group assigned
+             * So we need to get the property group and update it if needed
+             */
+            $propertyGroup = (new GetOrUpdatePropertyGroup($this->wcProduct, $targetId))->handle();
         }
+
+        $this->props['propertyGroupId'] = $propertyGroup['propertyGroupId'];
+
+        $existingVariants = $this->moloniProduct['variants'] ?? [];
+        $newVariants = [];
+
+        $wcVariationIds = $this->wcProduct->get_children();
+
+        foreach ($wcVariationIds as $wcVariationId) {
+            $wcVariation = wc_get_product($wcVariationId);
+
+            if (empty($wcVariation)) {
+                continue;
+            }
+
+            $newVariants[] = (new ProductVariant($wcVariation, $existingVariants, $propertyGroup))->toArray();
+        }
+
+        foreach ($existingVariants as $existingVariant) {
+            foreach ($newVariants as $newVariant) {
+                if (!isset($newVariant['productId'])) {
+                    continue;
+                }
+
+                if ($existingVariant['productId'] === $newVariant['productId']) {
+                    continue 2;
+                }
+            }
+
+            // If we cannot delete variant, set it as invisible
+            if ($existingVariant['deletable'] === false) {
+                $newVariants[] = [
+                    'productId' => $existingVariant['productId'],
+                    'visible' => Boolean::NO,
+                ];
+            }
+        }
+
+        $this->props['variants'] = $newVariants;
     }
 
     //            Requests            //
@@ -343,7 +383,7 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
                 ],
             ];
 
-            ApiProducts::mutationProductImageUpdate($variables, $image);
+            Products::mutationProductImageUpdate($variables, $image);
         }
     }
 
