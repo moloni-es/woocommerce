@@ -3,6 +3,7 @@
 namespace MoloniES\Services\MoloniProduct\Update;
 
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
+use MoloniES\Storage;
 use MoloniES\Tools\ProductAssociations;
 use WC_Product;
 
@@ -42,6 +43,7 @@ class UpdateVariantProduct extends MoloniProductSyncAbstract
             $this->setEan();
         }
 
+        $this->setPropertyGroup();
         $this->setVariants();
 
         $this->update();
@@ -55,18 +57,35 @@ class UpdateVariantProduct extends MoloniProductSyncAbstract
 
     public function saveLog()
     {
-        // TODO: Implement saveLog() method.
+        $message = sprintf(__('Product with variants updated in Moloni (%s)', 'moloni_es'), $this->moloniProduct['reference']);
+
+        Storage::$LOGGER->info($message, [
+            'moloniId' => $this->moloniProduct['productId'],
+            'moloniParentId' => 0,
+            'wcId' => $this->wcProduct->get_id(),
+            'wcParentId' => 0,
+            'props' => $this->props
+        ]);
     }
 
     //            Privates            //
 
     protected function createAssociation()
     {
+        ProductAssociations::deleteByWcId($this->wcProduct->get_id());
+        ProductAssociations::deleteByWcParentId($this->wcProduct->get_id());
+        ProductAssociations::deleteByMoloniId($this->moloniProduct['productId']);
+        ProductAssociations::deleteByMoloniParentId($this->moloniProduct['productId']);
+
         ProductAssociations::add(
             $this->wcProduct->get_id(),
             0,
             $this->moloniProduct['productId'],
             0
         );
+
+        foreach ($this->variantServices as $variantService) {
+            $variantService->createAssociation();
+        }
     }
 }

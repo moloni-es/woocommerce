@@ -3,6 +3,7 @@
 namespace MoloniES\Services\MoloniProduct\Create;
 
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
+use MoloniES\Storage;
 use MoloniES\Tools\ProductAssociations;
 use WC_Product;
 
@@ -38,6 +39,7 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
             $this->setStock();
         }
 
+        $this->setPropertyGroup();
         $this->setVariants();
 
         $this->insert();
@@ -51,7 +53,15 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
 
     public function saveLog()
     {
-        // TODO: Implement saveLog() method.
+        $message = sprintf(__('Product with variants created in Moloni (%s)', 'moloni_es'), $this->moloniProduct['reference']);
+
+        Storage::$LOGGER->info($message, [
+            'moloniId' => $this->moloniProduct['productId'],
+            'moloniParentId' => 0,
+            'wcId' => $this->wcProduct->get_id(),
+            'wcParentId' => 0,
+            'props' => $this->props
+        ]);
     }
 
     //            Privates            //
@@ -64,5 +74,9 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
             $this->moloniProduct['productId'],
             0
         );
+
+        foreach ($this->variantServices as $variantService) {
+            $variantService->createAssociation();
+        }
     }
 }

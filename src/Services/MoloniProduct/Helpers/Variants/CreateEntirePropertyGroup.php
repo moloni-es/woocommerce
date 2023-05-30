@@ -9,12 +9,12 @@ use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
 class CreateEntirePropertyGroup extends VariantHelperAbstract
 {
     private $moloniPropertyGroups;
-    private $attributes;
+    private $productAttributes;
 
-    public function __construct(array $moloniPropertyGroups, array $attributes)
+    public function __construct(array $moloniPropertyGroups, array $productAttributes)
     {
         $this->moloniPropertyGroups = $moloniPropertyGroups;
-        $this->attributes = $attributes;
+        $this->productAttributes = $productAttributes;
     }
 
     public function handle(): array
@@ -22,30 +22,32 @@ class CreateEntirePropertyGroup extends VariantHelperAbstract
         $propsForInsert = [];
 
         /** Iterate over the shopify variants and prepare an array for insert into moloni */
-        foreach ($this->attributes as $attributeName => $options) {
-            foreach ($options as $option) {
-                $nameExistsKey = $this->findInName($propsForInsert, $attributeName);
+        foreach ($this->productAttributes as $attributes) {
+            foreach ($attributes as $attributeName => $options) {
+                foreach ($options as $option) {
+                    $nameExistsKey = $this->findInName($propsForInsert, $attributeName);
 
-                $newValue = [
-                    'code' => $this->cleanReferenceString($option),
-                    'value' => $option,
-                    'ordering' => $nameExistsKey ? count($propsForInsert[$nameExistsKey]['values']) + 1 : 1,
-                    'visible' => Boolean::YES,
-                ];
-
-                if ($nameExistsKey !== false) {
-                    if (!$this->findInCode($propsForInsert[$nameExistsKey]['values'], $newValue['code'])) {
-                        $propsForInsert[$nameExistsKey]['values'][] = $newValue;
-                    }
-                } else {
-                    $propsForInsert[] = [
-                        'name' => $attributeName,
-                        'ordering' => count($propsForInsert) + 1,
-                        'values' => [
-                            $newValue
-                        ],
+                    $newValue = [
+                        'code' => $this->cleanReferenceString($option),
+                        'value' => $option,
+                        'ordering' => $nameExistsKey ? count($propsForInsert[$nameExistsKey]['values']) + 1 : 1,
                         'visible' => Boolean::YES,
                     ];
+
+                    if ($nameExistsKey !== false) {
+                        if (!$this->findInCode($propsForInsert[$nameExistsKey]['values'], $newValue['code'])) {
+                            $propsForInsert[$nameExistsKey]['values'][] = $newValue;
+                        }
+                    } else {
+                        $propsForInsert[] = [
+                            'name' => $attributeName,
+                            'ordering' => count($propsForInsert) + 1,
+                            'values' => [
+                                $newValue
+                            ],
+                            'visible' => Boolean::YES,
+                        ];
+                    }
                 }
             }
         }
@@ -80,6 +82,6 @@ class CreateEntirePropertyGroup extends VariantHelperAbstract
             );*/
         }
 
-        return $mutationData;
+        return (new PrepareVariantPropertiesReturn($mutationData, $this->productAttributes))->handle();
     }
 }

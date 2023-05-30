@@ -17,6 +17,8 @@ abstract class VariantHelperAbstract
 
     protected function findInCode(array $array, string $needle)
     {
+        $needle = $this->cleanReferenceString($needle);
+
         foreach ($array as $value) {
             $value['code'] = $this->cleanReferenceString($value['code']);
 

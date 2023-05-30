@@ -2,21 +2,21 @@
 
 namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 
-use MoloniES\API\PropertyGroups;
+use WP_Term;
+use WC_Product;
+use WC_Product_Variable;
+use WC_Product_Attribute;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\Error;
+use MoloniES\API\PropertyGroups;
 use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
-use WC_Product;
-use WC_Product_Attribute;
-use WC_Product_Variable;
-use WP_Term;
 
 class FindOrCreatePropertyGroup extends VariantHelperAbstract
 {
     /**
      * @var array
      */
-    private $attributes;
+    private $productAttributes;
 
     /**
      * Constructor
@@ -25,12 +25,12 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
      */
     public function __construct($wcProduct)
     {
-        $this->attributes = $this->prepareProductAttributes($wcProduct);
+        $this->productAttributes = $this->prepareProductAttributes($wcProduct);
     }
 
     public function handle(): array
     {
-        if (empty($this->attributes)) {
+        if (empty($this->productAttributes)) {
             return [];
         }
 
@@ -51,10 +51,12 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
 
             $propertyGroupPropertiesMatchCount = 0;
 
-            foreach ($this->attributes as $attributeName => $options) {
-                foreach ($moloniPropertyGroup['properties'] as $property) {
-                    if (strtolower($attributeName) === strtolower($property['name'])) {
-                        $propertyGroupPropertiesMatchCount++;
+            foreach ($this->productAttributes as $attributes) {
+                foreach ($attributes as $attributeName => $options) {
+                    foreach ($moloniPropertyGroup['properties'] as $property) {
+                        if (strtolower($attributeName) === strtolower($property['name'])) {
+                            $propertyGroupPropertiesMatchCount++;
+                        }
                     }
                 }
             }
@@ -75,7 +77,7 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
          * We need to fully create it
          */
         if (empty($matches) || $matches[0]['count'] === 0) {
-            return (new CreateEntirePropertyGroup($moloniPropertyGroups, $this->attributes))->handle();
+            return (new CreateEntirePropertyGroup($moloniPropertyGroups, $this->productAttributes))->handle();
         }
 
         /**
@@ -102,52 +104,54 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
 
         $updateNeeded = false;
 
-        foreach ($this->attributes as $attributeName => $options) {
-            foreach ($options as $option) {
-                $propExistsKey = $this->findInName($propertyGroupForUpdate['properties'], $attributeName);
+        foreach ($this->productAttributes as $attributes) {
+            foreach ($attributes as $attributeName => $options) {
+                foreach ($options as $option) {
+                    $propExistsKey = $this->findInName($propertyGroupForUpdate['properties'], $attributeName);
 
-                /** Property name exists */
-                if ($propExistsKey !== false) {
-                    $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
+                    /** Property name exists */
+                    if ($propExistsKey !== false) {
+                        $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                    $valueExistsKey = $this->findInCode($propExists['values'], $option);
+                        $valueExistsKey = $this->findInCode($propExists['values'], $option);
 
-                    // Property value doesn't, add value
-                    if ($valueExistsKey === false) {
-                        $updateNeeded = true;
+                        /** Property value doesn't, add value */
+                        if ($valueExistsKey === false) {
+                            $updateNeeded = true;
 
-                        $nextOrdering = $this->getNextPropertyOrder($propExists['values']);
+                            $nextOrdering = $this->getNextPropertyOrder($propExists['values']);
 
-                        $propertyGroupForUpdate['properties'][$propExistsKey]['values'][] = [
-                            'code' => $this->cleanReferenceString($option),
-                            'value' => $option,
-                            'ordering' => $nextOrdering,
-                            'visible' => Boolean::YES,
-                        ];
-                    }
-                } else {
-                    /**
-                     * Property name doesn't exist
-                     * Need to create property and the value
-                     */
-
-                    $updateNeeded = true;
-
-                    $nextOrdering = $this->getNextPropertyOrder($propertyGroupForUpdate['properties']);
-
-                    $propertyGroupForUpdate['properties'][] = [
-                        'ordering' => $nextOrdering,
-                        'name' => $attributeName,
-                        'visible' => Boolean::YES,
-                        'values' => [
-                            [
+                            $propertyGroupForUpdate['properties'][$propExistsKey]['values'][] = [
                                 'code' => $this->cleanReferenceString($option),
                                 'value' => $option,
+                                'ordering' => $nextOrdering,
                                 'visible' => Boolean::YES,
-                                'ordering' => 1,
+                            ];
+                        }
+                    } else {
+                        /**
+                         * Property name doesn't exist
+                         * Need to create property and the value
+                         */
+
+                        $updateNeeded = true;
+
+                        $nextOrdering = $this->getNextPropertyOrder($propertyGroupForUpdate['properties']);
+
+                        $propertyGroupForUpdate['properties'][] = [
+                            'ordering' => $nextOrdering,
+                            'name' => $attributeName,
+                            'visible' => Boolean::YES,
+                            'values' => [
+                                [
+                                    'code' => $this->cleanReferenceString($option),
+                                    'value' => $option,
+                                    'visible' => Boolean::YES,
+                                    'ordering' => 1,
+                                ]
                             ]
-                        ]
-                    ];
+                        ];
+                    }
                 }
             }
         }
@@ -170,35 +174,39 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
                 ], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);*/
             }
 
-            return $updatedGroup;
+            return (new PrepareVariantPropertiesReturn($updatedGroup, $this->productAttributes))->handle();
         }
 
         /** This was a 100% match, we can return right away */
-        return $bestPropertyGroup;
+        return (new PrepareVariantPropertiesReturn($bestPropertyGroup, $this->productAttributes))->handle();
     }
 
     /**
      * Prepare initial data structure for looping
      *
-     * @param WC_Product|WC_Product_Variable $wpProduct
+     * @param WC_Product|WC_Product_Variable $wcProduct
      *
      * @return array
      */
-    private function prepareProductAttributes($wpProduct): array
+    private function prepareProductAttributes($wcProduct): array
     {
+        $tempParsedAttributes = [];
+
         /**
          * [
-         *       'group_name' => [
-         *           'attribute_a',
-         *           'attribute_b',
-         *           ...
-         *       ]
+         *      'wc_product_id => [
+         *          'attribute_name' => [
+         *              'option_a',
+         *              'option_b',
+         *              ...
+         *          ]
+         *      ]
          * ]
          */
         $result = [];
 
         /** @var WC_Product_Attribute[] $attributes */
-        $attributes = $wpProduct->get_attributes();
+        $attributes = $wcProduct->get_attributes();
 
         foreach ($attributes as $attributeTaxonomy => $productAttribute) {
             $attributeObject = wc_get_attribute($productAttribute->get_id());
@@ -209,15 +217,40 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
 
             $attributeName = $attributeObject->name;
 
-            if (!isset($result[$attributeName])) {
-                $result[$attributeName] = [];
+            if (!isset($tempParsedAttributes[$attributeTaxonomy])) {
+                $tempParsedAttributes[$attributeTaxonomy] = [
+                    'name' => $attributeName,
+                    'options' => [],
+                ];
             }
 
-            /** @var WP_Term[] $wcTerms */
-            $wcTerms = wc_get_product_terms($wpProduct->get_id(), $attributeTaxonomy);
+            $tempParsedAttributes[$attributeTaxonomy]['options'] = wc_get_product_terms($wcProduct->get_id(), $attributeTaxonomy);
+        }
 
-            foreach ($wcTerms as $wcTerm) {
-                $result[$attributeName][] = $wcTerm->name;
+        $ids = $wcProduct->get_children();
+
+        foreach ($ids as $id) {
+            $variationAttributes = wc_get_product($id)->get_attributes();
+
+            $result[$id] = [];
+
+            foreach ($variationAttributes as $taxonomy => $option) {
+                if (empty($option)) {
+                    continue;
+                }
+
+                $attributeName = $tempParsedAttributes[$taxonomy]['name'];
+
+                $result[$id][$attributeName] = [];
+
+                /** @var WP_Term $wpTerm */
+                foreach ($tempParsedAttributes[$taxonomy]['options'] as $wpTerm) {
+                    if ($wpTerm->slug === $option) {
+                        $result[$id][$attributeName][] = $wpTerm->name;
+
+                        break;
+                    }
+                }
             }
         }
 

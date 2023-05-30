@@ -8,6 +8,7 @@ use MoloniES\API\Warehouses;
 use MoloniES\Exceptions\Error;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\AutomaticDocumentsStatus;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
 
 try {
     $warehouses = Warehouses::queryWarehouses();
@@ -15,13 +16,11 @@ try {
     $e->showError();
     return;
 }
+/*
+$wcProduct = new WC_Product_Variable(254);
 
-/*$product = wc_get_product(36);
-$image = wp_get_attachment_image_src($product->get_image_id());
-$image2 = get_the_title($product->get_image_id());
-var_dump($image);
-echo '<br>';
-var_dump($image2);
+echo json_encode((new FindOrCreatePropertyGroup($wcProduct))->handle());
+
 die;*/
 ?>
 
@@ -118,7 +117,7 @@ die;*/
                         <optgroup label="<?= __('Warehouses', 'moloni_es') ?>">
                             <?php foreach ($warehouses as $warehouse) : ?>
                                 <option
-                                    value='<?= $warehouse['warehouseId'] ?>' <?= ($hookStockSyncWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
+                                        value='<?= $warehouse['warehouseId'] ?>' <?= ($hookStockSyncWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
                                     <?= $warehouse['name'] ?> (<?= $warehouse['number'] ?>)
                                 </option>
                             <?php endforeach; ?>
@@ -191,7 +190,7 @@ die;*/
                         <optgroup label="<?= __('Warehouses', 'moloni_es') ?>">
                             <?php foreach ($warehouses as $warehouse) : ?>
                                 <option
-                                    value='<?= $warehouse['warehouseId'] ?>' <?= ($hookStockSyncWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
+                                        value='<?= $warehouse['warehouseId'] ?>' <?= ($hookStockSyncWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
                                     <?= $warehouse['name'] ?> (<?= $warehouse['number'] ?>)
                                 </option>
                             <?php endforeach; ?>
@@ -225,21 +224,29 @@ die;*/
                 <td>
                     <fieldset>
                         <input type="checkbox" name="opt[sync_fields_name]" id="name"
-                               value="1" <?= (defined('SYNC_FIELDS_NAME') && SYNC_FIELDS_NAME === '1' ? 'checked' : '') ?>/><label for="name"><?= __('Name', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_NAME') && SYNC_FIELDS_NAME === '1' ? 'checked' : '') ?>/><label
+                                for="name"><?= __('Name', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_price]" id="price"
-                               value="1" <?= (defined('SYNC_FIELDS_PRICE') && SYNC_FIELDS_PRICE === '1' ? 'checked' : '') ?>/><label for="price"><?= __('Price', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_PRICE') && SYNC_FIELDS_PRICE === '1' ? 'checked' : '') ?>/><label
+                                for="price"><?= __('Price', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_description]]" id="description"
-                               value="1" <?= (defined('SYNC_FIELDS_DESCRIPTION') && SYNC_FIELDS_DESCRIPTION === '1' ? 'checked' : '') ?>/><label for="description"><?= __('Description', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_DESCRIPTION') && SYNC_FIELDS_DESCRIPTION === '1' ? 'checked' : '') ?>/><label
+                                for="description"><?= __('Description', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_visibility]" id="visibility"
-                               value="1" <?= (defined('SYNC_FIELDS_VISIBILITY') && SYNC_FIELDS_VISIBILITY === '1' ? 'checked' : '') ?>/><label for="visibility"><?= __('Visibility', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_VISIBILITY') && SYNC_FIELDS_VISIBILITY === '1' ? 'checked' : '') ?>/><label
+                                for="visibility"><?= __('Visibility', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_stock]" id="stock"
-                               value="1" <?= (defined('SYNC_FIELDS_STOCK') && SYNC_FIELDS_STOCK === '1' ? 'checked' : '') ?>/><label for="stock"><?= __('Stock', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_STOCK') && SYNC_FIELDS_STOCK === '1' ? 'checked' : '') ?>/><label
+                                for="stock"><?= __('Stock', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_categories]" id="categories"
-                               value="1" <?= (defined('SYNC_FIELDS_CATEGORIES') && SYNC_FIELDS_CATEGORIES === '1' ? 'checked' : '') ?>/><label for="categories"><?= __('Categories', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_CATEGORIES') && SYNC_FIELDS_CATEGORIES === '1' ? 'checked' : '') ?>/><label
+                                for="categories"><?= __('Categories', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_ean]" id="ean"
-                               value="1" <?= (defined('SYNC_FIELDS_EAN') && SYNC_FIELDS_EAN === '1' ? 'checked' : '') ?>/><label for="ean"><?= __('EAN', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_EAN') && SYNC_FIELDS_EAN === '1' ? 'checked' : '') ?>/><label
+                                for="ean"><?= __('EAN', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_image]" id="image"
-                               value="1" <?= (defined('SYNC_FIELDS_IMAGE') && SYNC_FIELDS_IMAGE === '1' ? 'checked' : '') ?>/><label for="image"><?= __('Image', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_IMAGE') && SYNC_FIELDS_IMAGE === '1' ? 'checked' : '') ?>/><label
+                                for="image"><?= __('Image', 'moloni_es') ?></label><br/>
                     </fieldset>
                     <p class='description'>
                         <?= __('Optional field that will sync when synchronizing products', 'moloni_es') ?>

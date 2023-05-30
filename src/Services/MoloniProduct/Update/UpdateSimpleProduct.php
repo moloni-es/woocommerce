@@ -60,7 +60,8 @@ class UpdateSimpleProduct extends MoloniProductSyncAbstract
             'moloniId' => $this->moloniProduct['productId'],
             'moloniParentId' => 0,
             'wcId' => $this->wcProduct->get_id(),
-            'wcParentId' => 0
+            'wcParentId' => 0,
+            'props' => $this->props
         ]);
     }
 

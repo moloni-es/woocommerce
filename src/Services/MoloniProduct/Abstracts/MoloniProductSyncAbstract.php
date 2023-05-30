@@ -2,32 +2,32 @@
 
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
+use WC_Tax;
+use WC_Product;
+use MoloniES\Tools;
 use MoloniES\API\Companies;
 use MoloniES\API\Products;
 use MoloniES\API\Warehouses;
-use MoloniES\Controllers\ProductCategory;
 use MoloniES\Enums\Boolean;
-use MoloniES\Enums\ProductIdentificationType;
 use MoloniES\Enums\ProductType;
+use MoloniES\Controllers\ProductCategory;
 use MoloniES\Exceptions\ServiceException;
-use MoloniES\Services\MoloniProduct\Helpers\ProductVariant;
+use MoloniES\Enums\ProductIdentificationType;
+use MoloniES\Services\MoloniProduct\Variant\MoloniVariant;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
 use MoloniES\Services\MoloniProduct\Interfaces\MoloniProductServiceInterface;
-use MoloniES\Tools;
 use MoloniES\Traits\SyncFieldsSettingsTrait;
-use WC_Product;
-use WC_Tax;
 
 abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterface
 {
     use SyncFieldsSettingsTrait;
 
     /**
-     * WooCommerce product
-     *
-     * @var WC_Product|null
-     */
+ * WooCommerce product
+ *
+ * @var WC_Product|null
+ */
     protected $wcProduct;
 
     /**
@@ -43,6 +43,21 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
      * @var array
      */
     protected $props = [];
+
+
+    /**
+     * Property group
+     *
+     * @var array
+     */
+    protected $propertyGroup = [];
+
+    /**
+     * Moloni variant services
+     *
+     * @var MoloniVariant[]
+     */
+    protected $variantServices = [];
 
     //            Sets            //
 
@@ -245,7 +260,7 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         }
     }
 
-    protected function setVariants()
+    protected function setPropertyGroup()
     {
         if (empty($this->moloniProduct)) {
             $propertyGroup = (new FindOrCreatePropertyGroup($this->wcProduct))->handle();
@@ -259,40 +274,54 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
             $propertyGroup = (new GetOrUpdatePropertyGroup($this->wcProduct, $targetId))->handle();
         }
 
-        $this->props['propertyGroupId'] = $propertyGroup['propertyGroupId'];
+        $this->propertyGroup = $propertyGroup;
 
-        $existingVariants = $this->moloniProduct['variants'] ?? [];
+        $this->props['propertyGroupId'] = $propertyGroup['propertyGroupId'];
+    }
+
+    protected function setVariants()
+    {
         $newVariants = [];
 
-        $wcVariationIds = $this->wcProduct->get_children();
-
-        foreach ($wcVariationIds as $wcVariationId) {
+        foreach ($this->propertyGroup['variations'] as $wcVariationId => $targetPropertyGroup) {
             $wcVariation = wc_get_product($wcVariationId);
 
             if (empty($wcVariation)) {
                 continue;
             }
 
-            $newVariants[] = (new ProductVariant($wcVariation, $existingVariants, $propertyGroup))->toArray();
+            $service = new MoloniVariant(
+                $wcVariation,
+                $this->moloniProduct ?? [],
+                $this->propertyGroup['variations'][$wcVariationId] ?? []
+            );
+            $service->findVariant();
+            $service->run();
+
+            $newVariants[] = $service->getProps();
+
+            $this->variantServices[] = $service;
         }
 
-        foreach ($existingVariants as $existingVariant) {
-            foreach ($newVariants as $newVariant) {
-                if (!isset($newVariant['productId'])) {
-                    continue;
+        if (!empty($this->moloniProduct['variants'])) {
+            foreach ($this->moloniProduct['variants'] as $existingVariant) {
+                foreach ($newVariants as $newVariant) {
+                    if (!isset($newVariant['productId'])) {
+                        continue;
+                    }
+
+                    if ($existingVariant['productId'] === $newVariant['productId']) {
+                        continue 2;
+                    }
                 }
 
-                if ($existingVariant['productId'] === $newVariant['productId']) {
-                    continue 2;
+                /** If we cannot delete variant, set it as invisible */
+                if ($existingVariant['deletable'] === false) {
+                    $newVariants[] = [
+                        'productId' => $existingVariant['productId'],
+                        'visible' => Boolean::NO,
+                    ];
                 }
-            }
-
-            // If we cannot delete variant, set it as invisible
-            if ($existingVariant['deletable'] === false) {
-                $newVariants[] = [
-                    'productId' => $existingVariant['productId'],
-                    'visible' => Boolean::NO,
-                ];
             }
         }
 
@@ -326,6 +355,8 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         }
 
         $this->moloniProduct = $product;
+
+        $this->afterSave();
     }
 
     protected function update()
@@ -353,6 +384,8 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         }
 
         $this->moloniProduct = $product;
+
+        $this->afterSave();
     }
 
     protected function uploadImage()
@@ -400,6 +433,16 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
     }
 
     //            Auxiliary            //
+
+    protected function afterSave()
+    {
+        if (!empty($this->variantServices)) {
+            foreach ($this->variantServices as $variantService) {
+                $variantService->setMoloniParentProduct($this->moloniProduct);
+                $variantService->findVariant();
+            }
+        }
+    }
 
     /**
      * Creates reference for product if missing

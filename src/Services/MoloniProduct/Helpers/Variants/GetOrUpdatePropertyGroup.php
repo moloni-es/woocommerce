@@ -2,20 +2,21 @@
 
 namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 
+use WP_Term;
+use WC_Product;
+use WC_Product_Variable;
+use WC_Product_Attribute;
 use MoloniES\API\PropertyGroups;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\Error;
-use WC_Product;
-use WC_Product_Attribute;
-use WC_Product_Variable;
-use WP_Term;
+use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
 
-class GetOrUpdatePropertyGroup
+class GetOrUpdatePropertyGroup extends VariantHelperAbstract
 {
     /**
      * @var array
      */
-    private $attributes;
+    private $productAttributes;
 
     /**
      * @var string
@@ -30,13 +31,13 @@ class GetOrUpdatePropertyGroup
      */
     public function __construct($wcProduct, string $propertyGroupId)
     {
-        $this->attributes = $this->prepareProductAttributes($wcProduct);
+        $this->productAttributes = $this->prepareProductAttributes($wcProduct);
         $this->propertyGroupId = $propertyGroupId;
     }
 
     public function handle(): array
     {
-        if (empty($this->attributes)) {
+        if (empty($this->productAttributes)) {
             return [];
         }
 
@@ -63,7 +64,7 @@ class GetOrUpdatePropertyGroup
             'properties' => $moloniPropertyGroup['properties'],
         ];
 
-        // Delete unwanted props
+        /** Delete unwanted props */
         foreach ($propertyGroupForUpdate['properties'] as $idx => $group) {
             unset($propertyGroupForUpdate['properties'][$idx]['deletable']);
 
@@ -74,50 +75,48 @@ class GetOrUpdatePropertyGroup
 
         $updateNeeded = false;
 
-        foreach ($this->attributes as $groups) {
-            foreach ($groups as $groupName => $attributes) {
-                foreach ($attributes as $attribute) {
-                    $propExistsKey = $this->findInName($propertyGroupForUpdate['properties'], $groupName);
+        foreach ($this->productAttributes as $attributes) {
+            foreach ($attributes as $attributeName => $options) {
+                foreach ($options as $option) {
+                    $propExistsKey = $this->findInName($propertyGroupForUpdate['properties'], $attributeName);
 
-                    // Property name exists
+                    /** Property name exists */
                     if ($propExistsKey !== false) {
                         $propExists = $propertyGroupForUpdate['properties'][$propExistsKey];
 
-                        $valueExistsKey = $this->findInCode(
-                            $propExists['values'],
-                            $attribute,
-                            [$this, 'cleanReferenceString']
-                        );
+                        $valueExistsKey = $this->findInCode($propExists['values'], $option);
 
-                        // Property value doesn't, add value
+                        /** Property value doesn't, add value */
                         if ($valueExistsKey === false) {
                             $updateNeeded = true;
 
                             $nextOrdering = $this->getNextPropertyOrder($propExists['values']);
 
                             $propertyGroupForUpdate['properties'][$propExistsKey]['values'][] = [
-                                'code' => $this->cleanReferenceString($attribute),
-                                'value' => $attribute,
+                                'code' => $this->cleanReferenceString($option),
+                                'value' => $option,
                                 'ordering' => $nextOrdering,
                                 'visible' => Boolean::YES,
                             ];
                         }
-
-                        // Property name doesn't exist
-                        // need to create property and the value
                     } else {
+                        /**
+                         * Property name doesn't exist
+                         * Need to create property and the value
+                         */
+
                         $updateNeeded = true;
 
                         $nextOrdering = $this->getNextPropertyOrder($propertyGroupForUpdate['properties']);
 
                         $propertyGroupForUpdate['properties'][] = [
                             'ordering' => $nextOrdering,
-                            'name' => $groupName,
+                            'name' => $attributeName,
                             'visible' => Boolean::YES,
                             'values' => [
                                 [
-                                    'code' => $this->cleanReferenceString($attribute),
-                                    'value' => $attribute,
+                                    'code' => $this->cleanReferenceString($option),
+                                    'value' => $option,
                                     'visible' => Boolean::YES,
                                     'ordering' => 1,
                                 ],
@@ -128,7 +127,7 @@ class GetOrUpdatePropertyGroup
             }
         }
 
-        // There was stuff missing, we need to update the property group
+        /** There was stuff missing, we need to update the property group */
         if ($updateNeeded) {
             $mutation = PropertyGroups::mutationPropertyGroupUpdate(['data' => $propertyGroupForUpdate]);
 
@@ -139,35 +138,39 @@ class GetOrUpdatePropertyGroup
                 /* throw new MoloniProductException('Failed to update existing property group "{0}"', ['{0}' => $bestPropertyGroup['name'] ?? ''], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);*/
             }
 
-            return $updatedPropertyGroup;
+            return (new PrepareVariantPropertiesReturn($updatedPropertyGroup, $this->productAttributes))->handle();
         }
 
-        // This was a 100% match, we can return right away
-        return $moloniPropertyGroup;
+        /** This was a 100% match, we can return right away */
+        return (new PrepareVariantPropertiesReturn($moloniPropertyGroup, $this->productAttributes))->handle();
     }
 
     /**
      * Prepare initial data structure for looping
      *
-     * @param WC_Product|WC_Product_Variable $wpProduct
+     * @param WC_Product|WC_Product_Variable $wcProduct
      *
      * @return array
      */
-    private function prepareProductAttributes($wpProduct): array
+    private function prepareProductAttributes($wcProduct): array
     {
+        $tempParsedAttributes = [];
+
         /**
          * [
-         *       'group_name' => [
-         *           'attribute_a',
-         *           'attribute_b',
-         *           ...
-         *       ]
+         *      'wc_product_id => [
+         *          'attribute_name' => [
+         *              'option_a',
+         *              'option_b',
+         *              ...
+         *          ]
+         *      ]
          * ]
          */
         $result = [];
 
         /** @var WC_Product_Attribute[] $attributes */
-        $attributes = $wpProduct->get_attributes();
+        $attributes = $wcProduct->get_attributes();
 
         foreach ($attributes as $attributeTaxonomy => $productAttribute) {
             $attributeObject = wc_get_attribute($productAttribute->get_id());
@@ -178,15 +181,40 @@ class GetOrUpdatePropertyGroup
 
             $attributeName = $attributeObject->name;
 
-            if (!isset($result[$attributeName])) {
-                $result[$attributeName] = [];
+            if (!isset($tempParsedAttributes[$attributeTaxonomy])) {
+                $tempParsedAttributes[$attributeTaxonomy] = [
+                    'name' => $attributeName,
+                    'options' => [],
+                ];
             }
 
-            /** @var WP_Term[] $wcTerms */
-            $wcTerms = wc_get_product_terms($wpProduct->get_id(), $attributeTaxonomy);
+            $tempParsedAttributes[$attributeTaxonomy]['options'] = wc_get_product_terms($wcProduct->get_id(), $attributeTaxonomy);
+        }
 
-            foreach ($wcTerms as $wcTerm) {
-                $result[$attributeName][] = $wcTerm->name;
+        $ids = $wcProduct->get_children();
+
+        foreach ($ids as $id) {
+            $variationAttributes = wc_get_product($id)->get_attributes();
+
+            $result[$id] = [];
+
+            foreach ($variationAttributes as $taxonomy => $option) {
+                if (empty($option)) {
+                    continue;
+                }
+
+                $attributeName = $tempParsedAttributes[$taxonomy]['name'];
+
+                $result[$id][$attributeName] = [];
+
+                /** @var WP_Term $wpTerm */
+                foreach ($tempParsedAttributes[$taxonomy]['options'] as $wpTerm) {
+                    if ($wpTerm->slug === $option) {
+                        $result[$id][$attributeName][] = $wpTerm->name;
+
+                        break;
+                    }
+                }
             }
         }
 
