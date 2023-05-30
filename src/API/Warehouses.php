@@ -10,12 +10,13 @@ class Warehouses
     /**
      * Get All Warehouses from Moloni ES
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws Error
      */
-    public static function queryWarehouses($variables = [])
+    public static function queryWarehouses(?array $variables = []): array
     {
         $query = 'query warehouses($companyId: Int!,$options: WarehouseOptions)
         {

@@ -18,6 +18,8 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
 
     public function run()
     {
+        $this->loadVariationProducts();
+
         $this->setName();
         $this->setReference();
         $this->setPrice();

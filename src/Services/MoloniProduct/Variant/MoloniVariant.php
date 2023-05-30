@@ -2,13 +2,14 @@
 
 namespace MoloniES\Services\MoloniProduct\Variant;
 
+use MoloniES\Helpers\MoloniWarehouse;
+use WC_Product;
+use WC_Product_Variation;
 use MoloniES\API\Warehouses;
 use MoloniES\Enums\Boolean;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
 use MoloniES\Tools\ProductAssociations;
 use MoloniES\Traits\SyncFieldsSettingsTrait;
-use WC_Product;
-use WC_Product_Variation;
 
 class MoloniVariant
 {
@@ -152,31 +153,24 @@ class MoloniVariant
     {
         $hasStock = $this->wcProduct->managing_stock();
 
-        $this->props['hasStock'] = $hasStock;
-
         if ($hasStock) {
             $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
 
             if ($warehouseId === 1) {
-                $results = Warehouses::queryWarehouses();
-
-                /** fail safe */
-                $warehouseId = (int)$results[0]['warehouseId'];
-
-                foreach ($results as $result) {
-                    if ((bool)$result['isDefault'] === true) {
-                        $warehouseId = (int)$result['warehouseId'];
-
-                        break;
-                    }
-                }
+                $warehouseId = MoloniWarehouse::getDefaultWarehouse();
             }
 
             $this->props['warehouseId'] = $warehouseId;
-            $this->props['warehouses'] = [[
+            $warehouses = [
                 'warehouseId' => $warehouseId,
-                'stock' => (float)$this->wcProduct->get_stock_quantity()
-            ]];
+            ];
+
+            /** New variants cant have stock if parent product already exists */
+            if (!$this->parentProductExists()) {
+                $warehouses['stock'] = (float)$this->wcProduct->get_stock_quantity();
+            }
+
+            $this->props['warehouses'] = [$warehouses];
         }
     }
 

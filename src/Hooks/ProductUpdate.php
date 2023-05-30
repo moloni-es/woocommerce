@@ -2,6 +2,7 @@
 
 namespace MoloniES\Hooks;
 
+use WC_Product;
 use Exception;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
@@ -17,7 +18,6 @@ use MoloniES\Start;
 use MoloniES\Storage;
 use MoloniES\Tools\ProductAssociations;
 use MoloniES\Tools\SyncLogs;
-use WC_Product;
 
 class ProductUpdate
 {
@@ -50,10 +50,8 @@ class ProductUpdate
      */
     private $moloniProduct = [];
 
-    public function __construct(Plugin $parent)
+    public function __construct()
     {
-        $this->parent = $parent;
-
         add_action('woocommerce_update_product', [$this, 'productSave']);
     }
 
@@ -88,6 +86,7 @@ class ProductUpdate
                 'data' => [
                     'wcProductId' => $this->wcProductId,
                     'moloniProduct' => $this->moloniProduct,
+                    'request' => $e->getRequest(),
                 ]
             ]);
         } catch (Exception $e) {

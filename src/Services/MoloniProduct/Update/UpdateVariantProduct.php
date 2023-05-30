@@ -19,6 +19,8 @@ class UpdateVariantProduct extends MoloniProductSyncAbstract
 
     public function run()
     {
+        $this->loadVariationProducts();
+
         $this->setProductId();
 
         if ($this->productShouldSyncName()) {

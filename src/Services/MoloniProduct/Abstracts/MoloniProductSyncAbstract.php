@@ -2,8 +2,10 @@
 
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
+use MoloniES\Helpers\MoloniWarehouse;
 use WC_Tax;
 use WC_Product;
+use WC_Product_Variation;
 use MoloniES\Tools;
 use MoloniES\API\Companies;
 use MoloniES\API\Products;
@@ -46,6 +48,13 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
 
     /**
+     * WooCommerce's variation products
+     *
+     * @var WC_Product_Variation[]
+     */
+    protected $variationProductsCache = [];
+
+    /**
      * Property group
      *
      * @var array
@@ -60,6 +69,21 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
     protected $variantServices = [];
 
     //            Sets            //
+
+    protected function loadVariationProducts()
+    {
+        /** Let's load everything at the beginning, to do fewer queries to database */
+
+        $variationIds = $this->wcProduct->get_children();
+
+        if (empty($variationIds)) {
+            return;
+        }
+
+        foreach ($variationIds as $variationId) {
+            $this->variationProductsCache[$variationId] = wc_get_product($variationId);
+        }
+    }
 
     protected function setProductId()
     {
@@ -169,33 +193,42 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function setStock()
     {
-        $hasStock = $this->wcProduct->managing_stock();
+        $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
+        $wcProductIsVariable = $this->wcProduct->is_type('variable');
+
+        if ($wcProductIsVariable) {
+            $hasStock = false;
+
+            foreach ($this->variationProductsCache as $variationProduct) {
+                if ($variationProduct->managing_stock()) {
+                    $hasStock = true;
+
+                    break;
+                }
+            }
+        } else {
+            $hasStock = $this->wcProduct->managing_stock();
+        }
 
         $this->props['hasStock'] = $hasStock;
 
         if ($hasStock) {
-            $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
-
             if ($warehouseId === 1) {
-                $results = Warehouses::queryWarehouses();
-
-                /** fail safe */
-                $warehouseId = (int)$results[0]['warehouseId'];
-
-                foreach ($results as $result) {
-                    if ((bool)$result['isDefault'] === true) {
-                        $warehouseId = (int)$result['warehouseId'];
-
-                        break;
-                    }
-                }
+                $warehouseId = MoloniWarehouse::getDefaultWarehouse();
             }
 
             $this->props['warehouseId'] = $warehouseId;
-            $this->props['warehouses'] = [[
-                'warehouseId' => $warehouseId,
-                'stock' => (float)$this->wcProduct->get_stock_quantity()
-            ]];
+
+            if ($wcProductIsVariable) {
+                $this->props['warehouses'] = [
+                    'warehouseId' => $warehouseId,
+                ];
+            } else {
+                $this->props['warehouses'] = [[
+                    'warehouseId' => $warehouseId,
+                    'stock' => (float)$this->wcProduct->get_stock_quantity()
+                ]];
+            }
         }
     }
 
@@ -284,7 +317,8 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         $newVariants = [];
 
         foreach ($this->propertyGroup['variations'] as $wcVariationId => $targetPropertyGroup) {
-            $wcVariation = wc_get_product($wcVariationId);
+            /** Get variation from cached objects array */
+            $wcVariation = $this->variationProductsCache[$wcVariationId];
 
             if (empty($wcVariation)) {
                 continue;
