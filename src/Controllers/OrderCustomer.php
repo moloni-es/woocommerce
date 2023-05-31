@@ -102,7 +102,10 @@ class OrderCustomer
     /**
      * Get the vat number of an order
      * Get it from a custom field and validate if Portuguese
+     *
      * @return string
+     *
+     * @throws Error
      */
     public function getVatNumber()
     {
@@ -140,7 +143,7 @@ class OrderCustomer
             }
 
             if (!empty($vat) && !Customer::isVatEsValid($vat)) {
-                $vat = null;
+                throw new Error(__('Customer has invalid VAT for Spain.','moloni_es'));
             }
         }
 
