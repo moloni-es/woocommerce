@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.45
+Stable tag: 1.0.46
 Tested up to: 6.2
 WC tested up to: 7.5.1
 
@@ -67,6 +67,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.46 =
+* Show error when a customer has an invalid VAT for the Spanish fiscal zone.
+
 = 1.0.45 =
 * Change Webhooks behaviour
 
