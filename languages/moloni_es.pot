@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-19 11:40+0000\n"
+"POT-Creation-Date: 2023-05-31 11:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -157,6 +157,10 @@ msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:386
 msgid "Custom field associated with the customer's VAT"
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:146
+msgid "Customer has invalid VAT for Spain."
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:374
