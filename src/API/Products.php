@@ -67,36 +67,6 @@ class Products
     }
 
     /**
-     * Update a product image
-     *
-     * @param array $variables variables of the query
-     *
-     * @return true
-     */
-    public static function mutationProductImageUpdate(array $variables = [], $file = ''): bool
-    {
-        $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
-        {
-            productUpdate(companyId: $companyId ,data: $data)
-            {
-                data
-                {
-                    productId
-                    name
-                    reference
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
-
-        return Curl::uploadImage($query, $variables, $file);
-    }
-
-    /**
      * Gets the information of a product
      *
      * @param array $variables variables of the query

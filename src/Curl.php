@@ -111,6 +111,29 @@ class Curl
     }
 
     /**
+     * Uploads a file
+     *
+     * @param $headers
+     * @param $payload
+     *
+     * @return true
+     */
+    public static function simpleCustomPost($headers, $payload): bool
+    {
+        wp_remote_post(
+            self::$url,
+            [
+                'headers' => $headers,
+                'body' => $payload,
+                'timeout' => 45,
+                'user-agent' => self::$userAgent
+            ]
+        );
+
+        return true;
+    }
+
+    /**
      * Gets all values from a query and loops its pages of results
      *
      * @param $action
@@ -147,66 +170,6 @@ class Curl
         }
 
         return $array;
-    }
-
-    /**
-     * Uploads a file
-     *
-     * @param $query
-     * @param $variables
-     * @param $file
-     *
-     * @return true
-     */
-    public static function uploadImage($query, $variables, $file): bool
-    {
-        $payload = '';
-        $boundary = 'MOLONIRULES';
-        $query = str_replace(["\n", "\r"], '', $query);
-
-        if (Storage::$MOLONI_ES_COMPANY_ID) {
-            $variables['companyId'] = Storage::$MOLONI_ES_COMPANY_ID;
-        }
-
-        $data = [
-            'operations' => json_encode(['query' => $query, 'variables' => $variables]),
-            'map' => '{ "0": ["variables.data.img"] }'
-        ];
-
-        $headers = [
-            'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN,
-            'Content-type' => 'multipart/form-data; boundary=' . $boundary,
-        ];
-
-        foreach ($data as $name => $value) {
-            $payload .= '--' . $boundary;
-            $payload .= "\r\n";
-            $payload .= 'Content-Disposition: form-data; name="' . $name .
-                '"' . "\r\n\r\n";
-            $payload .= $value;
-            $payload .= "\r\n";
-        }
-
-        $payload .= '--' . $boundary;
-        $payload .= "\r\n";
-        $payload .= 'Content-Disposition: form-data; name="0"; filename="' . basename($file) . '"' . "\r\n";
-        $payload .= 'Content-Type: image/*' . "\r\n";
-        $payload .= "\r\n";
-        $payload .= file_get_contents($file);
-        $payload .= "\r\n";
-        $payload .= '--' . $boundary . '--';
-
-        wp_remote_post(
-            self::$url,
-            [
-                'headers' => $headers,
-                'body' => $payload,
-                'timeout' => 45,
-                'user-agent' => self::$userAgent
-            ]
-        );
-
-        return true;
     }
 
     /**

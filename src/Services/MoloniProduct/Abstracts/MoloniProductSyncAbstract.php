@@ -2,7 +2,9 @@
 
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
+use MoloniES\Curl;
 use MoloniES\Helpers\MoloniWarehouse;
+use MoloniES\Services\MoloniProduct\Helpers\UpdateProductImages;
 use WC_Tax;
 use WC_Product;
 use WC_Product_Variation;
@@ -424,34 +426,29 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function uploadImage()
     {
+        $files = [];
         $wcImageId = $this->wcProduct->get_image_id();
-        $oldMoloniImage = $this->moloniProduct['img'] ?? '';
-
-        if ($wcImageId > 0 && !empty($oldMoloniImage)) {
-            $wcImageName = get_the_title($wcImageId);
-
-            /** If images have the same name there is no need to update image */
-            if (str_contains($oldMoloniImage, $wcImageName)) {
-                return;
-            }
-        }
 
         $url = wp_get_attachment_url($wcImageId);
 
         if ($url) {
             $uploads = wp_upload_dir();
 
-            $image = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
-
-            $variables = [
-                'data' => [
-                    'productId' => (int)$this->moloniProduct['productId'],
-                    'img' => null
-                ],
-            ];
-
-            Products::mutationProductImageUpdate($variables, $image);
+            $files[0] = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
+        } else {
+            $files[0] = '';
         }
+
+        if (!empty($this->variantServices)) {
+            foreach ($this->variantServices as $variantService) {
+                $image = $variantService->getImage();
+                $productId = $variantService->getMoloniVariantProductId();
+
+                $files[$productId] = $image;
+            }
+        }
+
+        new UpdateProductImages($files, $this->moloniProduct);
     }
 
     //            Gets            //

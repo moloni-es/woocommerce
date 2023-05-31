@@ -151,7 +151,7 @@ class Product
                 ],
             ];
 
-            ApiProducts::mutationProductImageUpdate($variables, $this->image);
+            // ApiProducts::mutationProductImageUpdate($variables, [$this->image]);
         }
     }
 

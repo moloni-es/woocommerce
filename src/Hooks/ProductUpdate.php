@@ -134,12 +134,12 @@ class ProductUpdate
 
     private function fetchMoloniProduct(): void
     {
-        /** Fetch by our associaitons table */
+        /** Fetch by our associations table */
 
         $association = ProductAssociations::findByWcId($this->wcProductId);
 
         if (!empty($association)) {
-            $byId = Products::queryProduct(['productId' => $association['ml_product_id']]);
+            $byId = Products::queryProduct(['productId' => (int)$association['ml_product_id']]);
             $byId = $byId['data']['product']['data'] ?? [];
 
             if (!empty($byId)) {

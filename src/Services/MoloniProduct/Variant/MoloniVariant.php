@@ -51,6 +51,13 @@ class MoloniVariant
      */
     private $props = [];
 
+    /**
+     * WooCommerce image URL
+     *
+     * @var string
+     */
+    private $image = '';
+
     public function __construct($wcProduct, ?array $moloniParentProduct = [], ?array $propertyPairs = [])
     {
         $this->wcProduct = $wcProduct;
@@ -109,6 +116,10 @@ class MoloniVariant
         if ($this->productShouldSyncDescription()) {
             $this->setSummary();
             $this->setNotes();
+        }
+
+        if ($this->productShouldSyncImage()) {
+            $this->setImage();
         }
     }
 
@@ -194,6 +205,21 @@ class MoloniVariant
         $this->props['propertyPairs'] = $this->propertyPairs;
     }
 
+    private function setImage()
+    {
+        $wcImageId = $this->wcProduct->get_image_id();
+
+        $url = wp_get_attachment_url($wcImageId);
+
+        if ($url) {
+            $uploads = wp_upload_dir();
+
+            $image = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
+        }
+
+        $this->image = $image ?? '';
+    }
+
     public function setMoloniParentProduct(array $moloniParentProduct)
     {
         $this->moloniParentProduct = $moloniParentProduct;
@@ -204,6 +230,11 @@ class MoloniVariant
     public function getProps(): array
     {
         return $this->props;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image ?? '';
     }
 
     public function getPropertyPairs(): ?array
@@ -219,6 +250,15 @@ class MoloniVariant
     public function getMoloniVariant(): array
     {
         return $this->moloniVariant;
+    }
+
+    public function getMoloniVariantProductId(): int
+    {
+        if (empty($this->moloniVariant)) {
+            return 0;
+        }
+
+        return (int)($this->moloniVariant['productId'] ?? 0);
     }
 
     //            Auxiliary            //
