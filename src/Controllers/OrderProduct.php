@@ -213,8 +213,11 @@ class OrderProduct
     {
         $moloniProduct = [];
 
-        if ($this->orderProduct->get_variation_id() > 0) {
-            $association = ProductAssociations::findByWcId($this->orderProduct->get_variation_id());
+        $wcProductId = $this->orderProduct->get_product_id();
+        $wcVariationId = $this->orderProduct->get_variation_id();
+
+        if ($wcVariationId > 0) {
+            $association = ProductAssociations::findByWcId($wcVariationId);
 
             /** Association found, let's fetch by ID */
             if (!empty($association)) {
@@ -224,41 +227,62 @@ class OrderProduct
             if (empty($moloniProduct)) {
                 $moloniProduct = $this->getByProductParent();
             }
-        } else {
-            $association = ProductAssociations::findByWcId($this->orderProduct->get_product_id());
 
-            /** Association found, let's fetch by ID */
-            if (!empty($association)) {
-                $moloniProduct = $this->getById($association['ml_product_id']);
-            }
-        }
-
-        /** Let's search by reference */
-        if (empty($moloniProduct)) {
-            $wcProduct = $this->orderProduct->get_product();
-
-            if (empty($wcProduct)) {
-                throw new Error(__('Order products were deleted.','moloni_es'));
-            }
-
-            $moloniProduct = $this->getByReference($wcProduct);
-
-            /** Not found, lets create a new product */
+            /** Let's search by reference */
             if (empty($moloniProduct)) {
-                $wcProduct = wc_get_product($this->orderProduct->get_product_id());
+                $wcProduct = wc_get_product($wcVariationId);
 
                 if (empty($wcProduct)) {
                     throw new Error(__('Order products were deleted.','moloni_es'));
                 }
 
-                if ($wcProduct->is_type('variable')) {
+                $moloniProduct = $this->getByReference($wcProduct);
+
+                /** Not found, lets create a new product */
+                if (empty($moloniProduct)) {
+                    $wcProduct = wc_get_product($wcProductId);
+
+                    if (empty($wcProduct)) {
+                        throw new Error(__('Order products were deleted.','moloni_es'));
+                    }
+
+                    SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
+
                     $service = new CreateVariantProduct($wcProduct);
-                } else {
-                    $service = new CreateSimpleProduct($wcProduct);
+                    $service->run();
+                    $service->saveLog();
+
+                    $moloniProduct = $service->getVariant($wcVariationId);
+                }
+            }
+        } else {
+            $association = ProductAssociations::findByWcId($wcProductId);
+
+            /** Association found, let's fetch by ID */
+            if (!empty($association)) {
+                $moloniProduct = $this->getById($association['ml_product_id']);
+            }
+
+            /** Let's search by reference */
+            if (empty($moloniProduct)) {
+                $wcProduct = wc_get_product($wcProductId);
+
+                if (empty($wcProduct)) {
+                    throw new Error(__('Order products were deleted.','moloni_es'));
                 }
 
-                $service->run();
-                $service->saveLog();
+                $moloniProduct = $this->getByReference($wcProduct);
+
+                /** Not found, lets create a new product */
+                if (empty($moloniProduct)) {
+                    SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
+
+                    $service = new CreateSimpleProduct($wcProduct);
+                    $service->run();
+                    $service->saveLog();
+
+                    $moloniProduct = $service->getMoloniProduct();
+                }
             }
         }
 
@@ -473,6 +497,7 @@ class OrderProduct
         }
 
         SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcParentId);
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $mlProduct['productId']);
 
         $service = new UpdateVariantProduct($wcProduct, $mlProduct);
         $service->run();
