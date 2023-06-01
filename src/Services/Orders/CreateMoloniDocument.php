@@ -2,7 +2,7 @@
 
 namespace MoloniES\Services\Orders;
 
-use MoloniES\Exceptions\Warning;
+use MoloniES\Exceptions\DocumentWarning;
 use WC_Order;
 use MoloniES\API\Companies;
 use MoloniES\Exceptions\Error;
@@ -47,7 +47,7 @@ class CreateMoloniDocument
     /**
      * Run service
      *
-     * @throws Warning
+     * @throws DocumentWarning
      * @throws Error
      */
     public function run(): void

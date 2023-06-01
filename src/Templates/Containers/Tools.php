@@ -96,3 +96,7 @@ if (!defined('ABSPATH')) {
     </tr>
     </tbody>
 </table>
+
+<script>
+    Moloni.Tools.init();
+</script>

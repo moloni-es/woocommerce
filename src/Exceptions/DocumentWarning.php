@@ -2,7 +2,7 @@
 
 namespace MoloniES\Exceptions;
 
-class Warning extends Error
+class DocumentWarning extends Error
 {
 
 }

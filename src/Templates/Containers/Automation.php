@@ -8,7 +8,6 @@ use MoloniES\API\Warehouses;
 use MoloniES\Exceptions\Error;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\AutomaticDocumentsStatus;
-use MoloniES\Hooks\ProductUpdate;
 
 try {
     $warehouses = Warehouses::queryWarehouses();

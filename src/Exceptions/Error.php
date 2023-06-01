@@ -33,7 +33,7 @@ class Error extends Exception
         $sent = $this->request['sent'] ?: [];
         $received = $this->request['received'] ?: [];
 
-        include MOLONI_ES_TEMPLATE_DIR . 'Messages/DocumentError.php';
+        include MOLONI_ES_TEMPLATE_DIR . 'Exceptions/ExceptionError.php';
     }
 
     public function getError()

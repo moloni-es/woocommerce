@@ -6,7 +6,7 @@ use MoloniES\Controllers\Logs;
 use MoloniES\Controllers\PendingOrders;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\Error;
-use MoloniES\Exceptions\Warning;
+use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
 use MoloniES\Hooks\OrderList;
@@ -147,7 +147,7 @@ class Plugin
     /**
      * Create a new document
      *
-     * @throws Warning|Error
+     * @throws DocumentWarning|Error
      */
     private function createDocument()
     {
@@ -156,7 +156,7 @@ class Plugin
 
         try {
             $service->run();
-        } catch (Exceptions\Warning $e) {
+        } catch (DocumentWarning $e) {
             Storage::$LOGGER->alert(
                 sprintf(__('There was an warning when generating the document (%s)'), $orderName),
                 [

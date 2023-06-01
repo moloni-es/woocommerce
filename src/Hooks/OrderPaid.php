@@ -5,7 +5,7 @@ namespace MoloniES\Hooks;
 use Exception;
 use MoloniES\Enums\AutomaticDocumentsStatus;
 use MoloniES\Enums\Boolean;
-use MoloniES\Exceptions\Warning;
+use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Notice;
 use MoloniES\Services\Mails\DocumentFailed;
 use MoloniES\Services\Mails\DocumentWarning;
@@ -49,7 +49,7 @@ class OrderPaid
                     $service->run();
 
                     $this->throwMessages($service);
-                } catch (Warning $e) {
+                } catch (DocumentWarning $e) {
                     $this->sendWarningEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));
@@ -98,7 +98,7 @@ class OrderPaid
                     $service->run();
 
                     $this->throwMessages($service);
-                } catch (Warning $e) {
+                } catch (DocumentWarning $e) {
                     $this->sendWarningEmail($orderName);
 
                     Notice::addmessagecustom(htmlentities($e->getError()));

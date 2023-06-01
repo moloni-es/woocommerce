@@ -4,7 +4,7 @@ namespace MoloniES;
 
 use MoloniES\Controllers\Documents;
 use MoloniES\Exceptions\Error;
-use MoloniES\Exceptions\Warning;
+use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 
 class Ajax
@@ -37,7 +37,7 @@ class Ajax
                 'valid' => 1,
                 'message' => sprintf(__('Document %s successfully inserted', 'moloni_es'), $service->getOrderNumber())
             ]);
-        } catch (Warning $e) {
+        } catch (DocumentWarning $e) {
             Storage::$LOGGER->alert(
                 sprintf(__('There was an warning when generating the document (%s)'), $orderName),
                 [

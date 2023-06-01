@@ -2,7 +2,7 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\Exceptions\Warning;
+use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Storage;
 use WC_Order;
 use WC_Order_Item_Fee;
@@ -175,7 +175,7 @@ class Documents
      * @return $this
      *
      * @throws Error
-     * @throws Warning
+     * @throws DocumentWarning
      */
     public function createDocument(): Documents
     {
@@ -248,7 +248,7 @@ class Documents
     /**
      * Close a document based on its id
      *
-     * @throws Warning
+     * @throws DocumentWarning
      */
     public function closeDocument()
     {
@@ -263,7 +263,7 @@ class Documents
 
             $viewUrl = admin_url('admin.php?page=molonies&action=getInvoice&id=' . $this->documentId);
 
-            throw new Warning(
+            throw new DocumentWarning(
                 __('The document has been inserted but the totals do not match. ', 'moloni_es') .
                 '<a href="' . esc_url($viewUrl) . '" target="_BLANK">' . __('See document', 'moloni_es') . '</a>'
             );
