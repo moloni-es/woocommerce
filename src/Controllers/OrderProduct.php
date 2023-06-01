@@ -2,13 +2,21 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\API\Taxes;
-use MoloniES\API\Warehouses;
-use MoloniES\Exceptions\Error;
-use MoloniES\Tools;
+use MoloniES\Enums\SyncLogsType;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
+use MoloniES\Services\MoloniProduct\Update\UpdateVariantProduct;
+use MoloniES\Tools\SyncLogs;
+use WC_Product;
+use WC_Tax;
 use WC_Order;
 use WC_Order_Item_Product;
-use WC_Tax;
+use MoloniES\API\Products;
+use MoloniES\Exceptions\Error;
+use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
+use MoloniES\Services\MoloniProduct\Create\CreateVariantProduct;
+use MoloniES\Tools;
+use MoloniES\Tools\ProductAssociations;
 
 class OrderProduct
 {
@@ -22,7 +30,7 @@ class OrderProduct
     /**
      * @var WC_Order_Item_Product
      */
-    private $product;
+    private $orderProduct;
 
     /** @var WC_Order */
     private $wc_order;
@@ -63,7 +71,7 @@ class OrderProduct
      */
     public function __construct($product, $wcOrder, $order = 0, $fiscalZone = 'es')
     {
-        $this->product = $product;
+        $this->orderProduct = $product;
         $this->wc_order = $wcOrder;
         $this->order = $order;
         $this->fiscalZone = $fiscalZone;
@@ -90,7 +98,7 @@ class OrderProduct
 
     public function setName()
     {
-        $this->name = $this->product->get_name();
+        $this->name = $this->orderProduct->get_name();
         return $this;
     }
 
@@ -122,8 +130,8 @@ class OrderProduct
     {
         $summary = '';
 
-        if ($this->product->get_variation_id() > 0) {
-            $product = wc_get_product($this->product->get_variation_id());
+        if ($this->orderProduct->get_variation_id() > 0) {
+            $product = wc_get_product($this->orderProduct->get_variation_id());
             $attributes = $product->get_attributes();
             if (is_array($attributes) && !empty($attributes)) {
                 $summary = wc_get_formatted_variation($attributes, true);
@@ -139,7 +147,7 @@ class OrderProduct
     private function getSummaryExtraProductOptions()
     {
         $summary = '';
-        $checkEPO = $this->product->get_meta('_tmcartepo_data', true);
+        $checkEPO = $this->orderProduct->get_meta('_tmcartepo_data', true);
         $extraProductOptions = maybe_unserialize($checkEPO);
 
         if ($extraProductOptions && is_array($extraProductOptions)) {
@@ -163,8 +171,8 @@ class OrderProduct
      */
     public function setPrice()
     {
-        $this->price = (float)$this->product->get_subtotal() / $this->qty;
-        $refundedValue = $this->wc_order->get_total_refunded_for_item($this->product->get_id());
+        $this->price = (float)$this->orderProduct->get_subtotal() / $this->qty;
+        $refundedValue = $this->wc_order->get_total_refunded_for_item($this->orderProduct->get_id());
 
         if ($refundedValue !== 0) {
             $refundedValue /= $this->qty;
@@ -184,8 +192,8 @@ class OrderProduct
      */
     public function setQty()
     {
-        $this->qty = (float)$this->product->get_quantity();
-        $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->product->get_id()));
+        $this->qty = (float)$this->orderProduct->get_quantity();
+        $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->orderProduct->get_id()));
 
         if ($refundedQty !== 0) {
             $this->qty -= $refundedQty;
@@ -195,24 +203,66 @@ class OrderProduct
     }
 
     /**
+     * Fetch product from Moloni
+     *
      * @return $this
+     *
      * @throws Error
      */
-    private function setProductId()
+    private function setProductId(): OrderProduct
     {
-        $wooCommerceProduct = $this->product->get_product();
+        $moloniProduct = [];
 
-        if (empty($wooCommerceProduct)) {
-            throw new Error(__('Order products were deleted.','moloni_es'));
+        if ($this->orderProduct->get_variation_id() > 0) {
+            $association = ProductAssociations::findByWcId($this->orderProduct->get_variation_id());
+
+            /** Association found, let's fetch by ID */
+            if (!empty($association)) {
+                $moloniProduct = $this->getById($association['ml_product_id']);
+            }
+
+            if (empty($moloniProduct)) {
+                $moloniProduct = $this->getByProductParent();
+            }
+        } else {
+            $association = ProductAssociations::findByWcId($this->orderProduct->get_product_id());
+
+            /** Association found, let's fetch by ID */
+            if (!empty($association)) {
+                $moloniProduct = $this->getById($association['ml_product_id']);
+            }
         }
 
-        $product = new Product($wooCommerceProduct);
+        /** Let's search by reference */
+        if (empty($moloniProduct)) {
+            $wcProduct = $this->orderProduct->get_product();
 
-        if (!$product->loadByReference()) {
-            $product->create();
+            if (empty($wcProduct)) {
+                throw new Error(__('Order products were deleted.','moloni_es'));
+            }
+
+            $moloniProduct = $this->getByReference($wcProduct);
+
+            /** Not found, lets create a new product */
+            if (empty($moloniProduct)) {
+                $wcProduct = wc_get_product($this->orderProduct->get_product_id());
+
+                if (empty($wcProduct)) {
+                    throw new Error(__('Order products were deleted.','moloni_es'));
+                }
+
+                if ($wcProduct->is_type('variable')) {
+                    $service = new CreateVariantProduct($wcProduct);
+                } else {
+                    $service = new CreateSimpleProduct($wcProduct);
+                }
+
+                $service->run();
+                $service->saveLog();
+            }
         }
 
-        $this->product_id = $product->getProductId();
+        $this->product_id = $moloniProduct['productId'] ?? 0;
 
         return $this;
     }
@@ -223,8 +273,8 @@ class OrderProduct
      */
     private function setDiscount()
     {
-        $total = (float)$this->product->get_total();
-        $subTotal = (float)$this->product->get_subtotal();
+        $total = (float)$this->orderProduct->get_total();
+        $subTotal = (float)$this->orderProduct->get_subtotal();
 
         if ($subTotal !== (float)0) {
             $this->discount = (100 - (($total * 100) / $subTotal));
@@ -248,7 +298,7 @@ class OrderProduct
      */
     private function setTaxes(): OrderProduct
     {
-        $taxes = $this->product->get_taxes();
+        $taxes = $this->orderProduct->get_taxes();
 
         foreach ($taxes['subtotal'] as $taxId => $value) {
             if (!empty($value)) {
@@ -331,5 +381,109 @@ class OrderProduct
         }
 
         return $props;
+    }
+
+    //          REQUESTS          //
+
+    protected function getById(int $productId): array
+    {
+        $variables = [
+            'productId' => $productId
+        ];
+
+        $byId = Products::queryProduct($variables);
+
+        return $byId['data']['product']['data'] ?? [];
+    }
+
+    protected function getByReference(WC_Product $wcProduct): array
+    {
+        $reference = $wcProduct->get_sku();
+
+        if (empty($reference)) {
+            $reference = Tools::createReferenceFromString($wcProduct->get_name());
+        }
+
+        $variables = [
+            'options' => [
+                'filter' => [
+                    [
+                        'field' => 'reference',
+                        'comparison' => 'eq',
+                        'value' => $reference,
+                    ],
+                    [
+                        'field' => 'visible',
+                        'comparison' => 'gte',
+                        'value' => '0',
+                    ]
+                ],
+                "includeVariants" => true
+            ]
+        ];
+
+        $byReference = Products::queryProducts($variables);
+
+        if (!empty($byReference) && isset($byReference[0]['productId'])) {
+            return $byReference[0];
+        }
+
+        return [];
+    }
+
+    protected function getByProductParent(): array
+    {
+        $wcParentId = $this->orderProduct->get_product_id();
+        $wcVariationId = $this->orderProduct->get_variation_id();
+
+        $wcProduct = wc_get_product($wcParentId);
+
+        if (empty($wcProduct)) {
+            throw new Error(__('Order products were deleted.','moloni_es'));
+        }
+
+        $byReference = $this->getByReference($wcProduct);
+
+        /** Product really does not exist, can return */
+        if (empty($byReference)) {
+            return [];
+        }
+
+        $mlProduct = $byReference[0];
+
+        /** For some reason the prodcut is simple in Moloni, use that one */
+        if (empty($mlProduct['variants'])) {
+            return $mlProduct;
+        }
+
+        $targetId = $mlProduct['propertyGroup']['propertyGroupId'] ?? '';
+
+        $propertyGroup = (new GetOrUpdatePropertyGroup($wcProduct, $targetId))->handle();
+
+        $variant = (new FindVariant(
+            $wcProduct->get_id(),
+            $this->orderProduct['product_reference'],
+            $mlProduct['variants'],
+            $propertyGroup['variants'][$wcVariationId] ?? []
+        ))->run();
+
+        /** Variant already exists in Moloni, use that one */
+        if (!empty($variant)) {
+            return $variant;
+        }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcParentId);
+
+        $service = new UpdateVariantProduct($wcProduct, $mlProduct);
+        $service->run();
+        $service->saveLog();
+
+        $variant = $service->getVariant($wcVariationId);
+
+        if (empty($variant)) {
+            throw new Error(__('Could not find variant after update.','moloni_es'));
+        }
+
+        return $variant;
     }
 }

@@ -66,6 +66,19 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
         ]);
     }
 
+    //            Gets            //
+
+    public function getVariant(int $wcVariationId): array
+    {
+        foreach ($this->variantServices as $variantService) {
+            if ($variantService->getWcProduct()->get_id() === $wcVariationId) {
+                return $variantService->getMoloniVariant();
+            }
+        }
+
+        return [];
+    }
+
     //            Privates            //
 
     protected function createAssociation()
