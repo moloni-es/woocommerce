@@ -81,7 +81,7 @@ class OrderProduct
      * @return $this
      * @throws Error
      */
-    public function create()
+    public function create(): OrderProduct
     {
         $this
             ->setName()
@@ -96,29 +96,27 @@ class OrderProduct
         return $this;
     }
 
-    public function setName()
+    public function setName(): OrderProduct
     {
         $this->name = $this->orderProduct->get_name();
+
         return $this;
     }
 
     /**
-     * @param null|string $summary
+     * Set summary
+     *
      * @return $this
      */
-    public function setSummary($summary = null)
+    public function setSummary(): OrderProduct
     {
-        if ($summary) {
-            $this->summary = $summary;
-        } else {
-            $this->summary .= $this->getSummaryVariationAttributes();
+        $this->summary .= $this->getSummaryVariationAttributes();
 
-            if (!empty($this->summary)) {
-                $this->summary .= "\n";
-            }
-
-            $this->summary .= $this->getSummaryExtraProductOptions();
+        if (!empty($this->summary)) {
+            $this->summary .= "\n";
         }
+
+        $this->summary .= $this->getSummaryExtraProductOptions();
 
         return $this;
     }
@@ -126,7 +124,7 @@ class OrderProduct
     /**
      * @return string
      */
-    private function getSummaryVariationAttributes()
+    private function getSummaryVariationAttributes(): string
     {
         $summary = '';
 
@@ -144,7 +142,7 @@ class OrderProduct
     /**
      * @return string
      */
-    private function getSummaryExtraProductOptions()
+    private function getSummaryExtraProductOptions(): string
     {
         $summary = '';
         $checkEPO = $this->orderProduct->get_meta('_tmcartepo_data', true);
@@ -169,7 +167,7 @@ class OrderProduct
     /**
      * @return OrderProduct
      */
-    public function setPrice()
+    public function setPrice(): OrderProduct
     {
         $this->price = (float)$this->orderProduct->get_subtotal() / $this->qty;
         $refundedValue = $this->wc_order->get_total_refunded_for_item($this->orderProduct->get_id());
@@ -190,7 +188,7 @@ class OrderProduct
     /**
      * @return OrderProduct
      */
-    public function setQty()
+    public function setQty(): OrderProduct
     {
         $this->qty = (float)$this->orderProduct->get_quantity();
         $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->orderProduct->get_id()));
@@ -295,7 +293,7 @@ class OrderProduct
      * Set the discount in percentage
      * @return $this
      */
-    private function setDiscount()
+    private function setDiscount(): OrderProduct
     {
         $total = (float)$this->orderProduct->get_total();
         $subTotal = (float)$this->orderProduct->get_subtotal();
@@ -349,7 +347,7 @@ class OrderProduct
      * @return array
      * @throws Error
      */
-    private function setTax($taxRate)
+    private function setTax($taxRate): array
     {
         $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
 

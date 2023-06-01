@@ -121,10 +121,6 @@ class Plugin
                         $this->createDocument();
                         break;
 
-                    case 'syncStocks':
-                        $this->syncStocks();
-                        break;
-
                     case 'remLogs':
                         $this->removeLogs();
                         break;

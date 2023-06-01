@@ -4,20 +4,54 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php use MoloniES\Log; ?>
-
 <br>
 <table class="wc_status_table wc_status_table--tools widefat">
     <tbody class="tools">
+
     <tr>
         <th style="padding: 2rem">
-            <strong class="name"><?= __('Force stock synchronization' , 'moloni_es') ?></strong>
-            <p class='description'><?= __('Synchronize stocks of all items used in the last 7 days' , 'moloni_es') ?></p>
+            <strong class="name"><?= __('Import stock from Moloni' , 'moloni_es') ?></strong>
+            <p class='description'><?= __('Match WooCommerce stock with Moloni values' , 'moloni_es') ?></p>
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large"
-               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=syncStocks&since=' . gmdate('Y-m-d', strtotime("-1 week")))) ?>'>
-                <?= __('Force stock synchronization' , 'moloni_es') ?>
+            <a class="button button-large">
+                <?= __('Import stock' , 'moloni_es') ?>
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="padding: 2rem">
+            <strong class="name"><?= __('Import products from Moloni' , 'moloni_es') ?></strong>
+            <p class='description'><?= __('Import products from Moloni account to WooCommerce' , 'moloni_es') ?></p>
+        </th>
+        <td class="run-tool" style="padding: 2rem; text-align: right">
+            <a class="button button-large">
+                <?= __('Import products' , 'moloni_es') ?>
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="padding: 2rem">
+            <strong class="name"><?= __('Export stock to Moloni' , 'moloni_es') ?></strong>
+            <p class='description'><?= __('Match Moloni stock with WooCommerce values' , 'moloni_es') ?></p>
+        </th>
+        <td class="run-tool" style="padding: 2rem; text-align: right">
+            <a class="button button-large">
+                <?= __('Export stock' , 'moloni_es') ?>
+            </a>
+        </td>
+    </tr>
+
+    <tr>
+        <th style="padding: 2rem">
+            <strong class="name"><?= __('Export products to Moloni' , 'moloni_es') ?></strong>
+            <p class='description'><?= __('Export products from WooCommerce to Moloni account' , 'moloni_es') ?></p>
+        </th>
+        <td class="run-tool" style="padding: 2rem; text-align: right">
+            <a class="button button-large">
+                <?= __('Export products' , 'moloni_es') ?>
             </a>
         </td>
     </tr>
