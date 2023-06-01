@@ -116,11 +116,11 @@ class ProductSetStock
 
         $wcProductId = $wcProduct->get_id();
 
-        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT, $wcProductId)) {
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductId)) {
             return false;
         }
 
-        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT, $wcProductId);
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductId);
 
         return true;
     }

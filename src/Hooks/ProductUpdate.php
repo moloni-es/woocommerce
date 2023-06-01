@@ -198,11 +198,11 @@ class ProductUpdate
 
     private function productHasTimeout(): bool
     {
-        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT, $this->wcProductId)) {
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $this->wcProductId)) {
             return true;
         }
 
-        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT, $this->wcProductId);
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $this->wcProductId);
 
         return false;
     }

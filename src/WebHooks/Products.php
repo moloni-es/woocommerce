@@ -62,10 +62,6 @@ class Products
 
             $productId = (int)sanitize_text_field($parameters['productId']);
 
-            if (!$this->shouldRunHook($productId)) {
-                return;
-            }
-
             $this->fetchMoloniProduct($productId);
 
             if (!$this->isProductValid()) {
@@ -107,9 +103,11 @@ class Products
 
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
-        if (!empty($wcProduct)) {
+        if (!empty($wcProduct) || SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])) {
             return;
         }
+
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId']);
 
         if ($this->moloniProductHasVariants()) {
             $service = new CreateParentProduct($this->moloniProduct);
@@ -142,9 +140,16 @@ class Products
 
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
-        if (empty($wcProduct) || SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT, $wcProduct->get_id())) {
+        if (
+            empty($wcProduct) ||
+            SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id()) ||
+            SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])
+        ) {
             return;
         }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId']);
 
         /** Both need to be the same kind */
         if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
@@ -191,9 +196,16 @@ class Products
 
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
-        if (empty($wcProduct)) {
+        if (
+            empty($wcProduct) ||
+            SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id()) ||
+            SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $this->moloniProduct['productId'])
+        ) {
             return;
         }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id());
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $this->moloniProduct['productId']);
 
         /** Both need to be the same kind */
         if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
@@ -341,17 +353,6 @@ class Products
     private function shouldSyncStock(): bool
     {
         return defined('HOOK_STOCK_SYNC') && (int)HOOK_STOCK_SYNC === Boolean::YES;
-    }
-
-    private function shouldRunHook(int $productId): bool
-    {
-        if (SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT, $productId)) {
-            return false;
-        }
-
-        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT, $productId);
-
-        return true;
     }
 
     /**
