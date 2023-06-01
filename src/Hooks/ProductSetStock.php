@@ -2,6 +2,7 @@
 
 namespace MoloniES\Hooks;
 
+use WC_Product;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
@@ -10,7 +11,6 @@ use MoloniES\Services\MoloniProduct\Stock\SyncProductStock;
 use MoloniES\Start;
 use MoloniES\Tools\ProductAssociations;
 use MoloniES\Tools\SyncLogs;
-use WC_Product;
 
 class ProductSetStock
 {
@@ -31,6 +31,10 @@ class ProductSetStock
 
     public function woocommerceSetStock(WC_Product $wcProduct)
     {
+        if (!Start::login(true)) {
+            return;
+        }
+
         if (!$this->productIsValidToSync($wcProduct)) {
             return;
         }
@@ -118,6 +122,6 @@ class ProductSetStock
 
         SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT, $wcProductId);
 
-        return Start::login(true);
+        return true;
     }
 }

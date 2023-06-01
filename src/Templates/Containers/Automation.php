@@ -8,7 +8,7 @@ use MoloniES\API\Warehouses;
 use MoloniES\Exceptions\Error;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\AutomaticDocumentsStatus;
-use MoloniES\Services\MoloniProduct\Helpers\Variants\FindOrCreatePropertyGroup;
+use MoloniES\Hooks\ProductUpdate;
 
 try {
     $warehouses = Warehouses::queryWarehouses();
@@ -16,11 +16,16 @@ try {
     $e->showError();
     return;
 }
-/*
-$wcProduct = new WC_Product_Variable(254);
 
-echo json_encode((new FindOrCreatePropertyGroup($wcProduct))->handle());
-
+/*try {
+    (new ProductUpdate())->productSave(249);
+} catch (Error $e) {
+    $e->showError();
+    return;
+} catch (Exception $e) {
+    echo $e->getMessage();
+    return;
+}
 die;*/
 ?>
 

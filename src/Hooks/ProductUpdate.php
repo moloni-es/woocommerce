@@ -57,9 +57,13 @@ class ProductUpdate
 
     public function productSave($wcProductId)
     {
+        if (!Start::login(true)) {
+            return;
+        }
+
         $this->wcProductId = $wcProductId;
 
-        if (!$this->shouldSyncProducts() || $this->productHasTimeout()) {
+        if (!$this->isProductSyncActive() || $this->productHasTimeout()) {
             return;
         }
 
@@ -189,7 +193,7 @@ class ProductUpdate
             return false;
         }
 
-        return Start::login(true);
+        return true;
     }
 
     private function productHasTimeout(): bool
@@ -203,7 +207,7 @@ class ProductUpdate
         return false;
     }
 
-    private function shouldSyncProducts(): bool
+    private function isProductSyncActive(): bool
     {
         return defined('MOLONI_PRODUCT_SYNC') && (int)MOLONI_PRODUCT_SYNC === Boolean::YES;
     }
