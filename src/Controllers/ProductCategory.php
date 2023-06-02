@@ -3,7 +3,8 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\Categories;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
 
 /**
  * Class Product Category
@@ -18,18 +19,20 @@ class ProductCategory
 
     /**
      * Product Category constructor.
-     * @param string $name
-     * @param int $parentId
+     *
+     * @param string|null $name
+     * @param int|null $parentId
      */
-    public function __construct($name, $parentId = 0)
+    public function __construct(?string $name = '', ?int $parentId = 0)
     {
         $this->name = trim($name);
         $this->parent_id = $parentId;
     }
 
     /**
-     * This method SHOULD be replaced by a productCategories/getBySearch
-     * @throws Error
+     * Load by name
+     *
+     * @throws DocumentError
      */
     public function loadByName()
     {
@@ -47,7 +50,18 @@ class ProductCategory
             ]
         ];
 
-        $categoriesList = Categories::queryProductCategories($variables);
+        try {
+            $categoriesList = Categories::queryProductCategories($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching categories','moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
+
         if (!empty($categoriesList) && is_array($categoriesList)) {
             foreach ($categoriesList as $category) {
                 if (strcmp((string)$category['name'], (string)$this->name) === 0) {
@@ -62,26 +76,44 @@ class ProductCategory
 
     /**
      * Create a product based on a WooCommerce Product
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    public function create()
+    public function create(): ProductCategory
     {
-        $insert = (Categories::mutationProductCategoryCreate($this->mapPropsToValues()))['data']['productCategoryCreate']['data'];
+        try {
+            $mutation = (Categories::mutationProductCategoryCreate($this->mapPropsToValues()))['data']['productCategoryCreate']['data'];
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                sprintf(__('Error creating category %s','moloni_es') ,$this->name),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
-        if (isset($insert['productCategoryId'])) {
-            $this->category_id = $insert['productCategoryId'];
+        if (isset($mutation['productCategoryId'])) {
+            $this->category_id = $mutation['productCategoryId'];
+
             return $this;
         }
 
-        throw new Error(sprintf(__('Error creating category %s','moloni_es') ,$this->name));
+        throw new DocumentError(
+            sprintf(__('Error creating category %s','moloni_es') ,$this->name),
+            [
+                'mutation' => $mutation
+            ]
+        );
     }
 
 
     /**
      * Map this object properties to an array to insert/update a moloni product category
+     *
      * @return array
      */
-    private function mapPropsToValues()
+    private function mapPropsToValues(): array
     {
         return [
             'data' => [

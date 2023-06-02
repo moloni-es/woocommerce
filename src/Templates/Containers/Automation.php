@@ -5,13 +5,13 @@ if (!defined('ABSPATH')) {
 }
 
 use MoloniES\API\Warehouses;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\AutomaticDocumentsStatus;
 
 try {
     $warehouses = Warehouses::queryWarehouses();
-} catch (Error $e) {
+} catch (APIExeption $e) {
     $e->showError();
     return;
 }

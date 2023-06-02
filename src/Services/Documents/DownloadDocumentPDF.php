@@ -2,8 +2,6 @@
 
 namespace MoloniES\Services\Documents;
 
-use MoloniES\Exceptions\Error;
-use MoloniES\Enums\DocumentTypes;
 use MoloniES\API\Documents;
 use MoloniES\API\Documents\BillsOfLading;
 use MoloniES\API\Documents\Estimate;
@@ -12,6 +10,8 @@ use MoloniES\API\Documents\ProFormaInvoice;
 use MoloniES\API\Documents\PurchaseOrder;
 use MoloniES\API\Documents\Receipt;
 use MoloniES\API\Documents\SimplifiedInvoice;
+use MoloniES\Enums\DocumentTypes;
+use MoloniES\Exceptions\APIExeption;
 
 class DownloadDocumentPDF
 {
@@ -28,7 +28,7 @@ class DownloadDocumentPDF
 
         try {
             $this->run();
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             $this->showError(__('Unexpected error', 'moloni_es'));
         }
     }
@@ -36,7 +36,7 @@ class DownloadDocumentPDF
     /**
      * Service runner
      *
-     * @throws Error
+     * @throws APIExeption
      */
     private function run(): void
     {

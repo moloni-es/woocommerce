@@ -3,7 +3,7 @@
 namespace MoloniES\Services\Documents;
 
 use MoloniES\API\Documents;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class OpenDocument
 {
@@ -20,13 +20,13 @@ class OpenDocument
 
         try {
             $this->run();
-        } catch (Error $e) {}
+        } catch (APIExeption $e) {}
     }
 
     /**
      * Service runner
      *
-     * @throws Error
+     * @throws APIExeption
      */
     private function run(): void
     {

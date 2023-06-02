@@ -3,7 +3,7 @@
 namespace MoloniES\Helpers;
 
 use MoloniES\API\Hooks;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Model;
 use MoloniES\Storage;
 
@@ -30,7 +30,7 @@ class WebHooks
      * @param string $model
      * @param string $operation
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function createHook(string $model, string $operation)
     {
@@ -52,7 +52,7 @@ class WebHooks
     /**
      * Deletes the created hooks
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function deleteHooks()
     {

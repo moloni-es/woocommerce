@@ -2,26 +2,27 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\Exceptions\DocumentWarning;
-use MoloniES\Storage;
-use WC_Order;
-use WC_Order_Item_Fee;
-use WC_Order_Item_Product;
+use MoloniES\API\Documents\BillsOfLading;
+use MoloniES\API\Documents\Estimate;
+use MoloniES\API\Documents\Invoice;
+use MoloniES\API\Documents\ProFormaInvoice;
+use MoloniES\API\Documents\PurchaseOrder;
+use MoloniES\API\Documents\Receipt;
+use MoloniES\API\Documents\SimplifiedInvoice;
 use MoloniES\Curl;
-use MoloniES\Tools;
-use MoloniES\Exceptions\Error;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\DocumentStatus;
 use MoloniES\Enums\DocumentTypes;
-use MoloniES\API\Documents\Invoice;
-use MoloniES\API\Documents\Receipt;
-use MoloniES\API\Documents\Estimate;
-use MoloniES\API\Documents\BillsOfLading;
-use MoloniES\API\Documents\PurchaseOrder;
-use MoloniES\API\Documents\ProFormaInvoice;
-use MoloniES\API\Documents\SimplifiedInvoice;
-use MoloniES\Services\Documents\SendDocumentMail;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
+use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Services\Documents\CreateDocumentPDF;
+use MoloniES\Services\Documents\SendDocumentMail;
+use MoloniES\Storage;
+use MoloniES\Tools;
+use WC_Order;
+use WC_Order_Item_Fee;
+use WC_Order_Item_Product;
 
 /**
  * Class Documents
@@ -121,7 +122,7 @@ class Documents
      * @param WC_Order $order
      * @param array $company
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function __construct(WC_Order $order, array $company)
     {
@@ -174,8 +175,8 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
      * @throws DocumentWarning
+     * @throws DocumentError
      */
     public function createDocument(): Documents
     {
@@ -183,41 +184,51 @@ class Documents
         $mutation = [];
         $props = $this->mapPropsToValues();
 
-        switch ($this->documentType) {
-            case DocumentTypes::INVOICE:
-                $mutation = Invoice::mutationInvoiceCreate($props);
-                $keyString = 'invoiceCreate';
-                break;
-            case DocumentTypes::RECEIPT:
-                $mutation = Receipt::mutationReceiptCreate($props);
-                $keyString = 'receiptCreate';
-                break;
-            case DocumentTypes::ESTIMATE:
-                $mutation = Estimate::mutationEstimateCreate($props);
-                $keyString = 'estimateCreate';
-                break;
-            case DocumentTypes::PURCHASE_ORDER:
-                $mutation = PurchaseOrder::mutationPurchaseOrderCreate($props);
-                $keyString = 'purchaseOrderCreate';
-                break;
-            case DocumentTypes::PRO_FORMA_INVOICE:
-                $mutation = ProFormaInvoice::mutationProFormaInvoiceCreate($props);
-                $keyString = 'proFormaInvoiceCreate';
-                break;
-            case DocumentTypes::SIMPLIFIED_INVOICE:
-                $mutation = SimplifiedInvoice::mutationSimplifiedInvoiceCreate($props);
-                $keyString = 'simplifiedInvoiceCreate';
-                break;
-            case DocumentTypes::BILLS_OF_LADING:
-                $mutation = BillsOfLading::mutationBillsOfLadingCreate($props);
-                $keyString = 'billsOfLadingCreate';
-                break;
+        try {
+            switch ($this->documentType) {
+                case DocumentTypes::INVOICE:
+                    $mutation = Invoice::mutationInvoiceCreate($props);
+                    $keyString = 'invoiceCreate';
+                    break;
+                case DocumentTypes::RECEIPT:
+                    $mutation = Receipt::mutationReceiptCreate($props);
+                    $keyString = 'receiptCreate';
+                    break;
+                case DocumentTypes::ESTIMATE:
+                    $mutation = Estimate::mutationEstimateCreate($props);
+                    $keyString = 'estimateCreate';
+                    break;
+                case DocumentTypes::PURCHASE_ORDER:
+                    $mutation = PurchaseOrder::mutationPurchaseOrderCreate($props);
+                    $keyString = 'purchaseOrderCreate';
+                    break;
+                case DocumentTypes::PRO_FORMA_INVOICE:
+                    $mutation = ProFormaInvoice::mutationProFormaInvoiceCreate($props);
+                    $keyString = 'proFormaInvoiceCreate';
+                    break;
+                case DocumentTypes::SIMPLIFIED_INVOICE:
+                    $mutation = SimplifiedInvoice::mutationSimplifiedInvoiceCreate($props);
+                    $keyString = 'simplifiedInvoiceCreate';
+                    break;
+                case DocumentTypes::BILLS_OF_LADING:
+                    $mutation = BillsOfLading::mutationBillsOfLadingCreate($props);
+                    $keyString = 'billsOfLadingCreate';
+                    break;
+            }
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error creating document', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
         }
 
         $this->document = $mutation['data'][$keyString]['data'] ?? [];
 
         if (!isset($this->document['documentId'])) {
-            throw new Error(
+            throw new DocumentError(
                 sprintf(__('Warning, there was an error inserting the document %s', 'moloni_es'), $this->order->get_order_number()),
                 Curl::getLog()
             );
@@ -249,6 +260,7 @@ class Documents
      * Close a document based on its id
      *
      * @throws DocumentWarning
+     * @throws DocumentError
      */
     public function closeDocument()
     {
@@ -279,35 +291,46 @@ class Documents
             ]
         ];
 
-        switch ($this->documentType) {
-            case DocumentTypes::INVOICE:
-                $mutation = Invoice::mutationInvoiceUpdate($variables);
-                $keyString = 'invoiceUpdate';
-                break;
-            case DocumentTypes::RECEIPT:
-                $mutation = Receipt::mutationReceiptUpdate($variables);
-                $keyString = 'receiptUpdate';
-                break;
-            case DocumentTypes::ESTIMATE:
-                $mutation = Estimate::mutationEstimateUpdate($variables);
-                $keyString = 'estimateUpdate';
-                break;
-            case DocumentTypes::PURCHASE_ORDER:
-                $mutation = PurchaseOrder::mutationPurchaseOrderUpdate($variables);
-                $keyString = 'purchaseOrderUpdate';
-                break;
-            case DocumentTypes::PRO_FORMA_INVOICE:
-                $mutation = ProFormaInvoice::mutationProFormaInvoiceUpdate($variables);
-                $keyString = 'proFormaInvoiceUpdate';
-                break;
-            case DocumentTypes::SIMPLIFIED_INVOICE:
-                $mutation = SimplifiedInvoice::mutationSimplifiedInvoiceUpdate($variables);
-                $keyString = 'simplifiedInvoiceUpdate';
-                break;
-            case DocumentTypes::BILLS_OF_LADING:
-                $mutation = BillsOfLading::mutationBillsOfLadingUpdate($variables);
-                $keyString = 'billsOfLadingUpdate';
-                break;
+        try {
+            switch ($this->documentType) {
+                case DocumentTypes::INVOICE:
+                    $mutation = Invoice::mutationInvoiceUpdate($variables);
+
+                    $keyString = 'invoiceUpdate';
+                    break;
+                case DocumentTypes::RECEIPT:
+                    $mutation = Receipt::mutationReceiptUpdate($variables);
+                    $keyString = 'receiptUpdate';
+                    break;
+                case DocumentTypes::ESTIMATE:
+                    $mutation = Estimate::mutationEstimateUpdate($variables);
+                    $keyString = 'estimateUpdate';
+                    break;
+                case DocumentTypes::PURCHASE_ORDER:
+                    $mutation = PurchaseOrder::mutationPurchaseOrderUpdate($variables);
+                    $keyString = 'purchaseOrderUpdate';
+                    break;
+                case DocumentTypes::PRO_FORMA_INVOICE:
+                    $mutation = ProFormaInvoice::mutationProFormaInvoiceUpdate($variables);
+                    $keyString = 'proFormaInvoiceUpdate';
+                    break;
+                case DocumentTypes::SIMPLIFIED_INVOICE:
+                    $mutation = SimplifiedInvoice::mutationSimplifiedInvoiceUpdate($variables);
+                    $keyString = 'simplifiedInvoiceUpdate';
+                    break;
+                case DocumentTypes::BILLS_OF_LADING:
+                    $mutation = BillsOfLading::mutationBillsOfLadingUpdate($variables);
+                    $keyString = 'billsOfLadingUpdate';
+                    break;
+            }
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error closing document', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
         }
 
         if (isset($mutation['errors']) || !isset($mutation['data'][$keyString]['data'])) {
@@ -345,7 +368,7 @@ class Documents
      *
      * @return void
      *
-     * @throws Error
+     * @throws DocumentError
      */
     private function init(): void
     {
@@ -521,7 +544,7 @@ class Documents
      */
     public function getDocumentTotal()
     {
-        return $this->documentTotal;
+        return $this->documentTotal ?? 0;
     }
 
     /**
@@ -531,7 +554,7 @@ class Documents
      */
     public function getDocumentExchageTotal()
     {
-        return $this->documentExchageTotal;
+        return $this->documentExchageTotal ?? 0;
     }
 
     /**
@@ -615,7 +638,7 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setCustomer(): Documents
     {
@@ -692,7 +715,7 @@ class Documents
      *
      * @return Documents
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setDocumentSetId(): Documents
     {
@@ -703,7 +726,7 @@ class Documents
         }
 
         if ($documentSetId === 0) {
-            throw new Error(__('Document set missing. <br>Please select a document set in settings', 'moloni_es'));
+            throw new DocumentError(__('Document set missing. Please select a document set in settings.', 'moloni_es'));
         }
 
         $this->documentSetId = $documentSetId;
@@ -743,7 +766,7 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setProducts(): Documents
     {
@@ -763,7 +786,7 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setShipping(): Documents
     {
@@ -780,7 +803,7 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setFees(): Documents
     {
@@ -802,12 +825,24 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setExchangeRate(): Documents
     {
         if ($this->company['currency']['iso4217'] !== $this->order->get_currency()) {
-            $result = Tools::getCurrencyExchangeRate($this->company['currency']['iso4217'], $this->order->get_currency());
+
+            try {
+                $result = Tools::getCurrencyExchangeRate($this->company['currency']['iso4217'], $this->order->get_currency());
+            } catch (APIExeption $e) {
+                throw new DocumentError(
+                    __('Error fetching exchange rate.'),
+                    [
+                        'message' => $e->getMessage(),
+                        'data' => $e->getData()
+                    ]
+                );
+            }
+
             $this->currencyExchangeId = (int)$result['currencyExchangeId'];
             $this->currencyExchangeExchange = (float)$result['exchange'];
 
@@ -853,7 +888,7 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setPaymentMethod(): Documents
     {
@@ -861,6 +896,7 @@ class Documents
 
         if (!empty($paymentMethodName)) {
             $paymentMethod = new Payment($paymentMethodName);
+
             if (!$paymentMethod->loadByName()) {
                 $paymentMethod->create();
             }
@@ -900,7 +936,7 @@ class Documents
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function setDelivery(): Documents
     {
@@ -945,7 +981,19 @@ class Documents
 
         $this->deliveryUnloadAddress = $this->order->get_shipping_address_1() . ' ' . $this->order->get_shipping_address_2();
         $this->deliveryUnloadCity = $this->order->get_shipping_city();
-        $this->deliveryUnloadCountryId = Tools::getCountryIdFromCode($this->order->get_shipping_country());
+
+        try {
+            $this->deliveryUnloadCountryId = Tools::getCountryIdFromCode($this->order->get_shipping_country());
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching country'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
+
 
         return $this;
     }

@@ -3,7 +3,7 @@
 namespace MoloniES\API\Documents;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class SimplifiedInvoice
 {
@@ -13,7 +13,7 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function querySimplifiedInvoice(?array $variables = [])
     {
@@ -50,7 +50,7 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function querySimplifiedInvoices(?array $variables = [])
     {
@@ -96,7 +96,7 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function querySimplifiedInvoiceGetPDFToken(?array $variables = [])
     {
@@ -128,7 +128,7 @@ class SimplifiedInvoice
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationSimplifiedInvoiceCreate(?array $variables = [])
     {
@@ -171,7 +171,7 @@ class SimplifiedInvoice
      * @param array|null $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationSimplifiedInvoiceUpdate(?array $variables = [])
     {
@@ -201,7 +201,7 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationSimplifiedInvoiceGetPDF(?array $variables = [])
     {
@@ -219,7 +219,7 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationSimplifiedInvoiceSendMail(?array $variables = [])
     {

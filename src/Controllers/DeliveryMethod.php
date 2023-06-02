@@ -3,7 +3,8 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\DeliveryMethods;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
 
 class DeliveryMethod
 {
@@ -12,9 +13,10 @@ class DeliveryMethod
 
     /**
      * Payment constructor.
-     * @param string $name
+     *
+     * @param string|null $name
      */
-    public function __construct($name)
+    public function __construct(?string $name = '')
     {
         $this->name = trim($name);
     }
@@ -24,9 +26,9 @@ class DeliveryMethod
      *
      * @return bool
      *
-     * @throws Error
+     * @throws DocumentError
      */
-    public function loadByName()
+    public function loadByName(): bool
     {
         $variables = [
             'options' => [
@@ -37,10 +39,20 @@ class DeliveryMethod
                 ]
             ]
         ];
-        $deliveryMethods = DeliveryMethods::queryDeliveryMethods($variables);
+        try {
+            $query = DeliveryMethods::queryDeliveryMethods($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching delivery methods', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
-        if (!empty($deliveryMethods) && isset($deliveryMethods[0]['deliveryMethodId'])) {
-            $this->delivery_method_id = $deliveryMethods[0]['deliveryMethodId'];
+        if (!empty($query) && isset($query[0]['deliveryMethodId'])) {
+            $this->delivery_method_id = $query[0]['deliveryMethodId'];
 
             return true;
         }
@@ -53,7 +65,7 @@ class DeliveryMethod
      *
      * @return bool
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function loadDefault(): bool
     {
@@ -66,10 +78,20 @@ class DeliveryMethod
                 ]
             ]
         ];
-        $deliveryMethods = DeliveryMethods::queryDeliveryMethods($variables);
+        try {
+            $query = DeliveryMethods::queryDeliveryMethods($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching delivery methods', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
-        if (!empty($deliveryMethods) && isset($deliveryMethods[0]['deliveryMethodId'])) {
-            $this->delivery_method_id = $deliveryMethods[0]['deliveryMethodId'];
+        if (!empty($query) && isset($query[0]['deliveryMethodId'])) {
+            $this->delivery_method_id = $query[0]['deliveryMethodId'];
 
             return true;
         }
@@ -80,9 +102,9 @@ class DeliveryMethod
     /**
      * Create a Payment Methods based on the name
      *
-     * @throws Error
+     * @throws DocumentError
      */
-    public function create()
+    public function create(): DeliveryMethod
     {
         $variables = [
             'data' => [
@@ -90,15 +112,30 @@ class DeliveryMethod
                 'isDefault' => false
             ]
         ];
-        $deliveryMethod = DeliveryMethods::mutationDeliveryMethodCreate($variables);
+        try {
+            $mutation = DeliveryMethods::mutationDeliveryMethodCreate($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                sprintf(__('Error creating delivery method (%s)', 'moloni_es'), $this->name),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
-        if (!empty($deliveryMethod) &&
-            isset($deliveryMethod['data']['deliveryMethodCreate']['data']['deliveryMethodId'])) {
-            $this->delivery_method_id = (int)$deliveryMethod['data']['deliveryMethodCreate']['data']['deliveryMethodId'];
+        if (!empty($mutation) &&
+            isset($mutation['data']['deliveryMethodCreate']['data']['deliveryMethodId'])) {
+            $this->delivery_method_id = (int)$mutation['data']['deliveryMethodCreate']['data']['deliveryMethodId'];
 
             return $this;
         }
 
-        throw new Error(__('Error creating delivery method', 'moloni_es') . $this->name);
+        throw new DocumentError(
+            sprintf(__('Error creating delivery method (%s)', 'moloni_es'), $this->name),
+            [
+                'mutation' => $mutation
+            ]
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace MoloniES;
 
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Curl
 {
@@ -58,7 +58,7 @@ class Curl
      * @param $variables
      *
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function simple($action, $query, $variables = [])
     {
@@ -107,7 +107,7 @@ class Curl
             return $parsed;
         }
 
-        throw new Error(__('Oops, an error was encountered...', 'moloni_es'), $log);
+        throw new APIExeption(__('Oops, an error was encountered...', 'moloni_es'), $log);
     }
 
     /**
@@ -143,7 +143,7 @@ class Curl
      *
      * @return array|bool
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function complex($action, $query, $variables, $keyString)
     {
@@ -191,7 +191,7 @@ class Curl
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function login($code, $clientId, $clientSecret)
     {
@@ -208,7 +208,7 @@ class Curl
         );
 
         if (is_wp_error($response)) {
-            throw new Error($response->get_error_message(), [
+            throw new APIExeption($response->get_error_message(), [
                 'code' => $response->get_error_code(),
                 'data' => $response->get_error_data(),
                 'message' => $response->get_error_message(),
@@ -229,7 +229,7 @@ class Curl
             'received' => $parsed
         ];
 
-        throw new Error(__('Invalid credentials', 'moloni_es'), $log);
+        throw new APIExeption(__('Invalid credentials', 'moloni_es'), $log);
     }
 
     /**

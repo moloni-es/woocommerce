@@ -2,10 +2,10 @@
 
 namespace MoloniES;
 
-use MoloniES\Controllers\Logs;
-use MoloniES\Controllers\PendingOrders;
 use MoloniES\Enums\Boolean;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\Core\MoloniException;
+use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
@@ -19,6 +19,8 @@ use MoloniES\Hooks\ProductView;
 use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
 use MoloniES\Menus\Admin;
+use MoloniES\Models\Logs;
+use MoloniES\Models\PendingOrders;
 use MoloniES\Services\Documents\DownloadDocumentPDF;
 use MoloniES\Services\Documents\OpenDocument;
 use MoloniES\Services\Orders\CreateMoloniDocument;
@@ -133,7 +135,7 @@ class Plugin
                         break;
                 }
             }
-        } catch (Error $error) {
+        } catch (MoloniException $error) {
             $pluginErrorException = $error;
         }
 
@@ -147,7 +149,7 @@ class Plugin
     /**
      * Create a new document
      *
-     * @throws DocumentWarning|Error
+     * @throws DocumentWarning|DocumentError|MoloniException
      */
     private function createDocument()
     {
@@ -157,21 +159,29 @@ class Plugin
         try {
             $service->run();
         } catch (DocumentWarning $e) {
+            $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
+            $message .= ' ';
+            $message .= $e->getMessage();
+
             Storage::$LOGGER->alert(
-                sprintf(__('There was an warning when generating the document (%s)'), $orderName),
+                $message,
                 [
                     'message' => $e->getMessage(),
-                    'request' => $e->getRequest()
+                    'request' => $e->getData()
                 ]
             );
 
             throw $e;
-        } catch (Error $e) {
+        } catch (DocumentError $e) {
+            $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
+            $message .= ' ';
+            $message .= $e->getMessage();
+
             Storage::$LOGGER->error(
-                sprintf(__('There was an error when generating the document (%s)'), $orderName),
+                $message,
                 [
                     'message' => $e->getMessage(),
-                    'request' => $e->getRequest()
+                    'request' => $e->getData()
                 ]
             );
 
@@ -292,7 +302,7 @@ class Plugin
     {
         $date = isset($_GET['since']) ? sanitize_text_field($_GET['since']) : gmdate('Y-m-d', strtotime('-1 week'));
 
-        $service = (new Controllers\SyncProducts($date))->run();
+        $service = (new Services\SyncProducts($date))->run();
 
         if ($service->countUpdated() > 0) {
             add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('%s products updated.', 'moloni_es'), $service->countUpdated()), 'updated');
@@ -335,7 +345,7 @@ class Plugin
 
             $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
             $type = 'updated';
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             $msg = __('Something went wrong reinstalling Moloni Webhooks.', 'moloni_es');
             $type = 'error';
         }

@@ -2,8 +2,8 @@
 
 namespace MoloniES;
 
-use MoloniES\Controllers\Documents;
-use MoloniES\Exceptions\Error;
+use Exception;
+use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 
@@ -18,6 +18,7 @@ class Ajax
     public function __construct(Plugin $parent)
     {
         $this->parent = $parent;
+
         add_action('wp_ajax_genInvoice', [$this, 'genInvoice']);
     }
 
@@ -38,25 +39,40 @@ class Ajax
                 'message' => sprintf(__('Document %s successfully inserted', 'moloni_es'), $service->getOrderNumber())
             ]);
         } catch (DocumentWarning $e) {
+            $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
+            $message .= ' ';
+            $message .= $e->getMessage();
+
             Storage::$LOGGER->alert(
-                sprintf(__('There was an warning when generating the document (%s)'), $orderName),
+                $message,
                 [
                     'message' => $e->getMessage(),
-                    'request' => $e->getRequest()
+                    'request' => $e->getData()
                 ]
             );
 
-            wp_send_json(['valid' => 1, 'message' => $e->getMessage(), 'description' => $e->getError()]);
-        } catch (Error $e) {
+            wp_send_json(['valid' => 1, 'message' => $e->getMessage(), 'data' => $e->getData()]);
+        } catch (DocumentError $e) {
+            $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
+            $message .= ' ';
+            $message .= $e->getMessage();
+
             Storage::$LOGGER->error(
-                sprintf(__('There was an error when generating the document (%s)'), $orderName),
+                $message,
                 [
                     'message' => $e->getMessage(),
-                    'request' => $e->getRequest()
+                    'request' => $e->getData()
                 ]
             );
 
-            wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'description' => $e->getError()]);
+            wp_send_json(['valid' => 0, 'message' => $e->getMessage(), 'data' => $e->getData()]);
+        } catch (Exception $e) {
+            Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
+                'action' => 'bulk:document:create',
+                'exception' => $e->getMessage()
+            ]);
+
+            wp_send_json(['valid' => 0, 'message' => $e->getMessage()]);
         }
     }
 }

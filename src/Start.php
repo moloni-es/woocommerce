@@ -4,7 +4,7 @@ namespace MoloniES;
 
 use MoloniES\API\Companies;
 use MoloniES\Enums\Boolean;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Helpers\WebHooks;
 
 /**
@@ -56,9 +56,9 @@ class Start
 
                     Model::setTokens($login['accessToken'], $login['refreshToken']);
                 }
-            } catch (Error $e) {
+            } catch (APIExeption $e) {
                 $errorMessage = $e->getMessage();
-                $errorBag = $e->getRequest();
+                $errorBag = $e->getData();
             }
 
             if (!$loginValid) {
@@ -162,7 +162,7 @@ class Start
 
                 $companies[] = $query;
             }
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             $companies = [];
         }
 
@@ -194,7 +194,7 @@ class Start
         try {
             WebHooks::deleteHooks();
             Model::resetTokens();
-        } catch (Error $e) {}
+        } catch (APIExeption $e) {}
     }
 
     //          Settings/Automations          //
@@ -254,7 +254,7 @@ class Start
                 WebHooks::createHook('Product', 'create');
                 WebHooks::createHook('Product', 'update');
             }
-        } catch (Error $e) {}
+        } catch (APIExeption $e) {}
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class FiscalZone
 {
@@ -13,7 +13,7 @@ class FiscalZone
      * @param $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryFiscalZoneTaxSettings($variables = [])
     {

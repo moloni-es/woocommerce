@@ -2,21 +2,22 @@
 
 namespace MoloniES\Controllers;
 
+use MoloniES\API\Products;
 use MoloniES\Enums\SyncLogsType;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
+use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
+use MoloniES\Services\MoloniProduct\Create\CreateVariantProduct;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
 use MoloniES\Services\MoloniProduct\Update\UpdateVariantProduct;
-use MoloniES\Tools\SyncLogs;
-use WC_Product;
-use WC_Tax;
-use WC_Order;
-use WC_Order_Item_Product;
-use MoloniES\API\Products;
-use MoloniES\Exceptions\Error;
-use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
-use MoloniES\Services\MoloniProduct\Create\CreateVariantProduct;
 use MoloniES\Tools;
 use MoloniES\Tools\ProductAssociations;
+use MoloniES\Tools\SyncLogs;
+use WC_Order;
+use WC_Order_Item_Product;
+use WC_Product;
+use WC_Tax;
 
 class OrderProduct
 {
@@ -65,11 +66,13 @@ class OrderProduct
 
     /**
      * OrderProduct constructor.
+     *
      * @param WC_Order_Item_Product $product
      * @param WC_Order $wcOrder
-     * @param int $order
+     * @param int|null $order
+     * @param string|null $fiscalZone
      */
-    public function __construct($product, $wcOrder, $order = 0, $fiscalZone = 'es')
+    public function __construct(WC_Order_Item_Product $product, WC_Order $wcOrder, ?int $order = 0, ?string $fiscalZone = 'es')
     {
         $this->orderProduct = $product;
         $this->wc_order = $wcOrder;
@@ -78,8 +81,11 @@ class OrderProduct
     }
 
     /**
+     * Create product
+     *
      * @return $this
-     * @throws Error
+     *
+     * @throws DocumentError
      */
     public function create(): OrderProduct
     {
@@ -122,6 +128,8 @@ class OrderProduct
     }
 
     /**
+     * Set variation summary
+     *
      * @return string
      */
     private function getSummaryVariationAttributes(): string
@@ -140,6 +148,8 @@ class OrderProduct
     }
 
     /**
+     * Set extra summary
+     *
      * @return string
      */
     private function getSummaryExtraProductOptions(): string
@@ -165,6 +175,8 @@ class OrderProduct
     }
 
     /**
+     * Set price
+     *
      * @return OrderProduct
      */
     public function setPrice(): OrderProduct
@@ -186,6 +198,8 @@ class OrderProduct
     }
 
     /**
+     * Set quantity
+     *
      * @return OrderProduct
      */
     public function setQty(): OrderProduct
@@ -205,7 +219,7 @@ class OrderProduct
      *
      * @return $this
      *
-     * @throws Error
+     * @throws DocumentError
      */
     private function setProductId(): OrderProduct
     {
@@ -231,7 +245,7 @@ class OrderProduct
                 $wcProduct = wc_get_product($wcVariationId);
 
                 if (empty($wcProduct)) {
-                    throw new Error(__('Order products were deleted.','moloni_es'));
+                    throw new DocumentError(__('Order products were deleted.','moloni_es'));
                 }
 
                 $moloniProduct = $this->getByReference($wcProduct);
@@ -241,7 +255,7 @@ class OrderProduct
                     $wcProduct = wc_get_product($wcProductId);
 
                     if (empty($wcProduct)) {
-                        throw new Error(__('Order products were deleted.','moloni_es'));
+                        throw new DocumentError(__('Order products were deleted.','moloni_es'));
                     }
 
                     SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
@@ -266,7 +280,7 @@ class OrderProduct
                 $wcProduct = wc_get_product($wcProductId);
 
                 if (empty($wcProduct)) {
-                    throw new Error(__('Order products were deleted.','moloni_es'));
+                    throw new DocumentError(__('Order products were deleted.','moloni_es'));
                 }
 
                 $moloniProduct = $this->getByReference($wcProduct);
@@ -291,6 +305,7 @@ class OrderProduct
 
     /**
      * Set the discount in percentage
+     *
      * @return $this
      */
     private function setDiscount(): OrderProduct
@@ -298,7 +313,7 @@ class OrderProduct
         $total = (float)$this->orderProduct->get_total();
         $subTotal = (float)$this->orderProduct->get_subtotal();
 
-        if ($subTotal !== (float)0) {
+        if ((int)$subTotal !== 0) {
             $this->discount = (100 - (($total * 100) / $subTotal));
         }
 
@@ -316,7 +331,7 @@ class OrderProduct
     /**
      * Set the taxes of a product
      *
-     * @throws Error
+     * @throws DocumentError
      */
     private function setTaxes(): OrderProduct
     {
@@ -343,19 +358,33 @@ class OrderProduct
     }
 
     /**
-     * @param float $taxRate Tax Rate in percentage
+     * Set product tax
+     *
+     * @param float|int|null $taxRate Tax Rate in percentage
+     *
      * @return array
-     * @throws Error
+     *
+     * @throws DocumentError
      */
     private function setTax($taxRate): array
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        try {
+            $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching taxes', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         $tax = [];
         $tax['taxId'] = (int) $moloniTax['taxId'];
         $tax['value'] = (float) $taxRate;
         $tax['ordering'] = count($this->taxes) + 1;
-        $tax['cumulative'] = (bool) 0;
+        $tax['cumulative'] = false;
 
         if ((int) $moloniTax['type'] === 1) {
             $this->hasIVA = true;
@@ -407,17 +436,37 @@ class OrderProduct
 
     //          REQUESTS          //
 
+    /**
+     * Get product by ID
+     *
+     * @throws DocumentError
+     */
     protected function getById(int $productId): array
     {
         $variables = [
             'productId' => $productId
         ];
 
-        $byId = Products::queryProduct($variables);
+        try {
+            $byId = Products::queryProduct($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching products', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
         return $byId['data']['product']['data'] ?? [];
     }
 
+    /**
+     * Get product by reference
+     *
+     * @throws DocumentError
+     */
     protected function getByReference(WC_Product $wcProduct): array
     {
         $reference = $wcProduct->get_sku();
@@ -444,7 +493,17 @@ class OrderProduct
             ]
         ];
 
-        $byReference = Products::queryProducts($variables);
+        try {
+            $byReference = Products::queryProducts($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching products', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
         if (!empty($byReference) && isset($byReference[0]['productId'])) {
             return $byReference[0];
@@ -453,6 +512,11 @@ class OrderProduct
         return [];
     }
 
+    /**
+     * Get product parent
+     *
+     * @throws DocumentError
+     */
     protected function getByProductParent(): array
     {
         $wcParentId = $this->orderProduct->get_product_id();
@@ -461,7 +525,7 @@ class OrderProduct
         $wcProduct = wc_get_product($wcParentId);
 
         if (empty($wcProduct)) {
-            throw new Error(__('Order products were deleted.','moloni_es'));
+            throw new DocumentError(__('Order products were deleted.','moloni_es'));
         }
 
         $byReference = $this->getByReference($wcProduct);
@@ -504,7 +568,7 @@ class OrderProduct
         $variant = $service->getVariant($wcVariationId);
 
         if (empty($variant)) {
-            throw new Error(__('Could not find variant after update.','moloni_es'));
+            throw new DocumentError(__('Could not find variant after update.','moloni_es'));
         }
 
         return $variant;

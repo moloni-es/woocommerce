@@ -2,14 +2,15 @@
 
 namespace MoloniES\Services\Orders;
 
-use MoloniES\Exceptions\DocumentWarning;
 use WC_Order;
 use MoloniES\API\Companies;
-use MoloniES\Exceptions\Error;
-use MoloniES\Enums\Boolean;
-use MoloniES\Enums\DocumentTypes;
-use MoloniES\Enums\DocumentStatus;
 use MoloniES\Controllers\Documents;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\DocumentStatus;
+use MoloniES\Enums\DocumentTypes;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
+use MoloniES\Exceptions\DocumentWarning;
 
 class CreateMoloniDocument
 {
@@ -47,14 +48,24 @@ class CreateMoloniDocument
     /**
      * Run service
      *
+     * @throws DocumentError
      * @throws DocumentWarning
-     * @throws Error
      */
     public function run(): void
     {
         $this->checkForWarnings();
 
-        $company = (Companies::queryCompany())['data']['company']['data'];
+        try {
+            $company = (Companies::queryCompany())['data']['company']['data'] ?? [];
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching company', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
         if ($this->shouldCreateBillOfLading()) {
             $billOfLading = new Documents($this->order, $company);
@@ -157,7 +168,7 @@ class CreateMoloniDocument
     /**
      * Checks if order already has a document associated
      *
-     * @throws Error
+     * @throws DocumentError
      */
     private function checkForWarnings(): void
     {
@@ -171,7 +182,7 @@ class CreateMoloniDocument
             $errorMsg = sprintf(__('The order %s document was previously generated!', 'moloni_es'), $this->order->get_order_number());
             $errorMsg .= " <a href='" . esc_url($forceUrl) . "'>" . __('Generate again', 'moloni_es') . '</a>';
 
-            throw new Error($errorMsg);
+            throw new DocumentError($errorMsg);
         }
     }
 }

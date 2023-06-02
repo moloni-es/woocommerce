@@ -2,11 +2,11 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\API\Products;
-use MoloniES\API\Taxes;
-use MoloniES\Exceptions\Error;
-use MoloniES\Tools;
 use WC_Order;
+use MoloniES\API\Products;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
+use MoloniES\Tools;
 
 class OrderShipping
 {
@@ -46,7 +46,6 @@ class OrderShipping
 
     private $type = 2;
     private $summary = '';
-    private $ean = '';
     private $unit_id;
     private $has_stock = 0;
 
@@ -55,10 +54,12 @@ class OrderShipping
 
     /**
      * OrderProduct constructor.
+     *
      * @param WC_Order $order
-     * @param int $index
+     * @param int|null $index
+     * @param string|null $fiscalZone
      */
-    public function __construct($order, $index = 0, $fiscalZone = 'es')
+    public function __construct(WC_Order $order, ?int $index = 0, ?string $fiscalZone = 'es')
     {
         $this->order = $order;
         $this->index = $index;
@@ -66,10 +67,13 @@ class OrderShipping
     }
 
     /**
+     * Create shipping
+     *
      * @return $this
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    public function create()
+    public function create(): OrderShipping
     {
         $this->qty = 1;
         $this->price = (float)$this->order->get_shipping_total();
@@ -84,20 +88,21 @@ class OrderShipping
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    private function setReference()
+    private function setReference(): OrderShipping
     {
         $this->reference = __('Shipping','moloni_es');
+
         return $this;
     }
 
     /**
-     * @return $this
-     * @throws Error
+     * Set shipping product
+     *
+     * @return void
+     *
+     * @throws DocumentError
      */
-    private function setProductId()
+    private function setProductId(): void
     {
         $variables = [
             'options' => [
@@ -117,34 +122,59 @@ class OrderShipping
             ]
         ];
 
-        $searchProduct = Products::queryProducts($variables);
-        if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
-            $this->product_id = $searchProduct[0]['productId'];
-            return $this;
+        try {
+            $searchProduct = Products::queryProducts($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(__('Error getting shipping', 'moloni_es'));
         }
 
-        // Lets create the shipping product
+        if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
+            $this->product_id = $searchProduct[0]['productId'];
+            return;
+        }
+
+        // Let's create the shipping product
         $this
             ->setCategory()
             ->setUnitId();
 
-        $insert = (Products::mutationProductCreate($this->mapPropsToValues(true)))['data']['productCreate']['data'];
-        if (isset($insert['productId'])) {
-            $this->product_id = $insert['productId'];
-            return $this;
+        try {
+            $mutation = (Products::mutationProductCreate($this->mapPropsToValues(true)))['data']['productCreate']['data'] ?? [];
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error inserting shipping','moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
         }
 
-        throw new Error(__('Error inserting shipping','moloni_es'));
+
+        if (isset($mutation['productId'])) {
+            $this->product_id = $mutation['productId'];
+            return;
+        }
+
+        throw new DocumentError(
+            __('Error inserting shipping','moloni_es'),
+            [
+                'mutation' => $mutation
+            ]
+        );
     }
 
     /**
-     * @throws Error
+     * Set document catefory
+     *
+     * @throws DocumentError
      */
-    private function setCategory()
+    private function setCategory(): OrderShipping
     {
         $categoryName = __('Online Store','moloni_es');
 
         $categoryObj = new ProductCategory($categoryName);
+
         if (!$categoryObj->loadByName()) {
             $categoryObj->create();
         }
@@ -155,25 +185,27 @@ class OrderShipping
     }
 
     /**
-     * @return $this
-     * @throws Error
+     * Set unit ID
+     *
+     * @return void
+     *
+     * @throws DocumentError
      */
-    private function setUnitId()
+    private function setUnitId(): void
     {
         if (defined('MEASURE_UNIT')) {
-            $this->unit_id = MEASURE_UNIT;
+            $this->unit_id = (int)MEASURE_UNIT;
         } else {
-            throw new Error(__('Measure unit not set!','moloni_es'));
+            throw new DocumentError(__('Measure unit not set!','moloni_es'));
         }
-
-        return $this;
     }
 
     /**
      * Set the discount in percentage
+     *
      * @return $this
      */
-    private function setDiscount()
+    private function setDiscount(): OrderShipping
     {
         $this->discount = $this->price <= 0 ? 100 : 0;
 
@@ -183,7 +215,7 @@ class OrderShipping
     /**
      * Set the taxes of a product
      *
-     * @throws Error
+     * @throws DocumentError
      */
     private function setTaxes(): OrderShipping
     {
@@ -215,13 +247,27 @@ class OrderShipping
     }
 
     /**
-     * @param float $taxRate Tax Rate in percentage
+     * Set product tax
+     *
+     * @param float|int|null $taxRate Tax Rate in percentage
+     *
      * @return array
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    private function setTax(float $taxRate)
+    private function setTax($taxRate): array
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        try {
+            $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching taxes', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         $tax = [];
         $tax['taxId'] = (int)$moloniTax['taxId'];
@@ -237,10 +283,13 @@ class OrderShipping
     }
 
     /**
-     * @param bool $toInsert
+     * To array
+     *
+     * @param bool|null $toInsert
+     *
      * @return array
      */
-    public function mapPropsToValues($toInsert = false)
+    public function mapPropsToValues(?bool $toInsert = false): array
     {
         $variables = [
             'productId' => (int) $this->product_id,

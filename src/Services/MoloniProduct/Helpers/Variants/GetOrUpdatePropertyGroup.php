@@ -2,14 +2,14 @@
 
 namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 
-use WP_Term;
-use WC_Product;
-use WC_Product_Variable;
-use WC_Product_Attribute;
 use MoloniES\API\PropertyGroups;
 use MoloniES\Enums\Boolean;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
+use WC_Product;
+use WC_Product_Attribute;
+use WC_Product_Variable;
+use WP_Term;
 
 class GetOrUpdatePropertyGroup extends VariantHelperAbstract
 {
@@ -47,7 +47,7 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
 
         try {
             $moloniPropertyGroup = PropertyGroups::queryPropertyGroup($queryParams)['data']['propertyGroup']['data'] ?? [];
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             // todo: throw error
             die;
         }

@@ -1,16 +1,14 @@
 <?php
 
-namespace MoloniES\Controllers;
+namespace MoloniES\Services;
 
 use Exception;
 use MoloniES\API\Products;
-use MoloniES\Exceptions\Error;
-use MoloniES\Log;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Storage;
 
 class SyncProducts
 {
-
     private $since;
     private $found = 0;
     private $updated = [];
@@ -202,13 +200,13 @@ class SyncProducts
 
         try {
             $fetched = Products::queryProducts($variables);
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             $fetched = [];
 
             Storage::$LOGGER->error(__('Warning, error getting products via API', 'moloni_es'), [
                 'action' => 'stock:sync:service',
                 'message' => $e->getMessage(),
-                'exception' => $e->getRequest(),
+                'exception' => $e->getData(),
             ]);
         }
 

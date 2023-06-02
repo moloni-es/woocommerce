@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class MeasurementUnits
 {
@@ -13,7 +13,7 @@ class MeasurementUnits
      * @param array $variables variables of the query
      *
      * @return array returns all measurement units
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryMeasurementUnits($variables = [])
     {
@@ -53,7 +53,7 @@ class MeasurementUnits
      * @param array $variables variables of the query
      *
      * @return array returns some data of the created measurement data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationMeasurementUnitCreate($variables = [])
     {

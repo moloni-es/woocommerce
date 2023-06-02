@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Stocks
 {
@@ -13,7 +13,7 @@ class Stocks
      * @param array $variables variables of the query
      *
      * @return array returns info about the movement
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationStockMovementManualEntryCreate(array $variables = []): array
     {
@@ -43,7 +43,7 @@ class Stocks
      * @param array $variables variables of the query
      *
      * @return array returns info about the movement
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationStockMovementManualExitCreate(array $variables = []): array
     {

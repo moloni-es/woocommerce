@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Countries
 {
@@ -13,7 +13,7 @@ class Countries
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCountries($variables = [])
     {
@@ -58,7 +58,7 @@ class Countries
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCountry($variables = [])
     {

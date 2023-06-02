@@ -5,14 +5,13 @@ namespace MoloniES\Hooks;
 use Exception;
 use MoloniES\Enums\AutomaticDocumentsStatus;
 use MoloniES\Enums\Boolean;
+use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Notice;
-use MoloniES\Services\Mails\DocumentFailed;
-use MoloniES\Services\Mails\DocumentWarning;
-use MoloniES\Start;
 use MoloniES\Plugin;
-use MoloniES\Exceptions\Error;
+use MoloniES\Services\Mails\DocumentFailed;
 use MoloniES\Services\Orders\CreateMoloniDocument;
+use MoloniES\Start;
 use MoloniES\Storage;
 
 class OrderPaid
@@ -34,99 +33,115 @@ class OrderPaid
 
     public function documentCreateComplete($orderId)
     {
-        try {
-            if ($this->canCreateCompleteDocument()) {
-                $service = new CreateMoloniDocument($orderId);
-                $orderName = $service->getOrderNumber() ?? '';
+        if ($this->canCreateCompleteDocument()) {
+            $service = new CreateMoloniDocument($orderId);
+            $orderName = $service->getOrderNumber() ?? '';
 
-                Storage::$LOGGER->info(sprintf(
-                    __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
-                    __('Complete', 'moloni_es'),
-                    $orderName
-                ));
+            Storage::$LOGGER->info(sprintf(
+                __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
+                __('Complete', 'moloni_es'),
+                $orderName
+            ));
 
-                try {
-                    $service->run();
+            try {
+                $service->run();
 
-                    $this->throwMessages($service);
-                } catch (DocumentWarning $e) {
-                    $this->sendWarningEmail($orderName);
+                $this->throwMessages($service);
+            } catch (DocumentWarning $e) {
+                $this->sendWarningEmail($orderName);
 
-                    Notice::addmessagecustom(htmlentities($e->getError()));
-                    Storage::$LOGGER->alert(
-                        sprintf(__('There was an warning when generating the document (%s)'), $orderName),
-                        [
-                            'message' => $e->getMessage(),
-                            'request' => $e->getRequest()
-                        ]
-                    );
-                } catch (Error $e) {
-                    $this->sendErrorEmail($orderName);
+                $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
+                $message .= ' ';
+                $message .= $e->getMessage();
 
-                    Notice::addmessagecustom(htmlentities($e->getError()));
-                    Storage::$LOGGER->error(
-                        sprintf(__('There was an error when generating the document (%s)'), $orderName),
-                        [
-                            'message' => $e->getMessage(),
-                            'request' => $e->getRequest()
-                        ]
-                    );
-                }
+                Notice::addmessagecustom(htmlentities($e->getError()));
+
+                Storage::$LOGGER->alert(
+                    $message,
+                    [
+                        'message' => $e->getMessage(),
+                        'request' => $e->getData()
+                    ]
+                );
+            } catch (DocumentError $e) {
+                $this->sendErrorEmail($orderName);
+
+                $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
+                $message .= ' ';
+                $message .= $e->getMessage();
+
+                Notice::addmessagecustom(htmlentities($e->getError()));
+
+                Storage::$LOGGER->error(
+                    $message,
+                    [
+                        'message' => $e->getMessage(),
+                        'request' => $e->getData()
+                    ]
+                );
+            } catch (Exception $ex) {
+                Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
+                    'action' => 'automatic:document:create:complete',
+                    'exception' => $ex->getMessage()
+                ]);
             }
-        } catch (Exception $ex) {
-            Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
-                'action' => 'automatic:document:create:complete',
-                'exception' => $ex->getMessage()
-            ]);
         }
     }
 
     public function documentCreateProcessing($orderId)
     {
-        try {
-            if ($this->canCreateProcessingDocument()) {
-                $service = new CreateMoloniDocument($orderId);
-                $orderName = $service->getOrderNumber() ?? '';
+        if ($this->canCreateProcessingDocument()) {
+            $service = new CreateMoloniDocument($orderId);
+            $orderName = $service->getOrderNumber() ?? '';
 
-                Storage::$LOGGER->info(sprintf(
-                    __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
-                    __('Processing', 'moloni_es'),
-                    $orderName
-                ));
+            Storage::$LOGGER->info(sprintf(
+                __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
+                __('Processing', 'moloni_es'),
+                $orderName
+            ));
 
-                try {
-                    $service->run();
+            try {
+                $service->run();
 
-                    $this->throwMessages($service);
-                } catch (DocumentWarning $e) {
-                    $this->sendWarningEmail($orderName);
+                $this->throwMessages($service);
+            } catch (DocumentWarning $e) {
+                $this->sendWarningEmail($orderName);
 
-                    Notice::addmessagecustom(htmlentities($e->getError()));
-                    Storage::$LOGGER->alert(
-                        sprintf(__('There was an warning when generating the document (%s)'), $orderName),
-                        [
-                            'message' => $e->getMessage(),
-                            'request' => $e->getRequest()
-                        ]
-                    );
-                } catch (Error $e) {
-                    $this->sendErrorEmail($orderName);
+                $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
+                $message .= ' ';
+                $message .= $e->getMessage();
 
-                    Notice::addmessagecustom(htmlentities($e->getError()));
-                    Storage::$LOGGER->error(
-                        sprintf(__('There was an error when generating the document (%s)'), $orderName),
-                        [
-                            'message' => $e->getMessage(),
-                            'request' => $e->getRequest()
-                        ]
-                    );
-                }
+                Notice::addmessagecustom(htmlentities($e->getError()));
+
+                Storage::$LOGGER->alert(
+                    $message,
+                    [
+                        'message' => $e->getMessage(),
+                        'request' => $e->getData()
+                    ]
+                );
+            } catch (DocumentError $e) {
+                $this->sendErrorEmail($orderName);
+
+                $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
+                $message .= ' ';
+                $message .= $e->getMessage();
+
+                Notice::addmessagecustom(htmlentities($e->getError()));
+
+                Storage::$LOGGER->error(
+                    $message,
+                    [
+                        'message' => $e->getMessage(),
+                        'request' => $e->getData()
+                    ]
+                );
+            } catch (Exception $ex) {
+                Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
+                    'action' => 'automatic:document:create:processing',
+                    'exception' => $ex->getMessage()
+                ]);
             }
-        } catch (Exception $ex) {
-            Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
-                'action' => 'automatic:document:create:complete',
-                'exception' => $ex->getMessage()
-            ]);
         }
     }
 
@@ -134,8 +149,6 @@ class OrderPaid
 
     /**
      * Verify if it can be created
-     *
-     * @throws Error
      */
     private function canCreateCompleteDocument(): bool
     {

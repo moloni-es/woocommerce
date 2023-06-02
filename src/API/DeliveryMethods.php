@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class DeliveryMethods
 {
@@ -14,7 +14,7 @@ class DeliveryMethods
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationDeliveryMethodCreate($variables = []) {
         $query = 'mutation deliveryMethodCreate($companyId: Int!,$data: DeliveryMethodInsert!)
@@ -43,7 +43,7 @@ class DeliveryMethods
      * @param array $variables Request variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryDeliveryMethods($variables = [])
     {

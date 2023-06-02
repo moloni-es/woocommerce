@@ -1,10 +1,10 @@
 <?php
 
-namespace MoloniES\Controllers;
+namespace MoloniES\Models;
 
+use MoloniES\Storage;
 use WC_Order;
 use WP_Query;
-use MoloniES\Storage;
 
 class PendingOrders
 {

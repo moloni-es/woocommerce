@@ -2,7 +2,9 @@
 
 namespace MoloniES\Exceptions;
 
-class HelperException extends Error
+use MoloniES\Exceptions\Core\MoloniException;
+
+class HelperException extends MoloniException
 {
 
 }

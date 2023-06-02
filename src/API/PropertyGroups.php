@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class PropertyGroups
 {
@@ -14,7 +14,7 @@ class PropertyGroups
      *
      * @return array|bool
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryPropertyGroups(?array $variables = [])
     {
@@ -53,7 +53,7 @@ class PropertyGroups
      *
      * @return array|bool
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryPropertyGroup(array $variables = [])
     {
@@ -83,7 +83,7 @@ class PropertyGroups
      *
      * @return array|bool
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationPropertyGroupUpdate(array $variables = [])
     {
@@ -113,7 +113,7 @@ class PropertyGroups
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationPropertyGroupCreate(array $variables = [])
     {

@@ -4,8 +4,9 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php use MoloniES\Enums\DocumentTypes; ?>
-<?php use MoloniES\Controllers\PendingOrders; ?>
+<?php use MoloniES\Enums\DocumentTypes;
+use MoloniES\Models\PendingOrders; ?>
+<?php ?>
 
 <?php
 /** @var WC_Order[] $orders */

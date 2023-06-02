@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Customers
 {
@@ -13,7 +13,7 @@ class Customers
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationCustomerCreate($variables = [])
     {
@@ -42,7 +42,7 @@ class Customers
      * Updates an costumer
      * @param array $variables
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationCustomerUpdate($variables = [])
     {
@@ -73,7 +73,7 @@ class Customers
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCustomer($variables = [])
     {
@@ -110,7 +110,7 @@ class Customers
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCustomers($variables = [])
     {
@@ -157,7 +157,7 @@ class Customers
      *
      * @return array Api data
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCustomerNextNumber($variables = [])
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace MoloniES\Controllers;
+namespace MoloniES\Models;
 
 use MoloniES\Storage;
 

@@ -2,11 +2,11 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\API\Products;
-use MoloniES\API\Taxes;
-use MoloniES\Exceptions\Error;
-use MoloniES\Tools;
 use WC_Order_Item_Fee;
+use MoloniES\Tools;
+use MoloniES\API\Products;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
 
 class OrderFees
 {
@@ -56,9 +56,10 @@ class OrderFees
      * OrderProduct constructor.
      *
      * @param WC_Order_Item_Fee $fee
-     * @param int $index
+     * @param int|null $index
+     * @param string|null $fiscalZone
      */
-    public function __construct($fee, $index = 0, $fiscalZone = 'es')
+    public function __construct(WC_Order_Item_Fee $fee, ?int $index = 0, ?string $fiscalZone = 'es')
     {
         $this->fee = $fee;
         $this->index = $index;
@@ -66,10 +67,13 @@ class OrderFees
     }
 
     /**
+     * Create order fee
+     *
      * @return $this
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    public function create()
+    public function create(): OrderFees
     {
         $this->qty = 1;
         $this->price = (float)$this->fee['line_total'];
@@ -89,17 +93,21 @@ class OrderFees
     /**
      * @return $this
      */
-    private function setReference()
+    private function setReference(): OrderFees
     {
         $this->reference = __('Fee','moloni_es');
+
         return $this;
     }
 
     /**
-     * @return $this
-     * @throws Error
+     * Set product id
+     *
+     * @return void
+     *
+     * @throws DocumentError
      */
-    private function setProductId()
+    private function setProductId(): void
     {
         $variables = [
             'options' => [
@@ -119,32 +127,54 @@ class OrderFees
             ]
         ];
 
-        $searchProduct = Products::queryProducts($variables);
+        try {
+            $searchProduct = Products::queryProducts($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching order fee', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
             $this->product_id = $searchProduct[0]['productId'];
-            return $this;
+            return;
         }
 
-        // Lets create the shipping product
+        // Let's create the shipping product
         $this
             ->setCategory()
             ->setUnitId();
 
-        $insert = (Products::mutationProductCreate($this->mapPropsToValues(true)))['data']['productCreate']['data'];
+        try {
+            $insert = (Products::mutationProductCreate($this->mapPropsToValues(true)))['data']['productCreate']['data'] ?? [];
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error creating order fee', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         if (isset($insert['productId'])) {
             $this->product_id = $insert['productId'];
-            return $this;
+            return;
         }
 
-        throw new Error(__('Error inserting order fees' , 'moloni_es'));
+        throw new DocumentError(__('Error inserting order fees' , 'moloni_es'));
     }
 
     /**
-     * @throws Error
+     * Set category
+     *
+     * @throws DocumentError
      */
-    private function setCategory()
+    private function setCategory(): OrderFees
     {
         $categoryName = __('Online Store','moloni_es');
 
@@ -160,25 +190,28 @@ class OrderFees
     }
 
     /**
-     * @return $this
-     * @throws Error
+     * Set unit
+     *
+     * @return void
+     *
+     * @throws DocumentError
      */
-    private function setUnitId()
+    private function setUnitId(): void
     {
         if (defined('MEASURE_UNIT')) {
             $this->unit_id = MEASURE_UNIT;
         } else {
-            throw new Error(__('Measure unit not set!','moloni_es'));
+            throw new DocumentError(__('Measure unit not set!','moloni_es'));
         }
 
-        return $this;
     }
 
     /**
      * Set the discount in percentage
+     *
      * @return $this
      */
-    private function setDiscount()
+    private function setDiscount(): OrderFees
     {
         $this->discount = $this->price <= 0 ? 100 : 0;
 
@@ -188,7 +221,7 @@ class OrderFees
     /**
      * Set the taxes of a product
      *
-     * @throws Error
+     * @throws DocumentError
      */
     private function setTaxes(): OrderFees
     {
@@ -219,13 +252,27 @@ class OrderFees
     }
 
     /**
-     * @param float $taxRate Tax Rate in percentage
+     * Set taxes
+     *
+     * @param int|float|null $taxRate Tax Rate in percentage
+     *
      * @return array
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    private function setTax($taxRate)
+    private function setTax($taxRate = 0): array
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        try {
+            $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching taxes', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         $tax = [];
         $tax['taxId'] = (int)$moloniTax['taxId'];
@@ -241,10 +288,13 @@ class OrderFees
     }
 
     /**
-     * @param bool $toInsert
+     * To array
+     *
+     * @param bool|null $toInsert
+     *
      * @return array
      */
-    public function mapPropsToValues($toInsert = false)
+    public function mapPropsToValues(?bool $toInsert = false): array
     {
         $variables = [
             'productId' => (int) $this->product_id,

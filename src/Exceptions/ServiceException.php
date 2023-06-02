@@ -2,7 +2,9 @@
 
 namespace MoloniES\Exceptions;
 
-class ServiceException extends Error
+use MoloniES\Exceptions\Core\MoloniException;
+
+class ServiceException extends MoloniException
 {
 
 }

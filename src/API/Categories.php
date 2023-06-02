@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Categories
 {
@@ -13,7 +13,7 @@ class Categories
      * @param array $variables variables of the query
      *
      * @return array returns some data of the created category
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProductCategoryCreate($variables = [])
     {
@@ -42,7 +42,7 @@ class Categories
      * @param array $variables variables of the query
      *
      * @return array returns data of the categories
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProductCategories($variables = [])
     {
@@ -86,7 +86,7 @@ class Categories
      * @param array $variables variables of the query
      *
      * @return array returns category data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProductCategory($variables = [])
     {

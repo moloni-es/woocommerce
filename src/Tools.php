@@ -6,7 +6,7 @@ use MoloniES\API\Countries;
 use MoloniES\API\Currencies;
 use MoloniES\API\FiscalZone;
 use MoloniES\API\Taxes;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 /**
  * Multiple tools for handling recurring tasks
@@ -52,7 +52,7 @@ class Tools
      *
      * @return array
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function createTaxFromRateAndCode($taxRate, $countryCode = 'es'): array
     {
@@ -92,7 +92,7 @@ class Tools
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function getTaxFromRate($taxRate, $countryCode = 'es')
     {
@@ -135,9 +135,12 @@ class Tools
 
     /**
      * Returns country id
+     *
      * @param $countryCode
+     *
      * @return string
-     * @throws Error
+     *
+     * @throws APIExeption
      */
     public static function getCountryIdFromCode($countryCode): string
     {
@@ -150,7 +153,7 @@ class Tools
                 ]
             ]
         ];
-        $countryId = \MoloniES\Enums\Countries::SPAIN;
+        $countryId = Enums\Countries::SPAIN;
 
         $countriesList = Countries::queryCountries($variables);
 
@@ -170,10 +173,13 @@ class Tools
 
     /**
      * Returns currency exchange rate
+     *
      * @param int $from
      * @param int $to
+     *
      * @return array
-     * @throws Error
+     *
+     * @throws APIExeption
      */
     public static function getCurrencyExchangeRate($from, $to): array
     {

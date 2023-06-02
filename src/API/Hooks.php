@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Hooks
 {
@@ -14,7 +14,7 @@ class Hooks
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryHooks($variables = [])
     {
@@ -45,7 +45,7 @@ class Hooks
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationHookCreate($variables = [])
     {
@@ -76,7 +76,7 @@ class Hooks
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationHookDelete($variables = [])
     {

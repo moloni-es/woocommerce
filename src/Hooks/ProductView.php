@@ -6,7 +6,7 @@ use Exception;
 use WC_Product;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Plugin;
 use MoloniES\Start;
 use MoloniES\Tools\ProductAssociations;
@@ -70,7 +70,7 @@ class ProductView
                     }
 
                     $this->showProductDetails();
-                } catch (Error $e) {
+                } catch (APIExeption $e) {
                     echo __("Error getting product", 'moloni_es');
                     return null;
                 }
@@ -119,7 +119,7 @@ class ProductView
     /**
      * Fetch Moloni Product
      *
-     * @throws Error
+     * @throws APIExeption
      */
     private function fetchMoloniProduct()
     {

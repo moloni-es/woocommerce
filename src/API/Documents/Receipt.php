@@ -3,7 +3,7 @@
 namespace MoloniES\API\Documents;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Receipt
 {
@@ -13,7 +13,7 @@ class Receipt
      * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryReceipt(?array $variables = [])
     {
@@ -50,7 +50,7 @@ class Receipt
      * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryReceipts(?array $variables = [])
     {
@@ -96,7 +96,7 @@ class Receipt
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryReceiptGetPDFToken(?array $variables = [])
     {
@@ -128,7 +128,7 @@ class Receipt
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationReceiptCreate(?array $variables = [])
     {
@@ -164,7 +164,7 @@ class Receipt
      * @param array|null $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationReceiptUpdate(?array $variables = [])
     {
@@ -194,7 +194,7 @@ class Receipt
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationReceiptSendMail(?array $variables = [])
     {
@@ -212,7 +212,7 @@ class Receipt
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationReceiptGetPDF(?array $variables = [])
     {

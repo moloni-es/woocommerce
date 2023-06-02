@@ -3,7 +3,7 @@
 namespace MoloniES\Services\WcProduct\Helpers;
 
 use MoloniES\API\Categories;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class FetchWcCategoriesFromMoloniCategoryId
 {
@@ -23,7 +23,7 @@ class FetchWcCategoriesFromMoloniCategoryId
 
         try {
             $namesArray = $this->getFamlityTree();
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             return [];
         }
 
@@ -51,7 +51,7 @@ class FetchWcCategoriesFromMoloniCategoryId
     /**
      * Gets category ancesters names
      *
-     * @throws Error
+     * @throws APIExeption
      */
     private function getFamlityTree(): array
     {

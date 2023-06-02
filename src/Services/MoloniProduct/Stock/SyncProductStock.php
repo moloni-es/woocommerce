@@ -2,13 +2,13 @@
 
 namespace MoloniES\Services\MoloniProduct\Stock;
 
-use WC_Product;
-use MoloniES\Storage;
 use MoloniES\API\Stocks;
 use MoloniES\API\Warehouses;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\ServiceException;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniStockSyncAbstract;
+use MoloniES\Storage;
+use WC_Product;
 
 class SyncProductStock extends MoloniStockSyncAbstract
 {
@@ -20,6 +20,12 @@ class SyncProductStock extends MoloniStockSyncAbstract
 
     //            Publics            //
 
+    /**
+     * Runner
+     *
+     * @throws ServiceException
+     * @throws APIExeption
+     */
     public function run()
     {
         $wcStock = (int)$this->wcProduct->get_stock_quantity();
@@ -42,7 +48,7 @@ class SyncProductStock extends MoloniStockSyncAbstract
                 if (!empty($query)) {
                     $warehouseId = (int)$query[0]['warehouseId'];
                 }
-            } catch (Error $e) {
+            } catch (APIExeption $e) {
                 throw new ServiceException(__('Error fetching default company warehouse', 'moloni_es'));
             }
 

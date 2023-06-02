@@ -7,8 +7,8 @@ use WC_Product;
 use WC_Product_Variable;
 use WC_Product_Attribute;
 use MoloniES\Enums\Boolean;
-use MoloniES\Exceptions\Error;
 use MoloniES\API\PropertyGroups;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
 
 class FindOrCreatePropertyGroup extends VariantHelperAbstract
@@ -36,7 +36,7 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
 
         try {
             $moloniPropertyGroups = PropertyGroups::queryPropertyGroups();
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             // todo: thorw error
             die;
         }

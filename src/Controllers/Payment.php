@@ -15,7 +15,8 @@
 namespace MoloniES\Controllers;
 
 use MoloniES\API\PaymentMethods;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
 
 class Payment
 {
@@ -25,16 +26,18 @@ class Payment
 
     /**
      * Payment constructor.
-     * @param string $name
+     *
+     * @param string|null $name
      */
-    public function __construct($name)
+    public function __construct(?string $name = '')
     {
         $this->name = trim($name);
     }
 
     /**
      * Loads a payment method by name
-     * @throws Error
+     *
+     * @throws DocumentError
      */
     public function loadByName()
     {
@@ -47,7 +50,18 @@ class Payment
             ]
         ];
 
-        $paymentMethods = PaymentMethods::queryPaymentMethods($variables);
+        try {
+            $paymentMethods = PaymentMethods::queryPaymentMethods($variables);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching payment methods', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
+
         if (!empty($paymentMethods)) {
             foreach ($paymentMethods as $paymentMethod) {
                 if ($paymentMethod['name'] === $this->name) {
@@ -62,25 +76,42 @@ class Payment
 
     /**
      * Create a Payment Methods based on the name
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    public function create()
+    public function create(): Payment
     {
-        $insert = (PaymentMethods::mutationPaymentMethodCreate($this->mapPropsToValues()))['data']['paymentMethodCreate']['data'];
+        try {
+            $mutation = (PaymentMethods::mutationPaymentMethodCreate($this->mapPropsToValues()))['data']['paymentMethodCreate']['data'] ?? [];
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                sprintf(__('Error creating payment method (%s)', 'moloni_es'), $this->name),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]
+            );
+        }
 
-        if (isset($insert['paymentMethodId'])) {
-            $this->payment_method_id = $insert['paymentMethodId'];
+        if (isset($mutation['paymentMethodId'])) {
+            $this->payment_method_id = $mutation['paymentMethodId'];
             return $this;
         }
 
-        throw new Error(__('Error creating payment method','moloni_es') . $this->name);
+        throw new DocumentError(
+            sprintf(__('Error creating payment method (%s)', 'moloni_es'), $this->name),
+            [
+                'mutation' => $mutation
+            ]
+        );
     }
 
     /**
      * Map this object properties to an array to insert/update a moloni Payment Value
+     *
      * @return array
      */
-    private function mapPropsToValues()
+    private function mapPropsToValues(): array
     {
         return [
             'data' => [

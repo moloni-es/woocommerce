@@ -5,7 +5,7 @@ namespace MoloniES\API;
 
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Languages
 {
@@ -15,7 +15,7 @@ class Languages
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryLanguage($variables = [])
     {
@@ -47,7 +47,7 @@ class Languages
      * @param array $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryLanguages($variables = [])
     {

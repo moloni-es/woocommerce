@@ -1,4 +1,7 @@
 <?php
+
+use MoloniES\Exceptions\Core\MoloniException;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -44,7 +47,7 @@ if (!defined('ABSPATH')) {
 
 <?php
 
-if (isset($pluginErrorException) && $pluginErrorException instanceof \MoloniES\Exceptions\Error) {
+if (isset($pluginErrorException) && $pluginErrorException instanceof MoloniException) {
     $pluginErrorException->showError();
 }
 

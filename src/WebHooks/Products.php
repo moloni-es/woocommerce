@@ -6,7 +6,8 @@ use Exception;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\Core\MoloniException;
 use MoloniES\Exceptions\WebhookException;
 use MoloniES\Services\WcProduct\Create\CreateChildProduct;
 use MoloniES\Services\WcProduct\Create\CreateParentProduct;
@@ -82,7 +83,7 @@ class Products
             }
 
             $this->reply();
-        } catch (WebhookException $exception) {
+        } catch (MoloniException $exception) {
             $this->reply(0, $exception->getMessage());
         } catch (Exception $exception) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
@@ -262,7 +263,7 @@ class Products
                 'productId' => $productId
             ]);
             $moloniProduct = $query['data']['product']['data'] ?? [];
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             throw new WebhookException($e->getMessage());
         }
 

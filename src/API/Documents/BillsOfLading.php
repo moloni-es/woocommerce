@@ -3,7 +3,7 @@
 namespace MoloniES\API\Documents;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class BillsOfLading
 {
@@ -14,7 +14,7 @@ class BillsOfLading
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationBillsOfLadingCreate(?array $variables = [])
     {
@@ -50,9 +50,12 @@ class BillsOfLading
 
     /**
      * Creates a bill of lading
+     *
      * @param array|null $variables
+     *
      * @return mixed
-     * @throws Error
+     *
+     * @throws APIExeption
      */
     public static function mutationBillsOfLadingUpdate(?array $variables = [])
     {
@@ -86,7 +89,8 @@ class BillsOfLading
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     *
+     * @throws APIExeption
      */
     public static function queryBillsOfLadingGetPDFToken(?array $variables = [])
     {
@@ -117,7 +121,8 @@ class BillsOfLading
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     *
+     * @throws APIExeption
      */
     public static function mutationBillsOfLadingGetPDF(?array $variables = [])
     {
@@ -135,7 +140,8 @@ class BillsOfLading
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     *
+     * @throws APIExeption
      */
     public static function mutationBillsOfLadingSendMail(?array $variables = [])
     {

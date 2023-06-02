@@ -4,8 +4,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use MoloniES\Controllers\Logs;
 use MoloniES\Enums\LogLevel;
+use MoloniES\Models\Logs;
 
 $logs = Logs::getAllAvailable();
 ?>

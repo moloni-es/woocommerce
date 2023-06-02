@@ -3,7 +3,7 @@
 namespace MoloniES\API\Documents;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class ProFormaInvoice
 {
@@ -13,7 +13,7 @@ class ProFormaInvoice
      * @param array|null $variables variables of the request
      *
      * @return void Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProFormaInvoice(?array $variables = [])
     {
@@ -50,7 +50,7 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return array|bool Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProFormaInvoices(?array $variables = [])
     {
@@ -96,7 +96,7 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProFormaInvoiceGetPDFToken(?array $variables = [])
     {
@@ -128,7 +128,7 @@ class ProFormaInvoice
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProFormaInvoiceCreate(?array $variables = [])
     {
@@ -171,7 +171,7 @@ class ProFormaInvoice
      * @param array|null $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProFormaInvoiceUpdate(?array $variables = [])
     {
@@ -201,7 +201,7 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProFormaInvoiceGetPDF(?array $variables = [])
     {
@@ -219,7 +219,7 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProFormaInvoiceSendMail(?array $variables = [])
     {

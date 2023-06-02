@@ -3,7 +3,7 @@
 namespace MoloniES\API\Documents;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class CreditNote
 {
@@ -13,7 +13,7 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCreditNote(?array $variables = [])
     {
@@ -50,7 +50,7 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCreditNotes(?array $variables = [])
     {
@@ -96,7 +96,7 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCreditNoteGetPDFToken(?array $variables = [])
     {
@@ -127,7 +127,7 @@ class CreditNote
      * @param array|null $variables variables of the request
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationCreditNoteCreate(?array $variables = [])
     {
@@ -164,7 +164,7 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationCreditNoteGetPDF(?array $variables = [])
     {

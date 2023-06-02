@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Companies
 {
@@ -11,7 +11,7 @@ class Companies
      * Gets all the companies that the logged in user has access
      *
      * @return array return and array with all companies Ids
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryMe()
     {
@@ -40,7 +40,7 @@ class Companies
      * @param array $variables variables of the query
      *
      * @return array returns an array with the companies information
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCompany($variables = [])
     {

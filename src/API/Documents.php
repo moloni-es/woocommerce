@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Documents
 {
@@ -13,7 +13,7 @@ class Documents
      * @param array|null $variables
      *
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryDocument(?array $variables = [])
     {

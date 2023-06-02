@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Products
 {
@@ -13,7 +13,7 @@ class Products
      * @param array $variables variables of the query
      *
      * @return array returns some data of the created product
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProductCreate(array $variables = []): array
     {
@@ -42,7 +42,7 @@ class Products
      * @param array $variables variables of the query
      *
      * @return array returns some data of the updated product
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationProductUpdate(array $variables = []): array
     {
@@ -72,7 +72,7 @@ class Products
      * @param array $variables variables of the query
      *
      * @return array information of the product
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProduct(array $variables = []): array
     {
@@ -100,7 +100,7 @@ class Products
      * Gets all products
      * @param array $variables
      * @return array|bool
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryProducts(array $variables = [])
     {

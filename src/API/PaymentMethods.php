@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class PaymentMethods
 {
@@ -13,7 +13,7 @@ class PaymentMethods
      * @param $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryPaymentMethod($variables = [])
     {
@@ -45,7 +45,7 @@ class PaymentMethods
      * @param $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryPaymentMethods($variables = [])
     {
@@ -84,7 +84,7 @@ class PaymentMethods
      * Creates a payment method
      * @param $variables
      * @return mixed
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationPaymentMethodCreate($variables = [])
     {

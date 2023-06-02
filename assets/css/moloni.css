@@ -157,12 +157,15 @@ hr {
 
 /** =========== Error Message ========== */
 
-#MoloniConsoleLogError {
+.MoloniConsoleLogError {
     display: block;
     background-color: white;
     border: 1px solid rgb(241, 241, 241);
     padding: 5px;
     margin: 0 0 10px;
+
+    max-height: 400px;
+    overflow: auto;
 }
 
 /** =========== Menu Logo ========== */

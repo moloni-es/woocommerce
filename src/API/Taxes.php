@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Taxes
 {
@@ -13,7 +13,7 @@ class Taxes
      * @param array $variables variables of the query
      *
      * @return array returns an array with taxes information
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryTaxes($variables = [])
     {
@@ -66,7 +66,7 @@ class Taxes
      * @param array $variables variables of the query
      *
      * @return array returns an array with taxes information
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryTax($variables = [])
     {
@@ -110,7 +110,7 @@ class Taxes
      * @param array $variables variables of the query
      *
      * @return array returns data about the created tax
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationTaxCreate($variables = [])
     {

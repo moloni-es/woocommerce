@@ -4,7 +4,7 @@ namespace MoloniES\Exceptions;
 
 use MoloniES\Exceptions\Core\MoloniException;
 
-class WebhookException extends MoloniException
+class DocumentError extends MoloniException
 {
 
 }

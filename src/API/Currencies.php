@@ -3,7 +3,7 @@
 namespace MoloniES\API;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Currencies
 {
@@ -13,7 +13,7 @@ class Currencies
      * @param $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCurrencies($variables = [])
     {
@@ -57,7 +57,7 @@ class Currencies
      * @param $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryCurrencyExchanges($variables = [])
     {

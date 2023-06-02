@@ -3,18 +3,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-use MoloniES\Model;
-use MoloniES\Enums\Boolean;
-use MoloniES\Enums\DocumentStatus;
-use MoloniES\Enums\DocumentTypes;
-use MoloniES\Exceptions\Error;
 use MoloniES\API\Companies;
 use MoloniES\API\Countries;
 use MoloniES\API\DocumentSets;
-use MoloniES\API\Warehouses;
 use MoloniES\API\MaturityDates;
-use MoloniES\API\PaymentMethods;
 use MoloniES\API\MeasurementUnits;
+use MoloniES\API\PaymentMethods;
+use MoloniES\API\Warehouses;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\DocumentStatus;
+use MoloniES\Enums\DocumentTypes;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Model;
 
 try {
     $company = Companies::queryCompany();
@@ -29,7 +29,7 @@ try {
             'defaultLanguageId' => 2
         ]
     ]);
-} catch (Error $e) {
+} catch (APIExeption $e) {
     $e->showError();
     return;
 }

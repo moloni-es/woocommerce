@@ -2,10 +2,10 @@
 
 namespace MoloniES\Hooks;
 
-use MoloniES\Exceptions\Error;
 use WC_Order;
-use MoloniES\Plugin;
+use Exception;
 use MoloniES\Start;
+use MoloniES\Plugin;
 use MoloniES\Storage;
 use MoloniES\Helpers\MoloniOrder;
 
@@ -124,7 +124,7 @@ class OrderList
         if (self::$columnVisible === null) {
             try {
                 self::$columnVisible = Start::login(true) && defined('MOLONI_SHOW_DOWNLOAD_COLUMN') && (int)MOLONI_SHOW_DOWNLOAD_COLUMN === 1;
-            } catch (Error $e) {
+            } catch (Exception $e) {
                 self::$columnVisible = false;
             }
         }

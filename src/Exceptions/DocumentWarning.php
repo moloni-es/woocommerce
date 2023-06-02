@@ -2,7 +2,9 @@
 
 namespace MoloniES\Exceptions;
 
-class DocumentWarning extends Error
+use MoloniES\Exceptions\Core\MoloniException;
+
+class DocumentWarning extends MoloniException
 {
 
 }

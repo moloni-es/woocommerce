@@ -2,12 +2,12 @@
 
 namespace MoloniES\Hooks;
 
-use WC_Product;
 use Exception;
+use WC_Product;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\Core\MoloniException;
 use MoloniES\Notice;
 use MoloniES\Plugin;
 use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
@@ -50,8 +50,10 @@ class ProductUpdate
      */
     private $moloniProduct = [];
 
-    public function __construct()
+    public function __construct(Plugin $parent)
     {
+        $this->parent = $parent;
+
         add_action('woocommerce_update_product', [$this, 'productSave']);
     }
 
@@ -81,7 +83,7 @@ class ProductUpdate
             } else {
                 $this->update();
             }
-        } catch (Error $e) {
+        } catch (MoloniException $e) {
             Notice::addmessagecustom(htmlentities($e->geterror()));
 
             Storage::$LOGGER->error(__('Error synchronizing products to Moloni', 'moloni_es'), [
@@ -90,7 +92,7 @@ class ProductUpdate
                 'data' => [
                     'wcProductId' => $this->wcProductId,
                     'moloniProduct' => $this->moloniProduct,
-                    'request' => $e->getRequest(),
+                    'request' => $e->getData(),
                 ]
             ]);
         } catch (Exception $e) {

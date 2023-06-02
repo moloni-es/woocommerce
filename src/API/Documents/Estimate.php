@@ -3,7 +3,7 @@
 namespace MoloniES\API\Documents;
 
 use MoloniES\Curl;
-use MoloniES\Exceptions\Error;
+use MoloniES\Exceptions\APIExeption;
 
 class Estimate
 {
@@ -14,7 +14,7 @@ class Estimate
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryEstimate(?array $variables = []): array
     {
@@ -53,7 +53,7 @@ class Estimate
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function queryEstimateGetPDFToken(?array $variables = []): array
     {
@@ -85,7 +85,7 @@ class Estimate
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationEstimateCreate(?array $variables = []): array
     {
@@ -122,7 +122,7 @@ class Estimate
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationEstimateUpdate(?array $variables = []): array
     {
@@ -159,7 +159,7 @@ class Estimate
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationEstimateGetPDF(?array $variables = []): array
     {
@@ -178,7 +178,7 @@ class Estimate
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function mutationEstimateSendMail(?array $variables = [])
     {
