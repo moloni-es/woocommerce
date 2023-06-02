@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 
+use MoloniES\Exceptions\HelperException;
 use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
 
 class PrepareVariantPropertiesReturn extends VariantHelperAbstract
@@ -16,6 +17,9 @@ class PrepareVariantPropertiesReturn extends VariantHelperAbstract
         $this->productAttributes = $productAttributes;
     }
 
+    /**
+     * @throws HelperException
+     */
     public function handle(): array
     {
         $result = [];
@@ -28,8 +32,9 @@ class PrepareVariantPropertiesReturn extends VariantHelperAbstract
                     $propExistsKey = $this->findInName($this->moloniPropertyGroup['properties'], $attributesName);
 
                     if ($propExistsKey === false) {
-                        // todo: throw error
-                        //throw new MoloniProductException('Failed to find matching property name for "{0}".', ['{0}' => $attributesName]);
+                        throw new HelperException(
+                            sprintf(__('Failed to find matching property value for "%s"', 'moloni_es'), $attributesName)
+                        );
                     }
 
                     $propExists = $this->moloniPropertyGroup['properties'][$propExistsKey];
@@ -37,8 +42,9 @@ class PrepareVariantPropertiesReturn extends VariantHelperAbstract
                     $valueExists = $this->findInCode($propExists['values'], $option);
 
                     if ($valueExists === false) {
-                        // todo: throw error
-                        // throw new MoloniProductException('Failed to find matching property value for "{0}"', ['{0}' => $attribute]);
+                        throw new HelperException(
+                            sprintf(__('Failed to find matching property value for "%s"', 'moloni_es'), $option)
+                        );
                     }
 
                     $variantProperties[] = [

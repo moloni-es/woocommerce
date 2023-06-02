@@ -325,10 +325,6 @@ class Products
             }
         }
 
-        /** Fetch by attribute match */
-
-        // todo: this
-
         return null;
     }
 
@@ -363,17 +359,17 @@ class Products
     {
         /** Product not found */
         if (empty($this->moloniProduct)) {
-            throw new WebhookException('Moloni product not found!');
+            throw new WebhookException(__('Moloni product not found!', 'moloni_es'));
         }
 
         /** We only want to update the main product */
         if ($this->moloniProduct['parent'] !== null) {
-            throw new WebhookException('Product is variant, will be skipped!');
+            throw new WebhookException(__('Product is variant, will be skipped!', 'moloni_es'));
         }
 
         /** Do not sync shipping product */
         if (in_array(strtolower($this->moloniProduct['reference']), ['shipping', 'envio', 'envío', 'fee', 'tarifa'])) {
-            throw new WebhookException('Product reference blacklisted!');
+            throw new WebhookException(__('Product reference blacklisted!', 'moloni_es'));
         }
 
         return true;

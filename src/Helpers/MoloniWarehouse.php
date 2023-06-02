@@ -3,14 +3,30 @@
 namespace MoloniES\Helpers;
 
 use MoloniES\API\Warehouses;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\HelperException;
 
 class MoloniWarehouse
 {
-    public static function getDefaultWarehouse()
+    /**
+     * Get company default warehouse ID
+     *
+     * @return int
+     *
+     * @throws HelperException
+     */
+    public static function getDefaultWarehouse(): int
     {
         $warehouseId = 0;
 
-        $results = Warehouses::queryWarehouses();
+        try {
+            $results = Warehouses::queryWarehouses();
+        } catch (APIExeption $e) {
+            throw new HelperException(
+                __('Error fetching warehouses', 'moloni_es'),
+                ['message' => $e->getMessage(), 'data' => $e->getData()]
+            );
+        }
 
         foreach ($results as $result) {
             if ((bool)$result['isDefault'] === true) {
@@ -21,7 +37,10 @@ class MoloniWarehouse
         }
 
         if ($warehouseId === 0) {
-            // todo: throw error
+            throw new HelperException(
+                __('No default warehouse found', 'moloni_es'),
+                ['results' => $results]
+            );
         }
 
         return $warehouseId;

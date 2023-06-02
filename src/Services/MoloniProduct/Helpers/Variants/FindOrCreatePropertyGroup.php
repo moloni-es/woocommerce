@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 
+use MoloniES\Exceptions\HelperException;
 use WP_Term;
 use WC_Product;
 use WC_Product_Variable;
@@ -22,12 +23,19 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
      * Constructor
      *
      * @param WC_Product|WC_Product_Variable $wcProduct
+     *
+     * @throws HelperException
      */
     public function __construct($wcProduct)
     {
         $this->productAttributes = $this->prepareProductAttributes($wcProduct);
     }
 
+    /**
+     * Handler
+     *
+     * @throws HelperException
+     */
     public function handle(): array
     {
         if (empty($this->productAttributes)) {
@@ -37,8 +45,7 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
         try {
             $moloniPropertyGroups = PropertyGroups::queryPropertyGroups();
         } catch (APIExeption $e) {
-            // todo: thorw error
-            die;
+            throw new HelperException(__('Error fetching property groups', 'moloni_es'));
         }
 
         $matches = [];
@@ -160,18 +167,22 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
 
         /** There was stuff missing, we need to update the property group */
         if ($updateNeeded) {
-            $mutation = PropertyGroups::mutationPropertyGroupUpdate(
-                ['data' => $propertyGroupForUpdate]
-            );
+            try {
+                $mutation = PropertyGroups::mutationPropertyGroupUpdate(['data' => $propertyGroupForUpdate]);
+            } catch (APIExeption $e) {
+                throw new HelperException(
+                    sprintf(__('Failed to update existing property group "%s"', 'moloni_es'), $bestPropertyGroup['name'] ?? ''),
+                    ['message' => $e->getMessage(), 'data' => $e->getData()]
+                );
+            }
 
             $updatedGroup = $mutation['data']['propertyGroupUpdate']['data'] ?? [];
 
             if (empty($updatedGroup)) {
-                // todo: throw error
-
-                /*throw new MoloniProductException('Failed to update existing property group "{0}"', [
-                    '{0}' => $bestPropertyGroup['name'] ?? ''
-                ], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);*/
+                throw new HelperException(
+                    sprintf(__('Failed to update existing property group "%s"', 'moloni_es'), $bestPropertyGroup['name'] ?? ''),
+                    ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]
+                );
             }
 
             return (new PrepareVariantPropertiesReturn($updatedGroup, $this->productAttributes))->handle();
@@ -187,6 +198,8 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
      * @param WC_Product|WC_Product_Variable $wcProduct
      *
      * @return array
+     *
+     * @throws HelperException
      */
     private function prepareProductAttributes($wcProduct): array
     {
@@ -212,7 +225,7 @@ class FindOrCreatePropertyGroup extends VariantHelperAbstract
             $attributeObject = wc_get_attribute($productAttribute->get_id());
 
             if (empty($attributeObject)) {
-                // todo: throw error
+                throw new HelperException(__('Product attribute not found', 'moloni_es'));
             }
 
             $attributeName = $attributeObject->name;

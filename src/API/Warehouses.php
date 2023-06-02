@@ -19,6 +19,8 @@ class Warehouses extends EndpointAbstract
      */
     public static function queryWarehouses(?array $variables = []): array
     {
+        $action = 'warehouses/warehouses';
+
         $query = 'query warehouses($companyId: Int!,$options: WarehouseOptions)
         {
             warehouses(companyId: $companyId, options: $options) 
@@ -47,6 +49,10 @@ class Warehouses extends EndpointAbstract
             }
         }';
 
-        return Curl::complex('warehouses/warehouses', $query, $variables, 'warehouses');
+        if (empty(self::$cache[$action])) {
+            self::$cache[$action] = Curl::complex($action, $query, $variables, 'warehouses');
+        }
+
+        return self::$cache[$action];
     }
 }

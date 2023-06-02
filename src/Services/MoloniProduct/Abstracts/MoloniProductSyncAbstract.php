@@ -3,7 +3,9 @@
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
 use MoloniES\Curl;
+use MoloniES\Exceptions\HelperException;
 use MoloniES\Helpers\MoloniWarehouse;
+use MoloniES\Services\MoloniProduct\Helpers\GetOrCreateCategory;
 use MoloniES\Services\MoloniProduct\Helpers\UpdateProductImages;
 use WC_Tax;
 use WC_Product;
@@ -28,10 +30,10 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
     use SyncFieldsSettingsTrait;
 
     /**
- * WooCommerce product
- *
- * @var WC_Product|null
- */
+     * WooCommerce product
+     *
+     * @var WC_Product|null
+     */
     protected $wcProduct;
 
     /**
@@ -108,12 +110,17 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         $this->props['reference'] = $reference;
     }
 
+    /**
+     * Set category
+     *
+     * @throws ServiceException
+     */
     protected function setCategory()
     {
         $categoryId = 0;
         $categories = $this->wcProduct->get_category_ids();
 
-        // Get the deepest category from all the trees
+        /** Get the deepest category from all the trees */
         if (!empty($categories) && is_array($categories)) {
             $categoryTree = [];
 
@@ -131,26 +138,21 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
                 $category = get_term_by('id', $category, 'product_cat');
 
                 if (!empty($category->name)) {
-                    $categoryObj = new ProductCategory($category->name, $categoryId);
-
-                    if (!$categoryObj->loadByName()) {
-                        $categoryObj->create();
+                    try {
+                        $categoryId = (new GetOrCreateCategory($category->name, $categoryId))->get();
+                    } catch (HelperException $e) {
+                        throw new ServiceException($e->getMessage(), $e->getData());
                     }
-
-                    $categoryId = (int)$categoryObj->category_id;
                 }
             }
         }
 
         if ($categoryId === 0) {
-            $categoryName = __('Online Store','moloni_es');
-            $categoryObj = new ProductCategory($categoryName, 0);
-
-            if (!$categoryObj->loadByName()) {
-                $categoryObj->create();
+            try {
+                $categoryId = (new GetOrCreateCategory(__('Online Store', 'moloni_es')))->get();
+            } catch (HelperException $e) {
+                throw new ServiceException($e->getMessage(), $e->getData());
             }
-
-            $categoryId = (int)$categoryObj->category_id;
         }
 
         $this->props['productCategoryId'] = $categoryId;
@@ -193,6 +195,11 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         }
     }
 
+    /**
+     * Set stock
+     *
+     * @throws ServiceException
+     */
     protected function setStock()
     {
         $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
@@ -216,7 +223,11 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
         if ($hasStock) {
             if ($warehouseId === 1) {
-                $warehouseId = MoloniWarehouse::getDefaultWarehouse();
+                try {
+                    $warehouseId = MoloniWarehouse::getDefaultWarehouse();
+                } catch (HelperException $e) {
+                    throw new ServiceException($e->getMessage(), $e->getData());
+                }
             }
 
             $this->props['warehouseId'] = $warehouseId;

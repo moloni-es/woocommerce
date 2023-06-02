@@ -5,6 +5,7 @@ namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 use MoloniES\API\PropertyGroups;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\HelperException;
 use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
 use WC_Product;
 use WC_Product_Attribute;
@@ -28,6 +29,8 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
      *
      * @param WC_Product|WC_Product_Variable $wcProduct
      * @param string $propertyGroupId
+     *
+     * @throws HelperException
      */
     public function __construct($wcProduct, string $propertyGroupId)
     {
@@ -35,6 +38,11 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
         $this->propertyGroupId = $propertyGroupId;
     }
 
+    /**
+     * Handler
+     *
+     * @throws HelperException
+     */
     public function handle(): array
     {
         if (empty($this->productAttributes)) {
@@ -46,17 +54,16 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
         ];
 
         try {
-            $moloniPropertyGroup = PropertyGroups::queryPropertyGroup($queryParams)['data']['propertyGroup']['data'] ?? [];
+            $query = PropertyGroups::queryPropertyGroup($queryParams);
+
+            $moloniPropertyGroup = $query['data']['propertyGroup']['data'] ?? [];
         } catch (APIExeption $e) {
-            // todo: throw error
-            die;
+            throw new HelperException(__('Error fetching property group', 'moloni_es'));
         }
 
         /** Propery group is not found, exit process immediately */
         if (empty($moloniPropertyGroup)) {
-            // todo: throw error
-            die;
-            // throw new MoloniProductException('Error fetching property group', [], $queryParams);
+            throw new HelperException(__('Error fetching property group', 'moloni_es'), ['query' => $query]);
         }
 
         $propertyGroupForUpdate = [
@@ -129,13 +136,22 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
 
         /** There was stuff missing, we need to update the property group */
         if ($updateNeeded) {
-            $mutation = PropertyGroups::mutationPropertyGroupUpdate(['data' => $propertyGroupForUpdate]);
+            try {
+                $mutation = PropertyGroups::mutationPropertyGroupUpdate(['data' => $propertyGroupForUpdate]);
+            } catch (APIExeption $e) {
+                throw new HelperException(
+                    sprintf(__('Failed to update existing property group "%s"', 'moloni_es'), $bestPropertyGroup['name'] ?? ''),
+                    ['message' => $e->getMessage(), 'data' => $e->getData()]
+                );
+            }
 
             $updatedPropertyGroup = $mutation['data']['propertyGroupUpdate']['data'] ?? [];
 
             if (empty($updatedPropertyGroup)) {
-                // todo: throw error
-                /* throw new MoloniProductException('Failed to update existing property group "{0}"', ['{0}' => $bestPropertyGroup['name'] ?? ''], ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]);*/
+                throw new HelperException(
+                    sprintf(__('Failed to update existing property group "%s"', 'moloni_es'), $bestPropertyGroup['name'] ?? ''),
+                    ['mutation' => $mutation, 'props' => $propertyGroupForUpdate]
+                );
             }
 
             return (new PrepareVariantPropertiesReturn($updatedPropertyGroup, $this->productAttributes))->handle();
@@ -151,6 +167,8 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
      * @param WC_Product|WC_Product_Variable $wcProduct
      *
      * @return array
+     *
+     * @throws HelperException
      */
     private function prepareProductAttributes($wcProduct): array
     {
@@ -176,7 +194,7 @@ class GetOrUpdatePropertyGroup extends VariantHelperAbstract
             $attributeObject = wc_get_attribute($productAttribute->get_id());
 
             if (empty($attributeObject)) {
-                // todo: throw error
+                throw new HelperException(__('Product attribute not found', 'moloni_es'));
             }
 
             $attributeName = $attributeObject->name;

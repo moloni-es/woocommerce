@@ -2,10 +2,11 @@
 
 namespace MoloniES\Services\MoloniProduct\Variant;
 
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Exceptions\ServiceException;
 use MoloniES\Helpers\MoloniWarehouse;
 use WC_Product;
 use WC_Product_Variation;
-use MoloniES\API\Warehouses;
 use MoloniES\Enums\Boolean;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
 use MoloniES\Tools\ProductAssociations;
@@ -127,11 +128,6 @@ class MoloniVariant
 
     public function createAssociation()
     {
-        // todo: remove after testing
-        /*  if (!$this->variantExists()) {
-            return;
-        }*/
-
         ProductAssociations::deleteByWcId($this->wcProduct->get_id());
         ProductAssociations::deleteByMoloniId($this->moloniVariant['productId']);
 
@@ -160,6 +156,11 @@ class MoloniVariant
         $this->props['productId'] = $this->moloniVariant['productId'] ?? 0;
     }
 
+    /**
+     * Set stock
+     *
+     * @throws ServiceException
+     */
     private function setStock()
     {
         $hasStock = $this->wcProduct->managing_stock();
@@ -168,7 +169,11 @@ class MoloniVariant
             $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
 
             if ($warehouseId === 1) {
-                $warehouseId = MoloniWarehouse::getDefaultWarehouse();
+                try {
+                    $warehouseId = MoloniWarehouse::getDefaultWarehouse();
+                } catch (HelperException $e) {
+                    throw new ServiceException($e->getMessage(), $e->getData());
+                }
             }
 
             $this->props['warehouseId'] = $warehouseId;

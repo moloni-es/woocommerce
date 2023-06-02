@@ -160,8 +160,6 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
         $productAttributes = [];
         $position = 0;
 
-        // todo: maybe verify existing stuff on update
-
         foreach ($attributes as $name => $options) {
             $attrId = wc_attribute_taxonomy_id_by_name($name);
 
@@ -209,8 +207,6 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
     protected function setVariationOptions()
     {
         $attributes = [];
-
-        // todo: maybe verify existing stuff on update
 
         foreach ($this->moloniProduct["propertyPairs"] as $value) {
             $propertyName = trim($value['property']["name"]);

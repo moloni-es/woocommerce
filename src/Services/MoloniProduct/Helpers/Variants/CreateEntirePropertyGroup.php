@@ -4,6 +4,8 @@ namespace MoloniES\Services\MoloniProduct\Helpers\Variants;
 
 use MoloniES\API\PropertyGroups;
 use MoloniES\Enums\Boolean;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\HelperException;
 use MoloniES\Services\MoloniProduct\Helpers\Abstracts\VariantHelperAbstract;
 
 class CreateEntirePropertyGroup extends VariantHelperAbstract
@@ -17,6 +19,11 @@ class CreateEntirePropertyGroup extends VariantHelperAbstract
         $this->productAttributes = $productAttributes;
     }
 
+    /**
+     * Handler
+     *
+     * @throws HelperException
+     */
     public function handle(): array
     {
         $propsForInsert = [];
@@ -69,17 +76,25 @@ class CreateEntirePropertyGroup extends VariantHelperAbstract
             ]
         ];
 
-        $mutation = PropertyGroups::mutationPropertyGroupCreate($creationVariables);
+        try {
+            $mutation = PropertyGroups::mutationPropertyGroupCreate($creationVariables);
+        } catch (APIExeption $e) {
+            throw new HelperException(
+                sprintf(__('Error creating %s attribute group', 'moloni_es'), $newGroupName),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         $mutationData = $mutation['data']['propertyGroupCreate']['data'] ?? [];
 
         if (empty($mutationData)) {
-            // todo: throw error
-            /* throw new MoloniProductException(
-                'Error creating {0} attribute group',
-                ['{0}' => $newGroupName],
+            throw new HelperException(
+                sprintf(__('Error creating %s attribute group', 'moloni_es'), $newGroupName),
                 ['mutation' => $mutation]
-            );*/
+            );
         }
 
         return (new PrepareVariantPropertiesReturn($mutationData, $this->productAttributes))->handle();

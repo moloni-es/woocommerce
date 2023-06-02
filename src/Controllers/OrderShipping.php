@@ -3,6 +3,8 @@
 namespace MoloniES\Controllers;
 
 use WC_Order;
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Services\MoloniProduct\Helpers\GetOrCreateCategory;
 use MoloniES\API\Products;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\DocumentError;
@@ -171,15 +173,11 @@ class OrderShipping
      */
     private function setCategory(): OrderShipping
     {
-        $categoryName = __('Online Store','moloni_es');
-
-        $categoryObj = new ProductCategory($categoryName);
-
-        if (!$categoryObj->loadByName()) {
-            $categoryObj->create();
+        try {
+            $this->category_id = (new GetOrCreateCategory(__('Online Store', 'moloni_es')))->get();
+        } catch (HelperException $e) {
+            throw new DocumentError($e->getMessage(), $e->getData());
         }
-
-        $this->category_id = $categoryObj->category_id;
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace MoloniES\Controllers;
 
 use WC_Order_Item_Fee;
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Services\MoloniProduct\Helpers\GetOrCreateCategory;
 use MoloniES\Tools;
 use MoloniES\API\Products;
 use MoloniES\Exceptions\APIExeption;
@@ -176,15 +178,11 @@ class OrderFees
      */
     private function setCategory(): OrderFees
     {
-        $categoryName = __('Online Store','moloni_es');
-
-        $categoryObj = new ProductCategory($categoryName);
-
-        if (!$categoryObj->loadByName()) {
-            $categoryObj->create();
+        try {
+            $this->category_id = (new GetOrCreateCategory(__('Online Store', 'moloni_es')))->get();
+        } catch (HelperException $e) {
+            throw new DocumentError($e->getMessage(), $e->getData());
         }
-
-        $this->category_id = $categoryObj->category_id;
 
         return $this;
     }

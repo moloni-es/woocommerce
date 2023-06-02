@@ -2,10 +2,15 @@
 
 namespace MoloniES\Controllers;
 
+use WC_Tax;
+use WC_Order;
+use WC_Product;
+use WC_Order_Item_Product;
 use MoloniES\API\Products;
 use MoloniES\Enums\SyncLogsType;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\DocumentError;
+use MoloniES\Exceptions\HelperException;
 use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
 use MoloniES\Services\MoloniProduct\Create\CreateVariantProduct;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
@@ -14,10 +19,6 @@ use MoloniES\Services\MoloniProduct\Update\UpdateVariantProduct;
 use MoloniES\Tools;
 use MoloniES\Tools\ProductAssociations;
 use MoloniES\Tools\SyncLogs;
-use WC_Order;
-use WC_Order_Item_Product;
-use WC_Product;
-use WC_Tax;
 
 class OrderProduct
 {
@@ -139,6 +140,7 @@ class OrderProduct
         if ($this->orderProduct->get_variation_id() > 0) {
             $product = wc_get_product($this->orderProduct->get_variation_id());
             $attributes = $product->get_attributes();
+
             if (is_array($attributes) && !empty($attributes)) {
                 $summary = wc_get_formatted_variation($attributes, true);
             }
@@ -544,7 +546,11 @@ class OrderProduct
 
         $targetId = $mlProduct['propertyGroup']['propertyGroupId'] ?? '';
 
-        $propertyGroup = (new GetOrUpdatePropertyGroup($wcProduct, $targetId))->handle();
+        try {
+            $propertyGroup = (new GetOrUpdatePropertyGroup($wcProduct, $targetId))->handle();
+        } catch (HelperException $e) {
+            throw new DocumentError($e->getMessage(), $e->getData());
+        }
 
         $variant = (new FindVariant(
             $wcProduct->get_id(),
