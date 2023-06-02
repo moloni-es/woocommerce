@@ -160,7 +160,7 @@ class Plugin
             $service->run();
         } catch (DocumentWarning $e) {
             $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
-            $message .= ' ';
+            $message .= ' </br>';
             $message .= $e->getMessage();
 
             Storage::$LOGGER->alert(
@@ -174,8 +174,8 @@ class Plugin
             throw $e;
         } catch (DocumentError $e) {
             $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
-            $message .= ' ';
-            $message .= $e->getMessage();
+            $message .= ' </br>';
+            $message .= strip_tags($e->getMessage());
 
             Storage::$LOGGER->error(
                 $message,

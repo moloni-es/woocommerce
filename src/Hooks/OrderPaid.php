@@ -51,7 +51,7 @@ class OrderPaid
                 $this->sendWarningEmail($orderName);
 
                 $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
-                $message .= ' ';
+                $message .= ' </br>';
                 $message .= $e->getMessage();
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
@@ -67,8 +67,8 @@ class OrderPaid
                 $this->sendErrorEmail($orderName);
 
                 $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
-                $message .= ' ';
-                $message .= $e->getMessage();
+                $message .= ' </br>';
+                $message .= strip_tags($e->getMessage());
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
 
@@ -108,7 +108,7 @@ class OrderPaid
                 $this->sendWarningEmail($orderName);
 
                 $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
-                $message .= ' ';
+                $message .= ' </br>';
                 $message .= $e->getMessage();
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
@@ -124,8 +124,8 @@ class OrderPaid
                 $this->sendErrorEmail($orderName);
 
                 $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
-                $message .= ' ';
-                $message .= $e->getMessage();
+                $message .= ' </br>';
+                $message .= strip_tags($e->getMessage());
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
 

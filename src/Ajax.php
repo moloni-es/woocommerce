@@ -40,7 +40,7 @@ class Ajax
             ]);
         } catch (DocumentWarning $e) {
             $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
-            $message .= ' ';
+            $message .= ' </br>';
             $message .= $e->getMessage();
 
             Storage::$LOGGER->alert(
@@ -54,8 +54,8 @@ class Ajax
             wp_send_json(['valid' => 1, 'message' => $e->getMessage(), 'data' => $e->getData()]);
         } catch (DocumentError $e) {
             $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
-            $message .= ' ';
-            $message .= $e->getMessage();
+            $message .= ' </br>';
+            $message .= strip_tags($e->getMessage());
 
             Storage::$LOGGER->error(
                 $message,
