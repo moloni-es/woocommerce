@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class CreditNote
+class CreditNote extends EndpointAbstract
 {
     /**
      * Gets credit note information
@@ -13,9 +14,10 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryCreditNote(?array $variables = [])
+    public static function queryCreditNote(?array $variables = []): array
     {
         $query = 'query creditNote($companyId: Int!,$documentId: Int!,$options: CreditNoteOptionsSingle)
         {
@@ -50,9 +52,10 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryCreditNotes(?array $variables = [])
+    public static function queryCreditNotes(?array $variables = []): array
     {
         $query = 'query creditNotes($companyId: Int!,$options: CreditNoteOptions)
         {
@@ -96,9 +99,10 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function queryCreditNoteGetPDFToken(?array $variables = [])
+    public static function queryCreditNoteGetPDFToken(?array $variables = []): array
     {
         $query = 'query creditNoteGetPDFToken($documentId: Int!)
         {
@@ -127,9 +131,10 @@ class CreditNote
      * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationCreditNoteCreate(?array $variables = [])
+    public static function mutationCreditNoteCreate(?array $variables = []): array
     {
         $query = 'mutation creditNoteCreate($companyId: Int!,$data: CreditNoteInsert!,$options:CreditNoteMutateOptions)
         {
@@ -164,9 +169,10 @@ class CreditNote
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function mutationCreditNoteGetPDF(?array $variables = [])
+    public static function mutationCreditNoteGetPDF(?array $variables = []): array
     {
         $query = 'mutation creditNoteGetPDF($companyId: Int!,$documentId: Int!)
         {

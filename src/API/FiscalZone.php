@@ -2,20 +2,21 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class FiscalZone
+class FiscalZone extends EndpointAbstract
 {
     /**
      * Get settings for a fiscal zone
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
      * @throws APIExeption
      */
-    public static function queryFiscalZoneTaxSettings($variables = [])
+    public static function queryFiscalZoneTaxSettings(?array $variables = []): array
     {
         $query = 'query fiscalZoneTaxSettings($companyId: Int!,$fiscalZone: String!)
         {

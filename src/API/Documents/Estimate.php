@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Estimate
+class Estimate extends EndpointAbstract
 {
     /**
      * Gets estimate information

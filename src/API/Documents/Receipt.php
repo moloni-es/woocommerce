@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Receipt
+class Receipt extends EndpointAbstract
 {
     /**
      * Gets receipt information
@@ -13,9 +14,10 @@ class Receipt
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryReceipt(?array $variables = [])
+    public static function queryReceipt(?array $variables = []): array
     {
         $query = 'query receipt($companyId: Int!,$documentId: Int!,$options: ReceiptOptionsSingle)
         {
@@ -50,9 +52,10 @@ class Receipt
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryReceipts(?array $variables = [])
+    public static function queryReceipts(?array $variables = []): array
     {
         $query = 'query receipts($companyId: Int!,$options: ReceiptOptions)
         {
@@ -96,9 +99,10 @@ class Receipt
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function queryReceiptGetPDFToken(?array $variables = [])
+    public static function queryReceiptGetPDFToken(?array $variables = []): array
     {
         $query = 'query receiptGetPDFToken($documentId: Int!)
         {
@@ -164,9 +168,10 @@ class Receipt
      * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationReceiptUpdate(?array $variables = [])
+    public static function mutationReceiptUpdate(?array $variables = []): array
     {
         $query = 'mutation receiptUpdate($companyId: Int!,$data: ReceiptUpdate!)
         {
@@ -194,6 +199,7 @@ class Receipt
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function mutationReceiptSendMail(?array $variables = [])
@@ -212,9 +218,10 @@ class Receipt
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function mutationReceiptGetPDF(?array $variables = [])
+    public static function mutationReceiptGetPDF(?array $variables = []): array
     {
         $query = 'mutation receiptGetPDF($companyId: Int!,$documentId: Int!)
         {

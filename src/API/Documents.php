@@ -2,10 +2,11 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Documents
+class Documents extends EndpointAbstract
 {
     /**
      * Gets documents info by id
@@ -13,6 +14,7 @@ class Documents
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function queryDocument(?array $variables = [])

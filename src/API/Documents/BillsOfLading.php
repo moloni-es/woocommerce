@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class BillsOfLading
+class BillsOfLading extends EndpointAbstract
 {
     /**
      * Creates a bill of lading

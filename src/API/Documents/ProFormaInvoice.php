@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class ProFormaInvoice
+class ProFormaInvoice extends EndpointAbstract
 {
     /**
      * Creates a pro forma invoice
@@ -13,6 +14,7 @@ class ProFormaInvoice
      * @param array|null $variables variables of the request
      *
      * @return void Api data
+     *
      * @throws APIExeption
      */
     public static function queryProFormaInvoice(?array $variables = [])
@@ -49,10 +51,11 @@ class ProFormaInvoice
      *
      * @param array|null $variables
      *
-     * @return array|bool Api data
+     * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryProFormaInvoices(?array $variables = [])
+    public static function queryProFormaInvoices(?array $variables = []): array
     {
         $query = 'query proFormaInvoices($companyId: Int!,$options: ProFormaInvoiceOptions)
         {
@@ -96,9 +99,10 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function queryProFormaInvoiceGetPDFToken(?array $variables = [])
+    public static function queryProFormaInvoiceGetPDFToken(?array $variables = []): array
     {
         $query = 'query proFormaInvoiceGetPDFToken($documentId: Int!)
         {
@@ -171,9 +175,10 @@ class ProFormaInvoice
      * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationProFormaInvoiceUpdate(?array $variables = [])
+    public static function mutationProFormaInvoiceUpdate(?array $variables = []): array
     {
         $query = 'mutation proFormaInvoiceUpdate($companyId: Int!,$data: ProFormaInvoiceUpdate!)
         {
@@ -201,9 +206,10 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function mutationProFormaInvoiceGetPDF(?array $variables = [])
+    public static function mutationProFormaInvoiceGetPDF(?array $variables = []): array
     {
         $query = 'mutation proFormaInvoiceGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -219,6 +225,7 @@ class ProFormaInvoice
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function mutationProFormaInvoiceSendMail(?array $variables = [])

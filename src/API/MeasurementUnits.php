@@ -2,20 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class MeasurementUnits
+class MeasurementUnits extends EndpointAbstract
 {
     /**
      * Gets all measurement units
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns all measurement units
+     *
      * @throws APIExeption
      */
-    public static function queryMeasurementUnits($variables = [])
+    public static function queryMeasurementUnits(?array $variables = []): array
     {
         $query = 'query measurementUnits($companyId: Int!,$options: MeasurementUnitOptions)
         {
@@ -48,14 +50,15 @@ class MeasurementUnits
     }
 
     /**
-     * Create an measurement unit
+     * Create a measurement unit
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns some data of the created measurement data
+     *
      * @throws APIExeption
      */
-    public static function mutationMeasurementUnitCreate($variables = [])
+    public static function mutationMeasurementUnitCreate(?array $variables = []): array
     {
         $query = 'mutation measurementUnitCreate($companyId: Int!,$data: MeasurementUnitInsert!)
         {

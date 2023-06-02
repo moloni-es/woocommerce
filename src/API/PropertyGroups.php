@@ -2,21 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class PropertyGroups
+class PropertyGroups extends EndpointAbstract
 {
     /**
      * Get multiple property groups
      *
      * @param array|null $variables
      *
-     * @return array|bool
+     * @return array
      *
      * @throws APIExeption
      */
-    public static function queryPropertyGroups(?array $variables = [])
+    public static function queryPropertyGroups(?array $variables = []): array
     {
         $query = 'query propertyGroups($companyId: Int!,$options: PropertyGroupOptions)
         {

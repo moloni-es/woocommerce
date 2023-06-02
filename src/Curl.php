@@ -14,29 +14,6 @@ class Curl
     private static $logs = [];
 
     /**
-     * Hold a list of methods that can be cached
-     * @var array
-     */
-    private static $simpleAllowedCachedMethods = [
-        'companies/me'
-    ];
-
-    /**
-     * Hold a list of methods that can be cached
-     * @var array
-     */
-    private static $complexAllowedCachedMethods = [
-        'currencies/currencies',
-        'paymentmethods/paymentMethods'
-    ];
-
-    /**
-     * Save a request cache
-     * @var array
-     */
-    private static $cache = [];
-
-    /**
      * API url
      *
      * @var
@@ -55,17 +32,13 @@ class Curl
      *
      * @param $action
      * @param $query
-     * @param $variables
+     * @param array|null $variables
      *
      * @return mixed
      * @throws APIExeption
      */
-    public static function simple($action, $query, $variables = [])
+    public static function simple($action, $query, ?array $variables = [])
     {
-        if (isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
-            return self::$cache[$action];
-        }
-
         if (Storage::$MOLONI_ES_COMPANY_ID) {
             $variables['companyId'] = Storage::$MOLONI_ES_COMPANY_ID;
         }
@@ -94,16 +67,14 @@ class Curl
 
         self::$logs[] = $log;
 
-        //errors sometimes come inside data/query(or mutation)
+        /** Errors sometimes come inside data/query(or mutation) */
         $keyString = substr($action, strpos($action, '/') + strlen('/'));
 
-        if (!empty($parsed['data'][$keyString]['data']) ||
-            (!isset($parsed['errors']) && (empty($parsed['data'][$keyString]['errors'])))) {
+        if (!isset($parsed['errors']) && (empty($parsed['data'][$keyString]['errors']))) {
+            return $parsed;
+        }
 
-            if (!isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
-                self::$cache[$action] = $parsed;
-            }
-
+        if (!empty($parsed['data'][$keyString]['data'])) {
             return $parsed;
         }
 
@@ -141,19 +112,17 @@ class Curl
      * @param $variables
      * @param $keyString
      *
-     * @return array|bool
+     * @return array
      *
      * @throws APIExeption
      */
     public static function complex($action, $query, $variables, $keyString)
     {
-        if (isset(self::$cache[$action]) && in_array($action, self::$complexAllowedCachedMethods, false)) {
-            return self::$cache[$action];
-        }
+        /** To get all items we need to paginate */
 
-        //to get all items we need to paginate
         $page = 1;
         $array = [];
+
         do {
             $variables['options']['pagination']['qty'] = 50;
             $variables['options']['pagination']['page'] = $page;
@@ -162,12 +131,9 @@ class Curl
 
             $pagination = $result['data'][$keyString]['options']['pagination'];
             $array = array_merge($array, $result['data'][$keyString]['data']);
+
             $page++;
         } while (($pagination['count'] > ($pagination['qty'] * $pagination['page'])) && $page <= 1000);
-
-        if (!isset(self::$cache[$action]) && in_array($action, self::$complexAllowedCachedMethods, false)) {
-            self::$cache[$action] = $array;
-        }
 
         return $array;
     }

@@ -2,10 +2,11 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Stocks
+class Stocks extends EndpointAbstract
 {
     /**
      * Adds stock to a product
@@ -13,6 +14,7 @@ class Stocks
      * @param array $variables variables of the query
      *
      * @return array returns info about the movement
+     *
      * @throws APIExeption
      */
     public static function mutationStockMovementManualEntryCreate(array $variables = []): array
@@ -43,6 +45,7 @@ class Stocks
      * @param array $variables variables of the query
      *
      * @return array returns info about the movement
+     *
      * @throws APIExeption
      */
     public static function mutationStockMovementManualExitCreate(array $variables = []): array

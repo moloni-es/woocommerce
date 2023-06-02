@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class SimplifiedInvoice
+class SimplifiedInvoice extends EndpointAbstract
 {
     /**
      * Gets simplified invoice information
@@ -15,7 +16,7 @@ class SimplifiedInvoice
      * @return array Api data
      * @throws APIExeption
      */
-    public static function querySimplifiedInvoice(?array $variables = [])
+    public static function querySimplifiedInvoice(?array $variables = []): array
     {
         $query = 'query simplifiedInvoice($companyId: Int!,$documentId: Int!,$options: SimplifiedInvoiceOptionsSingle)
         {
@@ -52,7 +53,7 @@ class SimplifiedInvoice
      * @return array Api data
      * @throws APIExeption
      */
-    public static function querySimplifiedInvoices(?array $variables = [])
+    public static function querySimplifiedInvoices(?array $variables = []): array
     {
         $query = 'query simplifiedInvoices($companyId: Int!,$options: SimplifiedInvoiceOptions)
         {
@@ -98,7 +99,7 @@ class SimplifiedInvoice
      * @return array returns the Graphql response array or an error array
      * @throws APIExeption
      */
-    public static function querySimplifiedInvoiceGetPDFToken(?array $variables = [])
+    public static function querySimplifiedInvoiceGetPDFToken(?array $variables = []): array
     {
         $query = 'query simplifiedInvoiceGetPDFToken($documentId: Int!)
         {
@@ -171,9 +172,10 @@ class SimplifiedInvoice
      * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationSimplifiedInvoiceUpdate(?array $variables = [])
+    public static function mutationSimplifiedInvoiceUpdate(?array $variables = []): array
     {
         $query = 'mutation simplifiedInvoiceUpdate($companyId: Int!,$data: SimplifiedInvoiceUpdate!)
         {
@@ -201,9 +203,10 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function mutationSimplifiedInvoiceGetPDF(?array $variables = [])
+    public static function mutationSimplifiedInvoiceGetPDF(?array $variables = []): array
     {
         $query = 'mutation simplifiedInvoiceGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -219,6 +222,7 @@ class SimplifiedInvoice
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function mutationSimplifiedInvoiceSendMail(?array $variables = [])

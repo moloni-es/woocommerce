@@ -2,10 +2,11 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Warehouses
+class Warehouses extends EndpointAbstract
 {
     /**
      * Get All Warehouses from Moloni ES

@@ -2,20 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Products
+class Products extends EndpointAbstract
 {
     /**
      * Create a new product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns some data of the created product
+     *
      * @throws APIExeption
      */
-    public static function mutationProductCreate(array $variables = []): array
+    public static function mutationProductCreate(?array $variables = []): array
     {
         $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
         {
@@ -39,12 +41,13 @@ class Products
     /**
      * Update a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns some data of the updated product
+     *
      * @throws APIExeption
      */
-    public static function mutationProductUpdate(array $variables = []): array
+    public static function mutationProductUpdate(?array $variables = []): array
     {
         $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
         {
@@ -69,12 +72,13 @@ class Products
     /**
      * Gets the information of a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array information of the product
+     *
      * @throws APIExeption
      */
-    public static function queryProduct(array $variables = []): array
+    public static function queryProduct(?array $variables = []): array
     {
         $query = 'query product($companyId: Int!,$productId: Int!)
         {
@@ -98,11 +102,13 @@ class Products
 
     /**
      * Gets all products
-     * @param array $variables
-     * @return array|bool
+     *
+     * @param array|null $variables
+     *
+     * @return array
      * @throws APIExeption
      */
-    public static function queryProducts(array $variables = [])
+    public static function queryProducts(array $variables = []): array
     {
         $query = 'query products($companyId: Int!,$options: ProductOptions)
         {

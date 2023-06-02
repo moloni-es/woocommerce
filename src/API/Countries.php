@@ -2,20 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Countries
+class Countries extends EndpointAbstract
 {
     /**
      * Gets all countries
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryCountries($variables = [])
+    public static function queryCountries(?array $variables = []): array
     {
         $query = 'query countries($options: CountryOptions)
         {
@@ -55,12 +57,12 @@ class Countries
     /**
      * Gets country info
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
      * @throws APIExeption
      */
-    public static function queryCountry($variables = [])
+    public static function queryCountry(?array $variables = []): array
     {
         $query = 'query country($countryId: Int!)
         {

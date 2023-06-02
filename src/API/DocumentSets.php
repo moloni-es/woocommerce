@@ -2,10 +2,11 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class DocumentSets
+class DocumentSets extends EndpointAbstract
 {
     /**
      * Get All Documents Set from Moloni ES

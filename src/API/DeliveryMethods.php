@@ -2,21 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class DeliveryMethods
+class DeliveryMethods extends EndpointAbstract
 {
     /**
      * Create a new delivery methods
      *
-     * @param array $variables Request variables
+     * @param array|null $variables
      *
      * @return mixed
      *
      * @throws APIExeption
      */
-    public static function mutationDeliveryMethodCreate($variables = []) {
+    public static function mutationDeliveryMethodCreate(?array $variables = []) {
         $query = 'mutation deliveryMethodCreate($companyId: Int!,$data: DeliveryMethodInsert!)
         {
             deliveryMethodCreate(companyId: $companyId,data: $data) 
@@ -40,12 +41,12 @@ class DeliveryMethods
     /**
      * Get All DeliveryMethods from Moloni ES
      *
-     * @param array $variables Request variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
      * @throws APIExeption
      */
-    public static function queryDeliveryMethods($variables = [])
+    public static function queryDeliveryMethods(?array $variables = []): array
     {
         $query = 'query deliveryMethods($companyId: Int!,$options: DeliveryMethodOptions)
         {

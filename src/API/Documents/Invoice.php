@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Invoice
+class Invoice extends EndpointAbstract
 {
     /**
      * Gets invoice information
@@ -13,9 +14,10 @@ class Invoice
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryInvoice(?array $variables = [])
+    public static function queryInvoice(?array $variables = []): array
     {
         $query = 'query invoice($companyId: Int!,$documentId: Int!,$options: InvoiceOptionsSingle)
         {
@@ -50,9 +52,10 @@ class Invoice
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryInvoices(?array $variables = [])
+    public static function queryInvoices(?array $variables = []): array
     {
         $query = 'query invoices($companyId: Int!,$options: InvoiceOptions)
         {
@@ -96,9 +99,10 @@ class Invoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function queryInvoiceGetPDFToken(?array $variables = [])
+    public static function queryInvoiceGetPDFToken(?array $variables = []): array
     {
         $query = 'query invoiceGetPDFToken($documentId: Int!)
         {
@@ -127,6 +131,7 @@ class Invoice
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
     public static function mutationInvoiceGetPDF(array $variables = []): array
@@ -185,9 +190,10 @@ class Invoice
      * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationInvoiceUpdate(?array $variables = [])
+    public static function mutationInvoiceUpdate(?array $variables = []): array
     {
         $query = 'mutation invoiceUpdate($companyId: Int!,$data: InvoiceUpdate!)
         {
@@ -215,6 +221,7 @@ class Invoice
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function mutationInvoiceSendMail(?array $variables = [])

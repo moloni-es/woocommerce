@@ -2,21 +2,23 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Hooks
+class Hooks extends EndpointAbstract
 {
 
     /**
      * Gets all hooks
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryHooks($variables = [])
+    public static function queryHooks(?array $variables = []): array
     {
         $query = 'query hooks($companyId: Int!,$options: HookOptions)
         {
@@ -42,12 +44,13 @@ class Hooks
     /**
      * Create a hook
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationHookCreate($variables = [])
+    public static function mutationHookCreate(?array $variables = []): array
     {
         $query = 'mutation hookCreate($companyId: Int!,$data: HookInsert!)
         {
@@ -73,12 +76,13 @@ class Hooks
     /**
      * Delete hooks
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function mutationHookDelete($variables = [])
+    public static function mutationHookDelete(?array $variables = []): array
     {
         $query = 'mutation hookDelete($companyId: Int!,$hookId: [String!]!)
         {

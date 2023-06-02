@@ -4,19 +4,23 @@ namespace MoloniES\API;
 
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
+use MoloniES\API\Abstracts\EndpointAbstract;
 
-class Currencies
+class Currencies extends EndpointAbstract
 {
     /**
      * Get All Currencies from Moloni ES
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function queryCurrencies($variables = [])
+    public static function queryCurrencies(?array $variables = []): array
     {
+        $action = 'currencies/currencies';
+
         $query = 'query currencies($options: CurrencyOptions)
         {
             currencies(options: $options) 
@@ -48,18 +52,22 @@ class Currencies
             }
         }';
 
-        return Curl::complex('currencies/currencies', $query, $variables, 'currencies');
+        if (empty(self::$cache[$action])) {
+            self::$cache[$action] = Curl::complex($action, $query, $variables, 'currencies');
+        }
+
+        return self::$cache[$action];
     }
 
     /**
      * Get All Currencies exchanges from Moloni ES
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
      * @throws APIExeption
      */
-    public static function queryCurrencyExchanges($variables = [])
+    public static function queryCurrencyExchanges(?array $variables = []): array
     {
         $query = 'query currencyExchanges($options: CurrencyExchangeOptions)
         {

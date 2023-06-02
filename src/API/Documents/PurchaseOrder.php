@@ -2,10 +2,11 @@
 
 namespace MoloniES\API\Documents;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class PurchaseOrder
+class PurchaseOrder extends EndpointAbstract
 {
     /**
      * Creates a purchase order
@@ -13,9 +14,10 @@ class PurchaseOrder
      * @param array|null $variables variables of the request
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryPurchaseOrder(?array $variables = [])
+    public static function queryPurchaseOrder(?array $variables = []): array
     {
         $query = 'query purchaseOrder($companyId: Int!,$documentId: Int!,$options: PurchaseOrderOptionsSingle)
         {
@@ -50,9 +52,10 @@ class PurchaseOrder
      * @param array|null $variables
      *
      * @return array Api data
+     *
      * @throws APIExeption
      */
-    public static function queryPurchaseOrders(?array $variables = [])
+    public static function queryPurchaseOrders(?array $variables = []): array
     {
         $query = 'query purchaseOrders($companyId: Int!,$options: PurchaseOrderOptions)
         {
@@ -96,9 +99,10 @@ class PurchaseOrder
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function queryPurchaseOrderGetPDFToken(?array $variables = [])
+    public static function queryPurchaseOrderGetPDFToken(?array $variables = []): array
     {
         $query = 'query purchaseOrderGetPDFToken($documentId: Int!)
         {
@@ -171,6 +175,7 @@ class PurchaseOrder
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function mutationPurchaseOrderUpdate(?array $variables = [])
@@ -201,9 +206,10 @@ class PurchaseOrder
      * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
+     *
      * @throws APIExeption
      */
-    public static function mutationPurchaseOrderGetPDF(?array $variables = [])
+    public static function mutationPurchaseOrderGetPDF(?array $variables = []): array
     {
         $query = 'mutation purchaseOrderGetPDF($companyId: Int!,$documentId: Int!)
         {
@@ -219,6 +225,7 @@ class PurchaseOrder
      * @param array|null $variables
      *
      * @return mixed
+     *
      * @throws APIExeption
      */
     public static function mutationPurchaseOrderSendMail(?array $variables = [])

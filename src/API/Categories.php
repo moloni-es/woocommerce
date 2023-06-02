@@ -2,20 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 
-class Categories
+class Categories extends EndpointAbstract
 {
     /**
-     * Create an category
+     * Create a category
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables variables of the query
      *
      * @return array returns some data of the created category
+     *
      * @throws APIExeption
      */
-    public static function mutationProductCategoryCreate($variables = [])
+    public static function mutationProductCategoryCreate(?array $variables = []): array
     {
         $query = 'mutation productCategoryCreate($companyId: Int!,$data: ProductCategoryInsert!)
         {
@@ -39,12 +41,13 @@ class Categories
     /**
      * Gets all categories
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns data of the categories
+     *
      * @throws APIExeption
      */
-    public static function queryProductCategories($variables = [])
+    public static function queryProductCategories(?array $variables = []): array
     {
         $query = 'query productCategories($companyId: Int!,$options: ProductCategoryOptions)
         {
@@ -81,14 +84,15 @@ class Categories
     }
 
     /**
-     * Get the category of an product
+     * Get the category of a product
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns category data
+     *
      * @throws APIExeption
      */
-    public static function queryProductCategory($variables = [])
+    public static function queryProductCategory(?array $variables = []): array
     {
         $query = 'query productCategory($companyId: Int!,$productCategoryId: Int!)
         {
