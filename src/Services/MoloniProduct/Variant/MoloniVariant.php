@@ -90,6 +90,11 @@ class MoloniVariant
         }
     }
 
+    /**
+     * Runner
+     *
+     * @throws ServiceException
+     */
     public function run()
     {
         $this->setVisibility();

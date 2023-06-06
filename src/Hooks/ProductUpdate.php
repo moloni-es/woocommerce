@@ -3,6 +3,7 @@
 namespace MoloniES\Hooks;
 
 use Exception;
+use MoloniES\Exceptions\ServiceException;
 use WC_Product;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
@@ -109,6 +110,11 @@ class ProductUpdate
 
     //          Privates          //
 
+    /**
+     * Creator action
+     *
+     * @throws ServiceException
+     */
     private function create()
     {
         if ($this->wcProduct->is_type('variable')) {
@@ -121,6 +127,11 @@ class ProductUpdate
         $service->saveLog();
     }
 
+    /**
+     * Updater action
+     *
+     * @throws ServiceException
+     */
     private function update()
     {
         if ($this->wcProduct->is_type('variable')) {

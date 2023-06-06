@@ -2,6 +2,7 @@
 
 namespace MoloniES\Controllers;
 
+use MoloniES\Exceptions\ServiceException;
 use WC_Tax;
 use WC_Order;
 use WC_Product;
@@ -262,9 +263,13 @@ class OrderProduct
 
                     SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
 
-                    $service = new CreateVariantProduct($wcProduct);
-                    $service->run();
-                    $service->saveLog();
+                    try {
+                        $service = new CreateVariantProduct($wcProduct);
+                        $service->run();
+                        $service->saveLog();
+                    } catch (ServiceException $e) {
+                        throw new DocumentError($e->getMessage(), $e->getData());
+                    }
 
                     $moloniProduct = $service->getVariant($wcVariationId);
                 }
@@ -291,9 +296,13 @@ class OrderProduct
                 if (empty($moloniProduct)) {
                     SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
 
-                    $service = new CreateSimpleProduct($wcProduct);
-                    $service->run();
-                    $service->saveLog();
+                    try {
+                        $service = new CreateSimpleProduct($wcProduct);
+                        $service->run();
+                        $service->saveLog();
+                    } catch (ServiceException $e) {
+                        throw new DocumentError($e->getMessage(), $e->getData());
+                    }
 
                     $moloniProduct = $service->getMoloniProduct();
                 }
@@ -567,9 +576,13 @@ class OrderProduct
         SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcParentId);
         SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $mlProduct['productId']);
 
-        $service = new UpdateVariantProduct($wcProduct, $mlProduct);
-        $service->run();
-        $service->saveLog();
+        try {
+            $service = new UpdateVariantProduct($wcProduct, $mlProduct);
+            $service->run();
+            $service->saveLog();
+        } catch (ServiceException $e) {
+            throw new DocumentError($e->getMessage(), $e->getData());
+        }
 
         $variant = $service->getVariant($wcVariationId);
 

@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\MoloniProduct\Create;
 
+use MoloniES\Exceptions\ServiceException;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
 use MoloniES\Storage;
 use MoloniES\Tools\ProductAssociations;
@@ -16,6 +17,11 @@ class CreateSimpleProduct extends MoloniProductSyncAbstract
 
     //            Publics            //
 
+    /**
+     * Runner
+     *
+     * @throws ServiceException
+     */
     public function run()
     {
         $this->setName();

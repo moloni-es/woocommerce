@@ -3,6 +3,7 @@
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
 use MoloniES\Curl;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\HelperException;
 use MoloniES\Helpers\MoloniWarehouse;
 use MoloniES\Services\MoloniProduct\Helpers\GetOrCreateCategory;
@@ -306,10 +307,19 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         }
     }
 
+    /**
+     * Set property groups
+     *
+     * @throws ServiceException
+     */
     protected function setPropertyGroup()
     {
         if (empty($this->moloniProduct)) {
-            $propertyGroup = (new FindOrCreatePropertyGroup($this->wcProduct))->handle();
+            try {
+                $propertyGroup = (new FindOrCreatePropertyGroup($this->wcProduct))->handle();
+            } catch (HelperException $e) {
+                throw new ServiceException($e->getMessage(), $e->getData());
+            }
         } else {
             $targetId = $this->moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
 
@@ -317,7 +327,11 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
              * Product already exists, so it has property group assigned
              * So we need to get the property group and update it if needed
              */
-            $propertyGroup = (new GetOrUpdatePropertyGroup($this->wcProduct, $targetId))->handle();
+            try {
+                $propertyGroup = (new GetOrUpdatePropertyGroup($this->wcProduct, $targetId))->handle();
+            } catch (HelperException $e) {
+                throw new ServiceException($e->getMessage(), $e->getData());
+            }
         }
 
         $this->propertyGroup = $propertyGroup;
@@ -325,6 +339,11 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         $this->props['propertyGroupId'] = $propertyGroup['propertyGroupId'];
     }
 
+    /**
+     * Set variants
+     *
+     * @throws ServiceException
+     */
     protected function setVariants()
     {
         $newVariants = [];
@@ -377,13 +396,30 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     //            Requests            //
 
+    /**
+     * @throws ServiceException
+     */
     protected function insert()
     {
         $data = [
             'data' => $this->props
         ];
 
-        $mutation = Products::mutationProductCreate($data);
+        try {
+            $mutation = Products::mutationProductCreate($data);
+        } catch (APIExeption $e) {
+            throw new ServiceException(
+                sprintf(
+                    __('Error %s product in Moloni (%s)', 'moloni_es'),
+                    __('creating', 'moloni_es'),
+                    $this->props['reference'] ?? '---'
+                ),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         $product = $mutation['data']['productCreate']['data'] ?? [];
 
@@ -406,13 +442,32 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         $this->afterSave();
     }
 
+    /**
+     * Update a Moloni product
+     *
+     * @throws ServiceException
+     */
     protected function update()
     {
         $data = [
             'data' => $this->props
         ];
 
-        $mutation = Products::mutationProductUpdate($data);
+        try {
+            $mutation = Products::mutationProductUpdate($data);
+        } catch (APIExeption $e) {
+            throw new ServiceException(
+                sprintf(
+                    __('Error %s product in Moloni (%s)', 'moloni_es'),
+                    __('updating', 'moloni_es'),
+                    $this->wcProduct->get_sku() ?? '---'
+                ),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
 
         $product = $mutation['data']['productUpdate']['data'] ?? [];
 
@@ -421,7 +476,7 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
                 sprintf(
                     __('Error %s product in Moloni (%s)', 'moloni_es'),
                     __('updating', 'moloni_es'),
-                    $this->props['reference'] ?? '---'
+                    $this->wcProduct->get_sku() ?? '---'
                 ),
                 [
                     'mutation' => $mutation,

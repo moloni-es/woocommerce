@@ -24,7 +24,6 @@ class SyncProductStock extends MoloniStockSyncAbstract
      * Runner
      *
      * @throws ServiceException
-     * @throws APIExeption
      */
     public function run()
     {
@@ -91,14 +90,44 @@ class SyncProductStock extends MoloniStockSyncAbstract
 
                 $props['qty'] = $diference;
 
-                $mutation = Stocks::mutationStockMovementManualExitCreate(['data' => $props]);
+                try {
+                    $mutation = Stocks::mutationStockMovementManualExitCreate(['data' => $props]);
+                } catch (APIExeption $e) {
+                    throw new ServiceException(
+                        sprintf(
+                            __('Something went wrong updating stock (%s)', 'moloni_es'),
+                            $this->moloniProduct['reference']
+                        ),
+                        [
+                            'message' => $e->getMessage(),
+                            'data' => $e->getData(),
+                            'props' => $props,
+                        ]
+                    );
+                }
+
                 $movementId = $mutation['data']['stockMovementManualExitCreate']['data']['stockMovementId'] ?? 0;
             } else {
                 $diference = $wcStock - $moloniStock;
 
                 $props['qty'] = $diference;
 
-                $mutation = Stocks::mutationStockMovementManualEntryCreate(['data' => $props]);
+                try {
+                    $mutation = Stocks::mutationStockMovementManualEntryCreate(['data' => $props]);
+                } catch (APIExeption $e) {
+                    throw new ServiceException(
+                        sprintf(
+                            __('Something went wrong updating stock (%s)', 'moloni_es'),
+                            $this->moloniProduct['reference']
+                        ),
+                        [
+                            'message' => $e->getMessage(),
+                            'data' => $e->getData(),
+                            'props' => $props,
+                        ]
+                    );
+                }
+
                 $movementId = $mutation['data']['stockMovementManualEntryCreate']['data']['stockMovementId'] ?? 0;
             }
 
@@ -107,7 +136,8 @@ class SyncProductStock extends MoloniStockSyncAbstract
                     __('Something went wrong updating stock (%s)', 'moloni_es'),
                     $this->moloniProduct['reference']
                 ), [
-                    'mutation' => $mutation
+                    'mutation' => $mutation,
+                    'props' => $props
                 ]);
             }
         }

@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\MoloniProduct\Update;
 
+use MoloniES\Exceptions\ServiceException;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniProductSyncAbstract;
 use MoloniES\Storage;
 use MoloniES\Tools\ProductAssociations;
@@ -17,6 +18,11 @@ class UpdateVariantProduct extends MoloniProductSyncAbstract
 
     //            Publics            //
 
+    /**
+     * Runner
+     *
+     * @throws ServiceException
+     */
     public function run()
     {
         $this->loadVariationProducts();

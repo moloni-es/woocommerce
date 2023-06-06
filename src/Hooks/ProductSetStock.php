@@ -3,14 +3,17 @@
 namespace MoloniES\Hooks;
 
 use WC_Product;
+use MoloniES\Start;
+use MoloniES\Plugin;
+use MoloniES\Storage;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
-use MoloniES\Plugin;
-use MoloniES\Services\MoloniProduct\Stock\SyncProductStock;
-use MoloniES\Start;
-use MoloniES\Tools\ProductAssociations;
 use MoloniES\Tools\SyncLogs;
+use MoloniES\Tools\ProductAssociations;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\Core\MoloniException;
+use MoloniES\Services\MoloniProduct\Stock\SyncProductStock;
 
 class ProductSetStock
 {
@@ -39,19 +42,39 @@ class ProductSetStock
             return;
         }
 
-        $moloniProduct = $this->fetchMoloniProduct($wcProduct);
+        try {
+            $moloniProduct = $this->fetchMoloniProduct($wcProduct);
 
-        if (empty($moloniProduct)) {
-            return;
+            if (empty($moloniProduct)) {
+                return;
+            }
+
+            $service = new SyncProductStock($wcProduct, $moloniProduct);
+            $service->run();
+            $service->saveLog();
+        } catch (MoloniException $e) {
+            $message = __('Error synchronizing stock.');
+            $message .= ' </br>';
+            $message .= $e->getMessage();
+
+            Storage::$LOGGER->error(
+                $message,
+                [
+                    'action' => 'automatic:product:stock',
+                    'message' => $e->getMessage(),
+                    'request' => $e->getData()
+                ]
+            );
         }
-
-        $service = new SyncProductStock($wcProduct, $moloniProduct);
-        $service->run();
-        $service->saveLog();
     }
 
     //            Privates            //
 
+    /**
+     * Fetch Moloni Product
+     *
+     * @throws APIExeption
+     */
     private function fetchMoloniProduct(WC_Product $wcProduct): array
     {
         /** Fetch by our associaitons table */
