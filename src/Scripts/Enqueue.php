@@ -42,16 +42,19 @@ class Enqueue
             }
 
             if (empty($tab)) {
-                wp_enqueue_script('moloni-actions-bulk-documentes-js', plugins_url('assets/js/BulkDocuments.js', MOLONI_ES_PLUGIN_FILE));
+                wp_enqueue_script('moloni-actions-bulk-actions-js', plugins_url('assets/js/OrdersBulkAction.js', MOLONI_ES_PLUGIN_FILE));
 
-                //send translated strings to the javascript file
-                wp_localize_script('moloni-actions-bulk-documentes-js', 'translations', [
+                /** Send translated strings to the javascript file */
+                wp_localize_script('moloni-actions-bulk-actions-js', 'translations', [
                     'startingProcess' => __('Starting process...', 'moloni_es'),
-                    'noOrdersSelected' => __('No orders selected to generate', 'moloni_es'),
+                    'noOrdersSelected' => __('No orders selected to process', 'moloni_es'),
                     'creatingDocument' => __('Creating document', 'moloni_es'),
+                    'discardingOrder' => __('Discarding order', 'moloni_es'),
                     'progressCompleted' => __('Progress Completed', 'moloni_es'),
-                    'createdDocuments' => __('Documents created: ', 'moloni_es'),
-                    'documentsWithErrors' => __('Documents with errors: ', 'moloni_es'),
+                    'createdDocuments' => __('Documents created:', 'moloni_es'),
+                    'documentsWithErrors' => __('Documents with errors:', 'moloni_es'),
+                    'discardedOrders' => __('Orders discarded:', 'moloni_es'),
+                    'ordersWithErrors' => __('Orders with errors:', 'moloni_es'),
                     'close' => __('Close', 'moloni_es'),
                 ]);
             }

@@ -9,6 +9,7 @@ use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
+use MoloniES\Hooks\Ajax;
 use MoloniES\Hooks\OrderList;
 use MoloniES\Hooks\OrderPaid;
 use MoloniES\Hooks\OrderView;
@@ -24,6 +25,7 @@ use MoloniES\Models\PendingOrders;
 use MoloniES\Services\Documents\DownloadDocumentPDF;
 use MoloniES\Services\Documents\OpenDocument;
 use MoloniES\Services\Orders\CreateMoloniDocument;
+use MoloniES\Services\Orders\DiscardOrder;
 use MoloniES\Tools\Logger;
 use MoloniES\WebHooks\WebHook;
 use WC_Order;
@@ -63,7 +65,7 @@ class Plugin
      */
     private function translations()
     {
-        //loads translations files
+        /** Loads translations files */
         load_plugin_textdomain('moloni_es', FALSE, basename(dirname(MOLONI_ES_PLUGIN_FILE)) . '/languages/');
     }
 
@@ -246,9 +248,10 @@ class Plugin
 
         if (isset($_GET['confirm']) && sanitize_text_field($_GET['confirm']) === 'true') {
             $order = wc_get_order($orderId);
-            $order->add_meta_data('_molonies_sent', '-1');
-            $order->add_order_note(__('Order marked as created'));
-            $order->save();
+
+            $service = new DiscardOrder($order);
+            $service->run();
+            $service->saveLog();
 
             add_settings_error(
                 'molonies',
@@ -276,9 +279,9 @@ class Plugin
 
             if (!empty($allOrders)) {
                 foreach ($allOrders as $order) {
-                    $order->add_meta_data('_molonies_sent', '-1');
-                    $order->add_order_note(__('Order marked as created'));
-                    $order->save();
+                    $service = new DiscardOrder($order);
+                    $service->run();
+                    $service->saveLog();
                 }
 
                 add_settings_error('molonies', 'moloni-order-all-remove-success', __('All orders have been marked as generated!', 'moloni_es'), 'updated');
@@ -292,37 +295,6 @@ class Plugin
                 'molonies', 'moloni-order-remove',
                 __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . $url . "'>" . __('Yes, i confirm', 'moloni_es') . "</a>"
             );
-        }
-    }
-
-    /**
-     * Forces stock synchronization
-     */
-    private function syncStocks()
-    {
-        $date = isset($_GET['since']) ? sanitize_text_field($_GET['since']) : gmdate('Y-m-d', strtotime('-1 week'));
-
-        $service = (new Services\SyncProducts($date))->run();
-
-        if ($service->countUpdated() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('%s products updated.', 'moloni_es'), $service->countUpdated()), 'updated');
-        }
-
-        if ($service->countEqual() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('There are %s products up to date.', 'moloni_es'), $service->countEqual()), 'updated');
-        }
-
-        if ($service->countNotFound() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-not-found', sprintf(__('%s products were not found in WooCommerce.', 'moloni_es'), $service->countNotFound()));
-        }
-
-        if ($service->countFoundRecord() > 0) {
-            Storage::$LOGGER->info(__('Manual stock sync', 'moloni_es'), [
-                'since' => $service->getSince(),
-                'equal' => $service->getEqual(),
-                'not_found' => $service->getNotFound(),
-                'get_updated' => $service->getUpdated(),
-            ]);
         }
     }
 

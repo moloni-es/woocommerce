@@ -229,7 +229,7 @@ class Documents
 
         if (!isset($this->document['documentId'])) {
             throw new DocumentError(
-                sprintf(__('Warning, there was an error inserting the document %s', 'moloni_es'), $this->order->get_order_number()),
+                __('Error creating document', 'moloni_es'),
                 Curl::getLog()
             );
         }

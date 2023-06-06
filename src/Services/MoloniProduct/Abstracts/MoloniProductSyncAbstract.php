@@ -2,7 +2,6 @@
 
 namespace MoloniES\Services\MoloniProduct\Abstracts;
 
-use MoloniES\Curl;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\HelperException;
 use MoloniES\Helpers\MoloniWarehouse;
@@ -14,10 +13,8 @@ use WC_Product_Variation;
 use MoloniES\Tools;
 use MoloniES\API\Companies;
 use MoloniES\API\Products;
-use MoloniES\API\Warehouses;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\ProductType;
-use MoloniES\Controllers\ProductCategory;
 use MoloniES\Exceptions\ServiceException;
 use MoloniES\Enums\ProductIdentificationType;
 use MoloniES\Services\MoloniProduct\Variant\MoloniVariant;

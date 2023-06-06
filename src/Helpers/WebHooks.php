@@ -71,7 +71,7 @@ class WebHooks
 
         $query = Hooks::queryHooks($variables);
 
-        if (!empty($query) && is_array($query)) {
+        if (!empty($query)) {
             foreach ($query as $hook) {
                 $ids[] = $hook['hookId'];
             }
