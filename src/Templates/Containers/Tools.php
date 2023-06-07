@@ -14,9 +14,9 @@ if (!defined('ABSPATH')) {
             <p class='description'><?= __('Match WooCommerce stock with Moloni values' , 'moloni_es') ?></p>
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large">
+            <button id="importStockButton" class="button button-large">
                 <?= __('Import stock' , 'moloni_es') ?>
-            </a>
+            </button>
         </td>
     </tr>
 
@@ -26,9 +26,9 @@ if (!defined('ABSPATH')) {
             <p class='description'><?= __('Import products from Moloni account to WooCommerce' , 'moloni_es') ?></p>
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large">
+            <button id="importProductsButton" class="button button-large">
                 <?= __('Import products' , 'moloni_es') ?>
-            </a>
+            </button>
         </td>
     </tr>
 
@@ -38,9 +38,9 @@ if (!defined('ABSPATH')) {
             <p class='description'><?= __('Match Moloni stock with WooCommerce values' , 'moloni_es') ?></p>
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large">
+            <button id="exportStockButton" class="button button-large">
                 <?= __('Export stock' , 'moloni_es') ?>
-            </a>
+            </button>
         </td>
     </tr>
 
@@ -50,9 +50,9 @@ if (!defined('ABSPATH')) {
             <p class='description'><?= __('Export products from WooCommerce to Moloni account' , 'moloni_es') ?></p>
         </th>
         <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large">
+            <button id="exportProductsButton" class="button button-large">
                 <?= __('Export products' , 'moloni_es') ?>
-            </a>
+            </button>
         </td>
     </tr>
 
@@ -96,6 +96,12 @@ if (!defined('ABSPATH')) {
     </tr>
     </tbody>
 </table>
+
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ActionModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ExportProductsModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ExportStocksModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ImportProductsModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ImportStocksModal.php'; ?>
 
 <script>
     Moloni.Tools.init();

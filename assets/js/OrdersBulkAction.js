@@ -5,7 +5,7 @@ jQuery(document).ready(function ($) {
     var ProgressWindowMessage = $('#bulk-action-progress-message');
     var ProgressWindowCurrent = $('#bulk-action-progress-current');
     var ProgressWindowTotal = $('#bulk-action-progress-total');
-    var ProgressWindowTitle = $('#bulk-action-progress-content h2');
+    var ProgressWindowTitle = $('#bulk-action-progress-modal h2');
 
     var ProgressCurrent = 0;
     var ProgressWindowCloseButton = '<br><a class="wp-core-ui button-secondary" style="width: 80px; text-align: center; float:right" href="#" rel="modal:close">' + translations.close + '</a>'

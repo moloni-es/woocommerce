@@ -1,5 +1,5 @@
 <div id="bulk-action-progress-modal" class="modal" style="display: none">
-    <div id="bulk-action-progress-content">
+    <div>
         <h2>
             <?= __('Processing' , 'moloni_es') ?>
             &nbsp;

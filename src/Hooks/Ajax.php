@@ -114,7 +114,7 @@ class Ajax
             return;
         }
 
-        $service = new ImportStockChanges();
+        $service = new ImportStockChanges((int)$_REQUEST['page']);
         $service->run();
 
         $response = [
@@ -133,7 +133,7 @@ class Ajax
             return;
         }
 
-        $service = new ImportProducts();
+        $service = new ImportProducts((int)$_REQUEST['page']);
         $service->run();
 
         $response = [
@@ -152,7 +152,7 @@ class Ajax
             return;
         }
 
-        $service = new ExportStockChanges();
+        $service = new ExportStockChanges((int)$_REQUEST['page']);
         $service->run();
 
         $response = [
@@ -170,7 +170,7 @@ class Ajax
             return;
         }
 
-        $service = new ExportProducts();
+        $service = new ExportProducts((int)$_REQUEST['page']);
         $service->run();
 
         $response = [
