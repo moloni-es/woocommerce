@@ -5,7 +5,8 @@ jQuery(document).ready(function ($) {
     var ProgressWindowMessage = $('#bulk-action-progress-message');
     var ProgressWindowCurrent = $('#bulk-action-progress-current');
     var ProgressWindowTotal = $('#bulk-action-progress-total');
-    var ProgressWindowTitle = $('#bulk-action-progress-modal h2');
+    var ProgressWindowTitleStart = $('#bulk-action-progress-title-start');
+    var ProgressWindowTitleFinish = $('#bulk-action-progress-title-finish');
 
     var ProgressCurrent = 0;
     var ProgressWindowCloseButton = '<br><a class="wp-core-ui button-secondary" style="width: 80px; text-align: center; float:right" href="#" rel="modal:close">' + translations.close + '</a>'
@@ -86,7 +87,8 @@ jQuery(document).ready(function ($) {
     }
 
     function FinishBulkGenInvoice() {
-        ProgressWindowTitle.html(translations.progressCompleted);
+        ProgressWindowTitleStart.hide();
+        ProgressWindowTitleFinish.show();
         ProgressWindowMessage.html("");
 
         ProgressWindowMessage.append(translations.createdDocuments + ' ' + FinalResultSuccess.length);
@@ -156,7 +158,8 @@ jQuery(document).ready(function ($) {
     }
 
     function FinishBulkDiscardOrder() {
-        ProgressWindowTitle.html(translations.progressCompleted);
+        ProgressWindowTitleStart.hide();
+        ProgressWindowTitleFinish.show();
         ProgressWindowMessage.html("");
 
         ProgressWindowMessage.append(translations.discardedOrders + ' ' + FinalResultSuccess.length);
@@ -181,6 +184,9 @@ jQuery(document).ready(function ($) {
             clickClose: false,
             showClose: true
         });
+
+        ProgressWindowTitleFinish.hide();
+        ProgressWindowTitleStart.show();
     }
 
     //             Auxiliary             //

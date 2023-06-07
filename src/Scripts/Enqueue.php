@@ -50,7 +50,6 @@ class Enqueue
                     'noOrdersSelected' => __('No orders selected to process', 'moloni_es'),
                     'creatingDocument' => __('Creating document', 'moloni_es'),
                     'discardingOrder' => __('Discarding order', 'moloni_es'),
-                    'progressCompleted' => __('Progress completed', 'moloni_es'),
                     'createdDocuments' => __('Documents created:', 'moloni_es'),
                     'documentsWithErrors' => __('Documents with errors:', 'moloni_es'),
                     'discardedOrders' => __('Orders discarded:', 'moloni_es'),
