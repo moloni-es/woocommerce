@@ -114,12 +114,15 @@ class Ajax
             return;
         }
 
-        $response = [
-            'valid' => 1
-        ];
-
         $service = new ImportStockChanges();
         $service->run();
+
+        $response = [
+            'valid' => 1,
+            'hasMore' => $service->getHasMore(),
+            'totalResults' => $service->getTotalResults(),
+            'currentPercentage' => $service->getCurrentPercentage()
+        ];
 
         $this->sendJson($response);
     }
@@ -130,12 +133,15 @@ class Ajax
             return;
         }
 
-        $response = [
-            'valid' => 1
-        ];
-
         $service = new ImportProducts();
         $service->run();
+
+        $response = [
+            'valid' => 1,
+            'hasMore' => $service->getHasMore(),
+            'totalResults' => $service->getTotalResults(),
+            'currentPercentage' => $service->getCurrentPercentage()
+        ];
 
         $this->sendJson($response);
     }
@@ -146,12 +152,14 @@ class Ajax
             return;
         }
 
-        $response = [
-            'valid' => 1
-        ];
-
         $service = new ExportStockChanges();
         $service->run();
+
+        $response = [
+            'valid' => 1,
+            'hasMore' => $service->getHasMore(),
+            'processedProducts' => $service->getProcessedProducts()
+        ];
 
         $this->sendJson($response);
     }
@@ -162,12 +170,14 @@ class Ajax
             return;
         }
 
-        $response = [
-            'valid' => 1
-        ];
-
         $service = new ExportProducts();
         $service->run();
+
+        $response = [
+            'valid' => 1,
+            'hasMore' => $service->getHasMore(),
+            'processedProducts' => $service->getProcessedProducts()
+        ];
 
         $this->sendJson($response);
     }

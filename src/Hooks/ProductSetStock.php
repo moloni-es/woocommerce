@@ -45,7 +45,7 @@ class ProductSetStock
         try {
             $moloniProduct = $this->fetchMoloniProduct($wcProduct);
 
-            if (empty($moloniProduct)) {
+            if (empty($moloniProduct) || (int)$moloniProduct['hasStock'] === Boolean::NO) {
                 return;
             }
 

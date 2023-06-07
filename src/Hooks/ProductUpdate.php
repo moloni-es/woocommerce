@@ -3,6 +3,7 @@
 namespace MoloniES\Hooks;
 
 use Exception;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\ServiceException;
 use WC_Product;
 use MoloniES\API\Products;
@@ -76,9 +77,9 @@ class ProductUpdate
             return;
         }
 
-        $this->fetchMoloniProduct();
-
         try {
+            $this->fetchMoloniProduct();
+
             if (empty($this->moloniProduct)) {
                 $this->create();
             } else {
@@ -149,6 +150,11 @@ class ProductUpdate
         $this->wcProduct = wc_get_product($this->wcProductId);
     }
 
+    /**
+     * Fetch Moloni product
+     *
+     * @throws APIExeption
+     */
     private function fetchMoloniProduct(): void
     {
         /** Fetch by our associations table */

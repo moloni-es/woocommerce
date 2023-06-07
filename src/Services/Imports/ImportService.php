@@ -37,7 +37,7 @@ abstract class ImportService
         $this->page = $page;
     }
 
-    //              Publics              //
+    //              Gets              //
 
     public function getCurrentPercentage(): int
     {
