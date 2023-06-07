@@ -176,6 +176,7 @@ jQuery(document).ready(function ($) {
 
     function ShowModal() {
         ProgressWindow.modal({
+            fadeDuration: 100,
             escapeClose: false,
             clickClose: false,
             showClose: true

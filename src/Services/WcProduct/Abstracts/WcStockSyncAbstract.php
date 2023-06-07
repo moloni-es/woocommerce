@@ -34,4 +34,16 @@ abstract class WcStockSyncAbstract implements WcSyncInterface
      * @var array
      */
     protected $resultData = [];
+
+    //            Gets            //
+
+    public function getResultMsg(): string
+    {
+        return $this->resultMsg;
+    }
+
+    public function getResultData(): array
+    {
+        return $this->resultData;
+    }
 }

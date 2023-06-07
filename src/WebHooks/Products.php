@@ -9,6 +9,7 @@ use MoloniES\Enums\SyncLogsType;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\Core\MoloniException;
 use MoloniES\Exceptions\WebhookException;
+use MoloniES\Helpers\References;
 use MoloniES\Services\WcProduct\Create\CreateChildProduct;
 use MoloniES\Services\WcProduct\Create\CreateParentProduct;
 use MoloniES\Services\WcProduct\Create\CreateSimpleProduct;
@@ -368,7 +369,7 @@ class Products
         }
 
         /** Do not sync shipping product */
-        if (in_array(strtolower($this->moloniProduct['reference']), ['shipping', 'envio', 'envío', 'fee', 'tarifa'])) {
+        if (References::isIgnoredReference($this->moloniProduct['reference'])) {
             throw new WebhookException(__('Product reference blacklisted!', 'moloni_es'));
         }
 
