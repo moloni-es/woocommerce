@@ -113,10 +113,6 @@ class Plugin
                         $this->removeOrder();
                         break;
 
-                    case 'remInvoiceAll':
-                        $this->removeOrdersAll();
-                        break;
-
                     case 'reinstallWebhooks':
                         $this->reinstallWebhooks();
                         break;
@@ -264,36 +260,6 @@ class Plugin
                 'molonies',
                 'moloni-order-remove',
                 sprintf(__('Do you confirm that you want to mark the order %s as paid?', 'moloni_es'), $orderId) . " <a href='" . esc_url(admin_url('admin.php?page=molonies&action=remInvoice&confirm=true&id=' . $orderId)) . "'>" . __('Yes, i confirm', 'moloni_es') . "</a>"
-            );
-        }
-    }
-
-    /**
-     * Removes all orders form the pending list
-     */
-    private function removeOrdersAll()
-    {
-        if (isset($_GET['confirm']) && sanitize_text_field($_GET['confirm']) === 'true') {
-            /** @var WC_Order[] $allOrders */
-            $allOrders = PendingOrders::getAllAvailable();
-
-            if (!empty($allOrders)) {
-                foreach ($allOrders as $order) {
-                    $service = new DiscardOrder($order);
-                    $service->run();
-                    $service->saveLog();
-                }
-
-                add_settings_error('molonies', 'moloni-order-all-remove-success', __('All orders have been marked as generated!', 'moloni_es'), 'updated');
-            } else {
-                add_settings_error('molonies', 'moloni-order-all-remove-not-found', __('No order found to generate!', 'moloni_es'));
-            }
-        } else {
-            $url = esc_url(admin_url('admin.php?page=molonies&action=remInvoiceAll&confirm=true'));
-
-            add_settings_error(
-                'molonies', 'moloni-order-remove',
-                __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . $url . "'>" . __('Yes, i confirm', 'moloni_es') . "</a>"
             );
         }
     }

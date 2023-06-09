@@ -75,23 +75,6 @@ if (!defined('ABSPATH')) {
     <tr>
         <th style="padding: 2rem">
             <strong class="name">
-                <?= __('Remove pending orders', 'moloni_es') ?>
-            </strong>
-            <p class='description'>
-                <?= __('Remove all orders from the order list', 'moloni_es') ?>
-            </p>
-        </th>
-        <td class="run-tool" style="padding: 2rem; text-align: right">
-            <a class="button button-large"
-               href='<?= esc_url(admin_url('admin.php?page=molonies&tab=tools&action=remInvoiceAll')) ?>'>
-                <?= __('Remove pending orders', 'moloni_es') ?>
-            </a>
-        </td>
-    </tr>
-
-    <tr>
-        <th style="padding: 2rem">
-            <strong class="name">
                 <?= __('Reinstall Moloni Webhooks', 'moloni_es') ?>
             </strong>
             <p class='description'>
