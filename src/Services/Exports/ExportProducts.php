@@ -30,7 +30,7 @@ class ExportProducts extends ExportService
 
         $wcProducts = wc_get_products($filters);
 
-        $this->totalResults = count($wcProducts->products);
+        $this->totalResults = (int)$wcProducts->total;
 
         /**
          * @var $wcProduct WC_Product

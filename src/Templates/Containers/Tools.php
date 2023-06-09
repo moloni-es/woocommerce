@@ -108,11 +108,11 @@ if (!defined('ABSPATH')) {
     </tbody>
 </table>
 
-<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ActionModal.php'; ?>
-<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ExportProductsModal.php'; ?>
-<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ExportStocksModal.php'; ?>
-<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ImportProductsModal.php'; ?>
-<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Tools/ImportStocksModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/ActionModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/ExportProductsModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/ExportStocksModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/ImportProductsModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/ImportStocksModal.php'; ?>
 
 <script>
     jQuery(document).ready(function ($) {

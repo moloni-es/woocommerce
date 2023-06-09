@@ -41,14 +41,25 @@ abstract class ExportService
 
     //              Gets              //
 
-    public function getHasMore(): bool
+    public function getCurrentPercentage(): int
     {
-        return $this->totalResults === $this->itemsPerPage;
+        if ($this->totalResults === 0) {
+            return 100;
+        }
+
+        $percentage = (($this->page * $this->itemsPerPage) / $this->totalResults) * 100;
+
+        return (int)$percentage;
     }
 
-    public function getProcessedProducts()
+    public function getHasMore(): bool
     {
-        return (($this->page - 1) * $this->itemsPerPage) + $this->totalResults;
+        return $this->totalResults > ($this->page * $this->itemsPerPage);
+    }
+
+    public function getTotalResults(): int
+    {
+        return $this->totalResults;
     }
 
     public function getErrorProducts(): array
@@ -113,7 +124,9 @@ abstract class ExportService
             ]
         ];
 
-        $byReference = Products::queryProducts($variables);
+        $query = Products::queryProducts($variables);
+
+        $byReference = $query['data']['products']['data'] ?? [];
 
         if (!empty($byReference) && isset($byReference[0]['productId'])) {
             return $byReference[0];

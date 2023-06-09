@@ -505,7 +505,7 @@ class OrderProduct
         ];
 
         try {
-            $byReference = Products::queryProducts($variables);
+            $query = Products::queryProducts($variables);
         } catch (APIExeption $e) {
             throw new DocumentError(
                 __('Error fetching products', 'moloni_es'),
@@ -515,6 +515,8 @@ class OrderProduct
                 ]
             );
         }
+
+        $byReference = $query['data']['products']['data'] ?? [];
 
         if (!empty($byReference) && isset($byReference[0]['productId'])) {
             return $byReference[0];

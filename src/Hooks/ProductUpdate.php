@@ -192,7 +192,9 @@ class ProductUpdate
             ]
         ];
 
-        $byReference = Products::queryProducts($variables);
+        $query = Products::queryProducts($variables);
+
+        $byReference = $query['data']['products']['data'] ?? [];
 
         if (!empty($byReference) && isset($byReference[0]['productId'])) {
             $this->moloniProduct = $byReference[0];

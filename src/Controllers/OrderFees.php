@@ -130,7 +130,7 @@ class OrderFees
         ];
 
         try {
-            $searchProduct = Products::queryProducts($variables);
+            $query = Products::queryProducts($variables);
         } catch (APIExeption $e) {
             throw new DocumentError(
                 __('Error fetching order fee', 'moloni_es'),
@@ -140,6 +140,8 @@ class OrderFees
                 ]
             );
         }
+
+        $searchProduct = $query['data']['products']['data'] ?? [];
 
         if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
             $this->product_id = $searchProduct[0]['productId'];

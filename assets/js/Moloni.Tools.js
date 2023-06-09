@@ -10,10 +10,33 @@ Moloni.Tools = (function ($) {
     }
 
     function startObservers() {
-        $('#importStocksButton').on('click', Moloni.Tools.overlays.importStocks);
-        $('#importProductsButton').on('click', Moloni.Tools.overlays.importProducts);
-        $('#exportStocksButton').on('click', Moloni.Tools.overlays.exportStocks);
-        $('#exportProductsButton').on('click', Moloni.Tools.overlays.exportProducts);
+        $('#importStocksButton').on('click', function () {
+            showPreModal('import-stocks-modal', 'toolsImportStock');
+        });
+        $('#importProductsButton').on('click', function () {
+            showPreModal('import-products-modal', 'toolsImportProduct');
+        });
+        $('#exportStocksButton').on('click', function () {
+            showPreModal('export-stocks-modal', 'toolsExportStock');
+        });
+        $('#exportProductsButton').on('click', function () {
+            showPreModal('export-products-modal', 'toolsExportProduct');
+        });
+    }
+
+    function showPreModal(modalId, action) {
+        const preModal = $('#' + modalId);
+
+        preModal.modal({
+            fadeDuration: 100,
+            escapeClose: false,
+            clickClose: false,
+            showClose: true
+        });
+
+        preModal.find('.button-primary').off('click').on('click', function () {
+            Moloni.Tools.modals.syncTool(action);
+        });
     }
 
     return {
@@ -23,82 +46,71 @@ Moloni.Tools = (function ($) {
 
 //       Overlays       //
 
-if (Moloni.Tools.overlays === undefined) {
-    Moloni.Tools.overlays = {};
+if (Moloni.Tools.modals === undefined) {
+    Moloni.Tools.modals = {};
 }
 
-Moloni.Tools.overlays.importStocks = (function () {
-    var doingAjax = false;
-    var $ = jQuery;
-    var importStocksModal = $('#import-stocks-modal');
+Moloni.Tools.modals.syncTool = (async function (action) {
+    const $ = jQuery;
 
-    importStocksModal.modal({
-        fadeDuration: 100,
-        escapeClose: false,
-        clickClose: false,
-        showClose: true
-    });
+    const actionModal = $('#action-modal');
 
-    function doAction() {
-        alert('oi');
+    const closeButton = actionModal.find('.button-secondary');
+    const spinner = actionModal.find('#action-modal-spinner');
+    const content = actionModal.find('#action-modal-content');
+    const error = actionModal.find('#action-modal-error');
+
+    let page = 1;
+
+    content.html('').hide();
+    closeButton.hide();
+    error.hide();
+    spinner.show();
+
+    const toogleContent = () => {
+        spinner.fadeOut(100, function () {
+            content.fadeIn(200);
+        });
     }
 
-    importStocksModal.find('.button-primary').on('click', doAction);
-});
+    const sync = async () => {
+        const resp = await $.ajax({
+            type: 'POST',
+            url: ajaxurl,
+            data: {
+                'action': action,
+                'page': page
+            },
+            async: true
+        });
 
-Moloni.Tools.overlays.importProducts = (function () {
-    var doingAjax = false;
-    var $ = jQuery;
-    var importProductsModal = $('#import-products-modal');
+        if (page === 1) {
+            toogleContent();
+        }
 
-    importProductsModal.modal({
-        fadeDuration: 100,
-        escapeClose: false,
-        clickClose: false,
-        showClose: true
-    });
+        content.html(resp.overlayContent || '---');
 
-    function doAction() {
-        alert('oi');
+        if (resp.hasMore && actionModal.is(':visible')) {
+            page = page + 1;
+
+            return await sync();
+        }
     }
 
-    importProductsModal.find('.button-primary').on('click', doAction);
-});
-
-Moloni.Tools.overlays.exportStocks = (function () {
-    var doingAjax = false;
-    var $ = jQuery;
-    var exportStocksModal = jQuery('#export-stocks-modal');
-
-    exportStocksModal.modal({
-        fadeDuration: 100,
+    actionModal.modal({
+        fadeDuration: 0,
         escapeClose: false,
         clickClose: false,
-        showClose: true
+        closeExisting: true,
     });
 
-    function doAction() {
-        alert('oi');
+    try {
+        await sync();
+    } catch (ex) {
+        spinner.fadeOut(50);
+        content.fadeOut(50);
+        error.fadeIn(200);
     }
 
-    exportStocksModal.find('.button-primary').on('click', doAction);
-});
-
-Moloni.Tools.overlays.exportProducts = (function () {
-    var doingAjax = false;
-    var $ = jQuery;
-    var exportProductsModal = $('#export-products-modal');
-
-    exportProductsModal.modal({
-        fadeDuration: 100,
-        escapeClose: false,
-        clickClose: false,
-        showClose: true
-    });
-
-    function doAction() {
-        alert('oi');
-    }
-
-    exportProductsModal.find('.button-primary').on('click', doAction);
+    closeButton.show(200);
 });

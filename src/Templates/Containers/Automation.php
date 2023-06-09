@@ -15,25 +15,6 @@ try {
     $e->showError();
     return;
 }
-
-$filters = [
-    'status' => ['publish'],
-    'manage_stock' => true,
-    'limit' => 10,
-    'page' => 1,
-    'paginate' => true,
-    'orderby' => [
-        'ID' => 'DESC',
-    ],
-];
-
-$wcProducts = wc_get_products($filters);
-
-/** @var WC_Product $product */
-foreach ($wcProducts->products as $product) {
-    echo $product->get_type();
-    echo '</br>';
-}
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=automation') ?>' id='formOpcoes'>

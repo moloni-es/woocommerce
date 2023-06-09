@@ -136,7 +136,7 @@ class Products extends EndpointAbstract
             }
         }';
 
-        return Curl::complex('products/products', $query, $variables, 'products');
+        return Curl::simple('products/products', $query, $variables);
     }
 
     //          PRIVATES          //

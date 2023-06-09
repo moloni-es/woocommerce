@@ -125,10 +125,12 @@ class OrderShipping
         ];
 
         try {
-            $searchProduct = Products::queryProducts($variables);
+            $query = Products::queryProducts($variables);
         } catch (APIExeption $e) {
             throw new DocumentError(__('Error getting shipping', 'moloni_es'));
         }
+
+        $searchProduct = $query['data']['products']['data'] ?? [];
 
         if (!empty($searchProduct) && isset($searchProduct[0]['productId'])) {
             $this->product_id = $searchProduct[0]['productId'];

@@ -25,10 +25,11 @@ class Ajax
 
         add_action('wp_ajax_genInvoice', [$this, 'genInvoice']);
         add_action('wp_ajax_discardOrder', [$this, 'discardOrder']);
-        add_action('wp_ajax_importStock', [$this, 'importStock']);
-        add_action('wp_ajax_importProduct', [$this, 'importProduct']);
-        add_action('wp_ajax_exportStock', [$this, 'exportStock']);
-        add_action('wp_ajax_exportProduct', [$this, 'exportProduct']);
+
+        add_action('wp_ajax_toolsImportStock', [$this, 'toolsImportStock']);
+        add_action('wp_ajax_toolsImportProduct', [$this, 'toolsImportProduct']);
+        add_action('wp_ajax_toolsExportStock', [$this, 'toolsExportStock']);
+        add_action('wp_ajax_toolsExportProduct', [$this, 'toolsExportProduct']);
     }
 
     //             Publics             //
@@ -108,7 +109,8 @@ class Ajax
         $this->sendJson($response);
     }
 
-    public function importStock()
+
+    public function toolsImportStock()
     {
         if (!$this->isAuthed()) {
             return;
@@ -119,15 +121,18 @@ class Ajax
 
         $response = [
             'valid' => 1,
+            'overlayContent' => '',
             'hasMore' => $service->getHasMore(),
             'totalResults' => $service->getTotalResults(),
             'currentPercentage' => $service->getCurrentPercentage()
         ];
 
+        $response['overlayContent'] = $this->loadModalContent($response);
+
         $this->sendJson($response);
     }
 
-    public function importProduct()
+    public function toolsImportProduct()
     {
         if (!$this->isAuthed()) {
             return;
@@ -138,15 +143,18 @@ class Ajax
 
         $response = [
             'valid' => 1,
+            'overlayContent' => '',
             'hasMore' => $service->getHasMore(),
             'totalResults' => $service->getTotalResults(),
             'currentPercentage' => $service->getCurrentPercentage()
         ];
 
+        $response['overlayContent'] = $this->loadModalContent($response);
+
         $this->sendJson($response);
     }
 
-    public function exportStock()
+    public function toolsExportStock()
     {
         if (!$this->isAuthed()) {
             return;
@@ -157,14 +165,18 @@ class Ajax
 
         $response = [
             'valid' => 1,
+            'overlayContent' => '',
             'hasMore' => $service->getHasMore(),
-            'processedProducts' => $service->getProcessedProducts()
+            'totalResults' => $service->getTotalResults(),
+            'currentPercentage' => $service->getCurrentPercentage()
         ];
+
+        $response['overlayContent'] = $this->loadModalContent($response);
 
         $this->sendJson($response);
     }
 
-    public function exportProduct()
+    public function toolsExportProduct()
     {
         if (!$this->isAuthed()) {
             return;
@@ -175,9 +187,13 @@ class Ajax
 
         $response = [
             'valid' => 1,
+            'overlayContent' => '',
             'hasMore' => $service->getHasMore(),
-            'processedProducts' => $service->getProcessedProducts()
+            'totalResults' => $service->getTotalResults(),
+            'currentPercentage' => $service->getCurrentPercentage()
         ];
+
+        $response['overlayContent'] = $this->loadModalContent($response);
 
         $this->sendJson($response);
     }
@@ -187,6 +203,20 @@ class Ajax
     private function isAuthed(): bool
     {
         return Start::login(true);
+    }
+
+    /**
+     * Load tools modal content
+     *
+     * @see https://wpadmin.bracketspace.com/
+     */
+    private function loadModalContent($data)
+    {
+        ob_start();
+
+        include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/Blocks/ActionModalContent.php';
+
+        return ob_get_clean();
     }
 
     /**

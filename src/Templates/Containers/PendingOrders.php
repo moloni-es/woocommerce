@@ -181,4 +181,4 @@ $orders = PendingOrders::getAllAvailable();
     </div>
 </div>
 
-<?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/PendingOrders/BulkActionModal.php'; ?>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/PendingOrders/BulkActionModal.php'; ?>
