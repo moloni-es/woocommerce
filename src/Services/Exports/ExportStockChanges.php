@@ -42,7 +42,7 @@ class ExportStockChanges extends ExportService
                 foreach ($childIds as $childId) {
                     $wcVariation = wc_get_product($childId);
 
-                    if (!$wcProduct->managing_stock()) {
+                    if (!$wcVariation->managing_stock()) {
                         $this->errorProducts[] = [$wcVariation->get_id() => 'WooCommerce product does not manage stock.'];
 
                         continue;
