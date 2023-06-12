@@ -28,6 +28,9 @@ class DiscardOrder
             $this->order->get_order_number()
         );
 
-        Storage::$LOGGER->info($message, ['order_id' => $this->order->get_id()]);
+        Storage::$LOGGER->info($message, [
+            'tag' => 'service:order:discard',
+            'order_id' => $this->order->get_id()
+        ]);
     }
 }

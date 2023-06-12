@@ -120,9 +120,8 @@ class ExportStockChanges extends ExportService
             }
         }
 
-        Storage::$LOGGER->info(
-            sprintf(__('Products stock export. Part %s', 'moloni_es'), $this->page),
-            [
+        Storage::$LOGGER->info(sprintf(__('Products stock export. Part %s', 'moloni_es'), $this->page), [
+                'tag' => 'tool:export:stock',
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
             ]

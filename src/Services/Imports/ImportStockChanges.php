@@ -121,9 +121,8 @@ class ImportStockChanges extends ImportService
             }
         }
 
-        Storage::$LOGGER->info(
-            sprintf(__('Products stock import. Part %s', 'moloni_es'), $this->page),
-            [
+        Storage::$LOGGER->info(sprintf(__('Products stock import. Part %s', 'moloni_es'), $this->page), [
+                'tag' => 'tool:import:stock',
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
             ]

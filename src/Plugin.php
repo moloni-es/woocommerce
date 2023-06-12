@@ -161,9 +161,8 @@ class Plugin
             $message .= ' </br>';
             $message .= $e->getMessage();
 
-            Storage::$LOGGER->alert(
-                $message,
-                [
+            Storage::$LOGGER->alert($message, [
+                    'tag' => 'service:document:create:manual:warning',
                     'message' => $e->getMessage(),
                     'request' => $e->getData()
                 ]
@@ -175,9 +174,8 @@ class Plugin
             $message .= ' </br>';
             $message .= strip_tags($e->getMessage());
 
-            Storage::$LOGGER->error(
-                $message,
-                [
+            Storage::$LOGGER->error($message, [
+                    'tag' => 'service:document:create:manual:error',
                     'message' => $e->getMessage(),
                     'request' => $e->getData()
                 ]

@@ -60,6 +60,7 @@ class CreateChildProduct extends WcProductSyncAbstract
         $message = sprintf(__('Child product created in WooCommerce (%s)', 'moloni_es'), $this->wcProduct->get_sku());
 
         Storage::$LOGGER->info($message, [
+            'tag' => 'service:wcproduct:child:create',
             'moloniId' => $this->moloniProduct['productId'],
             'moloniParentId' => $this->moloniProduct['parent']['productId'],
             'wcId' => $this->wcProduct->get_id(),

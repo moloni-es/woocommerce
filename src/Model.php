@@ -138,12 +138,9 @@ class Model
                         new AuthenticationExpired(ALERT_EMAIL);
                     }
 
-                    Storage::$LOGGER->error(
-                        sprintf(
-                            __('Reseting tokens after %s tries', 'moloni_es'),
-                            $retryNumber
-                        )
-                    );
+                    Storage::$LOGGER->error(sprintf(__('Reseting tokens after %s tries', 'moloni_es'), $retryNumber), [
+                        'tag' => 'service:refreshtokens:error',
+                    ]);
 
                     self::resetTokens();
 

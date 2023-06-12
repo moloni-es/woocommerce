@@ -86,9 +86,8 @@ class ImportProducts extends ImportService
             $this->syncedProducts[] = $product['reference'];
         }
 
-        Storage::$LOGGER->info(
-            sprintf(__('Products import. Part %s', 'moloni_es'), $this->page),
-            [
+        Storage::$LOGGER->info(sprintf(__('Products import. Part %s', 'moloni_es'), $this->page), [
+                'tag' => 'tool:import:product',
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
             ]

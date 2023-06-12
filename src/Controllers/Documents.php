@@ -405,6 +405,7 @@ class Documents
         );
 
         Storage::$LOGGER->info($message, [
+            'tag' => 'service:create:document',
             'order_id' => $this->order->get_id(),
             'document_id' => $this->documentSetId,
             'document_status' => $this->documentStatus,

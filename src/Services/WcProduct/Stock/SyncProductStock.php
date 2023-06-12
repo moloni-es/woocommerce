@@ -42,6 +42,7 @@ class SyncProductStock extends WcStockSyncAbstract
 
         $this->resultMsg = $msg;
         $this->resultData = [
+            'tag' => 'service:wcproduct:sync:stock',
             'WooCommerceId' => $this->wcProduct->get_id(),
             'WooCommerceParentId' => $this->wcProduct->get_parent_id(),
             'WooCommerceStock' => $wcStock,

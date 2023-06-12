@@ -60,6 +60,7 @@ class UpdateSimpleProduct extends WcProductSyncAbstract
         $message = sprintf(__('Simple product updated in WooCommerce (%s)', 'moloni_es'), $this->wcProduct->get_sku());
 
         Storage::$LOGGER->info($message, [
+            'tag' => 'service:wcproduct:simple:update',
             'moloniId' => $this->moloniProduct['productId'],
             'moloniParentId' => 0,
             'wcId' => $this->wcProduct->get_id(),

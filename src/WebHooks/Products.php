@@ -88,8 +88,10 @@ class Products
             $this->reply(0, $exception->getMessage());
         } catch (Exception $exception) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
-                'message' => $exception->getMessage()
-            ]);
+                    'tag' => 'webhook:product:fatalerror',
+                    'message' => $exception->getMessage()
+                ]
+            );
 
             $this->reply(0, $exception->getMessage());
         }

@@ -89,7 +89,7 @@ class ProductUpdate
             Notice::addmessagecustom(htmlentities($e->geterror()));
 
             Storage::$LOGGER->error(__('Error synchronizing products to Moloni', 'moloni_es'), [
-                'action' => 'automatic:product:save',
+                'tag' => 'automatic:product:save:error',
                 'exception' => $e->getMessage(),
                 'data' => [
                     'wcProductId' => $this->wcProductId,
@@ -99,7 +99,7 @@ class ProductUpdate
             ]);
         } catch (Exception $e) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
-                'action' => 'automatic:product:save',
+                'tag' => 'automatic:product:save:fatalerror',
                 'exception' => $e->getMessage(),
                 'data' => [
                     'wcProductId' => $this->wcProductId,

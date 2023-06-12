@@ -63,6 +63,7 @@ class UpdateSimpleProduct extends MoloniProductSyncAbstract
         $message = sprintf(__('Simple product updated in Moloni (%s)', 'moloni_es'), $this->moloniProduct['reference']);
 
         Storage::$LOGGER->info($message, [
+            'tag' => 'service:mlproduct:simple:update',
             'moloniId' => $this->moloniProduct['productId'],
             'moloniParentId' => 0,
             'wcId' => $this->wcProduct->get_id(),

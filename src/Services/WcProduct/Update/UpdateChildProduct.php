@@ -53,6 +53,7 @@ class UpdateChildProduct extends WcProductSyncAbstract
         $message = sprintf(__('Child product updated in WooCommerce (%s)', 'moloni_es'), $this->wcProduct->get_sku());
 
         Storage::$LOGGER->info($message, [
+            'tag' => 'service:wcproduct:child:update',
             'moloniId' => $this->moloniProduct['productId'],
             'moloniParentId' => $this->moloniProduct['parent']['productId'],
             'wcId' => $this->wcProduct->get_id(),

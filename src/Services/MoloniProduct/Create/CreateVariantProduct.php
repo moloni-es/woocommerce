@@ -64,6 +64,7 @@ class CreateVariantProduct extends MoloniProductSyncAbstract
         $message = sprintf(__('Product with variants created in Moloni (%s)', 'moloni_es'), $this->moloniProduct['reference']);
 
         Storage::$LOGGER->info($message, [
+            'tag' => 'service:mlproduct:variant:create',
             'moloniId' => $this->moloniProduct['productId'],
             'moloniParentId' => 0,
             'wcId' => $this->wcProduct->get_id(),

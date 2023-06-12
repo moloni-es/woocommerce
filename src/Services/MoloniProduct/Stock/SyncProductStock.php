@@ -144,6 +144,7 @@ class SyncProductStock extends MoloniStockSyncAbstract
 
         $this->resultMsg = $msg;
         $this->resultData = [
+            'tag' => 'service:mlproduct:sync:stock',
             'WooCommerceId' => $this->wcProduct->get_id(),
             'WooCommerceParentId' => $this->wcProduct->get_parent_id(),
             'WooCommerceStock' => $wcStock,

@@ -41,7 +41,9 @@ class OrderPaid
                 __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
                 __('Complete', 'moloni_es'),
                 $orderName
-            ));
+            ), [
+                'tag' => 'automatic:document:create:complete:start',
+            ]);
 
             try {
                 $service->run();
@@ -56,9 +58,8 @@ class OrderPaid
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
 
-                Storage::$LOGGER->alert(
-                    $message,
-                    [
+                Storage::$LOGGER->alert($message, [
+                        'tag' => 'automatic:document:create:complete:warning',
                         'message' => $e->getMessage(),
                         'request' => $e->getData()
                     ]
@@ -72,16 +73,15 @@ class OrderPaid
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
 
-                Storage::$LOGGER->error(
-                    $message,
-                    [
+                Storage::$LOGGER->error($message, [
+                        'tag' => 'automatic:document:create:complete:error',
                         'message' => $e->getMessage(),
                         'request' => $e->getData()
                     ]
                 );
             } catch (Exception $ex) {
                 Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
-                    'action' => 'automatic:document:create:complete',
+                    'tag' => 'automatic:document:create:complete:fatalerror',
                     'exception' => $ex->getMessage()
                 ]);
             }
@@ -98,7 +98,10 @@ class OrderPaid
                 __("Automatically generating order document in status '%s' (%s)", 'moloni_es'),
                 __('Processing', 'moloni_es'),
                 $orderName
-            ));
+            ), [
+                    'tag' => 'automatic:document:create:processing:start',
+                ]
+            );
 
             try {
                 $service->run();
@@ -113,9 +116,8 @@ class OrderPaid
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
 
-                Storage::$LOGGER->alert(
-                    $message,
-                    [
+                Storage::$LOGGER->alert($message, [
+                        'tag' => 'automatic:document:create:processing:warning',
                         'message' => $e->getMessage(),
                         'request' => $e->getData()
                     ]
@@ -129,16 +131,15 @@ class OrderPaid
 
                 Notice::addmessagecustom(htmlentities($e->getError()));
 
-                Storage::$LOGGER->error(
-                    $message,
-                    [
+                Storage::$LOGGER->error($message, [
+                        'tag' => 'automatic:document:create:processing:error',
                         'message' => $e->getMessage(),
                         'request' => $e->getData()
                     ]
                 );
             } catch (Exception $ex) {
                 Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
-                    'action' => 'automatic:document:create:processing',
+                    'tag' => 'automatic:document:create:processing:fatalerror',
                     'exception' => $ex->getMessage()
                 ]);
             }

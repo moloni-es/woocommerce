@@ -55,9 +55,8 @@ class Ajax
             $message .= ' </br>';
             $message .= $e->getMessage();
 
-            Storage::$LOGGER->alert(
-                $message,
-                [
+            Storage::$LOGGER->alert($message, [
+                    'tag' => 'ajax:document:create:warning',
                     'message' => $e->getMessage(),
                     'request' => $e->getData()
                 ]
@@ -69,9 +68,8 @@ class Ajax
             $message .= ' </br>';
             $message .= strip_tags($e->getMessage());
 
-            Storage::$LOGGER->error(
-                $message,
-                [
+            Storage::$LOGGER->error($message, [
+                    'tag' => 'ajax:document:create:error',
                     'message' => $e->getMessage(),
                     'request' => $e->getData()
                 ]
@@ -80,7 +78,7 @@ class Ajax
             $response = ['valid' => 0, 'message' => $e->getMessage(), 'data' => $e->getData()];
         } catch (Exception $e) {
             Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
-                'action' => 'bulk:document:create',
+                'tag' => 'ajax:document:create:fatalerror',
                 'exception' => $e->getMessage()
             ]);
 

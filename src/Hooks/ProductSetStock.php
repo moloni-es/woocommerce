@@ -57,10 +57,8 @@ class ProductSetStock
             $message .= ' </br>';
             $message .= $e->getMessage();
 
-            Storage::$LOGGER->error(
-                $message,
-                [
-                    'action' => 'automatic:product:stock',
+            Storage::$LOGGER->error($message, [
+                    'tag' => 'automatic:product:stock:error',
                     'message' => $e->getMessage(),
                     'request' => $e->getData()
                 ]
