@@ -3,6 +3,9 @@
 namespace MoloniES\Services\Exports;
 
 use Exception;
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
 use WC_Product;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\APIExeption;
@@ -37,27 +40,27 @@ class ExportStockChanges extends ExportService
          * @var $wcProduct WC_Product
          */
         foreach ($wcProducts->products as $wcProduct) {
+            try {
+                $moloniProduct = $this->fetchMoloniProduct($wcProduct);
+            } catch (APIExeption $e) {
+                $this->errorProducts[] = [$wcProduct->get_id() => 'Error fetching product.'];
+
+                continue;
+            }
+
+            if (empty($moloniProduct)) {
+                $this->errorProducts[] = [$wcProduct->get_id() => 'Product does not exist in Moloni.'];
+
+                continue;
+            }
+
+            if ((int)$moloniProduct['hasStock'] === Boolean::NO) {
+                $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni product does not manage stock.'];
+
+                continue;
+            }
+
             if ($wcProduct->is_type('variable')) {
-                try {
-                    $moloniProduct = $this->fetchMoloniProduct($wcProduct);
-                } catch (APIExeption $e) {
-                    $this->errorProducts[] = [$wcProduct->get_id() => 'Error fetching product.'];
-
-                    continue;
-                }
-
-                if (empty($moloniProduct)) {
-                    $this->errorProducts[] = [$wcProduct->get_id() => 'Product does not exist in Moloni.'];
-
-                    continue;
-                }
-
-                if ((int)$moloniProduct['hasStock'] === Boolean::NO) {
-                    $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni product does not manage stock.'];
-
-                    continue;
-                }
-
                 /** Both need to be the same kind */
                 if (!empty($moloniProduct['variants']) !== $wcProduct->is_type('variable')) {
                     $this->errorProducts[] = [$wcProduct->get_id() => 'Product types do not match'];
@@ -66,6 +69,18 @@ class ExportStockChanges extends ExportService
                 }
 
                 $childIds = $wcProduct->get_children();
+
+                $targetId = $moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
+
+                try {
+                    $propertyGroup = (new GetOrUpdatePropertyGroup($wcProduct, $targetId))->handle();
+                } catch (HelperException $e) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Error getting or updating property group.'];
+
+                    continue;
+                }
+
+                SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $moloniProduct['productId']);
 
                 foreach ($childIds as $childId) {
                     $wcVariation = wc_get_product($childId);
@@ -76,10 +91,13 @@ class ExportStockChanges extends ExportService
                         continue;
                     }
 
-                    $moloniVariant = [];
+                    $moloniVariant = (new FindVariant(
+                        $wcProduct->get_id(),
+                        $wcVariation->get_sku(),
+                        $moloniProduct['variants'],
+                        $propertyGroup['variants'][$childId] ?? []
+                    ))->run();
 
-                    // todo: find variant here
-                    // todo: copy from order product, from line 558 till 576
 
                     if (empty($moloniVariant)) {
                         $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni variant not found.'];
@@ -92,26 +110,6 @@ class ExportStockChanges extends ExportService
             } else {
                 if (!$wcProduct->managing_stock()) {
                     $this->errorProducts[] = [$wcProduct->get_id() => 'WooCommerce product does not manage stock.'];
-
-                    continue;
-                }
-
-                try {
-                    $moloniProduct = $this->fetchMoloniProduct($wcProduct);
-                } catch (APIExeption $e) {
-                    $this->errorProducts[] = [$wcProduct->get_id() => 'Error fetching product.'];
-
-                    continue;
-                }
-
-                if (empty($moloniProduct)) {
-                    $this->errorProducts[] = [$wcProduct->get_id() => 'Product does not exist in Moloni.'];
-
-                    continue;
-                }
-
-                if ((int)$moloniProduct['hasStock'] === Boolean::NO) {
-                    $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni product does not manage stock.'];
 
                     continue;
                 }
@@ -129,17 +127,18 @@ class ExportStockChanges extends ExportService
         );
     }
 
-    private function syncProduct($wcProduct, $moloniProduct)
+    private function syncProduct($wcProductOrVariation, $moloniProductOrVariant)
     {
         try {
-            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id());
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductOrVariation->get_id());
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $moloniProductOrVariant['productId']);
 
-            $service = new SyncProductStock($wcProduct, $moloniProduct);
+            $service = new SyncProductStock($wcProductOrVariation, $moloniProductOrVariant);
             $service->run();
 
-            $this->syncedProducts[] = [$wcProduct->get_id() => $service->getResultMsg()];
+            $this->syncedProducts[] = [$wcProductOrVariation->get_id() => $service->getResultMsg()];
         } catch (MoloniException|Exception $e) {
-            $this->errorProducts[] = [$wcProduct->get_id() => $e->getMessage()];
+            $this->errorProducts[] = [$wcProductOrVariation->get_id() => $e->getMessage()];
         }
     }
 }
