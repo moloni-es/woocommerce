@@ -3,8 +3,9 @@
 namespace MoloniES\Services\Exports;
 
 use Exception;
-use MoloniES\Enums\Boolean;
 use WC_Product;
+use MoloniES\Enums\Boolean;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Storage;
 use MoloniES\Tools\SyncLogs;
 use MoloniES\Enums\SyncLogsType;
@@ -37,6 +38,33 @@ class ExportStockChanges extends ExportService
          */
         foreach ($wcProducts->products as $wcProduct) {
             if ($wcProduct->is_type('variable')) {
+                try {
+                    $moloniProduct = $this->fetchMoloniProduct($wcProduct);
+                } catch (APIExeption $e) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Error fetching product.'];
+
+                    continue;
+                }
+
+                if (empty($moloniProduct)) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Product does not exist in Moloni.'];
+
+                    continue;
+                }
+
+                if ((int)$moloniProduct['hasStock'] === Boolean::NO) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni product does not manage stock.'];
+
+                    continue;
+                }
+
+                /** Both need to be the same kind */
+                if (!empty($moloniProduct['variants']) !== $wcProduct->is_type('variable')) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Product types do not match'];
+
+                    continue;
+                }
+
                 $childIds = $wcProduct->get_children();
 
                 foreach ($childIds as $childId) {
@@ -48,7 +76,18 @@ class ExportStockChanges extends ExportService
                         continue;
                     }
 
-                    $this->syncProduct($wcVariation);
+                    $moloniVariant = [];
+
+                    // todo: find variant here
+                    // todo: copy from order product, from line 558 till 576
+
+                    if (empty($moloniVariant)) {
+                        $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni variant not found.'];
+
+                        continue;
+                    }
+
+                    $this->syncProduct($wcVariation, $moloniVariant);
                 }
             } else {
                 if (!$wcProduct->managing_stock()) {
@@ -57,7 +96,27 @@ class ExportStockChanges extends ExportService
                     continue;
                 }
 
-                $this->syncProduct($wcProduct);
+                try {
+                    $moloniProduct = $this->fetchMoloniProduct($wcProduct);
+                } catch (APIExeption $e) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Error fetching product.'];
+
+                    continue;
+                }
+
+                if (empty($moloniProduct)) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Product does not exist in Moloni.'];
+
+                    continue;
+                }
+
+                if ((int)$moloniProduct['hasStock'] === Boolean::NO) {
+                    $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni product does not manage stock.'];
+
+                    continue;
+                }
+
+                $this->syncProduct($wcProduct, $moloniProduct);
             }
         }
 
@@ -70,23 +129,9 @@ class ExportStockChanges extends ExportService
         );
     }
 
-    private function syncProduct($wcProduct)
+    private function syncProduct($wcProduct, $moloniProduct)
     {
         try {
-            $moloniProduct = $this->fetchMoloniProduct($wcProduct);
-
-            if (empty($moloniProduct)) {
-                $this->errorProducts[] = [$wcProduct->get_id() => 'Product does not exist in Moloni.'];
-
-                return;
-            }
-
-            if ((int)$moloniProduct['hasStock'] === Boolean::NO) {
-                $this->errorProducts[] = [$wcProduct->get_id() => 'Moloni product does not manage stock.'];
-
-                return;
-            }
-
             SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id());
 
             $service = new SyncProductStock($wcProduct, $moloniProduct);

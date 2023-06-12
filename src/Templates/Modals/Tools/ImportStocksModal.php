@@ -4,7 +4,7 @@
     </h2>
     <div>
         <p>
-            <?= __('This tool will fetch all your Moloni products and synchronize your WooCommerec stocks with the ones on your Moloni account.', 'moloni_es') ?>
+            <?= __('This tool will fetch all your Moloni products and synchronize your WooCommerce stocks with the ones on your Moloni account.', 'moloni_es') ?>
         </p>
         <p>
             <?= __('This may take a while, so, please keep this window open until the process finishes.', 'moloni_es') ?>

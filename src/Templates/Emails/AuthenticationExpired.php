@@ -53,19 +53,24 @@ if (!defined('ABSPATH')) {
                                     </h1>
                                     <span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;"></span>
                                     <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                        <?= __("You're getting this email because there was an error getting new Moloni authentication tokens in your Prestashop plugin.", 'moloni_es') ?>
+                                        <?= __("You're getting this email because there was an error getting new Moloni authentication tokens in your Wordpress plugin.", 'moloni_es') ?>
                                     </p>
 
                                     <br>
 
                                     <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                        <?= __('Please access the Moloni Spain plugin from your Prestashop store admin panel and confirm the authentication status of your account.', 'moloni_es') ?>
+                                        <?= __('Please access the Moloni Spain plugin from your WooCommerce store admin panel and confirm the authentication status of your account.', 'moloni_es') ?>
                                     </p>
 
                                     <br>
 
                                     <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
-                                        <?= __('If the authentication has expired, please proceed with the authentication process again, which you can consult <a href="https://www.moloni.es/faqs/como-conectar-tu-tienda-prestashop-con-moloni">here</a>.', 'moloni_es') ?>
+                                        <?=
+                                        sprintf(
+                                            __('If the authentication has expired, please proceed with the authentication process again, which you can consult <a href="%s">here</a>.', 'moloni_es'),
+                                            'https://www.moloni.es/faqs/como-conectar-tu-tienda-prestashop-con-moloni'
+                                        );
+                                        ?>
                                     </p>
 
                                     <br>

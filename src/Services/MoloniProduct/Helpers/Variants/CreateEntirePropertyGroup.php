@@ -61,7 +61,7 @@ class CreateEntirePropertyGroup extends VariantHelperAbstract
 
         /** Loop like crazy trying to find a free group name */
         for ($idx = 1; $idx <= 1000; $idx++) {
-            $newGroupName = "Prestashop-" . str_pad($idx, 3, '0', STR_PAD_LEFT);
+            $newGroupName = "WooCommerce-" . str_pad($idx, 3, '0', STR_PAD_LEFT);
 
             if ($this->findInName($this->moloniPropertyGroups, $newGroupName) === false) {
                 break;
