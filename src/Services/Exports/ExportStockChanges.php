@@ -80,6 +80,8 @@ class ExportStockChanges extends ExportService
                     continue;
                 }
 
+                /** Give timeouts to parent's as well */
+                SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id());
                 SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $moloniProduct['productId']);
 
                 foreach ($childIds as $childId) {
