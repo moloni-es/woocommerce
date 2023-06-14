@@ -127,10 +127,12 @@ class Curl
             $variables['options']['pagination']['qty'] = 50;
             $variables['options']['pagination']['page'] = $page;
 
-            $result = self::simple($action, $query, $variables);
+            $fetch = self::simple($action, $query, $variables);
 
-            $pagination = $result['data'][$keyString]['options']['pagination'];
-            $array = array_merge($array, $result['data'][$keyString]['data']);
+            $pagination = $fetch['data'][$keyString]['options']['pagination'] ?? ['count' => 0, 'qty' => 0, 'page' => 0];
+            $results = $fetch['data'][$keyString]['data'] ?? [];
+
+            $array = array_merge($array, $results);
 
             $page++;
         } while (($pagination['count'] > ($pagination['qty'] * $pagination['page'])) && $page <= 1000);
