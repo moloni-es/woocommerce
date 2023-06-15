@@ -21,10 +21,10 @@ class Model
     /**
      * Adds client id and secret to the database
      *
-     * @param int $clientId
+     * @param string $clientId
      * @param string $clientSecret
      */
-    public static function setClient(int $clientId, string $clientSecret)
+    public static function setClient(string $clientId, string $clientSecret)
     {
         global $wpdb;
 

@@ -21,11 +21,11 @@ try {
     <input type='hidden' value='saveAutomations' name='action'>
     <div>
         <h2 class="title">
-            <?= __('Automatic actions from Wordpress', 'moloni_es') ?>
+            <?= __('Automatic actions from WooCommerce', 'moloni_es') ?>
         </h2>
 
         <div class="subtitle">
-            (<?= __('This actions happen when an action occours in your Wordpress site.', 'moloni_es') ?>)
+            (<?= __('This actions happen when an action occours in your WooCommerce store.', 'moloni_es') ?>)
         </div>
 
         <table class="form-table">
@@ -117,7 +117,7 @@ try {
                         </optgroup>
                     </select>
                     <p class='description'>
-                        <?= __('This warehouse will be used when a product is inserted or updated in Wordpress', 'moloni_es') ?>
+                        <?= __('This warehouse will be used when a product is inserted or updated in WooCommerce', 'moloni_es') ?>
                     </p>
                 </td>
             </tr>

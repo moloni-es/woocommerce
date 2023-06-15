@@ -419,7 +419,16 @@ try {
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                    <p class='description'><?= __('Custom field associated with the customer\'s VAT', 'moloni_es') ?></p>
+                    <p class='description'>
+                        <?= __('Custom field associated with the customer\'s VAT', 'moloni_es') ?>
+                        <br>
+                        <?=
+                        sprintf(
+                            __('If you don\'t have any fields VAT yet, you can add the available plugin <a target="_blank" href="%s">here.</a>', 'moloni_es'),
+                            'https://wordpress.org/plugins/contribuinte-checkout/'
+                        );
+                        ?>
+                    </p>
                 </td>
             </tr>
             </tbody>
