@@ -191,9 +191,10 @@ class Start
      * @return void
      */
     private static function logout() {
+        Model::resetTokens();
+
         try {
             WebHooks::deleteHooks();
-            Model::resetTokens();
         } catch (APIExeption $e) {}
     }
 
