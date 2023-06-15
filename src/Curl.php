@@ -61,14 +61,18 @@ class Curl
             $variables['companyId'] = Storage::$MOLONI_ES_COMPANY_ID;
         }
 
-        $data = json_encode(['query' => $query, 'variables' => $variables]);
+        $data = ['query' => $query];
+
+        if (!empty($variables)) {
+            $data['variables'] = $variables;
+        }
 
         $args = [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN
             ],
-            'body' => $data,
+            'body' => json_encode($data),
             'timeout' => 45
         ];
 
