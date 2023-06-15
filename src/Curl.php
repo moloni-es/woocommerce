@@ -43,7 +43,11 @@ class Curl
             $variables['companyId'] = Storage::$MOLONI_ES_COMPANY_ID;
         }
 
-        $data = json_encode(['query' => $query, 'variables' => $variables]);
+        $data = ['query' => $query];
+
+        if (!empty($variables)) {
+            $data['variables'] = $variables;
+        }
 
         $args = [
             'headers' => [
@@ -51,7 +55,7 @@ class Curl
                 'Authorization' => 'Bearer ' . Storage::$MOLONI_ES_ACCESS_TOKEN,
                 'user-agent' => self::$userAgent
             ],
-            'body' => $data,
+            'body' => json_encode($data),
             'timeout' => 45
         ];
 
