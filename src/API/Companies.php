@@ -84,6 +84,14 @@ class Companies extends EndpointAbstract
                         currencyId
                         iso4217
                     }
+                    subscription {
+                        subscriptionId
+                        plan 
+                        {
+                            planId
+                            code
+                        }
+                    }
                 }
                 options
                 {

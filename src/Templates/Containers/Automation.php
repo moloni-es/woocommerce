@@ -4,13 +4,16 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use MoloniES\API\Companies;
 use MoloniES\API\Warehouses;
+use MoloniES\Enums\MoloniPlans;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\AutomaticDocumentsStatus;
 
 try {
     $warehouses = Warehouses::queryWarehouses();
+    $company = Companies::queryCompany()['data']['company']['data'] ?? [];
 } catch (APIExeption $e) {
     $e->showError();
     return;
@@ -209,6 +212,40 @@ try {
 
         <table class="form-table">
             <tbody>
+
+
+            <?php if (MoloniPlans::hasVariants((int)($company['subscription'][0]['plan']['planId'] ?? 0))) : ?>
+                <tr>
+                    <th>
+                        <label for="sync_products_with_variants">
+                            <?= __('Sync products with variants/variations', 'moloni_es') ?>
+                        </label>
+                    </th>
+                    <td>
+                        <?php $syncProductsWithVariants = defined('SYNC_PRODUCTS_WITH_VARIANTS') ? (int)SYNC_PRODUCTS_WITH_VARIANTS : 0; ?>
+
+                        <select id="sync_products_with_variants" name='opt[sync_products_with_variants]' class='inputOut'>
+                            <option value='0' <?= ($syncProductsWithVariants === Boolean::NO ? 'selected' : '') ?>>
+                                <?= __('No', 'moloni_es') ?>
+                            </option>
+                            <option value='1' <?= ($syncProductsWithVariants === Boolean::YES ? 'selected' : '') ?>>
+                                <?= __('Yes', 'moloni_es') ?>
+                            </option>
+                        </select>
+                        <p class='description'>
+                            <?= __('WooCommerce product with variations will be created in Moloni as products with variants. If disabled, each WooCommerce variation will be created as a simple product.', 'moloni_es') ?>
+                            <br/>
+                            <?= __('Moloni product with variants will be created in WooCommerce as products with variations. If disabled, Moloni products with variants will not be synchronized.', 'moloni_es') ?>
+                        </p>
+                    </td>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <td>
+                        <input type='hidden' id='sync_products_with_variants' name='opt[sync_products_with_variants]' value="0">
+                    </td>
+                </tr>
+            <?php endif; ?>
 
             <tr>
                 <th>
