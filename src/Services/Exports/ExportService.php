@@ -3,6 +3,7 @@
 namespace MoloniES\Services\Exports;
 
 use MoloniES\API\Products;
+use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Tools\ProductAssociations;
 use WC_Product;
@@ -133,6 +134,13 @@ abstract class ExportService
         }
 
         return [];
+    }
+
+    //          Auxiliary          //
+
+    protected function shouldSyncProductWithVariations(): bool
+    {
+        return defined('SYNC_PRODUCTS_WITH_VARIANTS') && (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::YES;
     }
 
     //              Abstracts              //

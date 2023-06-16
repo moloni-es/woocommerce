@@ -43,10 +43,16 @@ class ImportProducts extends ImportService
 
         foreach ($data as $product) {
             if (References::isIgnoredReference($product['reference'])) {
+                $this->errorProducts[] = [$product['reference'] => 'Reference is blacklisted'];
+
                 continue;
             }
 
-            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $product['productId']);
+            if (!empty($product['variants']) && !$this->shouldSyncProductWithVariants()) {
+                $this->errorProducts[] = [$product['reference'] => 'Synchronization of products with variants is disabled'];
+
+                continue;
+            }
 
             $wcProduct = $this->fetchWcProduct($product);
 
@@ -58,39 +64,60 @@ class ImportProducts extends ImportService
 
             try {
                 if (empty($product['variants'])) {
-                    $service = new CreateSimpleProduct($product);
-                    $service->run();
-
-                    SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $service->getWcProduct()->get_id());
+                    $this->createProductSimple($product);
                 } else {
-                    $service = new CreateParentProduct($product);
-                    $service->run();
-
-                    $wcParentProduct = $service->getWcProduct();
-
-                    SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcParentProduct->get_id());
-
-                    foreach ($product['variants'] as $variant) {
-                        if ((int)$variant['visible'] === Boolean::NO) {
-                            continue;
-                        }
-
-                        $service = new CreateChildProduct($variant, $wcParentProduct);
-                        $service->run();
-                    }
+                    $this->createProductWithVariations($product);
                 }
             } catch (Exception $exception) {
                 $this->errorProducts[] = [$product['reference'] => $exception->getMessage()];
             }
-
-            $this->syncedProducts[] = $product['reference'];
         }
 
         Storage::$LOGGER->info(sprintf(__('Products import. Part %s', 'moloni_es'), $this->page), [
                 'tag' => 'tool:import:product',
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
+                'settings' => [
+                    'syncProductWithVariations' => $this->shouldSyncProductWithVariants()
+                ]
             ]
         );
+    }
+
+    //              Privates              //
+
+    private function createProductSimple(array $product)
+    {
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $product['productId']);
+
+        $service = new CreateSimpleProduct($product);
+        $service->run();
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $service->getWcProduct()->get_id());
+
+        $this->syncedProducts[] = $product['reference'];
+    }
+
+    private function createProductWithVariations(array $product)
+    {
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $product['productId']);
+
+        $service = new CreateParentProduct($product);
+        $service->run();
+
+        $wcParentProduct = $service->getWcProduct();
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcParentProduct->get_id());
+
+        foreach ($product['variants'] as $variant) {
+            if ((int)$variant['visible'] === Boolean::NO) {
+                continue;
+            }
+
+            $service = new CreateChildProduct($variant, $wcParentProduct);
+            $service->run();
+        }
+
+        $this->syncedProducts[] = $product['reference'];
     }
 }

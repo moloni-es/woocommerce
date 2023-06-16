@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\Imports;
 
+use MoloniES\Enums\Boolean;
 use MoloniES\Tools\ProductAssociations;
 use WC_Product;
 
@@ -120,14 +121,17 @@ abstract class ImportService
         $wcProductId = wc_get_product_id_by_sku($moloniVariant['reference']);
 
         if ($wcProductId > 0) {
-            $wcProduct = wc_get_product($wcProductId);
-
-            if (!empty($wcProduct)) {
-                return $wcProduct;
-            }
+            return wc_get_product($wcProductId);
         }
 
         return null;
+    }
+
+    //          Auxiliary          //
+
+    protected function shouldSyncProductWithVariants(): bool
+    {
+        return defined('SYNC_PRODUCTS_WITH_VARIANTS') && (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::YES;
     }
 
     //              Abstracts              //
