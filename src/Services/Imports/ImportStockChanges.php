@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\Imports;
 
+use MoloniES\Exceptions\HelperException;
 use WC_Product;
 use Exception;
 use MoloniES\API\Products;
@@ -117,6 +118,11 @@ class ImportStockChanges extends ImportService
         $this->syncedProducts[] = [$product['reference'] => $service->getResultMsg()];
     }
 
+    /**
+     * Import product stock from product with variation
+     *
+     * @throws HelperException
+     */
     private function importProductWithVariantsStock(WC_Product $wcProduct, array $product)
     {
         /** Both need to be the same kind */

@@ -4,6 +4,7 @@ namespace MoloniES;
 
 use MoloniES\API\Companies;
 use MoloniES\Enums\Boolean;
+use MoloniES\Enums\MoloniPlans;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Helpers\WebHooks;
 
@@ -105,6 +106,8 @@ class Start
                 Model::defineValues();
                 Model::defineConfigs();
 
+                self::afterCompanySelect();
+
                 return true;
             }
 
@@ -195,6 +198,30 @@ class Start
 
         try {
             WebHooks::deleteHooks();
+        } catch (APIExeption $e) {}
+    }
+
+
+    //          Company select          //
+
+    /**
+     * After a company has been choosen
+     *
+     * @return void
+     */
+    private static function afterCompanySelect()
+    {
+        /** User already defined this option */
+        if (defined('SYNC_PRODUCTS_WITH_VARIANTS')) {
+            return;
+        }
+
+        try {
+            $company = Companies::queryCompany()['data']['company']['data'] ?? [];
+
+            if (MoloniPlans::hasVariants((int)($company['subscription'][0]['plan']['planId'] ?? 0))) {
+                self::saveOptions(['SYNC_PRODUCTS_WITH_VARIANTS' => Boolean::YES]);
+            }
         } catch (APIExeption $e) {}
     }
 
