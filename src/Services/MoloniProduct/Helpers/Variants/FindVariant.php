@@ -51,6 +51,8 @@ class FindVariant
             if (!empty($targetVariant)) {
                 return $targetVariant;
             }
+
+            ProductAssociations::deleteById($association['id']);
         }
 
         $targetVariant = $this->findVariantByVariationReference();

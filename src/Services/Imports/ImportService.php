@@ -2,12 +2,14 @@
 
 namespace MoloniES\Services\Imports;
 
-use MoloniES\Enums\Boolean;
-use MoloniES\Tools\ProductAssociations;
 use WC_Product;
+use MoloniES\Traits\SettingsTrait;
+use MoloniES\Tools\ProductAssociations;
 
 abstract class ImportService
 {
+    use SettingsTrait;
+
     /**
      * @var array
      */
@@ -98,40 +100,6 @@ abstract class ImportService
         }
 
         return null;
-    }
-
-    protected function fetchWcProductVariation(array $moloniVariant): ?WC_Product
-    {
-        /** Fetch by our associaitons table */
-
-        $association = ProductAssociations::findByMoloniId($moloniVariant['productId']);
-
-        if (!empty($association)) {
-            $wcProduct = wc_get_product($association['wc_product_id']);
-
-            if (!empty($wcProduct)) {
-                return $wcProduct;
-            }
-
-            ProductAssociations::deleteById($association['id']);
-        }
-
-        /** Fetch by reference */
-
-        $wcProductId = wc_get_product_id_by_sku($moloniVariant['reference']);
-
-        if ($wcProductId > 0) {
-            return wc_get_product($wcProductId);
-        }
-
-        return null;
-    }
-
-    //          Auxiliary          //
-
-    protected function shouldSyncProductWithVariants(): bool
-    {
-        return defined('SYNC_PRODUCTS_WITH_VARIANTS') && (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::YES;
     }
 
     //              Abstracts              //

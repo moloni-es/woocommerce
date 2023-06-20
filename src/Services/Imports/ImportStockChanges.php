@@ -2,16 +2,18 @@
 
 namespace MoloniES\Services\Imports;
 
+use WC_Product;
 use Exception;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Helpers\References;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\ParseProductProperties;
+use MoloniES\Services\WcProduct\Helpers\Variations\FindVariation;
 use MoloniES\Services\WcProduct\Stock\SyncProductStock;
 use MoloniES\Storage;
 use MoloniES\Tools\SyncLogs;
-use WC_Product;
 
 class ImportStockChanges extends ImportService
 {
@@ -52,7 +54,7 @@ class ImportStockChanges extends ImportService
                 continue;
             }
 
-            if (!empty($product['variants']) && !$this->shouldSyncProductWithVariants()) {
+            if (!empty($product['variants']) && !$this->isSyncProductWithVariantsActive()) {
                 $this->errorProducts[] = [$product['reference'] => 'Synchronization of products with variants is disabled'];
 
                 continue;
@@ -86,7 +88,7 @@ class ImportStockChanges extends ImportService
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
                 'settings' => [
-                    'syncProductWithVariations' => $this->shouldSyncProductWithVariants()
+                    'syncProductWithVariations' => $this->isSyncProductWithVariantsActive()
                 ]
             ]
         );
@@ -124,6 +126,8 @@ class ImportStockChanges extends ImportService
             return;
         }
 
+        $wcParentAttributes = (new ParseProductProperties($wcProduct))->handle();
+
         foreach ($product['variants'] as $variant) {
             $auxVariantIdentifier = $product['reference'] . ':' . $variant['reference'];
 
@@ -133,8 +137,7 @@ class ImportStockChanges extends ImportService
                 continue;
             }
 
-            // todo: improve this function
-            $wcProductVariation = $this->fetchWcProductVariation($variant);
+            $wcProductVariation = (new FindVariation($wcParentAttributes, $variant))->run();
 
             if (empty($wcProductVariation)) {
                 $this->errorProducts[] = [$auxVariantIdentifier => 'Variation not found in WooCommerce'];

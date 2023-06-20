@@ -121,8 +121,8 @@ class OrderFees
                     ],
                     [
                         'field' => 'visible',
-                        'comparison' => 'gte',
-                        'value' => '0',
+                        'comparison' => 'in',
+                        'value' => '[0, 1]'
                     ]
                 ],
                 "includeVariants" => true

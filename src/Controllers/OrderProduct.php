@@ -2,30 +2,20 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\Exceptions\ServiceException;
 use WC_Tax;
 use WC_Order;
-use WC_Product;
 use WC_Order_Item_Product;
-use MoloniES\API\Products;
-use MoloniES\Enums\SyncLogsType;
+use MoloniES\Tools;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\HelperException;
-use MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct;
-use MoloniES\Services\MoloniProduct\Create\CreateVariantProduct;
-use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariant;
-use MoloniES\Services\MoloniProduct\Helpers\Variants\GetOrUpdatePropertyGroup;
-use MoloniES\Services\MoloniProduct\Update\UpdateVariantProduct;
-use MoloniES\Tools;
-use MoloniES\Tools\ProductAssociations;
-use MoloniES\Tools\SyncLogs;
+use MoloniES\Controllers\Helpers\GetMoloniProductFromOrder;
 
 class OrderProduct
 {
 
     /** @var int */
-    public $product_id = 0;
+    private $product_id = 0;
 
     /** @var int */
     private $order;
@@ -42,10 +32,10 @@ class OrderProduct
     private $taxes = [];
 
     /** @var float */
-    public $qty;
+    private $qty;
 
     /** @var float */
-    public $price;
+    private $price;
 
     /** @var string */
     private $exemption_reason;
@@ -82,6 +72,8 @@ class OrderProduct
         $this->fiscalZone = $fiscalZone;
     }
 
+    //          Publics          //
+
     /**
      * Create product
      *
@@ -104,7 +96,38 @@ class OrderProduct
         return $this;
     }
 
-    public function setName(): OrderProduct
+    public function mapPropsToValues(): array
+    {
+        $props = [
+            'productId' => (int)$this->product_id,
+            'name' => $this->name,
+            'price' => (float)$this->price,
+            'summary' => $this->summary,
+            'ordering' => $this->order,
+            'qty' => (float)$this->qty,
+            'discount' => (float)$this->discount,
+            'exemptionReason' => '',
+            'taxes' => [],
+        ];
+
+        if (!empty($this->warehouse_id)) {
+            $props['warehouseId'] = $this->warehouse_id;
+        }
+
+        if (!empty($this->taxes)) {
+            $props['taxes'] = $this->taxes;
+        }
+
+        if (!empty($this->exemption_reason)) {
+            $props['exemptionReason'] = $this->exemption_reason;
+        }
+
+        return $props;
+    }
+
+    //          Sets          //
+
+    private function setName(): OrderProduct
     {
         $this->name = $this->orderProduct->get_name();
 
@@ -116,7 +139,7 @@ class OrderProduct
      *
      * @return $this
      */
-    public function setSummary(): OrderProduct
+    private function setSummary(): OrderProduct
     {
         $this->summary .= $this->getSummaryVariationAttributes();
 
@@ -182,7 +205,7 @@ class OrderProduct
      *
      * @return OrderProduct
      */
-    public function setPrice(): OrderProduct
+    private function setPrice(): OrderProduct
     {
         $this->price = (float)$this->orderProduct->get_subtotal() / $this->qty;
         $refundedValue = $this->wc_order->get_total_refunded_for_item($this->orderProduct->get_id());
@@ -205,7 +228,7 @@ class OrderProduct
      *
      * @return OrderProduct
      */
-    public function setQty(): OrderProduct
+    private function setQty(): OrderProduct
     {
         $this->qty = (float)$this->orderProduct->get_quantity();
         $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->orderProduct->get_id()));
@@ -226,90 +249,11 @@ class OrderProduct
      */
     private function setProductId(): OrderProduct
     {
-        $moloniProduct = [];
-
-        $wcProductId = $this->orderProduct->get_product_id();
-        $wcVariationId = $this->orderProduct->get_variation_id();
-
-        if ($wcVariationId > 0) {
-            $association = ProductAssociations::findByWcId($wcVariationId);
-
-            /** Association found, let's fetch by ID */
-            if (!empty($association)) {
-                $moloniProduct = $this->getById($association['ml_product_id']);
-            }
-
-            if (empty($moloniProduct)) {
-                $moloniProduct = $this->getByProductParent();
-            }
-
-            /** Let's search by reference */
-            if (empty($moloniProduct)) {
-                $wcProduct = wc_get_product($wcVariationId);
-
-                if (empty($wcProduct)) {
-                    throw new DocumentError(__('Order products were deleted.','moloni_es'));
-                }
-
-                $moloniProduct = $this->getByReference($wcProduct);
-
-                /** Not found, lets create a new product */
-                if (empty($moloniProduct)) {
-                    $wcProduct = wc_get_product($wcProductId);
-
-                    if (empty($wcProduct)) {
-                        throw new DocumentError(__('Order products were deleted.','moloni_es'));
-                    }
-
-                    SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
-
-                    try {
-                        $service = new CreateVariantProduct($wcProduct);
-                        $service->run();
-                        $service->saveLog();
-                    } catch (ServiceException $e) {
-                        throw new DocumentError($e->getMessage(), $e->getData());
-                    }
-
-                    $moloniProduct = $service->getVariant($wcVariationId);
-                }
-            }
-        } else {
-            $association = ProductAssociations::findByWcId($wcProductId);
-
-            /** Association found, let's fetch by ID */
-            if (!empty($association)) {
-                $moloniProduct = $this->getById($association['ml_product_id']);
-            }
-
-            /** Let's search by reference */
-            if (empty($moloniProduct)) {
-                $wcProduct = wc_get_product($wcProductId);
-
-                if (empty($wcProduct)) {
-                    throw new DocumentError(__('Order products were deleted.','moloni_es'));
-                }
-
-                $moloniProduct = $this->getByReference($wcProduct);
-
-                /** Not found, lets create a new product */
-                if (empty($moloniProduct)) {
-                    SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
-
-                    try {
-                        $service = new CreateSimpleProduct($wcProduct);
-                        $service->run();
-                        $service->saveLog();
-                    } catch (ServiceException $e) {
-                        throw new DocumentError($e->getMessage(), $e->getData());
-                    }
-
-                    $moloniProduct = $service->getMoloniProduct();
-                }
-            }
+        try {
+            $this->product_id = (new GetMoloniProductFromOrder($this->orderProduct))->handle();
+        } catch (HelperException $e) {
+            throw new DocumentError($e->getMessage(), $e->getData());
         }
-
-        $this->product_id = $moloniProduct['productId'] ?? 0;
 
         return $this;
     }
@@ -392,12 +336,12 @@ class OrderProduct
         }
 
         $tax = [];
-        $tax['taxId'] = (int) $moloniTax['taxId'];
-        $tax['value'] = (float) $taxRate;
+        $tax['taxId'] = (int)$moloniTax['taxId'];
+        $tax['value'] = (float)$taxRate;
         $tax['ordering'] = count($this->taxes) + 1;
         $tax['cumulative'] = false;
 
-        if ((int) $moloniTax['type'] === 1) {
+        if ((int)$moloniTax['type'] === 1) {
             $this->hasIVA = true;
         }
 
@@ -414,184 +358,5 @@ class OrderProduct
         if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int)MOLONI_PRODUCT_WAREHOUSE > 0) {
             $this->warehouse_id = (int)MOLONI_PRODUCT_WAREHOUSE;
         }
-    }
-
-    public function mapPropsToValues(): array
-    {
-        $props = [
-            'productId' => (int) $this->product_id,
-            'name' => $this->name,
-            'price' => (float) $this->price,
-            'summary' => $this->summary,
-            'ordering' => $this->order,
-            'qty' => (float) $this->qty,
-            'discount' => (float) $this->discount,
-            'exemptionReason' => '',
-            'taxes' => [],
-        ];
-
-        if (!empty($this->warehouse_id)) {
-            $props['warehouseId'] = $this->warehouse_id;
-        }
-
-        if (!empty($this->taxes)) {
-            $props['taxes'] = $this->taxes;
-        }
-
-        if (!empty($this->exemption_reason)) {
-            $props['exemptionReason'] = $this->exemption_reason;
-        }
-
-        return $props;
-    }
-
-    //          REQUESTS          //
-
-    /**
-     * Get product by ID
-     *
-     * @throws DocumentError
-     */
-    protected function getById(int $productId): array
-    {
-        $variables = [
-            'productId' => $productId
-        ];
-
-        try {
-            $byId = Products::queryProduct($variables);
-        } catch (APIExeption $e) {
-            throw new DocumentError(
-                __('Error fetching products', 'moloni_es'),
-                [
-                    'message' => $e->getMessage(),
-                    'data' => $e->getData(),
-                ]
-            );
-        }
-
-        return $byId['data']['product']['data'] ?? [];
-    }
-
-    /**
-     * Get product by reference
-     *
-     * @throws DocumentError
-     */
-    protected function getByReference(WC_Product $wcProduct): array
-    {
-        $reference = $wcProduct->get_sku();
-
-        if (empty($reference)) {
-            $reference = Tools::createReferenceFromString($wcProduct->get_name());
-        }
-
-        $variables = [
-            'options' => [
-                'filter' => [
-                    [
-                        'field' => 'reference',
-                        'comparison' => 'eq',
-                        'value' => $reference,
-                    ],
-                    [
-                        'field' => 'visible',
-                        'comparison' => 'gte',
-                        'value' => '0',
-                    ]
-                ],
-                "includeVariants" => true
-            ]
-        ];
-
-        try {
-            $query = Products::queryProducts($variables);
-        } catch (APIExeption $e) {
-            throw new DocumentError(
-                __('Error fetching products', 'moloni_es'),
-                [
-                    'message' => $e->getMessage(),
-                    'data' => $e->getData(),
-                ]
-            );
-        }
-
-        $byReference = $query['data']['products']['data'] ?? [];
-
-        if (!empty($byReference) && isset($byReference[0]['productId'])) {
-            return $byReference[0];
-        }
-
-        return [];
-    }
-
-    /**
-     * Get product parent
-     *
-     * @throws DocumentError
-     */
-    protected function getByProductParent(): array
-    {
-        $wcParentId = $this->orderProduct->get_product_id();
-        $wcVariationId = $this->orderProduct->get_variation_id();
-
-        $wcProduct = wc_get_product($wcParentId);
-
-        if (empty($wcProduct)) {
-            throw new DocumentError(__('Order products were deleted.','moloni_es'));
-        }
-
-        $byReference = $this->getByReference($wcProduct);
-
-        /** Product really does not exist, can return */
-        if (empty($byReference)) {
-            return [];
-        }
-
-        $mlProduct = $byReference[0];
-
-        /** For some reason the prodcut is simple in Moloni, use that one */
-        if (empty($mlProduct['variants'])) {
-            return $mlProduct;
-        }
-
-        $targetId = $mlProduct['propertyGroup']['propertyGroupId'] ?? '';
-
-        try {
-            $propertyGroup = (new GetOrUpdatePropertyGroup($wcProduct, $targetId))->handle();
-        } catch (HelperException $e) {
-            throw new DocumentError($e->getMessage(), $e->getData());
-        }
-
-        $variant = (new FindVariant(
-            $wcProduct->get_id(),
-            $this->orderProduct['product_reference'],
-            $mlProduct['variants'],
-            $propertyGroup['variants'][$wcVariationId] ?? []
-        ))->run();
-
-        /** Variant already exists in Moloni, use that one */
-        if (!empty($variant)) {
-            return $variant;
-        }
-
-        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcParentId);
-        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $mlProduct['productId']);
-
-        try {
-            $service = new UpdateVariantProduct($wcProduct, $mlProduct);
-            $service->run();
-            $service->saveLog();
-        } catch (ServiceException $e) {
-            throw new DocumentError($e->getMessage(), $e->getData());
-        }
-
-        $variant = $service->getVariant($wcVariationId);
-
-        if (empty($variant)) {
-            throw new DocumentError(__('Could not find variant after update.','moloni_es'));
-        }
-
-        return $variant;
     }
 }

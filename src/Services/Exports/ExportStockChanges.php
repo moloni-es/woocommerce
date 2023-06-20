@@ -41,7 +41,7 @@ class ExportStockChanges extends ExportService
          */
         foreach ($wcProducts->products as $wcProduct) {
             if ($wcProduct->is_type('variable')) {
-                if ($this->shouldSyncProductWithVariations()) {
+                if ($this->isSyncProductWithVariantsActive()) {
                     $this->exportProductWithVariantsStock($wcProduct);
                 } else {
                     $this->exportProductWithVariantsAsSimpleProductStock($wcProduct);
@@ -56,7 +56,7 @@ class ExportStockChanges extends ExportService
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
                 'settings' => [
-                    'syncProductWithVariations' => $this->shouldSyncProductWithVariations()
+                    'syncProductWithVariations' => $this->isSyncProductWithVariantsActive()
                 ]
             ]
         );

@@ -57,7 +57,7 @@ class ProductView
             if (Start::login(true)) {
                 $this->wcProduct = wc_get_product(get_the_ID());
 
-                if (!$this->wcProduct || $this->wcProduct->get_sku() === '') {
+                if (!$this->wcProduct) {
                     return null;
                 }
 
@@ -140,6 +140,10 @@ class ProductView
             ProductAssociations::deleteById($association['id']);
         }
 
+        if (empty($this->wcProduct->get_sku())) {
+            return;
+        }
+
         $variables = [
             'options' => [
                 'filter' => [
@@ -150,11 +154,10 @@ class ProductView
                     ],
                     [
                         'field' => 'visible',
-                        'comparison' => 'gte',
-                        'value' => '0',
+                        'comparison' => 'in',
+                        'value' => '[0, 1]'
                     ]
-                ],
-                "includeVariants" => true
+                ]
             ]
         ];
 

@@ -42,7 +42,7 @@ class ExportProducts extends ExportService
 
             try {
                 if ($wcProduct->is_type('variable')) {
-                    if ($this->shouldSyncProductWithVariations()) {
+                    if ($this->isSyncProductWithVariantsActive()) {
                         $this->createProductWithVariants($wcProduct);
                     } else {
                         $this->createProductWithVariantsAsSimple($wcProduct);
@@ -60,7 +60,7 @@ class ExportProducts extends ExportService
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
                 'settings' => [
-                    'syncProductWithVariations' => $this->shouldSyncProductWithVariations()
+                    'syncProductWithVariations' => $this->isSyncProductWithVariantsActive()
                 ]
             ]
         );

@@ -48,7 +48,7 @@ class ImportProducts extends ImportService
                 continue;
             }
 
-            if (!empty($product['variants']) && !$this->shouldSyncProductWithVariants()) {
+            if (!empty($product['variants']) && !$this->isSyncProductWithVariantsActive()) {
                 $this->errorProducts[] = [$product['reference'] => 'Synchronization of products with variants is disabled'];
 
                 continue;
@@ -78,7 +78,7 @@ class ImportProducts extends ImportService
                 'success' => $this->syncedProducts,
                 'error' => $this->errorProducts,
                 'settings' => [
-                    'syncProductWithVariations' => $this->shouldSyncProductWithVariants()
+                    'syncProductWithVariations' => $this->isSyncProductWithVariantsActive()
                 ]
             ]
         );

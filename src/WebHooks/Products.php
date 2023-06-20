@@ -2,6 +2,10 @@
 
 namespace MoloniES\WebHooks;
 
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\ParseProductProperties;
+use MoloniES\Services\WcProduct\Helpers\Variations\FindVariation;
+use WC_Product;
 use Exception;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\Boolean;
@@ -21,10 +25,12 @@ use MoloniES\Start;
 use MoloniES\Storage;
 use MoloniES\Tools\ProductAssociations;
 use MoloniES\Tools\SyncLogs;
-use WC_Product;
+use MoloniES\Traits\SettingsTrait;
 
 class Products
 {
+    use SettingsTrait;
+
     /**
      * Moloni product
      *
@@ -66,9 +72,7 @@ class Products
 
             $this->fetchMoloniProduct($productId);
 
-            if (!$this->isProductValid()) {
-                return;
-            }
+            $this->validateMoloniProduct();
 
             //switch between operations
             switch ($parameters['operation']) {
@@ -107,7 +111,11 @@ class Products
 
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
-        if (!empty($wcProduct) || SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])) {
+        if (!empty($wcProduct)) {
+            return;
+        }
+
+        if (SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])) {
             return;
         }
 
@@ -136,6 +144,11 @@ class Products
         }
     }
 
+    /**
+     * On Moloni product update
+     *
+     * @throws HelperException
+     */
     private function onUpdate()
     {
         if (!$this->shouldSyncProduct()) {
@@ -144,37 +157,36 @@ class Products
 
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
-        if (
-            empty($wcProduct) ||
-            SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id()) ||
-            SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])
-        ) {
+        if (empty($wcProduct)) {
             return;
         }
-
-        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
-        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId']);
 
         /** Both need to be the same kind */
         if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
             return;
         }
 
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id()) ||
+            SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])) {
+            return;
+        }
+
+        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
+        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId']);
+
         if ($this->moloniProductHasVariants()) {
             $service = new UpdateParentProduct($this->moloniProduct, $wcProduct);
             $service->run();
             $service->saveLog();
+
+            $wcParentAttributes = (new ParseProductProperties($wcProduct))->handle();
 
             foreach ($this->moloniProduct['variants'] as $variant) {
                 if ((int)$variant['visible'] === Boolean::NO) {
                     continue;
                 }
 
-                $wcProductVariation = $this->fetchWcProductVariation($variant);
-
-                if ($wcProductVariation->get_parent_id() !== $wcProduct->get_id()) {
-                    continue;
-                }
+                $wcProductVariation = (new FindVariation($wcParentAttributes, $variant))->run();
 
                 if (empty($wcProductVariation)) {
                     $service = new CreateChildProduct($variant, $wcProduct);
@@ -192,6 +204,11 @@ class Products
         }
     }
 
+    /**
+     * On Moloni stock update
+     *
+     * @throws HelperException
+     */
     private function onStockUpdate()
     {
         if (!$this->shouldSyncStock()) {
@@ -200,11 +217,12 @@ class Products
 
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
-        if (
-            empty($wcProduct) ||
-            SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id()) ||
-            SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $this->moloniProduct['productId'])
-        ) {
+        if (empty($wcProduct)) {
+            return;
+        }
+
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id()) ||
+            SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $this->moloniProduct['productId'])) {
             return;
         }
 
@@ -217,18 +235,17 @@ class Products
         }
 
         if ($this->moloniProductHasVariants()) {
+
+            $wcParentAttributes = (new ParseProductProperties($wcProduct))->handle();
+
             foreach ($this->moloniProduct['variants'] as $variant) {
                 if ((int)$variant['visible'] === Boolean::NO || (int)$variant['hasStock'] === Boolean::NO) {
                     continue;
                 }
 
-                $wcProductVariation = $this->fetchWcProductVariation($variant);
+                $wcProductVariation = (new FindVariation($wcParentAttributes, $variant))->run();
 
                 if (empty($wcProductVariation) || !$wcProductVariation->managing_stock()) {
-                    continue;
-                }
-
-                if ($wcProductVariation->get_parent_id() !== $wcProduct->get_id()) {
                     continue;
                 }
 
@@ -257,6 +274,8 @@ class Products
     //            Auxiliary            //
 
     /**
+     * Fetch Moloni product
+     *
      * @throws WebhookException
      */
     private function fetchMoloniProduct(int $productId)
@@ -300,37 +319,6 @@ class Products
         return null;
     }
 
-    private function fetchWcProductVariation(array $moloniVariant): ?WC_Product
-    {
-        /** Fetch by our associaitons table */
-
-        $association = ProductAssociations::findByMoloniId($moloniVariant['productId']);
-
-        if (!empty($association)) {
-            $wcProduct = wc_get_product($association['wc_product_id']);
-
-            if (!empty($wcProduct)) {
-                return $wcProduct;
-            }
-
-            ProductAssociations::deleteById($association['id']);
-        }
-
-        /** Fetch by reference */
-
-        $wcProductId = wc_get_product_id_by_sku($moloniVariant['reference']);
-
-        if ($wcProductId > 0) {
-            $wcProduct = wc_get_product($wcProductId);
-
-            if (!empty($wcProduct)) {
-                return $wcProduct;
-            }
-        }
-
-        return null;
-    }
-
     /**
      * Checks if hash with company id hash
      *
@@ -355,10 +343,16 @@ class Products
         return defined('HOOK_STOCK_SYNC') && (int)HOOK_STOCK_SYNC === Boolean::YES;
     }
 
+    private function moloniProductHasVariants(): bool
+    {
+        return !empty($this->moloniProduct['variants']);
+    }
+
     /**
+     * Validate Moloni product data
      * @throws WebhookException
      */
-    private function isProductValid(): bool
+    private function validateMoloniProduct()
     {
         /** Product not found */
         if (empty($this->moloniProduct)) {
@@ -375,11 +369,12 @@ class Products
             throw new WebhookException(__('Product reference blacklisted!', 'moloni_es'));
         }
 
-        return true;
-    }
-
-    private function moloniProductHasVariants(): bool
-    {
-        return !empty($this->moloniProduct['variants']);
+        /** Do not sync product with varianst if settings is not set */
+        if (
+            $this->moloniProductHasVariants() &&
+            (!defined('SYNC_PRODUCTS_WITH_VARIANTS') || (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::NO)
+        ) {
+            throw new WebhookException(__('Synchronization of products with variants is disabled', 'moloni_es'));
+        }
     }
 }

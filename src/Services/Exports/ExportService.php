@@ -6,10 +6,13 @@ use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Tools\ProductAssociations;
+use MoloniES\Traits\SettingsTrait;
 use WC_Product;
 
 abstract class ExportService
 {
+    use SettingsTrait;
+
     /**
      * @var array
      */
@@ -117,8 +120,8 @@ abstract class ExportService
                     ],
                     [
                         'field' => 'visible',
-                        'comparison' => 'gte',
-                        'value' => '0',
+                        'comparison' => 'in',
+                        'value' => '[0, 1]'
                     ]
                 ],
                 "includeVariants" => true
@@ -134,13 +137,6 @@ abstract class ExportService
         }
 
         return [];
-    }
-
-    //          Auxiliary          //
-
-    protected function shouldSyncProductWithVariations(): bool
-    {
-        return defined('SYNC_PRODUCTS_WITH_VARIANTS') && (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::YES;
     }
 
     //              Abstracts              //
