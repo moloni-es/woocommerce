@@ -58,7 +58,7 @@ class Ajax
             Storage::$LOGGER->alert($message, [
                     'tag' => 'ajax:document:create:warning',
                     'message' => $e->getMessage(),
-                    'request' => $e->getData()
+                    'data' => $e->getData()
                 ]
             );
 
@@ -71,7 +71,7 @@ class Ajax
             Storage::$LOGGER->error($message, [
                     'tag' => 'ajax:document:create:error',
                     'message' => $e->getMessage(),
-                    'request' => $e->getData()
+                    'data' => $e->getData()
                 ]
             );
 
@@ -79,7 +79,7 @@ class Ajax
         } catch (Exception $e) {
             Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
                 'tag' => 'ajax:document:create:fatalerror',
-                'exception' => $e->getMessage()
+                'message' => $e->getMessage()
             ]);
 
             $response = ['valid' => 0, 'message' => $e->getMessage()];

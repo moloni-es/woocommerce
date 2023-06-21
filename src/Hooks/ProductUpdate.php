@@ -3,9 +3,9 @@
 namespace MoloniES\Hooks;
 
 use Exception;
-use MoloniES\Exceptions\HookException;
 use WC_Product;
 use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\HookException;
 use MoloniES\Exceptions\ServiceException;
 use MoloniES\Traits\SettingsTrait;
 use MoloniES\API\Products;
@@ -50,6 +50,10 @@ class ProductUpdate
 
     public function productSave($wcProductId)
     {
+        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId)) {
+            return;
+        }
+
         $this->wcProductId = $wcProductId;
 
         if (!Start::login(true) || !$this->shouldRunHook()) {
@@ -59,9 +63,7 @@ class ProductUpdate
         $wcProduct = $this->fetchWcProduct($wcProductId);
 
         try {
-            if (!$this->wooCommerceProductIsValid($wcProduct)) {
-                throw new HookException(__('WooCommerce product not valid', 'moloni_es'));
-            }
+            $this->validateWooCommerceProduct($wcProduct);
 
             if ($wcProduct->is_type('variable')) {
                 if ($this->isSyncProductWithVariantsActive()) {
@@ -78,7 +80,7 @@ class ProductUpdate
                     foreach ($childIds as $childId) {
                         $wcVariation = $this->fetchWcProduct($childId);
 
-                        if (!$this->wooCommerceProductIsValid($wcVariation)) {
+                        if (!$this->wooCommerceVariationIsValid($wcVariation)) {
                             continue;
                         }
 
@@ -106,21 +108,24 @@ class ProductUpdate
             $message = __('Error synchronizing products to Moloni.', 'moloni_es');
             $message .= ' </br>';
             $message .= $e->getMessage();
-            $message .= '.';
+
+            if (!in_array(substr($message, -1), ['.', '!', '?'])) {
+                $message .= '.';
+            }
 
             Storage::$LOGGER->error($message, [
                 'tag' => 'automatic:product:save:error',
-                'exception' => $e->getMessage(),
-                'data' => [
+                'message' => $e->getMessage(),
+                'extra' => [
                     'wcProductId' => $wcProductId,
-                    'request' => $e->getData(),
+                    'data' => $e->getData(),
                 ]
             ]);
         } catch (Exception $e) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
                 'tag' => 'automatic:product:save:fatalerror',
-                'exception' => $e->getMessage(),
-                'data' => [
+                'message' => $e->getMessage(),
+                'extra' => [
                     'wcProductId' => $wcProductId,
                 ]
             ]);
@@ -268,7 +273,30 @@ class ProductUpdate
         return defined('MOLONI_PRODUCT_SYNC') && (int)MOLONI_PRODUCT_SYNC === Boolean::YES;
     }
 
-    private function wooCommerceProductIsValid(?WC_Product $wcProduct): bool
+    /**
+     * Validate WooCommerce product
+     *
+     * @throws HookException
+     */
+    private function validateWooCommerceProduct(?WC_Product $wcProduct)
+    {
+        if (empty($wcProduct)) {
+            throw new HookException(__('Product not found', 'moloni_es'));
+        }
+
+        if ($wcProduct->get_status() === 'draft') {
+            throw new HookException(__('Product is not published', 'moloni_es'));
+        }
+
+        if (empty($wcProduct->get_sku())) {
+            throw new HookException(__('Product does not have reference', 'moloni_es'));
+        }
+    }
+
+    /**
+     * Validate WooCommerce variation
+     */
+    private function wooCommerceVariationIsValid(?WC_Product $wcProduct): bool
     {
         if (empty($wcProduct)) {
             return false;

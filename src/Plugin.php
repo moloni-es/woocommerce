@@ -164,7 +164,7 @@ class Plugin
             Storage::$LOGGER->alert($message, [
                     'tag' => 'service:document:create:manual:warning',
                     'message' => $e->getMessage(),
-                    'request' => $e->getData()
+                    'data' => $e->getData()
                 ]
             );
 
@@ -177,7 +177,7 @@ class Plugin
             Storage::$LOGGER->error($message, [
                     'tag' => 'service:document:create:manual:error',
                     'message' => $e->getMessage(),
-                    'request' => $e->getData()
+                    'data' => $e->getData()
                 ]
             );
 

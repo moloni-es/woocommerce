@@ -220,7 +220,9 @@ class Start
             $company = Companies::queryCompany()['data']['company']['data'] ?? [];
 
             if (MoloniPlans::hasVariants((int)($company['subscription'][0]['plan']['planId'] ?? 0))) {
-                self::saveOptions(['SYNC_PRODUCTS_WITH_VARIANTS' => Boolean::YES]);
+                self::saveOptions(['sync_products_with_variants' => Boolean::YES]);
+            } else {
+                self::saveOptions(['sync_products_with_variants' => Boolean::NO]);
             }
         } catch (APIExeption $e) {}
     }

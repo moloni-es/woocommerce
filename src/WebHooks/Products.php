@@ -3,6 +3,7 @@
 namespace MoloniES\WebHooks;
 
 use MoloniES\Exceptions\HelperException;
+use MoloniES\Exceptions\HookException;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\ParseProductProperties;
 use MoloniES\Services\WcProduct\Helpers\Variations\FindVariation;
 use WC_Product;
@@ -60,9 +61,9 @@ class Products
      */
     public function products($requestData)
     {
-        try {
-            $parameters = $requestData->get_params();
+        $parameters = $requestData->get_params();
 
+        try {
             /** Model has to be 'Product', needs to be logged in and received hash has to match logged in company id hash */
             if ($parameters['model'] !== 'Product' || !Start::login(true) || !$this->checkHash($parameters['hash'])) {
                 return;
@@ -71,8 +72,6 @@ class Products
             $productId = (int)sanitize_text_field($parameters['productId']);
 
             $this->fetchMoloniProduct($productId);
-
-            $this->validateMoloniProduct();
 
             //switch between operations
             switch ($parameters['operation']) {
@@ -89,11 +88,31 @@ class Products
 
             $this->reply();
         } catch (MoloniException $exception) {
+            $message = __('Error synchronizing products to WooCommerce.', 'moloni_es');
+            $message .= ' </br>';
+            $message .= $exception->getMessage();
+
+            if (!in_array(substr($message, -1), ['.', '!', '?'])) {
+                $message .= '.';
+            }
+
+            Storage::$LOGGER->error($message, [
+                'tag' => 'automatic:product:save:error',
+                'message' => $exception->getMessage(),
+                'extra' => [
+                    'parameters' => $parameters,
+                    'data' => $exception->getData(),
+                ]
+            ]);
+
             $this->reply(0, $exception->getMessage());
         } catch (Exception $exception) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
                     'tag' => 'webhook:product:fatalerror',
-                    'message' => $exception->getMessage()
+                    'message' => $exception->getMessage(),
+                    'extra' => [
+                        'parameters' => $parameters,
+                    ]
                 ]
             );
 
@@ -103,16 +122,23 @@ class Products
 
     //            Actions            //
 
+    /**
+     * Create action
+     *
+     * @throws WebhookException
+     */
     private function onCreate()
     {
         if (!$this->shouldSyncProduct()) {
             return;
         }
 
+        $this->validateMoloniProduct();
+
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
         if (!empty($wcProduct)) {
-            return;
+            throw new WebhookException(__('Product not found', 'moloni_es'));
         }
 
         if (SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])) {
@@ -145,9 +171,9 @@ class Products
     }
 
     /**
-     * On Moloni product update
+     * On Moloni product update action
      *
-     * @throws HelperException
+     * @throws HelperException|WebhookException
      */
     private function onUpdate()
     {
@@ -155,15 +181,17 @@ class Products
             return;
         }
 
+        $this->validateMoloniProduct();
+
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
         if (empty($wcProduct)) {
-            return;
+            throw new WebhookException(__('Product not found', 'moloni_es'));
         }
 
         /** Both need to be the same kind */
         if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
-            return;
+            throw new WebhookException(__('Product types do not match', 'moloni_es'));
         }
 
         if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id()) ||
@@ -207,7 +235,7 @@ class Products
     /**
      * On Moloni stock update
      *
-     * @throws HelperException
+     * @throws HelperException|WebhookException
      */
     private function onStockUpdate()
     {
@@ -215,10 +243,12 @@ class Products
             return;
         }
 
+        $this->validateMoloniProduct();
+
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
         if (empty($wcProduct)) {
-            return;
+            throw new WebhookException(__('Product not found', 'moloni_es'));
         }
 
         if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id()) ||
@@ -231,7 +261,7 @@ class Products
 
         /** Both need to be the same kind */
         if ($this->moloniProductHasVariants() !== $wcProduct->is_type('variable')) {
-            return;
+            throw new WebhookException(__('Product types do not match', 'moloni_es'));
         }
 
         if ($this->moloniProductHasVariants()) {
@@ -255,7 +285,7 @@ class Products
             }
         } else {
             if ((int)$this->moloniProduct['hasStock'] === Boolean::NO || !$wcProduct->managing_stock()) {
-                return;
+                throw new WebhookException(__('Product does not manage stock', 'moloni_es'));
             }
 
             $service = new SyncProductStock($this->moloniProduct, $wcProduct);
@@ -284,6 +314,7 @@ class Products
             $query = ApiProducts::queryProduct([
                 'productId' => $productId
             ]);
+
             $moloniProduct = $query['data']['product']['data'] ?? [];
         } catch (APIExeption $e) {
             throw new WebhookException($e->getMessage());
@@ -350,30 +381,29 @@ class Products
 
     /**
      * Validate Moloni product data
+     *
      * @throws WebhookException
      */
     private function validateMoloniProduct()
     {
         /** Product not found */
         if (empty($this->moloniProduct)) {
-            throw new WebhookException(__('Moloni product not found!', 'moloni_es'));
+            throw new WebhookException(__('Moloni product not found', 'moloni_es'));
         }
 
         /** We only want to update the main product */
         if ($this->moloniProduct['parent'] !== null) {
-            throw new WebhookException(__('Product is variant, will be skipped!', 'moloni_es'));
+            throw new WebhookException(__('Product is variant, will be skipped', 'moloni_es'));
         }
 
         /** Do not sync shipping product */
         if (References::isIgnoredReference($this->moloniProduct['reference'])) {
-            throw new WebhookException(__('Product reference blacklisted!', 'moloni_es'));
+            throw new WebhookException(__('Product reference blacklisted', 'moloni_es'));
         }
 
         /** Do not sync product with varianst if settings is not set */
-        if (
-            $this->moloniProductHasVariants() &&
-            (!defined('SYNC_PRODUCTS_WITH_VARIANTS') || (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::NO)
-        ) {
+        if ($this->moloniProductHasVariants() &&
+            (!defined('SYNC_PRODUCTS_WITH_VARIANTS') || (int)SYNC_PRODUCTS_WITH_VARIANTS === Boolean::NO)) {
             throw new WebhookException(__('Synchronization of products with variants is disabled', 'moloni_es'));
         }
     }

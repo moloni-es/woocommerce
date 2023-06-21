@@ -312,23 +312,19 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
     protected function setPropertyGroup()
     {
         if (empty($this->moloniProduct)) {
-            try {
-                $propertyGroup = (new FindOrCreatePropertyGroup($this->wcProduct))->handle();
-            } catch (HelperException $e) {
-                throw new ServiceException($e->getMessage(), $e->getData());
-            }
+            $targetId = '';
         } else {
             $targetId = $this->moloniProduct['propertyGroup']['propertyGroupId'] ?? '';
+        }
 
-            /**
-             * Product already exists, so it has property group assigned
-             * So we need to get the property group and update it if needed
-             */
-            try {
+        try {
+            if (empty($targetId)) {
+                $propertyGroup = (new FindOrCreatePropertyGroup($this->wcProduct))->handle();
+            } else {
                 $propertyGroup = (new GetOrUpdatePropertyGroup($this->wcProduct, $targetId))->handle();
-            } catch (HelperException $e) {
-                throw new ServiceException($e->getMessage(), $e->getData());
             }
+        } catch (HelperException $e) {
+            throw new ServiceException($e->getMessage(), $e->getData());
         }
 
         $this->propertyGroup = $propertyGroup;

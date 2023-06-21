@@ -59,19 +59,22 @@ class ProductSetStock
             $message = __('Error synchronizing stock.', 'moloni_es');
             $message .= ' </br>';
             $message .= $e->getMessage();
-            $message .= '.';
+
+            if (!in_array(substr($message, -1), ['.', '!', '?'])) {
+                $message .= '.';
+            }
 
             Storage::$LOGGER->error($message, [
                     'tag' => 'automatic:product:stock:error',
                     'message' => $e->getMessage(),
-                    'request' => $e->getData()
+                    'data' => $e->getData()
                 ]
             );
         } catch (Exception $e) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
                 'tag' => 'automatic:product:stock:fatalerror',
-                'exception' => $e->getMessage(),
-                'data' => [
+                'message' => $e->getMessage(),
+                'extra' => [
                     'wcProductId' => $wcProduct->get_id(),
                 ]
             ]);
@@ -117,19 +120,22 @@ class ProductSetStock
             $message = __('Error synchronizing stock.', 'moloni_es');
             $message .= ' </br>';
             $message .= $e->getMessage();
-            $message .= '.';
+
+            if (!in_array(substr($message, -1), ['.', '!', '?'])) {
+                $message .= '.';
+            }
 
             Storage::$LOGGER->error($message, [
                     'tag' => 'automatic:variation:stock:error',
                     'message' => $e->getMessage(),
-                    'request' => $e->getData()
+                    'data' => $e->getData()
                 ]
             );
         } catch (Exception $e) {
             Storage::$LOGGER->critical(__('Fatal error', 'moloni_es'), [
                 'tag' => 'automatic:variation:stock:fatalerror',
-                'exception' => $e->getMessage(),
-                'data' => [
+                'message' => $e->getMessage(),
+                'extra' => [
                     'wcProductId' => $wcVariation->get_id(),
                 ]
             ]);

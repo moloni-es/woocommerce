@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-20 16:38+0000\n"
+"POT-Creation-Date: 2023-06-21 08:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -121,8 +121,8 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:209
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:222
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:238
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:251
 msgid "Changes saved."
 msgstr ""
 
@@ -207,8 +207,8 @@ msgstr ""
 msgid "Create documents when the order is"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:411
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:427
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:407
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:423
 msgid "creating"
 msgstr ""
 
@@ -400,10 +400,10 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:410
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:426
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:458
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:474
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:406
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:422
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:454
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:470
 #, php-format
 msgid "Error %s product in Moloni (%s)"
 msgstr ""
@@ -523,12 +523,16 @@ msgstr ""
 msgid "Error inserting shipping"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:106
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:108
 msgid "Error synchronizing products to Moloni."
 msgstr ""
 
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:91
+msgid "Error synchronizing products to WooCommerce."
+msgstr ""
+
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:59
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:117
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:120
 msgid "Error synchronizing stock."
 msgstr ""
 
@@ -578,10 +582,10 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:80
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:83
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:141
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:71
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:129
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:120
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:94
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:74
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:135
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:125
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:110
 msgid "Fatal error"
 msgstr ""
 
@@ -755,8 +759,8 @@ msgstr ""
 msgid "Moloni login invalid"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:359
-msgid "Moloni product not found!"
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:391
+msgid "Moloni product not found"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:238
@@ -945,23 +949,33 @@ msgstr ""
 msgid "Product attribute not found"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:219
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:292
+msgid "Product does not have reference"
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:225
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:288
 msgid "Product does not manage stock"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:239
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:245
 msgid "Product has timeout"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:235
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:241
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:288
 msgid "Product is not published"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:364
-msgid "Product is variant, will be skipped!"
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:396
+msgid "Product is variant, will be skipped"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:211
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:217
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:284
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:141
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:189
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:251
 msgid "Product not found"
 msgstr ""
 
@@ -969,14 +983,16 @@ msgstr ""
 msgid "Product not found in Moloni"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:369
-msgid "Product reference blacklisted!"
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:401
+msgid "Product reference blacklisted"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:215
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:231
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:155
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:189
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:221
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:237
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:160
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:194
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:194
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:264
 msgid "Product types do not match"
 msgstr ""
 
@@ -1019,7 +1035,7 @@ msgstr ""
 msgid "Products stock export. Part %s"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Imports/ImportStockChanges.php:86
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Imports/ImportStockChanges.php:87
 #, php-format
 msgid "Products stock import. Part %s"
 msgstr ""
@@ -1232,7 +1248,7 @@ msgstr ""
 msgid "Synchronization extras"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:377
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:407
 msgid "Synchronization of products with variants is disabled"
 msgstr ""
 
@@ -1351,8 +1367,8 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:459
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:475
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:455
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:471
 msgid "updating"
 msgstr ""
 
@@ -1456,10 +1472,6 @@ msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:239
 msgid "WooCommerce order list"
-msgstr ""
-
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:63
-msgid "WooCommerce product not valid"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:236

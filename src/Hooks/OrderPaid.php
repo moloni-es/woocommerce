@@ -61,7 +61,7 @@ class OrderPaid
                 Storage::$LOGGER->alert($message, [
                         'tag' => 'automatic:document:create:complete:warning',
                         'message' => $e->getMessage(),
-                        'request' => $e->getData()
+                        'data' => $e->getData()
                     ]
                 );
             } catch (DocumentError $e) {
@@ -76,13 +76,13 @@ class OrderPaid
                 Storage::$LOGGER->error($message, [
                         'tag' => 'automatic:document:create:complete:error',
                         'message' => $e->getMessage(),
-                        'request' => $e->getData()
+                        'data' => $e->getData()
                     ]
                 );
             } catch (Exception $ex) {
                 Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
                     'tag' => 'automatic:document:create:complete:fatalerror',
-                    'exception' => $ex->getMessage()
+                    'message' => $ex->getMessage()
                 ]);
             }
         }
@@ -119,7 +119,7 @@ class OrderPaid
                 Storage::$LOGGER->alert($message, [
                         'tag' => 'automatic:document:create:processing:warning',
                         'message' => $e->getMessage(),
-                        'request' => $e->getData()
+                        'data' => $e->getData()
                     ]
                 );
             } catch (DocumentError $e) {
@@ -134,13 +134,13 @@ class OrderPaid
                 Storage::$LOGGER->error($message, [
                         'tag' => 'automatic:document:create:processing:error',
                         'message' => $e->getMessage(),
-                        'request' => $e->getData()
+                        'data' => $e->getData()
                     ]
                 );
             } catch (Exception $ex) {
                 Storage::$LOGGER->critical(__("Fatal error", 'moloni_es'), [
                     'tag' => 'automatic:document:create:processing:fatalerror',
-                    'exception' => $ex->getMessage()
+                    'message' => $ex->getMessage()
                 ]);
             }
         }
