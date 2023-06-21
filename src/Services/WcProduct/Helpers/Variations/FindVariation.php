@@ -99,7 +99,10 @@ class FindVariation
                 $moloniPropertyName = $variantPropertyPairs['property']['name'] ?? '';
                 $moloniPropertyValue = $variantPropertyPairs['propertyValue']['value'] ?? '';
 
-                foreach ($currentVariationAttributes as $wcPropertyName => $wcPropertyValue) {
+                foreach ($currentVariationAttributes as $wcPropertyName => $wcPropertyValues) {
+                    /** It always has 1 value, so get first value */
+                    $wcPropertyValue =  $wcPropertyValues[0];
+
                     if ($moloniPropertyName === $wcPropertyName && $moloniPropertyValue === $wcPropertyValue) {
                         $found = true;
 
