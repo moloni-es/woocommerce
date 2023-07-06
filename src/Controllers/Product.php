@@ -381,7 +381,7 @@ class Product
             $tax['ordering'] = 1;
             $tax['cumulative'] = false;
 
-            $this->price = (($this->product->get_total) * 100);
+            $this->price = (float)wc_get_price_including_tax($this->product) * 100;
             $this->price = $this->price / (100 + $tax['value']);
 
             $this->taxes = $tax;
