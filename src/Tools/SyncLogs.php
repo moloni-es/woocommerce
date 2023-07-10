@@ -38,12 +38,12 @@ class SyncLogs
     /**
      * Procedure to check if an entity has been synced recently
      *
-     * @param $typeId int
-     * @param $entityId int
+     * @param int|int[] $typeId
+     * @param int $entityId
      *
      * @return bool
      */
-    public static function hasTimeout(int $typeId, int $entityId): bool
+    public static function hasTimeout($typeId, int $entityId): bool
     {
         /** Delete old logs before checking entry */
         self::removeExpiredTimeouts();
@@ -66,17 +66,30 @@ class SyncLogs
     /**
      * Checks for a log entry
      *
-     * @param int $typeId
+     * @param int|int[] $typeId
      * @param int $entityId
      *
      * @return bool
      */
-    private static function checkIfExists(int $typeId, int $entityId): bool
+    private static function checkIfExists($typeId, int $entityId): bool
     {
         global $wpdb;
 
         $query = 'SELECT COUNT(*) FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs 
-            WHERE `type_id` = ' . $typeId . ' AND `entity_id` =' . $entityId;
+            WHERE `entity_id` = ' . $entityId . ' AND';
+
+        if (is_array($typeId)) {
+            $query .= ' `type_id` IN (';
+
+            foreach ($typeId as $value) {
+                $query .= (int)$value . ',';
+            }
+
+            $query = rtrim($query, ',');
+            $query .= ')';
+        } else {
+            $query .= ' `type_id` = ' . (int)$typeId;
+        }
 
         $queryResult = $wpdb->get_row($query, ARRAY_A);
 

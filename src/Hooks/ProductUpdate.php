@@ -3,6 +3,10 @@
 namespace MoloniES\Hooks;
 
 use Exception;
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\FindVariantByProperties;
+use MoloniES\Services\MoloniProduct\Helpers\Variants\ParseProductProperties;
+use MoloniES\Services\MoloniProduct\Stock\SyncProductStock;
 use WC_Product;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\HookException;
@@ -50,20 +54,27 @@ class ProductUpdate
 
     public function productSave($wcProductId)
     {
-        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId)) {
+        /** WooCommerce product has some type of timeout */
+        if (SyncLogs::hasTimeout([SyncLogsType::WC_PRODUCT_SAVE, SyncLogsType::WC_PRODUCT_STOCK], $wcProductId)) {
+            return;
+        }
+
+        /** Login is valid */
+        if (!Start::login(true)) {
+            return;
+        }
+
+        /** No sincronization is active */
+        if (!$this->shouldSyncProduct() && !$this->shouldSyncStock()) {
             return;
         }
 
         $this->wcProductId = $wcProductId;
 
-        if (!Start::login(true) || !$this->shouldRunHook()) {
-            return;
-        }
-
         $wcProduct = $this->fetchWcProduct($wcProductId);
 
         try {
-            $this->validateWooCommerceProduct($wcProduct);
+            $this->validateWcProduct($wcProduct);
 
             if ($wcProduct->is_type('variable')) {
                 if ($this->isSyncProductWithVariantsActive()) {
@@ -80,7 +91,7 @@ class ProductUpdate
                     foreach ($childIds as $childId) {
                         $wcVariation = $this->fetchWcProduct($childId);
 
-                        if (!$this->wooCommerceVariationIsValid($wcVariation)) {
+                        if (!$this->wcVariationIsValid($wcVariation)) {
                             continue;
                         }
 
@@ -141,6 +152,10 @@ class ProductUpdate
      */
     private function createSimple(WC_Product $wcProduct)
     {
+        if (!$this->shouldSyncProduct()) {
+            return;
+        }
+
         SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
 
         $service = new CreateSimpleProduct($wcProduct);
@@ -160,12 +175,25 @@ class ProductUpdate
             throw new HookException(__('Product types do not match', 'moloni_es'));
         }
 
-        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
-        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId']);
+        if ($this->shouldSyncProduct()) {
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId']);
 
-        $service = new UpdateSimpleProduct($wcProduct, $moloniProduct);
-        $service->run();
-        $service->saveLog();
+            $service = new UpdateSimpleProduct($wcProduct, $moloniProduct);
+            $service->run();
+            $service->saveLog();
+
+            $moloniProduct = $service->getMoloniProduct();
+        }
+
+        if ($this->shouldSyncStock() && $wcProduct->managing_stock() && (int)$moloniProduct['hasStock'] === Boolean::YES) {
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id());
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $moloniProduct['productId']);
+
+            $service = new SyncProductStock($wcProduct, $moloniProduct);
+            $service->run();
+            $service->saveLog();
+        }
     }
 
     /**
@@ -175,6 +203,10 @@ class ProductUpdate
      */
     private function createVariant(WC_Product $wcProduct)
     {
+        if (!$this->shouldSyncProduct()) {
+            return;
+        }
+
         SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
 
         $service = new CreateVariantProduct($wcProduct);
@@ -187,6 +219,7 @@ class ProductUpdate
      *
      * @throws ServiceException
      * @throws HookException
+     * @throws HelperException
      */
     private function updateVariant(WC_Product $wcProduct, array $moloniProduct)
     {
@@ -194,12 +227,60 @@ class ProductUpdate
             throw new HookException(__('Product types do not match', 'moloni_es'));
         }
 
-        SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
-        SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId']);
+        if ($this->shouldSyncProduct()) {
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId']);
 
-        $service = new UpdateVariantProduct($wcProduct, $moloniProduct);
-        $service->run();
-        $service->saveLog();
+            $service = new UpdateVariantProduct($wcProduct, $moloniProduct);
+            $service->run();
+            $service->saveLog();
+
+            $moloniProduct = $service->getMoloniProduct();
+        }
+
+        if ($this->shouldSyncStock() && (int)$moloniProduct['hasStock'] === Boolean::YES) {
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProduct->get_id());
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $moloniProduct['productId']);
+
+            $wcProductAttributes = (new ParseProductProperties($wcProduct))->handle();
+            $childIds = $wcProduct->get_children();
+
+            foreach ($childIds as $childId) {
+                $moloniVariant = [];
+                $wcVariation = wc_get_product($childId);
+
+                if (!$wcVariation->managing_stock()) {
+                    continue;
+                }
+
+                $association = ProductAssociations::findByWcId($wcVariation->get_id());
+
+                if (!empty($association)) {
+                    foreach ($moloniProduct['variants'] as $variant) {
+                        if ((int)$variant['productId'] === (int)$association['ml_product_id']) {
+                            $moloniVariant = $variant;
+
+                            break;
+                        }
+                    }
+                }
+
+                if (empty($moloniVariant)) {
+                    $wcTargetProductAttributes = $wcProductAttributes[$wcVariation->get_id()] ?? [];
+                    $moloniVariant = (new FindVariantByProperties($wcTargetProductAttributes, $moloniProduct))->handle();
+                }
+
+                if (empty($moloniVariant)) {
+                    continue;
+                }
+
+                SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcVariation->get_id());
+
+                $service = new SyncProductStock($wcVariation, $moloniVariant);
+                $service->run();
+                $service->saveLog();
+            }
+        }
     }
 
     //          Privatess          //
@@ -268,17 +349,24 @@ class ProductUpdate
 
     //          Auxiliary          //
 
-    private function shouldRunHook(): bool
+    private function shouldSyncProduct(): bool
     {
         return defined('MOLONI_PRODUCT_SYNC') && (int)MOLONI_PRODUCT_SYNC === Boolean::YES;
     }
+
+    private function shouldSyncStock(): bool
+    {
+        return defined('MOLONI_STOCK_SYNC') && (int)MOLONI_STOCK_SYNC === Boolean::YES;
+    }
+
+    //          Validations          //
 
     /**
      * Validate WooCommerce product
      *
      * @throws HookException
      */
-    private function validateWooCommerceProduct(?WC_Product $wcProduct)
+    private function validateWcProduct(?WC_Product $wcProduct)
     {
         if (empty($wcProduct)) {
             throw new HookException(__('Product not found', 'moloni_es'));
@@ -296,7 +384,7 @@ class ProductUpdate
     /**
      * Validate WooCommerce variation
      */
-    private function wooCommerceVariationIsValid(?WC_Product $wcProduct): bool
+    private function wcVariationIsValid(?WC_Product $wcProduct): bool
     {
         if (empty($wcProduct)) {
             return false;
@@ -310,7 +398,7 @@ class ProductUpdate
             return false;
         }
 
-        if (SyncLogs::hasTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id())) {
+        if (SyncLogs::hasTimeout([SyncLogsType::WC_PRODUCT_SAVE, SyncLogsType::WC_PRODUCT_STOCK], $wcProduct->get_id())) {
             return false;
         }
 

@@ -29,6 +29,8 @@ class ProductSetStock
     /**
      * Constructor
      *
+     * @deprecated Do not use
+     *
      * @see https://stackoverflow.com/questions/39294861/which-hooks-are-triggered-when-woocommerce-product-stock-is-updated
      */
     public function __construct(Plugin $parent)

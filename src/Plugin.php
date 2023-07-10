@@ -85,7 +85,6 @@ class Plugin
         new ProductUpdate($this);
         new ProductDelete($this);
         new ProductView($this);
-        new ProductSetStock($this);
         new OrderView($this);
         new OrderPaid($this);
         new OrderList($this);
