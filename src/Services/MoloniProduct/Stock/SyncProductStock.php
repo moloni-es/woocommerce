@@ -74,8 +74,8 @@ class SyncProductStock extends MoloniStockSyncAbstract
         } else {
             $msg = sprintf(
                 __('Stock updated in Moloni (old: %s | new: %s) (%s)', 'moloni_es'),
-                $wcStock,
                 $moloniStock,
+                $wcStock,
                 $this->moloniProduct['reference']
             );
 
