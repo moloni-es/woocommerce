@@ -18,31 +18,32 @@ class Enqueue
     {
         if (isset($_REQUEST['page']) && !wp_doing_ajax() && sanitize_text_field($_REQUEST['page']) === 'molonies') {
             $tab = $_GET['tab'] ?? '';
+            $ver = '2.0';
 
             wp_enqueue_script('jquery', plugins_url('assets/external/jquery-3.6.0.min.js', MOLONI_ES_PLUGIN_FILE));
             wp_enqueue_style('jquery-modal', plugins_url('assets/external/jquery.modal.min.css', MOLONI_ES_PLUGIN_FILE));
             wp_enqueue_script('jquery-modal', plugins_url('assets/external/jquery.modal.min.js', MOLONI_ES_PLUGIN_FILE));
 
-            wp_enqueue_style('moloni-styles', plugins_url('assets/css/moloni.css', MOLONI_ES_PLUGIN_FILE));
+            wp_enqueue_style('moloni-styles', plugins_url("assets/css/moloni.css", MOLONI_ES_PLUGIN_FILE), [], $ver);
 
             if ($tab === 'settings') {
-                wp_enqueue_script('moloni-settings-js', plugins_url('assets/js/Moloni.Settings.js', MOLONI_ES_PLUGIN_FILE));
+                wp_enqueue_script('moloni-settings-js', plugins_url("assets/js/Moloni.Settings.js", MOLONI_ES_PLUGIN_FILE), [], $ver);
             }
 
             if ($tab === 'automation') {
-                wp_enqueue_script('moloni-automations-js', plugins_url('assets/js/Moloni.Automations.js', MOLONI_ES_PLUGIN_FILE));
+                wp_enqueue_script('moloni-automations-js', plugins_url("assets/js/Moloni.Automations.js", MOLONI_ES_PLUGIN_FILE), [], $ver);
             }
 
             if ($tab === 'logs') {
-                wp_enqueue_script('moloni-settings-js', plugins_url('assets/js/Moloni.Logs.js', MOLONI_ES_PLUGIN_FILE));
+                wp_enqueue_script('moloni-settings-js', plugins_url("assets/js/Moloni.Logs.js", MOLONI_ES_PLUGIN_FILE), [], $ver);
             }
 
             if ($tab === 'tools') {
-                wp_enqueue_script('moloni-tools-js', plugins_url('assets/js/Moloni.Tools.js', MOLONI_ES_PLUGIN_FILE));
+                wp_enqueue_script('moloni-tools-js', plugins_url("assets/js/Moloni.Tools.js", MOLONI_ES_PLUGIN_FILE), [], $ver);
             }
 
             if (empty($tab)) {
-                wp_enqueue_script('moloni-actions-bulk-actions-js', plugins_url('assets/js/OrdersBulkAction.js', MOLONI_ES_PLUGIN_FILE));
+                wp_enqueue_script('moloni-actions-bulk-actions-js', plugins_url("assets/js/OrdersBulkAction.js", MOLONI_ES_PLUGIN_FILE), [], $ver);
 
                 /** Send translated strings to the javascript file */
                 wp_localize_script('moloni-actions-bulk-actions-js', 'translations', [
