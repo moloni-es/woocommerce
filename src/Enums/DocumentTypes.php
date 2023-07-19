@@ -41,29 +41,41 @@ class DocumentTypes
         self::BILLS_OF_LADING,
     ];
 
-    public const TYPES_NAMES = [
-        self::INVOICE => 'Invoice',
-        self::RECEIPT => 'Receipt',
-        self::PURCHASE_ORDER => 'Purchase Order',
-        self::PRO_FORMA_INVOICE => 'Pro Forma Invoice',
-        self::SIMPLIFIED_INVOICE => 'Simplified invoice',
-        self::ESTIMATE => 'Budget',
-        self::BILLS_OF_LADING => 'Bills of lading',
-    ];
-
-    public const AVAILABLE_TYPES = [
-        self::INVOICE => 'Invoice',
-        self::INVOICE_AND_RECEIPT => 'Invoice + Receipt',
-        self::PURCHASE_ORDER => 'Purchase Order',
-        self::PRO_FORMA_INVOICE => 'Pro Forma Invoice',
-        self::SIMPLIFIED_INVOICE => 'Simplified invoice',
-        self::ESTIMATE => 'Budget',
-        self::BILLS_OF_LADING => 'Bills of lading',
-    ];
+    public static function getForRender(): array
+    {
+        return [
+            self::INVOICE => __('Invoice', 'moloni_es'),
+            self::INVOICE_AND_RECEIPT => __('Invoice + Receipt', 'moloni_es'),
+            self::PURCHASE_ORDER => __('Purchase Order', 'moloni_es'),
+            self::PRO_FORMA_INVOICE => __('Pro Forma Invoice', 'moloni_es'),
+            self::SIMPLIFIED_INVOICE => __('Simplified invoice', 'moloni_es'),
+            self::ESTIMATE => __('Budget', 'moloni_es'),
+            self::BILLS_OF_LADING => __('Bills of lading', 'moloni_es')
+        ];
+    }
 
     public static function getDocumentTypeName(?string $documentType = ''): string
     {
-        return self::TYPES_NAMES[$documentType] ?? '';
+        switch ($documentType) {
+            case self::INVOICE:
+                return __('Invoice', 'moloni_es');
+            case self::RECEIPT:
+                return __('Receipt', 'moloni_es');
+            case self::INVOICE_AND_RECEIPT:
+                return __('Invoice + Receipt', 'moloni_es');
+            case self::PURCHASE_ORDER:
+                return __('Purchase Order', 'moloni_es');
+            case self::PRO_FORMA_INVOICE:
+                return __('Pro Forma Invoice', 'moloni_es');
+            case self::SIMPLIFIED_INVOICE:
+                return __('Simplified Invoice', 'moloni_es');
+            case self::ESTIMATE:
+                return __('Budget', 'moloni_es');
+            case self::BILLS_OF_LADING:
+                return __('Bill of lading', 'moloni_es');
+        }
+
+        return $documentType;
     }
 
     public static function hasPayments(?string $documentType = ''): bool

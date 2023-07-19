@@ -71,9 +71,9 @@ try {
                         }
                         ?>
 
-                        <?php foreach (DocumentTypes::AVAILABLE_TYPES as $id => $name) : ?>
+                        <?php foreach (DocumentTypes::getForRender() as $id => $name) : ?>
                             <option value='<?= $id ?>' <?= ($documentType === $id ? 'selected' : '') ?>>
-                                <?= __($name, 'moloni_es') ?>
+                                <?= $name ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -129,7 +129,7 @@ try {
                             <?= __('Yes') ?>
                         </option>
                     </select>
-                    <p class='description'><?= __('Choose if you want to create a Bill of Lading associated with the main document') ?></p>
+                    <p class='description'><?= __('Choose if you want to create a Bill of Lading associated with the main document', 'moloni_es') ?></p>
                 </td>
             </tr>
 

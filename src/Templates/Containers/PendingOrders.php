@@ -124,9 +124,9 @@ $orders = PendingOrders::getAllAvailable();
                                 }
                                 ?>
 
-                                <?php foreach (DocumentTypes::AVAILABLE_TYPES as $id => $name) : ?>
+                                <?php foreach (DocumentTypes::getForRender() as $id => $name) : ?>
                                     <option value='<?= $id ?>' <?= ($documentType === $id ? 'selected' : '') ?>>
-                                        <?= __($name, 'moloni_es') ?>
+                                        <?= $name ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

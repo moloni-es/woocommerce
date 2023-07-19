@@ -672,7 +672,7 @@ class Documents
         }
 
         if (!empty($this->documentType)) {
-            $this->documentTypeName = __(DocumentTypes::getDocumentTypeName($this->documentType));
+            $this->documentTypeName = DocumentTypes::getDocumentTypeName($this->documentType);
         }
 
         return $this;
