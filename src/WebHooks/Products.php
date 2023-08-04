@@ -321,17 +321,31 @@ class Products
                 $this->setImages($variation, $objVariation);
             }
 
-
-            $var_attributes = [];
+            $attributes = [];
 
             foreach ($variation["propertyPairs"] as $value) {
-                $propertyName = self::cleanAttributeString($value['property']["name"]);
-                $propertyValue = self::cleanAttributeString($value['propertyValue']["value"]);
+                $propertyName = trim($value['property']["name"]);
+                $propertyValue = trim($value['propertyValue']["value"]);
 
-                $var_attributes[sanitize_title($propertyName)] = $propertyValue;
+                $attrId = wc_attribute_taxonomy_id_by_name($propertyName);
+                $attribute = wc_get_attribute($attrId);
+
+                if (empty($attribute)) {
+                    continue;
+                }
+
+                $taxonomy = $attribute->slug;
+
+                $term = get_term_by('name', $propertyValue, $taxonomy);
+
+                if (empty($term)) {
+                    continue;
+                }
+
+                $attributes[$taxonomy] = $term->slug;
             }
 
-            $objVariation->set_attributes($var_attributes);
+            $objVariation->set_attributes($attributes);
             $objVariation->save();
 
             if ($existsInWC !== 0) {
@@ -370,16 +384,51 @@ class Products
     {
         $attributes = self::getAttributes($moloniProduct);
         $productAttributes = [];
+        $position = 0;
 
         $product = new WC_Product_Variable($wcProductId);
 
         foreach ($attributes as $name => $options) {
-            $attribute = new WC_Product_Attribute();
-            $attribute->set_name($name);
-            $attribute->set_options($options);
-            $attribute->set_visible(true);
-            $attribute->set_variation(true);
-            $productAttributes[] = $attribute;
+            $attrId = wc_attribute_taxonomy_id_by_name($name);
+
+            if (empty($attrId)) {
+                $attrId = wc_create_attribute([
+                    'name' => $name
+                ]);
+
+                $taxonomy = wc_get_attribute($attrId)->slug;
+
+                register_taxonomy($taxonomy, ['product']);
+            } else {
+                $taxonomy = wc_get_attribute($attrId)->slug;
+            }
+
+            $attributeObj = new WC_Product_Attribute();
+
+            $termsIds = [];
+
+            foreach ($options as $option) {
+                term_exists($option, $taxonomy, $attrId);
+
+                if (empty($termId)) {
+                    if (!term_exists($option, $taxonomy)) {
+                        wp_insert_term($option, $taxonomy);
+                    }
+                }
+
+                $termsIds[] = $option;
+            }
+
+            $attributeObj->set_id($attrId);
+            $attributeObj->set_name($taxonomy);
+            $attributeObj->set_options($termsIds);
+            $attributeObj->set_position($position);
+            $attributeObj->set_visible(true);
+            $attributeObj->set_variation(true);
+
+            $productAttributes[] = $attributeObj;
+
+            $position++;
         }
 
         $product->set_attributes($productAttributes);
@@ -483,10 +532,14 @@ class Products
 
         foreach ($moloniProduct['variants'] as $variant) {
             foreach ($variant['propertyPairs'] as $property) {
-                if (!in_array($property['propertyValue']['value'], $attributes[$property['property']['name']], true)) {
-                    $propertyName = self::cleanAttributeString($property['property']['name']);
-                    $propertyValue = self::cleanAttributeString($property['propertyValue']['value']);
+                $propertyName = self::cleanAttributeString($property['property']['name']);
+                $propertyValue = self::cleanAttributeString($property['propertyValue']['value']);
 
+                if (!isset($attributes[$propertyName])) {
+                    $attributes[$propertyName] = [];
+                }
+
+                if (!in_array($propertyValue, $attributes[$propertyName], true)) {
                     $attributes[$propertyName][] = $propertyValue;
                 }
             }
