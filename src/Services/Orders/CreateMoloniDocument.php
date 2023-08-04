@@ -99,7 +99,6 @@ class CreateMoloniDocument
             $builder
                 ->setDocumentType(DocumentTypes::INVOICE)
                 ->setDocumentStatus(DocumentStatus::CLOSED)
-                ->setSendEmail(Boolean::NO)
                 ->createDocument();
 
             $receipt = clone $builder;
@@ -112,7 +111,6 @@ class CreateMoloniDocument
                 )
                 ->setDocumentType(DocumentTypes::RECEIPT)
                 ->setDocumentStatus(DocumentStatus::CLOSED)
-                ->setSendEmail()
                 ->createDocument();
         } else {
             $builder
