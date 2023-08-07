@@ -77,7 +77,7 @@ $logs = Logs::getAllAvailable();
                 <?php foreach ($logs as $log) : ?>
                     <tr>
                         <td>
-                            <?= $log['created_at'] ?>
+                            <?= date("d-m-Y H:i:s", strtotime($log['created_at'])) ?>
                         </td>
                         <td>
                             <?php
