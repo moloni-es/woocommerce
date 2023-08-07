@@ -2,13 +2,14 @@
 
 namespace MoloniES\Services\MoloniProduct\Stock;
 
+use WC_Product;
 use MoloniES\API\Stocks;
-use MoloniES\API\Warehouses;
 use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\HelperException;
 use MoloniES\Exceptions\ServiceException;
+use MoloniES\Helpers\MoloniWarehouse;
 use MoloniES\Services\MoloniProduct\Abstracts\MoloniStockSyncAbstract;
 use MoloniES\Storage;
-use WC_Product;
 
 class SyncProductStock extends MoloniStockSyncAbstract
 {
@@ -30,29 +31,11 @@ class SyncProductStock extends MoloniStockSyncAbstract
         $wcStock = (int)$this->wcProduct->get_stock_quantity();
         $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0;
 
-        if (in_array($warehouseId, [0, 1])) {
-            $params = [
-                'options' => [
-                    'filter' => [
-                        'field' => 'isDefault',
-                        'comparison' => 'eq',
-                        'value' => '1',
-                    ],
-                ],
-            ];
-
+        if (empty($warehouseId)) {
             try {
-                $query = Warehouses::queryWarehouses($params);
-
-                if (!empty($query)) {
-                    $warehouseId = (int)$query[0]['warehouseId'];
-                }
-            } catch (APIExeption $e) {
-                throw new ServiceException(__('Error fetching default company warehouse', 'moloni_es'));
-            }
-
-            if (in_array($warehouseId, [0, 1])) {
-                throw new ServiceException(__('Company does not have a default warehouse, please select one', 'moloni_es'));
+                $warehouseId = MoloniWarehouse::getDefaultWarehouse();
+            } catch (HelperException $e) {
+                throw new ServiceException($e->getMessage(), $e->getData());
             }
         }
 

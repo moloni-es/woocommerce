@@ -105,7 +105,7 @@ try {
                 <td>
                     <select id="moloni_stock_sync_warehouse" name='opt[moloni_stock_sync_warehouse]' class='inputOut'>
                         <option value='0'>
-                            <?= __('Default warehouse', 'moloni_es') ?>
+                            <?= __('Default company warehouse', 'moloni_es') ?>
                         </option>
 
                         <?php $hookStockSyncWarehouse = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0; ?>

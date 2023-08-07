@@ -200,7 +200,6 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
      */
     protected function setStock()
     {
-        $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
         $wcProductIsVariable = $this->wcProduct->is_type('variable');
 
         if ($wcProductIsVariable) {
@@ -220,7 +219,9 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         $this->props['hasStock'] = $hasStock;
 
         if ($hasStock) {
-            if ($warehouseId === 1) {
+            $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0;
+
+            if (empty($warehouseId)) {
                 try {
                     $warehouseId = MoloniWarehouse::getDefaultWarehouse();
                 } catch (HelperException $e) {

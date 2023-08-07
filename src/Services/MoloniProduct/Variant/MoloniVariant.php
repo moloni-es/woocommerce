@@ -114,7 +114,7 @@ class MoloniVariant
             $this->setPrice();
             $this->setPropertyPairs();
 
-            if ($this->productShouldSyncStock())  {
+            if ($this->productShouldSyncStock() && !$this->parentProductExists())  {
                 $this->setStock();
             }
         }
@@ -171,9 +171,9 @@ class MoloniVariant
         $hasStock = $this->wcProduct->managing_stock();
 
         if ($hasStock) {
-            $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 1;
+            $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0;
 
-            if ($warehouseId === 1) {
+            if (empty($warehouseId)) {
                 try {
                     $warehouseId = MoloniWarehouse::getDefaultWarehouse();
                 } catch (HelperException $e) {
@@ -181,16 +181,14 @@ class MoloniVariant
                 }
             }
 
-            $this->props['warehouseId'] = $warehouseId;
             $warehouses = [
                 'warehouseId' => $warehouseId,
             ];
 
             /** New variants cant have stock if parent product already exists */
-            if (!$this->parentProductExists()) {
-                $warehouses['stock'] = (float)$this->wcProduct->get_stock_quantity();
-            }
+            $warehouses['stock'] = (float)$this->wcProduct->get_stock_quantity();
 
+            $this->props['warehouseId'] = $warehouseId;
             $this->props['warehouses'] = [$warehouses];
         }
     }
