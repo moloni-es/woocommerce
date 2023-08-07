@@ -45,10 +45,14 @@ class ParseProductProperties
             $attributeObject = wc_get_attribute($productAttribute->get_id());
 
             if (empty($attributeObject)) {
-                throw new HelperException(__('Product attribute not found', 'moloni_es'));
-            }
+                /**
+                 * Hackermannnnnn
+                 */
 
-            $attributeName = $attributeObject->name;
+                $attributeName = $productAttribute->get_name();
+            } else {
+                $attributeName = $attributeObject->name;
+            }
 
             if (!isset($tempParsedAttributes[$attributeTaxonomy])) {
                 $tempParsedAttributes[$attributeTaxonomy] = [
@@ -57,7 +61,29 @@ class ParseProductProperties
                 ];
             }
 
-            $tempParsedAttributes[$attributeTaxonomy]['options'] = wc_get_product_terms($this->wcProduct->get_id(), $attributeTaxonomy);
+            if (empty($attributeObject)) {
+                /**
+                 * Hackermannnnnn
+                 */
+
+                $rawData = $productAttribute->get_data();
+
+                if (empty($rawData['options'])) {
+                    throw new HelperException(__('Product attribute not found', 'moloni_es'));
+                }
+
+                foreach ($rawData['options'] as $option) {
+                    $littleHack = [
+                        'slug' => $option,
+                        'name' => $option,
+                        'term_id' => 0,
+                    ];
+
+                    $tempParsedAttributes[$attributeTaxonomy]['options'][] = new WP_Term((object)$littleHack);
+                }
+            } else {
+                $tempParsedAttributes[$attributeTaxonomy]['options'] = wc_get_product_terms($this->wcProduct->get_id(), $attributeTaxonomy);
+            }
         }
 
         $ids = $this->wcProduct->get_children();

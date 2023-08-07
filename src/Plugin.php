@@ -14,21 +14,18 @@ use MoloniES\Hooks\OrderList;
 use MoloniES\Hooks\OrderPaid;
 use MoloniES\Hooks\OrderView;
 use MoloniES\Hooks\ProductDelete;
-use MoloniES\Hooks\ProductSetStock;
 use MoloniES\Hooks\ProductUpdate;
 use MoloniES\Hooks\ProductView;
 use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
 use MoloniES\Menus\Admin;
 use MoloniES\Models\Logs;
-use MoloniES\Models\PendingOrders;
 use MoloniES\Services\Documents\DownloadDocumentPDF;
 use MoloniES\Services\Documents\OpenDocument;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 use MoloniES\Services\Orders\DiscardOrder;
 use MoloniES\Tools\Logger;
 use MoloniES\WebHooks\WebHook;
-use WC_Order;
 
 /**
  * Main constructor
