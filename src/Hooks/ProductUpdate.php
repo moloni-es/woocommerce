@@ -54,6 +54,13 @@ class ProductUpdate
 
     public function productSave($wcProductId)
     {
+        global $post;
+
+        /** Documents status change is triggering this... */
+        if (empty($post) || $post->post_type !== 'product') {
+            return;
+        }
+
         /** WooCommerce product has some type of timeout */
         if (SyncLogs::hasTimeout([SyncLogsType::WC_PRODUCT_SAVE, SyncLogsType::WC_PRODUCT_STOCK], $wcProductId)) {
             return;
