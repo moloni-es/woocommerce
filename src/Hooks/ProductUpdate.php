@@ -175,6 +175,10 @@ class ProductUpdate
             throw new HookException(__('Product types do not match', 'moloni_es'));
         }
 
+        if (SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId'])) {
+            return;
+        }
+
         if ($this->shouldSyncProduct()) {
             SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProduct->get_id());
             SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId']);
@@ -225,6 +229,10 @@ class ProductUpdate
     {
         if (empty($moloniProduct['variants']) && $moloniProduct['deletable'] === false) {
             throw new HookException(__('Product types do not match', 'moloni_es'));
+        }
+
+        if (SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $moloniProduct['productId'])) {
+            return;
         }
 
         if ($this->shouldSyncProduct()) {
