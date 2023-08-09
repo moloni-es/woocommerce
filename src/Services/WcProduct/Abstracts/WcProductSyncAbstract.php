@@ -180,10 +180,10 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
             $termsIds = [];
 
             foreach ($options as $option) {
-                term_exists($option, $taxonomy, $attrId);
+                $termId = term_exists($option, $taxonomy);
 
                 if (empty($termId)) {
-                    wp_create_term($option, $taxonomy);
+                    wp_insert_term($option, $taxonomy);
                 }
 
                 $termsIds[] = $option;

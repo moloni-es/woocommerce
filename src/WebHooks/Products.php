@@ -138,7 +138,7 @@ class Products
         $wcProduct = $this->fetchWcProduct($this->moloniProduct);
 
         if (!empty($wcProduct)) {
-            throw new WebhookException(__('Product not found', 'moloni_es'));
+            throw new WebhookException(__('Product already exists', 'moloni_es'));
         }
 
         if (SyncLogs::hasTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $this->moloniProduct['productId'])) {
