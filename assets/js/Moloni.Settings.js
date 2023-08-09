@@ -9,6 +9,7 @@ Moloni.Settings = (function($) {
 
     function startObservers() {
         documentStatusChange();
+        documentTypeChange();
 
         shippingInfoChange();
         loadAddressChange();
@@ -16,6 +17,29 @@ Moloni.Settings = (function($) {
 
     function documentStatusChange() {
         toggleLineObserver('document_status' , 'create_bill_of_lading_line');
+    }
+
+    function documentTypeChange() {
+        var documentTypeInput = $('#document_type');
+        var documentStatusInput = $('#document_status');
+
+        if (!documentTypeInput.length || !documentStatusInput.length) {
+            return;
+        }
+
+        documentTypeInput.on('change', function () {
+            if (documentTypeInput.val() === 'invoiceAndReceipt') {
+                documentStatusInput
+                    .val(1)
+                    .prop("disabled", true)
+                    .trigger('change');
+            } else {
+                documentStatusInput
+                    .prop("disabled", false);
+            }
+        });
+
+        documentTypeInput.trigger('change');
     }
 
     function shippingInfoChange() {
