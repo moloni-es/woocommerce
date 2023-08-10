@@ -293,7 +293,7 @@ class OrderProduct
         $taxes = $this->orderProduct->get_taxes();
 
         foreach ($taxes['subtotal'] as $taxId => $value) {
-            if (!empty($value)) {
+            if (!empty($value) || empty($this->price)) {
                 $taxRate = preg_replace('/[^0-9.]/', '', WC_Tax::get_rate_percent($taxId));
 
                 if ((float)$taxRate > 0) {
