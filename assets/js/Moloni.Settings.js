@@ -22,8 +22,9 @@ Moloni.Settings = (function($) {
     function documentTypeChange() {
         var documentTypeInput = $('#document_type');
         var documentStatusInput = $('#document_status');
+        var createBillOfLadingInput = $('#create_bill_of_lading');
 
-        if (!documentTypeInput.length || !documentStatusInput.length) {
+        if (!documentTypeInput.length || !documentStatusInput.length || !createBillOfLadingInput.length) {
             return;
         }
 
@@ -35,6 +36,16 @@ Moloni.Settings = (function($) {
                     .trigger('change');
             } else {
                 documentStatusInput
+                    .prop("disabled", false);
+            }
+
+            if (['billsOfLading', 'estimate'].includes(documentTypeInput.val())) {
+                createBillOfLadingInput
+                    .val(0)
+                    .prop("disabled", true)
+                    .trigger('change');
+            } else {
+                createBillOfLadingInput
                     .prop("disabled", false);
             }
         });
