@@ -110,7 +110,7 @@ try {
             <!-- Bill of lading -->
             <tr id="create_bill_of_lading_line">
                 <th>
-                    <label for="create_bill_of_lading"><?= __('Create bill of lading') ?></label>
+                    <label for="create_bill_of_lading"><?= __('Create bill of lading', 'moloni_es') ?></label>
                 </th>
                 <td>
                     <?php
