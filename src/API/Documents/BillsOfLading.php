@@ -129,7 +129,7 @@ class BillsOfLading extends EndpointAbstract
     {
         $query = 'mutation billsOfLadingGetPDF($companyId: Int!,$documentId: Int!)
         {
-            billsOfLadingGetPDF(companyId: $companyId,documentId: $companyId)
+            billsOfLadingGetPDF(companyId: $companyId,documentId: $documentId)
         }';
 
         return Curl::simple('documents/billsOfLadingGetPDF', $query, $variables);
