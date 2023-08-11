@@ -32,6 +32,14 @@ class DocumentTypes
         self::BILLS_OF_LADING,
     ];
 
+    public const TYPES_RELATES_TO_BILL_OF_LADING = [
+        self::INVOICE,
+        self::INVOICE_AND_RECEIPT,
+        self::SIMPLIFIED_INVOICE,
+        self::PURCHASE_ORDER,
+        self::PRO_FORMA_INVOICE,
+    ];
+
     public const TYPES_WITH_PRODUCTS = [
         self::INVOICE,
         self::PURCHASE_ORDER,
@@ -96,5 +104,10 @@ class DocumentTypes
     public static function requiresDelivery(?string $documentType = ''): bool
     {
         return in_array($documentType, self::TYPES_REQUIRES_DELIVERY, true);
+    }
+
+    public static function canRelateToBillOfLading(?string $documentType = ''): bool
+    {
+        return in_array($documentType, self::TYPES_RELATES_TO_BILL_OF_LADING, true);
     }
 }

@@ -151,6 +151,10 @@ class CreateMoloniDocument
             return false;
         }
 
+        if (!DocumentTypes::canRelateToBillOfLading($this->documentType)) {
+            return false;
+        }
+
         if (defined('CREATE_BILL_OF_LADING')) {
             return (bool)CREATE_BILL_OF_LADING;
         }
