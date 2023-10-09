@@ -123,6 +123,10 @@ class Start
             $companiesIds = Companies::queryMe();
 
             foreach ($companiesIds['data']['me']['data']['userCompanies'] as $company) {
+                if (empty($company['company']['companyId'])) {
+                    continue;
+                }
+
                 $variables = [
                     'companyId' => $company['company']['companyId'],
                     'options' => [

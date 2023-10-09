@@ -25,8 +25,9 @@ class Companies
                     }
                 } 
                 errors 
-                { field 
-                msg 
+                { 
+                    field 
+                    msg 
                 }
             }
         }';
