@@ -91,8 +91,7 @@ class Curl
         //errors sometimes come inside data/query(or mutation)
         $keyString = substr($action, strpos($action, '/') + strlen('/'));
 
-        if (!empty($parsed['data'][$keyString]['data']) ||
-            (!isset($parsed['errors']) && (empty($parsed['data'][$keyString]['errors'])))) {
+        if (!empty($parsed['data'][$keyString]['data']) || (!isset($parsed['errors']) && (empty($parsed['data'][$keyString]['errors'])))) {
 
             if (!isset(self::$cache[$action]) && in_array($action, self::$simpleAllowedCachedMethods, false)) {
                 self::$cache[$action] = $parsed;
