@@ -74,7 +74,7 @@ class Curl
         /** Errors sometimes come inside data/query(or mutation) */
         $keyString = substr($action, strpos($action, '/') + strlen('/'));
 
-        if (!isset($parsed['errors']) && (empty($parsed['data'][$keyString]['errors']))) {
+        if (empty($parsed['errors']) && empty($parsed['data'][$keyString]['errors'])) {
             return $parsed;
         }
 
