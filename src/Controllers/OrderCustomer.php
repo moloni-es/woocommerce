@@ -131,7 +131,7 @@ class OrderCustomer
                 }
 
                 // Check if the vat is one of this
-                if (empty($vat) || in_array($vat, $this->invalidVats)) {
+                if (in_array($vat, $this->invalidVats)) {
                     $vat = null;
                 }
             }
@@ -142,7 +142,7 @@ class OrderCustomer
                     $vat = str_ireplace('ES', '', $vat);
                 }
 
-                if (empty($vat) || in_array($vat, $this->invalidVats)) {
+                if (in_array($vat, $this->invalidVats)) {
                     $vat = null;
                 }
 
