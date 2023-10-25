@@ -4,6 +4,7 @@ namespace MoloniES\Controllers;
 
 use MoloniES\API\Customers;
 use MoloniES\Enums\Countries;
+use MoloniES\Enums\Languages;
 use MoloniES\Error;
 use MoloniES\Helpers\Customer;
 use MoloniES\Tools;
@@ -119,35 +120,39 @@ class OrderCustomer
             }
         }
 
-        // Do some more verifications if the vat number is Portuguese
-        if ($this->countryId === Countries::PORTUGAL) {
-            // Remove the PT part from the beginning
-            if (stripos($vat, strtoupper('PT')) === 0) {
-                $vat = str_ireplace('PT', '', $vat);
+        if (!empty($vat)) {
+            $vat = strtoupper($vat);
+
+            // Do some more verifications if the vat number is Portuguese
+            if ($this->countryId === Countries::PORTUGAL) {
+                // Remove the PT part from the beginning
+                if (stripos($vat, strtoupper('PT')) === 0) {
+                    $vat = str_ireplace('PT', '', $vat);
+                }
+
+                // Check if the vat is one of this
+                if (empty($vat) || in_array($vat, $this->invalidVats)) {
+                    $vat = null;
+                }
             }
 
-            // Check if the vat is one of this
-            if (empty($vat) || in_array($vat, $this->invalidVats)) {
-                $vat = null;
+            // Do some more verifications if the vat number is Spanish
+            if ($this->countryId === Countries::SPAIN) {
+                if (stripos($vat, strtoupper('ES')) === 0) {
+                    $vat = str_ireplace('ES', '', $vat);
+                }
+
+                if (empty($vat) || in_array($vat, $this->invalidVats)) {
+                    $vat = null;
+                }
+
+                if (!empty($vat) && !Customer::isVatEsValid($vat)) {
+                    throw new Error(__('Customer has invalid VAT for Spain.','moloni_es'));
+                }
             }
         }
 
-        // Do some more verifications if the vat number is Spanish
-        if ($this->countryId === Countries::SPAIN) {
-            if (stripos($vat, strtoupper('ES')) === 0) {
-                $vat = str_ireplace('ES', '', $vat);
-            }
-
-            if (empty($vat) || in_array($vat, $this->invalidVats)) {
-                $vat = null;
-            }
-
-            if (!empty($vat) && !Customer::isVatEsValid($vat)) {
-                throw new Error(__('Customer has invalid VAT for Spain.','moloni_es'));
-            }
-        }
-
-        if ($vat === null) {
+        if (empty($vat)) {
             return null;
         }
 
@@ -283,7 +288,7 @@ class OrderCustomer
      */
     public function getCustomerLanguageId()
     {
-        return $this->countryId === Countries::PORTUGAL ? 1 : 2;
+        return $this->countryId === Countries::PORTUGAL ? Languages::PT : Languages::ES;
     }
 
     /**
@@ -329,7 +334,7 @@ class OrderCustomer
 
         return $result;
     }
-    
+
     private static function sugereProximoNumero($str, $nums_ocupados = [])
     {
         $str_separada = str_split($str);
