@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.50
+Stable tag: 1.0.51
 Tested up to: 6.2
 WC tested up to: 7.5.1
 
@@ -67,6 +67,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 1.0.51 =
+* Force VAT numbers to upper case
+
 = 1.0.50 =
 * Fixed a problem in login
 
