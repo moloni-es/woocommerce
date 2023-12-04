@@ -836,7 +836,7 @@ class Documents
                 $result = Tools::getCurrencyExchangeRate($this->company['currency']['iso4217'], $this->order->get_currency());
             } catch (APIExeption $e) {
                 throw new DocumentError(
-                    __('Error fetching exchange rate.'),
+                    __('Error fetching exchange rate.', 'moloni_es'),
                     [
                         'message' => $e->getMessage(),
                         'data' => $e->getData()
@@ -984,10 +984,10 @@ class Documents
         $this->deliveryUnloadCity = $this->order->get_shipping_city();
 
         try {
-            $this->deliveryUnloadCountryId = Tools::getCountryIdFromCode($this->order->get_shipping_country());
+            ['countryId' => $countryId] = Tools::getMoloniCountryByCode($this->order->get_shipping_country());
         } catch (APIExeption $e) {
             throw new DocumentError(
-                __('Error fetching country'),
+                __('Error fetching country', 'moloni_es'),
                 [
                     'message' => $e->getMessage(),
                     'data' => $e->getData()
@@ -995,6 +995,7 @@ class Documents
             );
         }
 
+        $this->deliveryUnloadCountryId = $countryId;
 
         return $this;
     }
