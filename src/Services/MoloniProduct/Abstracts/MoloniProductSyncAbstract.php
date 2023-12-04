@@ -266,8 +266,6 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
 
     protected function setTaxes()
     {
-        $hasIVA = false;
-
         $this->props['taxes'] = [];
         $this->props['exemptionReason'] = '';
 
@@ -297,14 +295,10 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
                 if ($moloniTax['value'] > 0) {
                     $this->props['taxes'][] = $tax;
                 }
-
-                if ((int)$moloniTax['type'] === 1) {
-                    $hasIVA = true;
-                }
             }
         }
 
-        if (!$hasIVA) {
+        if (empty($this->props['taxes'])) {
             $this->props['exemptionReason'] = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
         }
     }

@@ -51,7 +51,6 @@ class OrderFees
     private $unit_id;
     private $has_stock = 0;
 
-    private $hasIVA = false;
     private $fiscalZone;
 
     /**
@@ -239,13 +238,10 @@ class OrderFees
 
         if ($taxRate > 0) {
             $this->taxes[] = $this->setTax($taxRate);
-        }
-
-        if (!$this->hasIVA) {
+            $this->exemption_reason = '';
+        } else {
             $this->exemption_reason = defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '';
             $this->taxes = [];
-        } else {
-            $this->exemption_reason = '';
         }
 
         return $this;
@@ -279,10 +275,6 @@ class OrderFees
         $tax['value'] = (float)$moloniTax['value'];
         $tax['ordering'] = count($this->taxes) + 1;
         $tax['cumulative'] = false;
-
-        if ((int) $moloniTax['type'] === 1) {
-            $this->hasIVA = true;
-        }
 
         return $tax;
     }

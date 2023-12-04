@@ -52,8 +52,6 @@ class OrderProduct
     /** @var int */
     private $warehouse_id = 0;
 
-    /** @var bool */
-    private $hasIVA = false;
     private $fiscalZone;
 
     /**
@@ -302,9 +300,8 @@ class OrderProduct
             }
         }
 
-        if (!$this->hasIVA) {
+        if (empty($this->taxes)) {
             $this->exemption_reason = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
-            $this->taxes = [];
         } else {
             $this->exemption_reason = '';
         }
@@ -340,10 +337,6 @@ class OrderProduct
         $tax['value'] = (float)$taxRate;
         $tax['ordering'] = count($this->taxes) + 1;
         $tax['cumulative'] = false;
-
-        if ((int)$moloniTax['type'] === 1) {
-            $this->hasIVA = true;
-        }
 
         return $tax;
     }
