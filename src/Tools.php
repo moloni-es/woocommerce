@@ -7,6 +7,8 @@ use MoloniES\API\Currencies;
 use MoloniES\API\FiscalZone;
 use MoloniES\API\Taxes;
 use MoloniES\Enums\Languages;
+use MoloniES\Enums\TaxFiscalZoneType;
+use MoloniES\Enums\TaxType;
 use MoloniES\Exceptions\APIExeption;
 
 /**
@@ -66,8 +68,8 @@ class Tools
                 'name' => 'VAT - ' . strtoupper($countryCode) . ' - ' . $taxRate . '%',
                 'fiscalZone' => $countryCode,
                 'countryId' => $countryId,
-                'type' => 1,
-                'fiscalZoneFinanceType' => 1,
+                'type' => TaxType::PERCENTAGE,
+                'fiscalZoneFinanceType' => TaxFiscalZoneType::VAT,
                 'isDefault' => false,
                 'value' => (float)$taxRate
             ]
@@ -117,6 +119,16 @@ class Tools
                         'field' => 'flags',
                         'comparison' => 'eq',
                         'value' => '0'
+                    ],
+                    [
+                        'field' => 'type',
+                        'comparison' => 'eq',
+                        'value' => (string)TaxType::PERCENTAGE
+                    ],
+                    [
+                        'field' => 'fiscalZoneFinanceType',
+                        'comparison' => 'eq',
+                        'value' => (string)TaxFiscalZoneType::VAT
                     ]
                 ],
                 'search' => [
