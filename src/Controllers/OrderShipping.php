@@ -59,9 +59,9 @@ class OrderShipping
      *
      * @param WC_Order $order
      * @param int|null $index
-     * @param string|null $fiscalZone
+     * @param array|null $fiscalZone
      */
-    public function __construct(WC_Order $order, ?int $index = 0, ?string $fiscalZone = 'es')
+    public function __construct(WC_Order $order, ?int $index = 0, ?array $fiscalZone = [])
     {
         $this->order = $order;
         $this->index = $index;

@@ -48,21 +48,24 @@ class Tools
     /**
      * Create moloni tax based on value and country code
      *
-     * @param float $taxRate Tax value
-     * @param string $countryCode Country code
+     * @param float|int $taxRate Tax value
+     * @param array|null $fiscalZone Fiscal zone
      *
      * @return array
      *
      * @throws APIExeption
      */
-    public static function createTaxFromRateAndCode($taxRate, $countryCode = 'es'): array
+    public static function createTaxFromRateAndCode($taxRate, ?array $fiscalZone = []): array
     {
+        $countryId = $fiscalZone['countryId'] ?? Enums\Countries::SPAIN;
+        $countryCode = $fiscalZone['code'] ?? 'es';
+
         $taxCreateVariables = [
             'data' => [
                 'visible' => 1,
                 'name' => 'VAT - ' . strtoupper($countryCode) . ' - ' . $taxRate . '%',
                 'fiscalZone' => $countryCode,
-                'countryId' => self::getCountryIdFromCode($countryCode),
+                'countryId' => $countryId,
                 'type' => 1,
                 'fiscalZoneFinanceType' => 1,
                 'isDefault' => false,
@@ -88,17 +91,19 @@ class Tools
      * Get full tax Object given a tax rate
      * As a fallback if we don't find a tax with the same rate we return the company default
      *
-     * @param float $taxRate Tax value
-     * @param string $countryCode Country code
+     * @param float|int $taxRate Tax value
+     * @param array|null $fiscalZone Fiscal zone
      *
      * @return mixed
      *
      * @throws APIExeption
      */
-    public static function getTaxFromRate($taxRate, $countryCode = 'es')
+    public static function getTaxFromRate($taxRate, ?array $fiscalZone = [])
     {
-        $moloniTax = [];
+        $countryCode = $fiscalZone['code'] ?? 'es';
         $countryCode = strtolower((string)$countryCode);
+
+        $moloniTax = [];
 
         $queryVariables = [
             'options' => [
@@ -128,48 +133,10 @@ class Tools
         }
 
         if (empty($moloniTax)) {
-            $moloniTax = self::createTaxFromRateAndCode($taxRate, $countryCode);
+            $moloniTax = self::createTaxFromRateAndCode($taxRate, $fiscalZone);
         }
 
         return $moloniTax;
-    }
-
-    /**
-     * Returns country id
-     *
-     * @param $countryCode
-     *
-     * @return string
-     *
-     * @throws APIExeption
-     */
-    public static function getCountryIdFromCode($countryCode): string
-    {
-        $variables = [
-            'options' => [
-                'filter' => [
-                    'field' => 'iso3166_1',
-                    'comparison' => 'eq',
-                    'value' => $countryCode
-                ]
-            ]
-        ];
-        $countryId = Enums\Countries::SPAIN;
-
-        $countriesList = Countries::queryCountries($variables);
-
-        if (isset($countriesList['data']['countries']['data']) &&
-            is_array($countriesList['data']['countries']['data']) ) {
-            foreach ($countriesList['data']['countries']['data'] as $country) {
-                if (strtoupper($country['iso3166_1']) === strtoupper($countryCode)) {
-                    $countryId = $country['countryId'];
-
-                    break;
-                }
-            }
-        }
-
-        return $countryId;
     }
 
     /**

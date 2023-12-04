@@ -59,9 +59,9 @@ class OrderFees
      *
      * @param WC_Order_Item_Fee $fee
      * @param int|null $index
-     * @param string|null $fiscalZone
+     * @param array|null $fiscalZone
      */
-    public function __construct(WC_Order_Item_Fee $fee, ?int $index = 0, ?string $fiscalZone = 'es')
+    public function __construct(WC_Order_Item_Fee $fee, ?int $index = 0, ?array $fiscalZone = [])
     {
         $this->fee = $fee;
         $this->index = $index;

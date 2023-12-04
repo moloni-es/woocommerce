@@ -62,9 +62,9 @@ class OrderProduct
      * @param WC_Order_Item_Product $product
      * @param WC_Order $wcOrder
      * @param int|null $order
-     * @param string|null $fiscalZone
+     * @param array|null $fiscalZone
      */
-    public function __construct(WC_Order_Item_Product $product, WC_Order $wcOrder, ?int $order = 0, ?string $fiscalZone = 'es')
+    public function __construct(WC_Order_Item_Product $product, WC_Order $wcOrder, ?int $order = 0, ?array $fiscalZone = [])
     {
         $this->orderProduct = $product;
         $this->wc_order = $wcOrder;

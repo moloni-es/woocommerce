@@ -11,6 +11,7 @@ use MoloniES\API\Documents\Receipt;
 use MoloniES\API\Documents\SimplifiedInvoice;
 use MoloniES\Curl;
 use MoloniES\Enums\Boolean;
+use MoloniES\Enums\Countries;
 use MoloniES\Enums\DocumentStatus;
 use MoloniES\Enums\DocumentTypes;
 use MoloniES\Exceptions\APIExeption;
@@ -34,7 +35,7 @@ class Documents
     /** @var array */
     private $company;
 
-    /** @var string */
+    /** @var array */
     private $fiscalZone;
 
     /**
@@ -431,7 +432,7 @@ class Documents
     private function mapPropsToValues(): array
     {
         $variables = [
-            'fiscalZone' => $this->fiscalZone,
+            'fiscalZone' => $this->fiscalZone['code'],
             'customerId' => $this->customerId,
             'documentSetId' => $this->documentSetId,
             'ourReference' => $this->ourReference,
@@ -682,28 +683,55 @@ class Documents
      * Set fiscal zone
      *
      * @return $this
+     *
+     * @throws DocumentError
      */
     public function setFiscalZone(): Documents
     {
-        $fiscalZone = null;
+        $fiscalZone = [];
+        $addressCode = '';
+        $defaultValues = [
+            'code' => $this->company['fiscalZone']['fiscalZone'] ?? 'ES',
+            'countryId' => $this->company['country']['countryId'] ?? Countries::SPAIN
+        ];
 
         switch (get_option('woocommerce_tax_based_on')) {
             case 'billing':
-                $fiscalZone = $this->order->get_billing_country();
+                $addressCode = $this->order->get_billing_country();
 
                 break;
             case 'shipping':
-                $fiscalZone = $this->order->get_shipping_country();
+                $addressCode = $this->order->get_shipping_country();
 
                 break;
             case 'base':
-                $fiscalZone = $this->company['fiscalZone']['fiscalZone'];
+            default:
+                $fiscalZone = $defaultValues;
 
                 break;
         }
 
+        if (!empty($addressCode)) {
+            try {
+                ['countryId' => $countryId, 'code' => $code] = Tools::getMoloniCountryByCode($addressCode);
+            } catch (APIExeption $e) {
+                throw new DocumentError(
+                    __('Error fetching document fiscal zone', 'moloni_es'),
+                    [
+                        'message' => $e->getMessage(),
+                        'data' => $e->getData()
+                    ]
+                );
+            }
+
+            $fiscalZone = [
+                'code' => $code,
+                'countryId' => $countryId
+            ];
+        }
+
         if (empty($fiscalZone)) {
-            $fiscalZone = $this->company['fiscalZone']['fiscalZone'];
+            $fiscalZone = $defaultValues;
         }
 
         $this->fiscalZone = $fiscalZone;

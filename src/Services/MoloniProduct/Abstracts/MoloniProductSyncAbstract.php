@@ -278,11 +278,15 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
             $taxRates = WC_Tax::get_base_tax_rates($productTaxes);
 
             // Get company setting to associate country code
-            $companyCountryCode = Companies::queryCompany();
-            $companyCountryCode = $companyCountryCode['data']['company']['data']['fiscalZone']['fiscalZone'];
+            $query = Companies::queryCompany();
+
+            $fiscalZone = [
+                'code' => $query['data']['company']['data']['fiscalZone']['fiscalZone'],
+                'countryId' => $query['data']['company']['data']['country']['countryId']
+            ];
 
             foreach ($taxRates as $order => $taxRate) {
-                $moloniTax = Tools::getTaxFromRate((float)$taxRate['rate'], $companyCountryCode);
+                $moloniTax = Tools::getTaxFromRate((float)$taxRate['rate'], $fiscalZone);
 
                 $tax = [];
                 $tax['taxId'] = (int)$moloniTax['taxId'];
