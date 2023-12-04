@@ -4,6 +4,7 @@ namespace MoloniES;
 
 use MoloniES\API\Companies;
 use MoloniES\Enums\Boolean;
+use MoloniES\Enums\Languages;
 use MoloniES\Enums\MoloniPlans;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Helpers\WebHooks;
@@ -150,10 +151,14 @@ class Start
             $companiesIds = Companies::queryMe();
 
             foreach ($companiesIds['data']['me']['data']['userCompanies'] as $company) {
+                if (empty($company['company']['companyId'])) {
+                    continue;
+                }
+
                 $variables = [
                     'companyId' => $company['company']['companyId'],
                     'options' => [
-                        'defaultLanguageId' => 2
+                        'defaultLanguageId' => Languages::ES
                     ]
                 ];
 
