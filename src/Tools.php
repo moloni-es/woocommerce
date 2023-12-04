@@ -181,7 +181,7 @@ class Tools
      *
      * @throws APIExeption
      */
-    public static function getMoloniCountryByCode(string $countryIso = ''): array
+    public static function getMoloniCountryByCode(?string $countryIso = ''): array
     {
         $default = [
             'countryId' => Enums\Countries::SPAIN,
