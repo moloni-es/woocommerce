@@ -28,6 +28,7 @@ class Countries extends EndpointAbstract
                     countryId
                     iso3166_1
                     title
+                    ordering
                     language
                     {
                         languageId

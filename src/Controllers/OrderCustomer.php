@@ -25,8 +25,8 @@ class OrderCustomer
     private $zipCode = '10000';
     private $address = 'Desconocido';
     private $city = 'Desconocido';
-    private $languageId = 2;
-    private $countryId = 1;
+    private $languageId;
+    private $countryId;
 
     /**
      * List of some invalid vat numbers
@@ -52,8 +52,8 @@ class OrderCustomer
      */
     public function create()
     {
-        $this->countryId = $this->getCustomerCountryId();
-        $this->languageId = $this->getCustomerLanguageId();
+        $this->setLanguageAndCountryId();
+
         $this->email = $this->order->get_billing_email();
         $this->vat = $this->getVatNumber();
 
@@ -117,11 +117,13 @@ class OrderCustomer
         if (isset($result['data'][$keyString]['data']['customerId'])) {
             $this->customer_id = $result['data'][$keyString]['data']['customerId'];
         } else {
-            throw new DocumentError(__('There was an error saving the customer.','moloni_es'));
+            throw new DocumentError(__('There was an error saving the customer.', 'moloni_es'));
         }
 
         return $this->customer_id;
     }
+
+    //          Gets          //
 
     /**
      * Get the vat number of an order
@@ -183,18 +185,19 @@ class OrderCustomer
     {
         $billingName = $this->order->get_billing_first_name();
         $billingLastName = $this->order->get_billing_last_name();
+
         if (!empty($billingLastName)) {
             $billingName .= ' ' . $this->order->get_billing_last_name();
         }
 
         $billingCompany = trim($this->order->get_billing_company());
+
         if (!empty($billingCompany)) {
             $this->name = $billingCompany;
             $this->contactName = $billingName;
         } elseif (!empty($billingName)) {
             $this->name = $billingName;
         }
-
 
         return $this->name;
     }
@@ -249,6 +252,35 @@ class OrderCustomer
         return $this->zipCode;
     }
 
+    //          Sets          //
+
+    /**
+     * Set language and country
+     *
+     * @throws DocumentError
+     */
+    private function setLanguageAndCountryId(): void
+    {
+        $countryCode = $this->order->get_billing_country();
+
+        try {
+            ['countryId' => $countryId, 'languageId' => $languageId] = Tools::getMoloniCountryByCode($countryCode);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching countries', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
+
+        $this->countryId = $countryId;
+        $this->languageId = $languageId;
+    }
+
+    //          Statics          //
+
     /**
      * Get the customer next available number for incremental inserts
      *
@@ -287,39 +319,7 @@ class OrderCustomer
         return $nextNumber;
     }
 
-    /**
-     * Get the country_id based on a ISO value
-     *
-     * @return int
-     *
-     * @throws DocumentError
-     */
-    public function getCustomerCountryId(): int
-    {
-        $countryCode = $this->order->get_billing_country();
-
-        try {
-            $id = (int)Tools::getCountryIdFromCode($countryCode);
-        } catch (APIExeption $e) {
-            throw new DocumentError(
-                __('Error fetching country'),
-                [
-                    'message' => $e->getMessage(),
-                    'data' => $e->getData()
-                ]
-            );
-        }
-
-        return $id;
-    }
-
-    /**
-     * If the country of the customer is one of the available we set it to Portuguese
-     */
-    public function getCustomerLanguageId(): int
-    {
-        return $this->countryId === Countries::PORTUGAL ? 1 : 2;
-    }
+    //          Requests          //
 
     /**
      * Search for a customer based on $this->vat or $this->email

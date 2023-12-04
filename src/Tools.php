@@ -6,6 +6,7 @@ use MoloniES\API\Countries;
 use MoloniES\API\Currencies;
 use MoloniES\API\FiscalZone;
 use MoloniES\API\Taxes;
+use MoloniES\Enums\Languages;
 use MoloniES\Exceptions\APIExeption;
 
 /**
@@ -169,6 +170,59 @@ class Tools
         }
 
         return $countryId;
+    }
+
+    /**
+     * Returns country id
+     *
+     * @param string $countryIso
+     *
+     * @return array
+     *
+     * @throws APIExeption
+     */
+    public static function getMoloniCountryByCode(string $countryIso = ''): array
+    {
+        $default = [
+            'countryId' => Enums\Countries::SPAIN,
+            'languageId' => Languages::ES,
+            'code' => strtoupper($countryIso)
+        ];
+
+        /** Early return */
+        if (empty($countryIso)) {
+            return $default;
+        }
+
+        $variables = [
+            'options' => [
+                'search' => [
+                    'field' => 'iso3166_1',
+                    'value' => $countryIso,
+                ],
+                'order' => [
+                    [
+                        'field' => 'ordering',
+                        'sort' => 'ASC'
+                    ]
+                ],
+                'defaultLanguageId' => Languages::EN
+            ],
+        ];
+
+        $targetCountries = Countries::queryCountries($variables)['data']['countries']['data'] ?? [];
+
+        /** Early return */
+        if (empty($targetCountries)) {
+            return $default;
+        }
+
+        /** Return first */
+        return [
+            'countryId' => (int)$targetCountries[0]['countryId'],
+            'languageId' => (int)$targetCountries[0]['language']['languageId'],
+            'code' => strtoupper($countryIso)
+        ];
     }
 
     /**
