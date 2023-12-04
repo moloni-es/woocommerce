@@ -13,6 +13,7 @@ use MoloniES\API\Warehouses;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\DocumentStatus;
 use MoloniES\Enums\DocumentTypes;
+use MoloniES\Enums\Languages;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Model;
 
@@ -26,7 +27,7 @@ try {
 
     $countries = Countries::queryCountries([
         'options' => [
-            'defaultLanguageId' => 2
+            'defaultLanguageId' => Languages::ES
         ]
     ]);
 } catch (APIExeption $e) {
