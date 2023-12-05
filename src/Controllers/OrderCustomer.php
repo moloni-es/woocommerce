@@ -276,7 +276,12 @@ class OrderCustomer
         }
 
         $this->countryId = $countryId;
-        $this->languageId = $languageId;
+
+        if (defined('CUSTOMER_LANGUAGE') && !empty(CUSTOMER_LANGUAGE)) {
+            $this->languageId = (int)CUSTOMER_LANGUAGE;
+        } else {
+            $this->languageId = $languageId;
+        }
     }
 
     //          Statics          //

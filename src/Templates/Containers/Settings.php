@@ -124,10 +124,10 @@ try {
 
                     <select id="create_bill_of_lading" name='opt[create_bill_of_lading]' class='inputOut'>
                         <option value='0' <?= ($createBillOfLading === 0 ? 'selected' : '') ?>>
-                            <?= __('No') ?>
+                            <?= __('No', 'moloni_es') ?>
                         </option>
                         <option value='1' <?= ($createBillOfLading === 1 ? 'selected' : '') ?>>
-                            <?= __('Yes') ?>
+                            <?= __('Yes', 'moloni_es') ?>
                         </option>
                     </select>
                     <p class='description'><?= __('Choose if you want to create a Bill of Lading associated with the main document', 'moloni_es') ?></p>
@@ -344,6 +344,43 @@ try {
             <tbody>
             <tr>
                 <th>
+                    <label for="customer_language"><?= __('Customer language', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <?php
+                    $customerLanguage = 0;
+
+                    if (defined('CUSTOMER_LANGUAGE')) {
+                        $customerLanguage = (int)CUSTOMER_LANGUAGE;
+                    }
+                    ?>
+
+                    <select id="customer_language" name='opt[customer_language]' class='inputOut'>
+                        <option value='0' <?= ($customerLanguage === 0 ? 'selected' : '') ?>>
+                            <?= __('Automatic', 'moloni_es') ?>
+                        </option>
+                        <optgroup label="<?= __('Language', 'moloni_es')?>">
+                            <option value='<?= Languages::PT ?>' <?= ($customerLanguage === Languages::PT ? 'selected' : '') ?>>
+                                <?= __('Portuguese', 'moloni_es') ?>
+                            </option>
+                            <option value='<?= Languages::ES ?>' <?= ($customerLanguage === Languages::ES ? 'selected' : '') ?>>
+                                <?= __('Spanish', 'moloni_es') ?>
+                            </option>
+                            <option value='<?= Languages::EN ?>' <?= ($customerLanguage === Languages::EN ? 'selected' : '') ?>>
+                                <?= __('English', 'moloni_es') ?>
+                            </option>
+                        </optgroup>
+                    </select>
+
+                    <p class='description'>
+                        <?= __('Default language for customer\'s', 'moloni_es') ?>
+                    </p>
+
+                </td>
+            </tr>
+
+            <tr>
+                <th>
                     <label for="client_prefix"><?= __('Customer\'s number prefix', 'moloni_es') ?></label>
                 </th>
                 <td>
@@ -425,6 +462,7 @@ try {
                     </p>
                 </td>
             </tr>
+
             </tbody>
         </table>
 
