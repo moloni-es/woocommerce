@@ -3,16 +3,35 @@ if (Moloni === undefined) {
 }
 
 Moloni.Settings = (function($) {
-    function init() {
+    var translations = {};
+
+    function init(_translations) {
+        translations = _translations;
+
         startObservers();
     }
 
     function startObservers() {
+        prefixChange();
+
         documentStatusChange();
         documentTypeChange();
 
         shippingInfoChange();
         loadAddressChange();
+    }
+
+    function prefixChange() {
+        var prefixPreview = $('#prefix_preview');
+        var clientPrefix = $('#client_prefix');
+
+        if (!prefixPreview.length || !clientPrefix.length) {
+            return;
+        }
+
+        clientPrefix.on('change', function () {
+            prefixPreview.text('(' + translations.example + ': ' + clientPrefix.val() + ')');
+        });
     }
 
     function documentStatusChange() {

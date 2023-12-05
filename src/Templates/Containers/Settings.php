@@ -349,22 +349,15 @@ try {
                 <td>
                     <input id="client_prefix" name="opt[client_prefix]" type="text"
                            value="<?= (defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '') ?>"
-                           class="inputOut" onchange="prefixPreview()">
+                           class="inputOut">
                     <div style="max-width: 80vw ;overflow:hidden;">
-                        <a id="prefix_preview"><?= sprintf(__('(Example: %s1)', 'moloni_es'), (defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '')) ?></a>
+                        <a id="prefix_preview">
+                            (<?= __('Example', 'moloni_es') . ': ' . (defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '') ?>)
+                        </a>
                     </div>
                     <p class='description'><?= __('Prefix used when creating customer\'s', 'moloni_es') ?></p>
                 </td>
             </tr>
-
-            <script>
-                function prefixPreview() {
-                    var label = document.getElementById("prefix_preview");
-                    var input = document.getElementById("client_prefix");
-
-                    label.innerText = '(Example: ' + input.value + '1)';
-                }
-            </script>
 
             <tr>
                 <th>
@@ -470,5 +463,7 @@ try {
 </form>
 
 <script>
-    Moloni.Settings.init();
+    Moloni.Settings.init({
+        example: "<?= __('Example', 'moloni_es') ?>"
+    });
 </script>
