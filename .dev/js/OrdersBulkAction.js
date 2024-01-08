@@ -3,6 +3,8 @@ if (Moloni === undefined) {
 }
 
 Moloni.OrdersBulkAction = (function(translations) {
+    var $ = jQuery;
+
     var ProgressWindow = $("#bulk-action-progress-modal");
     var ProgressWindowMessage = $('#bulk-action-progress-message');
     var ProgressWindowCurrent = $('#bulk-action-progress-current');
