@@ -115,7 +115,7 @@ if (!defined('ABSPATH')) {
 <?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/ImportStocksModal.php'; ?>
 
 <script>
-    jQuery(document).ready(function ($) {
+    jQuery(document).ready(function () {
         Moloni.Tools.init();
     });
 </script>

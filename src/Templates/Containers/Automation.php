@@ -298,5 +298,7 @@ try {
 </form>
 
 <script>
-    Moloni.Automations.init();
+    jQuery(document).ready(function () {
+        Moloni.Automations.init();
+    });
 </script>

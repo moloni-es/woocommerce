@@ -1,6 +1,8 @@
-'use strict';
+if (Moloni === undefined) {
+    var Moloni = {};
+}
 
-jQuery(document).ready(function ($) {
+Moloni.OrdersBulkAction = (function(translations) {
     var ProgressWindow = $("#bulk-action-progress-modal");
     var ProgressWindowMessage = $('#bulk-action-progress-message');
     var ProgressWindowCurrent = $('#bulk-action-progress-current');

@@ -8,6 +8,8 @@ use MoloniES\Enums\LogLevel;
 use MoloniES\Models\Logs;
 
 $logs = Logs::getAllAvailable();
+
+$logsContext = [];
 ?>
 
 <div class="wrap">
@@ -137,5 +139,7 @@ $logs = Logs::getAllAvailable();
 <?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/Logs/LogsContextModal.php'; ?>
 
 <script>
-    Moloni.Logs.init();
+    jQuery(document).ready(function () {
+        Moloni.Logs.init();
+    });
 </script>

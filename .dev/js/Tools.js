@@ -1,5 +1,3 @@
-//       Page       //
-
 if (Moloni === undefined) {
     var Moloni = {};
 }

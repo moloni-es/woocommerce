@@ -501,7 +501,9 @@ try {
 </form>
 
 <script>
-    Moloni.Settings.init({
-        example: "<?= __('Example', 'moloni_es') ?>"
+    jQuery(document).ready(function () {
+        Moloni.Settings.init({
+            example: "<?= __('Example', 'moloni_es') ?>"
+        });
     });
 </script>

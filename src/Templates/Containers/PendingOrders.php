@@ -182,3 +182,19 @@ $orders = PendingOrders::getAllAvailable();
 </div>
 
 <?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/PendingOrders/BulkActionModal.php'; ?>
+
+<script>
+    jQuery(document).ready(function () {
+        Moloni.OrdersBulkAction({
+            startingProcess: "<?=__('Starting process...', 'moloni_es')?>",
+            noOrdersSelected: "<?=__('No orders selected to process', 'moloni_es')?>",
+            creatingDocument: "<?=__('Creating document', 'moloni_es')?>",
+            discardingOrder: "<?=__('Discarding order', 'moloni_es')?>",
+            createdDocuments: "<?=__('Documents created:', 'moloni_es')?>",
+            documentsWithErrors: "<?=__('Documents with errors:', 'moloni_es')?>",
+            discardedOrders: "<?=__('Orders discarded:', 'moloni_es')?>",
+            ordersWithErrors: "<?=__('Orders with errors:', 'moloni_es')?>",
+            close: "<?=__('Close', 'moloni_es')?>",
+        });
+    });
+</script>
