@@ -125,9 +125,15 @@ class OrderProduct
 
     //          Sets          //
 
-    private function setName(): OrderProduct
+    private function setName(?string $name = ''): OrderProduct
     {
-        $this->name = $this->orderProduct->get_name();
+        $name = apply_filters('moloni_es_before_order_item_setName', $name, $this->orderProduct);
+
+        if (empty($name)) {
+            $name = $this->orderProduct->get_name();
+        }
+
+        $this->name = apply_filters('moloni_es_after_order_item_setName', $name, $this->orderProduct);
 
         return $this;
     }
@@ -137,15 +143,35 @@ class OrderProduct
      *
      * @return $this
      */
-    private function setSummary(): OrderProduct
+    private function setSummary(?string $summary = ''): OrderProduct
     {
-        $this->summary .= $this->getSummaryVariationAttributes();
+        $summary = apply_filters('moloni_es_before_order_item_setSummary', $summary, $this->orderProduct);
 
-        if (!empty($this->summary)) {
-            $this->summary .= "\n";
+        if (empty($summary)) {
+            $variationAttributes = $this->getSummaryVariationAttributes();
+            $extraOptions = $this->getSummaryExtraProductOptions();
+
+            switch (true) {
+                case !empty($variationAttributes) && !empty($extraOptions):
+                    $summary = $variationAttributes . '\n' . $extraOptions;
+
+                    break;
+                case !empty($variationAttributes):
+                    $summary = $variationAttributes;
+
+                    break;
+                case !empty($extraOptions):
+                    $summary = $extraOptions;
+
+                    break;
+                default:
+                    $summary = '';
+
+                    break;
+            }
         }
 
-        $this->summary .= $this->getSummaryExtraProductOptions();
+        $this->summary = apply_filters('moloni_es_after_order_item_setSummary', $summary, $this->orderProduct);
 
         return $this;
     }

@@ -76,15 +76,61 @@ class OrderShipping
      */
     public function create(): OrderShipping
     {
-        $this->qty = 1;
-        $this->price = (float)$this->order->get_shipping_total();
-        $this->name = $this->order->get_shipping_method();
-
         $this
+            ->setQuantity()
+            ->setPrice()
+            ->setName()
             ->setReference()
             ->setDiscount()
             ->setTaxes()
+            ->setSummary()
             ->setProductId();
+
+        return $this;
+    }
+
+    //            Sets            //
+
+    private function setQuantity(): OrderShipping
+    {
+        $this->qty = 1;
+
+        return $this;
+    }
+
+    private function setPrice(): OrderShipping
+    {
+        $price = (float)$this->order->get_shipping_total();
+
+        $refundedValue = (float)$this->order->get_total_shipping_refunded();
+
+        if ($refundedValue > 0) {
+            $price -= $refundedValue;
+        }
+
+        if ($price < 0) {
+            $price = 0;
+        }
+
+        $this->price = $price;
+
+        return $this;
+    }
+
+    private function setName(): OrderShipping
+    {
+        $name = $this->order->get_shipping_method();
+
+        $this->name = apply_filters('moloni_es_after_order_shipping_setName', $name, $this->order);
+
+        return $this;
+    }
+
+    private function setSummary(?string $summary = ''): OrderShipping
+    {
+        $summary = empty($summary) ? '' : $summary;
+
+        $this->summary = apply_filters('moloni_es_after_order_shipping_setSummary', $summary, $this->order);
 
         return $this;
     }
@@ -272,6 +318,13 @@ class OrderShipping
         $tax['cumulative'] = false;
 
         return $tax;
+    }
+
+    //            Gets            //
+
+    public function getPrice(): float
+    {
+        return $this->price ?? 0.0;
     }
 
     /**

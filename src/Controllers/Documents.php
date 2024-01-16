@@ -32,6 +32,13 @@ use WC_Order_Item_Product;
  */
 class Documents
 {
+    /**
+     * Field used in filter to cancel document creation
+     *
+     * @var bool
+     */
+    public $stopProcess = false;
+
     /** @var array */
     private $company;
 
@@ -181,6 +188,12 @@ class Documents
      */
     public function createDocument(): Documents
     {
+        apply_filters('moloni_es_before_insert_document', $this);
+
+        if ($this->stopProcess) {
+            throw new DocumentError(__('Document creation stopped', 'moloni_es'));
+        }
+
         $keyString = '';
         $mutation = [];
         $props = $this->mapPropsToValues();
@@ -242,6 +255,8 @@ class Documents
             $this->documentTotal;
 
         $this->saveRecord();
+
+        apply_filters('moloni_es_after_insert_document', $this);
 
         if ($this->shouldCloseDocument()) {
             $this->closeDocument();
@@ -335,7 +350,13 @@ class Documents
         }
 
         if (isset($mutation['errors']) || !isset($mutation['data'][$keyString]['data'])) {
-            return false;
+            throw new DocumentError(
+                __('Error closing document', 'moloni_es'),
+                [
+                    'variables' => $variables,
+                    'mutation' => $mutation,
+                ]
+            );
         }
 
         // Send email to the client
@@ -354,12 +375,12 @@ class Documents
             $this->order->add_order_note(__('Document sent by email to the customer', 'moloni_es'));
         }
 
+        apply_filters('moloni_es_after_close_document', $this);
+
         $note = __('Document inserted in Moloni', 'moloni_es');
         $note .= " (" . $this->documentTypeName . ")";
 
         $this->order->add_order_note($note);
-
-        return $mutation['data'][$keyString]['data'];
     }
 
     //          PRIVATES          //
@@ -373,6 +394,8 @@ class Documents
      */
     private function init(): void
     {
+        apply_filters('moloni_es_before_start_document', $this);
+
         $this
             ->setYourReference()
             ->setOurReference()
@@ -821,7 +844,11 @@ class Documents
     {
         if ($this->order->get_shipping_method() && (float)$this->order->get_shipping_total() > 0) {
             $newOrderShipping = new OrderShipping($this->order, count($this->products), $this->fiscalZone);
-            $this->products[] = $newOrderShipping->create()->mapPropsToValues();
+            $newOrderShipping->create();
+
+            if ($newOrderShipping->getPrice() > 0) {
+                $this->products[] = $newOrderShipping->mapPropsToValues();
+            }
         }
 
         return $this;
