@@ -42,6 +42,7 @@ gulp.task('js:prod', () => {
         './js/OrdersBulkAction.js',
         './js/Settings.js',
         './js/Login.js',
+        './js/Tools.js',
     ];
 
     return (

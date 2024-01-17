@@ -26,10 +26,10 @@ class Ajax
         add_action('wp_ajax_genInvoice', [$this, 'genInvoice']);
         add_action('wp_ajax_discardOrder', [$this, 'discardOrder']);
 
-        add_action('wp_ajax_toolsImportStock', [$this, 'toolsImportStock']);
-        add_action('wp_ajax_toolsImportProduct', [$this, 'toolsImportProduct']);
-        add_action('wp_ajax_toolsExportStock', [$this, 'toolsExportStock']);
-        add_action('wp_ajax_toolsExportProduct', [$this, 'toolsExportProduct']);
+        add_action('wp_ajax_toolsMassImportStock', [$this, 'toolsMassImportStock']);
+        add_action('wp_ajax_toolsMassImportProduct', [$this, 'toolsMassImportProduct']);
+        add_action('wp_ajax_toolsMassExportStock', [$this, 'toolsMassExportStock']);
+        add_action('wp_ajax_toolsMassExportProduct', [$this, 'toolsMassExportProduct']);
     }
 
     //             Publics             //
@@ -108,7 +108,7 @@ class Ajax
     }
 
 
-    public function toolsImportStock()
+    public function toolsMassImportStock()
     {
         if (!$this->isAuthed()) {
             return;
@@ -130,7 +130,7 @@ class Ajax
         $this->sendJson($response);
     }
 
-    public function toolsImportProduct()
+    public function toolsMassImportProduct()
     {
         if (!$this->isAuthed()) {
             return;
@@ -152,7 +152,7 @@ class Ajax
         $this->sendJson($response);
     }
 
-    public function toolsExportStock()
+    public function toolsMassExportStock()
     {
         if (!$this->isAuthed()) {
             return;
@@ -174,7 +174,7 @@ class Ajax
         $this->sendJson($response);
     }
 
-    public function toolsExportProduct()
+    public function toolsMassExportProduct()
     {
         if (!$this->isAuthed()) {
             return;

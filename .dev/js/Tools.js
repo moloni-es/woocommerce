@@ -9,16 +9,16 @@ Moloni.Tools = (function ($) {
 
     function startObservers() {
         $('#importStocksButton').on('click', function () {
-            showPreModal('import-stocks-modal', 'toolsImportStock');
+            showPreModal('import-stocks-modal', 'toolsMassImportStock');
         });
         $('#importProductsButton').on('click', function () {
-            showPreModal('import-products-modal', 'toolsImportProduct');
+            showPreModal('import-products-modal', 'toolsMassImportProduct');
         });
         $('#exportStocksButton').on('click', function () {
-            showPreModal('export-stocks-modal', 'toolsExportStock');
+            showPreModal('export-stocks-modal', 'toolsMassExportStock');
         });
         $('#exportProductsButton').on('click', function () {
-            showPreModal('export-products-modal', 'toolsExportProduct');
+            showPreModal('export-products-modal', 'toolsMassExportProduct');
         });
     }
 
