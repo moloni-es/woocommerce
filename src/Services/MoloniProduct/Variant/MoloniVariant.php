@@ -175,7 +175,7 @@ class MoloniVariant
 
             if (empty($warehouseId)) {
                 try {
-                    $warehouseId = MoloniWarehouse::getDefaultWarehouse();
+                    $warehouseId = MoloniWarehouse::getDefaultWarehouseId();
                 } catch (HelperException $e) {
                     throw new ServiceException($e->getMessage(), $e->getData());
                 }

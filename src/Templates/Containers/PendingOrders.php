@@ -35,7 +35,7 @@ $orders = PendingOrders::getAllAvailable();
         </div>
     </div>
 
-    <table class='wp-list-table widefat fixed striped posts'>
+    <table class='wp-list-table widefat striped posts'>
         <thead>
         <tr>
             <td class="manage-column column-cb check-column">

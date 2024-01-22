@@ -5,8 +5,6 @@ use MoloniES\Exceptions\Core\MoloniException;
 if (!defined('ABSPATH')) {
     exit;
 }
-
-$tab = sanitize_text_field($_GET['tab'] ?? '');
 ?>
 
 <section id="moloni" class="moloni">
@@ -18,27 +16,27 @@ $tab = sanitize_text_field($_GET['tab'] ?? '');
 
     <nav class="nav-tab-wrapper woo-nav-tab-wrapper">
         <a href="<?= esc_url(admin_url('admin.php?page=molonies')) ?>"
-           class="nav-tab <?= ($tab === '') ? 'nav-tab-active' : '' ?>">
+           class="nav-tab <?= ($this->activeTab === '') ? 'nav-tab-active' : '' ?>">
             <?= __('Orders', 'moloni_es') ?>
         </a>
 
         <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=settings')) ?>"
-           class="nav-tab <?= ($tab === 'settings') ? 'nav-tab-active' : '' ?>">
+           class="nav-tab <?= ($this->activeTab === 'settings') ? 'nav-tab-active' : '' ?>">
             <?= __('Settings', 'moloni_es') ?>
         </a>
 
         <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=automation')) ?>"
-           class="nav-tab <?= ($tab === 'automation') ? 'nav-tab-active' : '' ?>">
+           class="nav-tab <?= ($this->activeTab === 'automation') ? 'nav-tab-active' : '' ?>">
             <?= __('Automation', 'moloni_es') ?>
         </a>
 
         <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=logs')) ?>"
-           class="nav-tab <?= $tab === 'logs' ? 'nav-tab-active' : '' ?>">
+           class="nav-tab <?= $this->activeTab === 'logs' ? 'nav-tab-active' : '' ?>">
             <?= __('Logs', 'moloni_es') ?>
         </a>
 
         <a href="<?= esc_url(admin_url('admin.php?page=molonies&tab=tools')) ?>"
-           class="nav-tab <?= ($tab === 'tools') ? 'nav-tab-active' : '' ?>">
+           class="nav-tab <?= (in_array($this->activeTab, ['tools', 'wcProductsList', 'moloniProductsList'])) ? 'nav-tab-active' : '' ?>">
             <?= __('Tools', 'moloni_es') ?>
         </a>
     </nav>
@@ -50,7 +48,7 @@ $tab = sanitize_text_field($_GET['tab'] ?? '');
             $pluginErrorException->showError();
         }
 
-        switch ($tab) {
+        switch ($this->activeTab) {
             case 'tools':
                 include MOLONI_ES_TEMPLATE_DIR . 'Containers/Tools.php';
                 break;
@@ -63,11 +61,16 @@ $tab = sanitize_text_field($_GET['tab'] ?? '');
             case 'logs':
                 include MOLONI_ES_TEMPLATE_DIR . 'Containers/Logs.php';
                 break;
+            case 'wcProductsList':
+                include MOLONI_ES_TEMPLATE_DIR . 'Containers/WcProducts.php';
+                break;
+            case 'moloniProductsList':
+                include MOLONI_ES_TEMPLATE_DIR . 'Containers/MoloniProducts.php';
+                break;
             default:
                 include MOLONI_ES_TEMPLATE_DIR . 'Containers/PendingOrders.php';
                 break;
         }
         ?>
     </div>
-
 </section>

@@ -15,10 +15,8 @@ class MoloniWarehouse
      *
      * @throws HelperException
      */
-    public static function getDefaultWarehouse(): int
+    public static function getDefaultWarehouseId(): int
     {
-        $warehouseId = 0;
-
         try {
             $results = Warehouses::queryWarehouses();
         } catch (APIExeption $e) {
@@ -30,19 +28,13 @@ class MoloniWarehouse
 
         foreach ($results as $result) {
             if ((bool)$result['isDefault'] === true) {
-                $warehouseId = (int)$result['warehouseId'];
-
-                break;
+                return (int)$result['warehouseId'];
             }
         }
 
-        if ($warehouseId === 0) {
-            throw new HelperException(
-                __('No default warehouse found', 'moloni_es'),
-                ['results' => $results]
-            );
-        }
-
-        return $warehouseId;
+        throw new HelperException(
+            __('No default warehouse found', 'moloni_es'),
+            ['results' => $results]
+        );
     }
 }

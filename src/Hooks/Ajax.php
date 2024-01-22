@@ -30,6 +30,11 @@ class Ajax
         add_action('wp_ajax_toolsMassImportProduct', [$this, 'toolsMassImportProduct']);
         add_action('wp_ajax_toolsMassExportStock', [$this, 'toolsMassExportStock']);
         add_action('wp_ajax_toolsMassExportProduct', [$this, 'toolsMassExportProduct']);
+
+        add_action('wp_ajax_toolsCreateWcProduct', [$this, 'toolsCreateWcProduct']);
+        add_action('wp_ajax_toolsUpdateWcStock', [$this, 'toolsUpdateWcStock']);
+        add_action('wp_ajax_toolsCreateMoloniProduct', [$this, 'toolsCreateMoloniProduct']);
+        add_action('wp_ajax_toolsUpdateMoloniStock', [$this, 'toolsUpdateMoloniStock']);
     }
 
     //             Publics             //
@@ -196,6 +201,8 @@ class Ajax
         $this->sendJson($response);
     }
 
+    // todo: methods here
+
     //             Privates             //
 
     private function isAuthed(): bool
@@ -212,7 +219,7 @@ class Ajax
     {
         ob_start();
 
-        include MOLONI_ES_TEMPLATE_DIR . 'Modals/Tools/Blocks/ActionModalContent.php';
+        include MOLONI_ES_TEMPLATE_DIR . 'Modals/Products/Blocks/ActionModalContent.php';
 
         return ob_get_clean();
     }

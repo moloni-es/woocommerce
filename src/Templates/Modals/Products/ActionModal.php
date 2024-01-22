@@ -1,7 +1,12 @@
 <div id="action-modal" class="modal" style="display: none">
-    <h2>
+    <h2 id="action-modal-title-start" style="display: none;">
         <?= __('Action in progress', 'moloni_es') ?>
     </h2>
+
+    <h2 id="action-modal-title-end" style="display: none;">
+        <?= __('Process concluded', 'moloni_es') ?>
+    </h2>
+
     <div id="action-modal-content" style="display: none;"></div>
 
     <div id="action-modal-spinner" style="display: none;">

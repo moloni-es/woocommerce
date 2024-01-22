@@ -22,7 +22,7 @@ $logsContext = [];
     </div>
 
     <form method="post" action='<?= admin_url('admin.php?page=molonies&tab=logs') ?>'>
-        <table class='wp-list-table widefat fixed striped posts'>
+        <table class='wp-list-table widefat striped posts'>
             <thead>
             <tr>
                 <th><a><?= __('Date', 'moloni_es') ?></a></th>

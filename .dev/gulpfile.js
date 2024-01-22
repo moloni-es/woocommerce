@@ -36,13 +36,16 @@ gulp.task('js:prod', () => {
 
     const files = [
         './node_modules/jquery-modal/jquery.modal.js',
+        './js/modals/ProductsProcessAll.js',
+        './js/modals/ProductsProcessBulk.js',
         './js/Automations.js',
         './js/Login.js',
         './js/Logs.js',
+        './js/MoloniProducts.js',
         './js/OrdersBulkAction.js',
         './js/Settings.js',
-        './js/Login.js',
         './js/Tools.js',
+        './js/WcProducts.js',
     ];
 
     return (

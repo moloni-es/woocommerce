@@ -17,6 +17,39 @@ class Warehouses extends EndpointAbstract
      *
      * @throws APIExeption
      */
+    public static function queryWarehouse(?array $variables = []): array
+    {
+        $query = 'query warehouse($companyId: Int!,$warehouseId: Int!)
+        {
+            warehouse(companyId: $companyId,warehouseId: $warehouseId)
+            {
+                data
+                {
+                    warehouseId
+                    visible
+                    name
+                    number
+                }
+                errors
+                {
+                    field
+                    msg
+                }
+            }
+        }';
+
+        return Curl::simple('warehouses/warehouse', $query, $variables);
+    }
+
+    /**
+     * Get All Warehouses from Moloni ES
+     *
+     * @param array|null $variables
+     *
+     * @return array returns the Graphql response array or an error array
+     *
+     * @throws APIExeption
+     */
     public static function queryWarehouses(?array $variables = []): array
     {
         $action = 'warehouses/warehouses';
