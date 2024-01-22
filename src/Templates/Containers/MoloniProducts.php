@@ -41,7 +41,23 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
     <?= __('All actions on this page will be in the Moloni -> WooCommerce direction.', 'moloni_es') ?>
 </h4>
 
-<div class="notice notice-warning m-0">
+<div class="notice notice-success m-0">
+    <p>
+        <?= __('Do you want to import your entire catalogue?', 'moloni_es') ?>
+    </p>
+
+    <p class="">
+        <button id="importProductsButton" class="button button-large">
+            <?= __('Import all products', 'moloni_es') ?>
+        </button>
+
+        <button id="importStocksButton" class="button button-large">
+            <?= __('Import all stock', 'moloni_es') ?>
+        </button>
+    </p>
+</div>
+
+<div class="notice notice-warning m-0 mt-4">
     <p>
         <?= __('Moloni stock values based on:', 'moloni_es') ?>
     </p>
@@ -67,22 +83,6 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
             echo '</b>';
         }
         ?>
-    </p>
-</div>
-
-<div class="notice notice-success m-0 mt-4">
-    <p>
-        <?= __('Do you want to import your entire catalogue?', 'moloni_es') ?>
-    </p>
-
-    <p class="">
-        <button id="importProductsButton" class="button button-large">
-            <?= __('Import all products', 'moloni_es') ?>
-        </button>
-
-        <button id="importStocksButton" class="button button-large">
-            <?= __('Import all stock', 'moloni_es') ?>
-        </button>
     </p>
 </div>
 
