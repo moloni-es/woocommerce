@@ -181,7 +181,7 @@ class ExportStockChanges extends ExportService
 
             /** Fetch matching Moloni variant */
             $moloniVariant = (new FindVariant(
-                $wcProduct->get_id(),
+                $wcVariation->get_id(),
                 $wcVariation->get_sku(),
                 $moloniProduct['variants'],
                 $propertyGroup['variants'][$childId] ?? []

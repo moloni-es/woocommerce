@@ -2,6 +2,7 @@
 
 namespace MoloniES\Services\MoloniProduct\Stock;
 
+use MoloniES\Helpers\MoloniProduct;
 use WC_Product;
 use MoloniES\API\Stocks;
 use MoloniES\Exceptions\APIExeption;
@@ -28,7 +29,6 @@ class SyncProductStock extends MoloniStockSyncAbstract
      */
     public function run()
     {
-        $wcStock = (int)$this->wcProduct->get_stock_quantity();
         $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0;
 
         if (empty($warehouseId)) {
@@ -39,15 +39,8 @@ class SyncProductStock extends MoloniStockSyncAbstract
             }
         }
 
-        $moloniStock = 0;
-
-        foreach ($this->moloniProduct['warehouses'] as $warehouse) {
-            if ((int)$warehouse['warehouseId'] === $warehouseId) {
-                $moloniStock = (int)$warehouse['stock'];
-
-                break;
-            }
-        }
+        $wcStock = (int)$this->wcProduct->get_stock_quantity();
+        $moloniStock = (int)MoloniProduct::parseMoloniStock($this->moloniProduct, $warehouseId);
 
         if ($wcStock === $moloniStock) {
             $msg = sprintf(
