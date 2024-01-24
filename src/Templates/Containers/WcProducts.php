@@ -34,7 +34,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
 ?>
 
 <h3>
-    <?= __('WooCommerce Product Listing', 'moloni_es') ?>
+    <?= __('WooCommerce product listing', 'moloni_es') ?>
 </h3>
 
 <h4>

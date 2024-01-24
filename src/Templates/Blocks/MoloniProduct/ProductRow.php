@@ -27,7 +27,17 @@ $row = $row ?? [];
         ?>
     </td>
     <td>
-        <?= ($row['tool_alert_message'] ?? '') ?: '---' ?>
+        <?php
+        if (empty($row['tool_alert_message'])) {
+            echo '---';
+        } elseif (is_string($row['tool_alert_message'])) {
+            echo $row['tool_alert_message'];
+        } elseif (is_array($row['tool_alert_message'])) {
+            foreach ($row['tool_alert_message'] as $message) {
+                echo $message;
+            }
+        }
+        ?>
     </td>
     <td>
         <?php if (!empty($row['wc_product_link']) || !empty($row['moloni_product_link'])) : ?>
