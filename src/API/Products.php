@@ -17,7 +17,7 @@ class Products extends EndpointAbstract
      *
      * @throws APIExeption
      */
-    public static function mutationProductCreate(?array $variables = []): array
+    public static function mutationProductCreate(?array $variables = []): ?array
     {
         $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
         {
@@ -47,7 +47,7 @@ class Products extends EndpointAbstract
      *
      * @throws APIExeption
      */
-    public static function mutationProductUpdate(?array $variables = []): array
+    public static function mutationProductUpdate(?array $variables = []): ?array
     {
         $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
         {
@@ -78,7 +78,7 @@ class Products extends EndpointAbstract
      *
      * @throws APIExeption
      */
-    public static function queryProduct(?array $variables = []): array
+    public static function queryProduct(?array $variables = []): ?array
     {
         $query = 'query product($companyId: Int!,$productId: Int!)
         {
@@ -108,7 +108,7 @@ class Products extends EndpointAbstract
      * @return array
      * @throws APIExeption
      */
-    public static function queryProducts(array $variables = []): array
+    public static function queryProducts(array $variables = []): ?array
     {
         $query = 'query products($companyId: Int!,$options: ProductOptions)
         {

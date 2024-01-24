@@ -122,7 +122,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
             </th>
             <th></th>
             <th class="w-12 text-center">
-                <a><?= __('Import produto', 'moloni_es') ?></a>
+                <a><?= __('Import produt', 'moloni_es') ?></a>
             </th>
             <th class="w-12 text-center">
                 <a><?= __('Import stock', 'moloni_es') ?></a>

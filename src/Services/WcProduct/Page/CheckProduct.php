@@ -169,11 +169,7 @@ class CheckProduct
 
             /** Moloni variant not found */
             if (empty($moloniVariant)) {
-                $message = __('Variation not found', 'moloni_es');
-                $message .= ' ';
-                $message .= '(' . $wcVariation->get_sku() . ')';
-
-                $childRow['tool_alert_message'][] = $message;
+                $childRow['tool_alert_message'][] = __('Variant not found', 'moloni_es');
 
                 continue;
             }
