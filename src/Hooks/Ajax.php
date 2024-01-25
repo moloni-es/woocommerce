@@ -7,7 +7,6 @@ use MoloniES\API\Companies;
 use MoloniES\API\Products;
 use MoloniES\Enums\Boolean;
 use MoloniES\Enums\SyncLogsType;
-use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\Core\MoloniException;
 use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\DocumentWarning;
@@ -234,7 +233,7 @@ class Ajax
             $mlProduct = Products::queryProduct(['productId' => $mlProductId])['data']['product']['data'] ?? [];
 
             if (empty($mlProduct)) {
-                throw new GenericException('Produto Moloni não encontrado');
+                throw new GenericException(__('Product not found in Moloni account', 'moloni_es'));
             }
 
             SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $mlProductId);
@@ -299,13 +298,13 @@ class Ajax
             $mlProduct = Products::queryProduct(['productId' => $mlProductId])['data']['product']['data'] ?? [];
 
             if (empty($mlProduct)) {
-                throw new GenericException('Produto Moloni não encontrado');
+                throw new GenericException(__('Product not found in Moloni account', 'moloni_es'));
             }
 
             $wcProduct = wc_get_product($wcProductId);
 
             if (empty($wcProduct)) {
-                throw new GenericException('Produto WooCommerce não encontrado');
+                throw new GenericException(__('Product not found in WooCommerce store', 'moloni_es'));
             }
 
             SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductId);
@@ -351,7 +350,7 @@ class Ajax
 
         try {
             if (empty($wcProduct)) {
-                throw new GenericException('Produto WooCommerce não encontrado');
+                throw new GenericException(__('Product not found in WooCommerce store', 'moloni_es'));
             }
 
             SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
@@ -408,13 +407,13 @@ class Ajax
             $wcProduct = wc_get_product($wcProductId);
 
             if (empty($wcProduct)) {
-                throw new GenericException('Produto WooCommerce não encontrado');
+                throw new GenericException(__('Product not found in WooCommerce store', 'moloni_es'));
             }
 
             $mlProduct = Products::queryProduct(['productId' => $mlProductId])['data']['product']['data'] ?? [];
 
             if (empty($mlProduct)) {
-                throw new GenericException('Produto Moloni não encontrado');
+                throw new GenericException(__('Product not found in Moloni account', 'moloni_es'));
             }
 
             SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductId);

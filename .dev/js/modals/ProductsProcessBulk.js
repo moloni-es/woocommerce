@@ -71,15 +71,15 @@ Moloni.modals.ProductsProcessBulk = (async function (rows, createProductAction, 
         let possibleActions = [
             {
                 name: 'create',
-                label: 'processos de criação de produtos.'
+                label: translations.create_action
             },
             {
                 name: 'update',
-                label: 'processos de atualização de produtos.'
+                label: translations.update_action
             },
             {
                 name: 'stock',
-                label: 'processos de atualização de stock.'
+                label: translations.stock_action
             }
         ];
 
@@ -137,12 +137,12 @@ Moloni.modals.ProductsProcessBulk = (async function (rows, createProductAction, 
 
         var displayName = name + ' (' + reference + ')';
 
-        content.html('A processar produto: ' + displayName);
+        content.html(translations.processing_product + ': ' + displayName);
 
         var data = await request();
 
         if (data && data.valid) {
-            history[action].push(displayName + ': Processado com sucesso');
+            history[action].push(displayName + ': ' + translations.successfully_processed);
 
             var newRow = $(data.product_row);
 
@@ -153,7 +153,7 @@ Moloni.modals.ProductsProcessBulk = (async function (rows, createProductAction, 
                 newRow.removeClass('product__row--new');
             }, 3000);
         } else {
-            history[action].push(displayName + ': Erro no processo');
+            history[action].push(displayName + ': ' + translations.error_in_the_process);
             console.log(data);
 
             row.addClass('product__row--error');

@@ -216,8 +216,12 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
 <script>
     jQuery(document).ready(function () {
         Moloni.WcProducts.init({
-
+            'create_action': "<?= __('product creation processes.', 'moloni_es') ?>",
+            'update_action': "<?= __('product update processes.', 'moloni_es') ?>",
+            'stock_action': "<?= __('stock update processes.', 'moloni_es') ?>",
+            'processing_product': "<?= __('Processing product', 'moloni_es') ?>",
+            'successfully_processed': "<?= __('Successfully processed', 'moloni_es') ?>",
+            'error_in_the_process': "<?= __('Error in the process', 'moloni_es') ?>",
         });
     });
 </script>
-

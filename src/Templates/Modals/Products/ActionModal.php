@@ -30,7 +30,7 @@
         </p>
     </div>
 
-    <div>
+    <div class="mt-4">
         <a class="button button-large button-secondary" href="#" rel="modal:close" style="display: none;">
             <?= __('Close', 'moloni_es') ?>
         </a>
