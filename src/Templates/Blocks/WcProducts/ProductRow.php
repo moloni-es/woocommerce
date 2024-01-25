@@ -56,7 +56,7 @@ $row = $row ?? [];
             echo $row['tool_alert_message'];
         } elseif (is_array($row['tool_alert_message'])) {
             foreach ($row['tool_alert_message'] as $message) {
-                echo $message;
+                echo "<p>$message</p><br>";
             }
         }
         ?>
