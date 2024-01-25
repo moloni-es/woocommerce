@@ -239,6 +239,10 @@ class Ajax
             SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $mlProductId);
 
             if (empty($mlProduct['variants'])) {
+                $service = new \MoloniES\Services\WcProduct\Create\CreateSimpleProduct($mlProduct);
+                $service->run();
+                $service->saveLog();
+            } else {
                 $service = new CreateParentProduct($mlProduct);
                 $service->run();
                 $service->saveLog();
@@ -254,10 +258,6 @@ class Ajax
                     $service->run();
                     $service->saveLog();
                 }
-            } else {
-                $service = new \MoloniES\Services\WcProduct\Create\CreateSimpleProduct($mlProduct);
-                $service->run();
-                $service->saveLog();
             }
 
             $warehouseId = defined('HOOK_STOCK_SYNC_WAREHOUSE') ? (int)HOOK_STOCK_SYNC_WAREHOUSE : 1;
