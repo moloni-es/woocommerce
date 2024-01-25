@@ -12,7 +12,7 @@ $row = $row ?? [];
     data-moloni-id="<?= $row['moloni_product_id'] ?? 0 ?>"
 >
     <td class="product__row-name">
-        <?= !empty($row['moloni_product_array']['parent']) ? ' 	&#8594; ' : '' ?>
+        <?= !empty($row['moloni_product_array']['parent']) ? ' 	&rdsh; ' : '' ?>
         <?= $row['moloni_product_array']['name'] ?? '---' ?>
     </td>
     <td class="product__row-reference">
@@ -21,7 +21,7 @@ $row = $row ?? [];
     <td>
         <?php
         if (!empty($row['moloni_product_array']['variants'])) {
-            echo __('With variations', 'moloni_es');
+            echo __('Variable', 'moloni_es');
         } elseif (!empty($row['moloni_product_array']['parent'])) {
             echo __('Variation', 'moloni_es');
         } else {

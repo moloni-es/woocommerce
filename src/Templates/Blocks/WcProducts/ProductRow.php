@@ -12,7 +12,7 @@ $row = $row ?? [];
     data-moloni-id="<?= $row['moloni_product_id'] ?? 0 ?>"
 >
     <td class="product__row-name">
-        <?= $row['wc_product_object']->get_parent_id() ? ' 	&#8594; ' : '' ?>
+        <?= $row['wc_product_object']->get_parent_id() ? ' &rdsh; ' : '' ?>
         <?= $row['wc_product_object']->get_name(); ?>
     </td>
     <td class="product__row-reference">

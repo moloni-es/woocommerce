@@ -3,10 +3,8 @@
 namespace MoloniES\WebHooks;
 
 use MoloniES\Exceptions\HelperException;
-use MoloniES\Exceptions\HookException;
 use MoloniES\Services\MoloniProduct\Helpers\Variants\ParseProductProperties;
 use MoloniES\Services\WcProduct\Helpers\Variations\FindVariation;
-use WC_Product;
 use Exception;
 use MoloniES\API\Products as ApiProducts;
 use MoloniES\Enums\Boolean;
