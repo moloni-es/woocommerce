@@ -222,6 +222,8 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
             'processing_product': "<?= __('Processing product', 'moloni_es') ?>",
             'successfully_processed': "<?= __('Successfully processed', 'moloni_es') ?>",
             'error_in_the_process': "<?= __('Error in the process', 'moloni_es') ?>",
+            'click_to_see': "<?= __('Click to see', 'moloni_es') ?>",
+            'completed': "<?= __('Completed', 'moloni_es') ?>",
         });
     });
 </script>

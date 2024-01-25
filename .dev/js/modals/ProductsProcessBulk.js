@@ -65,7 +65,7 @@ Moloni.modals.ProductsProcessBulk = (async function (rows, createProductAction, 
 
         let processReport = $('<div class="flex flex-col gap-3"></div>');
         let list = $('<div class="flex flex-col p-2 rounded bg-neutral-40 max-h-44 overflow-auto mt-2" style="display: none"></div>');
-        let toggle = $('<a class="mt-1" href="#">Clique para ver</a>');
+        let toggle = $('<a class="mt-1" href="#">' + translations.click_to_see + '</a>');
         let wrapper = $('<div></div>');
 
         let possibleActions = [
@@ -98,7 +98,7 @@ Moloni.modals.ProductsProcessBulk = (async function (rows, createProductAction, 
                 tempList.toggle(200);
             });
 
-            tempWrapper.append('<div>Concluídos ' + history[possibleAction.name].length + ' ' + possibleAction.label + '</div>');
+            tempWrapper.append('<div>' + translations.completed + ' ' + history[possibleAction.name].length + ' ' + possibleAction.label + '</div>');
             tempWrapper.append(tempList, tempToggle);
 
             processReport.append(tempWrapper);
