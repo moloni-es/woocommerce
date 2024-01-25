@@ -3,8 +3,16 @@
 namespace MoloniES\Hooks;
 
 use Exception;
+use MoloniES\API\Companies;
+use MoloniES\API\Products;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\SyncLogsType;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\Core\MoloniException;
 use MoloniES\Exceptions\DocumentError;
 use MoloniES\Exceptions\DocumentWarning;
+use MoloniES\Exceptions\GenericException;
+use MoloniES\Helpers\MoloniWarehouse;
 use MoloniES\Plugin;
 use MoloniES\Services\Exports\ExportProducts;
 use MoloniES\Services\Exports\ExportStockChanges;
@@ -12,8 +20,11 @@ use MoloniES\Services\Imports\ImportProducts;
 use MoloniES\Services\Imports\ImportStockChanges;
 use MoloniES\Services\Orders\CreateMoloniDocument;
 use MoloniES\Services\Orders\DiscardOrder;
+use MoloniES\Services\WcProduct\Create\CreateChildProduct;
+use MoloniES\Services\WcProduct\Create\CreateParentProduct;
 use MoloniES\Start;
 use MoloniES\Storage;
+use MoloniES\Tools\SyncLogs;
 
 class Ajax
 {
@@ -201,7 +212,236 @@ class Ajax
         $this->sendJson($response);
     }
 
-    // todo: methods here
+
+    public function toolsCreateWcProduct()
+    {
+        if (!$this->isAuthed()) {
+            return;
+        }
+
+        $mlProductId = (int)($_POST['ml_product_id'] ?? 0);
+        $response = [
+            'valid' => 1,
+            'message' => '',
+            'product_row' => '',
+            'post' => [
+                'ml_product_id' => $mlProductId,
+                'action' => 'toolsCreateWcProduct'
+            ]
+        ];
+
+        try {
+            $mlProduct = Products::queryProduct(['productId' => $mlProductId])['data']['product']['data'] ?? [];
+
+            if (empty($mlProduct)) {
+                throw new GenericException('Produto Moloni não encontrado');
+            }
+
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_SAVE, $mlProductId);
+
+            if (empty($mlProduct['variants'])) {
+                $service = new CreateParentProduct($mlProduct);
+                $service->run();
+                $service->saveLog();
+
+                $wcParentProduct = $service->getWcProduct();
+
+                foreach ($mlProduct['variants'] as $variant) {
+                    if ((int)$variant['visible'] === Boolean::NO) {
+                        continue;
+                    }
+
+                    $service = new CreateChildProduct($variant, $wcParentProduct);
+                    $service->run();
+                    $service->saveLog();
+                }
+            } else {
+                $service = new \MoloniES\Services\WcProduct\Create\CreateSimpleProduct($mlProduct);
+                $service->run();
+                $service->saveLog();
+            }
+
+            $warehouseId = defined('HOOK_STOCK_SYNC_WAREHOUSE') ? (int)HOOK_STOCK_SYNC_WAREHOUSE : 1;
+            $company = Companies::queryCompany()['data']['company']['data'] ?? [];
+
+            $checkService = new \MoloniES\Services\MoloniProduct\Page\CheckProduct($mlProduct, $warehouseId, $company);
+            $checkService->run();
+
+            $response['product_row'] = $checkService->getRowsHtml();
+        } catch (MoloniException $e) {
+            $response['valid'] = 0;
+            $response['message'] = $e->getMessage();
+        }
+
+        $this->sendJson($response);
+    }
+
+    public function toolsUpdateWcStock()
+    {
+        if (!$this->isAuthed()) {
+            return;
+        }
+
+        $mlProductId = (int)($_POST['ml_product_id'] ?? 0);
+        $wcProductId = (int)($_POST['wc_product_id'] ?? 0);
+        $response = [
+            'valid' => 1,
+            'message' => '',
+            'product_row' => '',
+            'post' => [
+                'ml_product_id' => $mlProductId,
+                'wc_product_id' => $wcProductId,
+                'action' => 'toolsUpdateWcStock'
+            ]
+        ];
+
+        try {
+            $mlProduct = Products::queryProduct(['productId' => $mlProductId])['data']['product']['data'] ?? [];
+
+            if (empty($mlProduct)) {
+                throw new GenericException('Produto Moloni não encontrado');
+            }
+
+            $wcProduct = wc_get_product($wcProductId);
+
+            if (empty($wcProduct)) {
+                throw new GenericException('Produto WooCommerce não encontrado');
+            }
+
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductId);
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $mlProductId);
+
+            $service = new \MoloniES\Services\WcProduct\Stock\SyncProductStock($mlProduct, $wcProduct);
+            $service->run();
+            $service->saveLog();
+
+            $warehouseId = defined('HOOK_STOCK_SYNC_WAREHOUSE') ? (int)HOOK_STOCK_SYNC_WAREHOUSE : 1;
+            $company = Companies::queryCompany()['data']['company']['data'] ?? [];
+
+            $checkService = new \MoloniES\Services\MoloniProduct\Page\CheckProduct($mlProduct, $warehouseId, $company);
+            $checkService->run();
+
+            $response['product_row'] = $checkService->getRowsHtml();
+        } catch (MoloniException $e) {
+            $response['valid'] = 0;
+            $response['message'] = $e->getMessage();
+        }
+
+        $this->sendJson($response);
+    }
+
+    public function toolsCreateMoloniProduct()
+    {
+        if (!$this->isAuthed()) {
+            return;
+        }
+
+        $wcProductId = (int)($_POST['wc_product_id'] ?? 0);
+        $response = [
+            'valid' => 1,
+            'message' => '',
+            'product_row' => '',
+            'post' => [
+                'wc_product_id' => $wcProductId,
+                'action' => 'toolsCreateMoloniProduct'
+            ]
+        ];
+
+        $wcProduct = wc_get_product($wcProductId);
+
+        try {
+            if (empty($wcProduct)) {
+                throw new GenericException('Produto WooCommerce não encontrado');
+            }
+
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_SAVE, $wcProductId);
+
+            if ($wcProduct->is_type('variable') && $wcProduct->has_child()) {
+                $service = new \MoloniES\Services\MoloniProduct\Create\CreateVariantProduct($wcProduct);
+            } else {
+                $service = new \MoloniES\Services\MoloniProduct\Create\CreateSimpleProduct($wcProduct);
+            }
+
+            $service->run();
+            $service->saveLog();
+
+            $company = Companies::queryCompany()['data']['company']['data'] ?? [];
+            $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0;
+
+            if (empty($warehouseId)) {
+                $warehouseId = MoloniWarehouse::getDefaultWarehouseId();
+            }
+
+            $checkService = new \MoloniES\Services\WcProduct\Page\CheckProduct($wcProduct, $warehouseId, $company);
+            $checkService->run();
+
+            $response['product_row'] = $checkService->getRowsHtml();
+        } catch (MoloniException $e) {
+            $response['valid'] = 0;
+            $response['message'] = $e->getMessage();
+        }
+
+        $this->sendJson($response);
+    }
+
+    public function toolsUpdateMoloniStock()
+    {
+        if (!$this->isAuthed()) {
+            return;
+        }
+
+        $mlProductId = (int)($_POST['ml_product_id'] ?? 0);
+        $wcProductId = (int)($_POST['wc_product_id'] ?? 0);
+        $response = [
+            'valid' => 1,
+            'message' => '',
+            'product_row' => '',
+            'post' => [
+                'ml_product_id' => $mlProductId,
+                'wc_product_id' => $wcProductId,
+                'action' => 'toolsUpdateMoloniStock'
+            ]
+        ];
+
+        try {
+
+            $wcProduct = wc_get_product($wcProductId);
+
+            if (empty($wcProduct)) {
+                throw new GenericException('Produto WooCommerce não encontrado');
+            }
+
+            $mlProduct = Products::queryProduct(['productId' => $mlProductId])['data']['product']['data'] ?? [];
+
+            if (empty($mlProduct)) {
+                throw new GenericException('Produto Moloni não encontrado');
+            }
+
+            SyncLogs::addTimeout(SyncLogsType::WC_PRODUCT_STOCK, $wcProductId);
+            SyncLogs::addTimeout(SyncLogsType::MOLONI_PRODUCT_STOCK, $mlProductId);
+
+            $service = new \MoloniES\Services\MoloniProduct\Stock\SyncProductStock($wcProduct, $mlProduct);
+            $service->run();
+            $service->saveLog();
+
+            $company = Companies::queryCompany()['data']['company']['data'] ?? [];
+            $warehouseId = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0;
+
+            if (empty($warehouseId)) {
+                $warehouseId = MoloniWarehouse::getDefaultWarehouseId();
+            }
+
+            $checkService = new \MoloniES\Services\WcProduct\Page\CheckProduct($wcProduct, $warehouseId, $company);
+            $checkService->run();
+
+            $response['product_row'] = $checkService->getRowsHtml();
+        } catch (MoloniException $e) {
+            $response['valid'] = 0;
+            $response['message'] = $e->getMessage();
+        }
+
+        $this->sendJson($response);
+    }
 
     //             Privates             //
 
