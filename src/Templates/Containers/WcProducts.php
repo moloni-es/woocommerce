@@ -142,7 +142,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
             <th></th>
             <th></th>
             <th class="flex flex-row gap-2">
-                <button type="submit" class="button button-primary">
+                <button type="button" class="search_button button button-primary">
                     <?= __('Search', 'moloni_es') ?>
                 </button>
 
