@@ -81,7 +81,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
     </p>
 </div>
 
-<form method="get" action='<?= $currentAction ?>'>
+<form method="get" action='<?= $currentAction ?>' class="list_form">
     <input type="hidden" name="page" value="molonies">
     <input type="hidden" name="paged" value="<?= $page ?>">
     <input type="hidden" name="tab" value="wcProductsList">
@@ -141,7 +141,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
             </th>
             <th></th>
             <th></th>
-            <th>
+            <th class="flex flex-row gap-2">
                 <button type="submit" class="button button-primary">
                     <?= __('Search', 'moloni_es') ?>
                 </button>
@@ -150,8 +150,16 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
                     <?= __('Clear', 'moloni_es') ?>
                 </a>
             </th>
-            <th></th>
-            <th></th>
+            <th>
+                <div class="text-center">
+                    <input type="checkbox" class="checkbox_create_product_master m-0-important">
+                </div>
+            </th>
+            <th>
+                <div class="text-center">
+                    <input type="checkbox" class="checkbox_update_stock_product_master m-0-important">
+                </div>
+            </th>
         </tr>
         </thead>
 
