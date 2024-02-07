@@ -335,8 +335,6 @@ class OrderCustomer
      */
     public function searchForCustomer()
     {
-        $result = false;
-
         $variables = [
             'options' => [
                 'filter' => [
@@ -353,6 +351,8 @@ class OrderCustomer
         } else if (!empty($this->email)) {
             $variables['options']['filter']['field'] = 'email';
             $variables['options']['filter']['value'] = $this->email;
+        } else {
+            return false;
         }
 
         try {
@@ -368,9 +368,9 @@ class OrderCustomer
         }
 
         if (isset($searchResult['data']['customers']['data'][0]['customerId'])) {
-            $result = $searchResult['data']['customers']['data'][0];
+            return $searchResult['data']['customers']['data'][0];
         }
 
-        return $result;
+        return false;
     }
 }
