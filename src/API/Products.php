@@ -215,7 +215,10 @@ class Products extends EndpointAbstract
                     taxId
                     value
                     name
+                    type
                     fiscalZone
+                    fiscalZoneFinanceType
+                    fiscalZoneFinanceTypeMode
                 }
                 value
                 ordering

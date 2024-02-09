@@ -2,11 +2,14 @@
 
 namespace MoloniES\Services\WcProduct\Abstracts;
 
+use WC_Tax;
 use WP_Term;
 use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
 use MoloniES\Enums\Boolean;
+use MoloniES\Enums\TaxType;
+use MoloniES\Enums\TaxFiscalZoneType;
 use MoloniES\Helpers\MoloniProduct;
 use MoloniES\Traits\SyncFieldsSettingsTrait;
 use MoloniES\Services\WcProduct\Interfaces\WcSyncInterface;
@@ -70,8 +73,49 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
     {
         if (empty($this->moloniProduct['taxes'])) {
             $this->wcProduct->set_tax_status('none');
-        } else {
-            $this->wcProduct->set_tax_status('taxable');
+
+            return;
+        }
+
+        $this->wcProduct->set_tax_status('taxable');
+
+        if ($this->wcProduct->exists()) {
+            return;
+        }
+
+        if (count($this->moloniProduct['taxes']) > 1) {
+            return;
+        }
+
+        $moloniTax = $this->moloniProduct['taxes'][0]['tax'];
+
+        if (
+            (int)$moloniTax['type'] !== TaxType::PERCENTAGE ||
+            (int)$moloniTax['fiscalZoneFinanceType'] !== TaxFiscalZoneType::VAT
+        ) {
+            return;
+        }
+
+        $taxClasses = wc_get_product_tax_class_options() ?? [];
+
+        if (empty($taxClasses)) {
+            return;
+        }
+
+        foreach ($taxClasses as $taxClass => $taxClassLabel) {
+            $taxRates = WC_Tax::find_rates([
+                'country' => $moloniTax['fiscalZone'],
+                'tax_class' => $taxClass
+            ]);
+
+            foreach ($taxRates as $taxRate) {
+                if ((int)($taxRate['rate'] * 100000) !== (int)($moloniTax['value'] * 100000)) {
+                    continue;
+                }
+
+                $this->wcProduct->set_tax_class($taxClass);
+                return;
+            }
         }
     }
 
