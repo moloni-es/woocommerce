@@ -216,11 +216,6 @@ class Start
      */
     private static function afterCompanySelect()
     {
-        /** User already defined this option */
-        if (defined('SYNC_PRODUCTS_WITH_VARIANTS')) {
-            return;
-        }
-
         try {
             $company = Companies::queryCompany()['data']['company']['data'] ?? [];
 
