@@ -1,3 +1,4 @@
 .idea
-/logs/
 /nbproject/private/
+/logs/*.log
+.dev/node_modules/*

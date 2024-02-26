@@ -4,6 +4,6 @@ namespace MoloniES\Enums;
 
 class Countries
 {
-    const PORTUGAL = 1;
-    const SPAIN = 70;
+    public const PORTUGAL = 1;
+    public const SPAIN = 70;
 }

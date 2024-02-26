@@ -2,19 +2,23 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class Companies
+class Companies extends EndpointAbstract
 {
     /**
-     * Gets all the companies that the logged in user has access
+     * Gets all the companies that the logged-in user has access
      *
      * @return array return and array with all companies Ids
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function queryMe()
+    public static function queryMe(): array
     {
+        $action = 'companies/me';
+
         $query = 'query{
             me { 
                 data { 
@@ -32,18 +36,23 @@ class Companies
             }
         }';
 
-        return Curl::simple('companies/me', $query, []);
+        if (empty(self::$cache[$action])) {
+            self::$cache[$action] = Curl::simple($action, $query);
+        }
+
+        return self::$cache[$action];
     }
 
     /**
      * Gets the information of the companies that the logged-in user has access
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns an array with the companies information
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function queryCompany($variables = [])
+    public static function queryCompany(?array $variables = []): array
     {
         $query = 'query company($companyId: Int!,$options: CompanyOptionsSingle){ 
             company(companyId: $companyId,options: $options) { 
@@ -75,6 +84,14 @@ class Companies
                     {
                         currencyId
                         iso4217
+                    }
+                    subscription {
+                        subscriptionId
+                        plan 
+                        {
+                            planId
+                            code
+                        }
                     }
                 }
                 options

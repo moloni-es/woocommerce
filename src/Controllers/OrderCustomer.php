@@ -2,13 +2,13 @@
 
 namespace MoloniES\Controllers;
 
+use WC_Order;
+use MoloniES\Exceptions\DocumentError;
 use MoloniES\API\Customers;
 use MoloniES\Enums\Countries;
-use MoloniES\Enums\Languages;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Helpers\Customer;
 use MoloniES\Tools;
-use WC_Order;
 
 class OrderCustomer
 {
@@ -25,8 +25,8 @@ class OrderCustomer
     private $zipCode = '10000';
     private $address = 'Desconocido';
     private $city = 'Desconocido';
-    private $languageId = 2;
-    private $countryId = 1;
+    private $languageId;
+    private $countryId;
 
     /**
      * List of some invalid vat numbers
@@ -38,23 +38,22 @@ class OrderCustomer
         '111111111'
     ];
 
-    /**
-     * Documents constructor.
-     * @param WC_Order $order
-     */
-    public function __construct($order)
+    public function __construct(WC_Order $order)
     {
         $this->order = $order;
     }
 
     /**
+     * Save client
+     *
      * @return bool|int
-     * @throws Error
+     *
+     * @throws DocumentError
      */
     public function create()
     {
-        $this->countryId = $this->getCustomerCountryId();
-        $this->languageId = $this->getCustomerLanguageId();
+        $this->setLanguageAndCountryId();
+
         $this->email = $this->order->get_billing_email();
         $this->vat = $this->getVatNumber();
 
@@ -83,22 +82,48 @@ class OrderCustomer
         if (empty($customerExists)){
             $variables['data']['vat'] = $this->vat;
             $variables['data']['number'] = self::getCustomerNextNumber();
-            $result = Customers::mutationCustomerCreate($variables);
+
+            try {
+                $result = Customers::mutationCustomerCreate($variables);
+            } catch (APIExeption $e) {
+                throw new DocumentError(
+                    __('Error creating customer.', 'moloni_es'),
+                    [
+                        'message' => $e->getMessage(),
+                        'data' => $e->getData()
+                    ]
+                );
+            }
+
             $keyString = 'customerCreate';
         } else {
             $variables['data']['customerId'] = (int)$customerExists['customerId'];
-            $result = Customers::mutationCustomerUpdate($variables);
+
+            try {
+                $result = Customers::mutationCustomerUpdate($variables);
+            } catch (APIExeption $e) {
+                throw new DocumentError(
+                    __('Error updating customer.','moloni_es'),
+                    [
+                        'message' => $e->getMessage(),
+                        'data' => $e->getData()
+                    ]
+                );
+            }
+
             $keyString = 'customerUpdate';
         }
 
         if (isset($result['data'][$keyString]['data']['customerId'])) {
             $this->customer_id = $result['data'][$keyString]['data']['customerId'];
         } else {
-            throw new Error(__('Warning, there was an error inserting the customer.','moloni_es'));
+            throw new DocumentError(__('There was an error saving the customer.', 'moloni_es'));
         }
 
         return $this->customer_id;
     }
+
+    //          Gets          //
 
     /**
      * Get the vat number of an order
@@ -106,9 +131,9 @@ class OrderCustomer
      *
      * @return string
      *
-     * @throws Error
+     * @throws DocumentError
      */
-    public function getVatNumber()
+    public function getVatNumber(): ?string
     {
         $vat = null;
 
@@ -147,7 +172,7 @@ class OrderCustomer
                 }
 
                 if (!empty($vat) && !Customer::isVatEsValid($vat)) {
-                    throw new Error(__('Customer has invalid VAT for Spain.','moloni_es'));
+                    throw new DocumentError(__('Customer has invalid VAT for Spain.','moloni_es'));
                 }
             }
         }
@@ -161,19 +186,22 @@ class OrderCustomer
 
     /**
      * Checks if the cohasmpany name is set
-     * If the order  a company we issue the document to the company
+     * If they order  a company we issue the document to the company
      * And add the name of the person to the contact name
+     *
      * @return string
      */
-    public function getCustomerName()
+    public function getCustomerName(): string
     {
         $billingName = $this->order->get_billing_first_name();
         $billingLastName = $this->order->get_billing_last_name();
+
         if (!empty($billingLastName)) {
             $billingName .= ' ' . $this->order->get_billing_last_name();
         }
 
         $billingCompany = trim($this->order->get_billing_company());
+
         if (!empty($billingCompany)) {
             $this->name = $billingCompany;
             $this->contactName = $billingName;
@@ -181,18 +209,19 @@ class OrderCustomer
             $this->name = $billingName;
         }
 
-
         return $this->name;
     }
 
     /**
-     * Create a customer billing a address
+     * Create a customer billing an address
+     *
      * @return string
      */
-    public function getCustomerBillingAddress()
+    public function getCustomerBillingAddress(): string
     {
         $billingAddress = trim($this->order->get_billing_address_1());
         $billingAddress2 = $this->order->get_billing_address_2();
+
         if (!empty($billingAddress2)) {
             $billingAddress .= ' ' . trim($billingAddress2);
         }
@@ -206,11 +235,13 @@ class OrderCustomer
 
     /**
      * Create a customer billing City
+     *
      * @return string
      */
-    public function getCustomerBillingCity()
+    public function getCustomerBillingCity(): string
     {
         $billingCity = trim($this->order->get_billing_city());
+
         if (!empty($billingCity)) {
             $this->city = $billingCity;
         }
@@ -221,19 +252,49 @@ class OrderCustomer
     /**
      * Gets the zip code of a customer
      * If the customer is Portuguese validate the Vat Number
+     *
      * @return string
      */
-    public function getCustomerZip()
+    public function getCustomerZip(): string
     {
-        $zipCode = $this->order->get_billing_postcode();
+        $this->zipCode = $this->order->get_billing_postcode();
 
-        if ($this->order->get_billing_country() === 'PT') {
-            $zipCode = Tools::zipCheck($zipCode);
-        }
-
-        $this->zipCode = $zipCode;
         return $this->zipCode;
     }
+
+    //          Sets          //
+
+    /**
+     * Set language and country
+     *
+     * @throws DocumentError
+     */
+    private function setLanguageAndCountryId(): void
+    {
+        $countryCode = $this->order->get_billing_country();
+
+        try {
+            ['countryId' => $countryId, 'languageId' => $languageId] = Tools::getMoloniCountryByCode($countryCode);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching countries', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+        }
+
+        $this->countryId = $countryId;
+
+        if (defined('CUSTOMER_LANGUAGE') && !empty(CUSTOMER_LANGUAGE)) {
+            $this->languageId = (int)CUSTOMER_LANGUAGE;
+        } else {
+            $this->languageId = $languageId;
+        }
+    }
+
+    //          Statics          //
 
     /**
      * Get the customer next available number for incremental inserts
@@ -255,15 +316,17 @@ class OrderCustomer
             ]
         ];
 
+        $nextNumber = '';
+
         try {
             $query = Customers::queryCustomerNextNumber($variables);
 
-            if (!isset($query['data']['customerNextNumber']['data'])) {
-                throw new Error('Something went wrong!');
+            if (isset($query['data']['customerNextNumber']['data'])) {
+                $nextNumber = $query['data']['customerNextNumber']['data'];
             }
+        } catch (APIExeption $e) {}
 
-            $nextNumber = $query['data']['customerNextNumber']['data'];
-        } catch (Error $e) {
+        if (empty($nextNumber)) {
             $nextNumber = defined('CLIENT_PREFIX') ? CLIENT_PREFIX : '';
             $nextNumber .= '1';
         }
@@ -271,37 +334,17 @@ class OrderCustomer
         return $nextNumber;
     }
 
-    /**
-     * Get the country_id based on a ISO value
-     * @return int
-     * @throws Error
-     */
-    public function getCustomerCountryId()
-    {
-        $countryCode = $this->order->get_billing_country();
-
-        return (int)Tools::getCountryIdFromCode($countryCode);
-    }
-
-    /**
-     * If the country of the customer is one of the available we set it to Portuguese
-     */
-    public function getCustomerLanguageId()
-    {
-        return $this->countryId === Countries::PORTUGAL ? Languages::PT : Languages::ES;
-    }
+    //          Requests          //
 
     /**
      * Search for a customer based on $this->vat or $this->email
      *
      * @return bool|array
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function searchForCustomer()
     {
-        $result = false;
-
         $variables = [
             'options' => [
                 'filter' => [
@@ -315,102 +358,29 @@ class OrderCustomer
         if (!empty($this->vat)) {
             $variables['options']['filter']['field'] = 'vat';
             $variables['options']['filter']['value'] = $this->vat;
-
-            $searchResult = Customers::queryCustomers($variables);
-
-            if (isset($searchResult['data']['customers']['data'][0]['customerId'])) {
-                $result = $searchResult['data']['customers']['data'][0];
-            }
         } else if (!empty($this->email)) {
             $variables['options']['filter']['field'] = 'email';
             $variables['options']['filter']['value'] = $this->email;
+        } else {
+            return false;
+        }
 
+        try {
             $searchResult = Customers::queryCustomers($variables);
-
-            if (isset($searchResult['data']['customers']['data'][0]['customerId'])) {
-                $result = $searchResult['data']['customers']['data'][0];
-            }
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching customers.', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
         }
 
-        return $result;
-    }
-
-    private static function sugereProximoNumero($str, $nums_ocupados = [])
-    {
-        $str_separada = str_split($str);
-
-        $prefixo = '';
-        $sufixo = '';
-        $found_int = false;
-
-        $leading_zeroes = false;
-        $num_pad_left = 0;
-
-        $suposto_inteiro = '';
-
-        // o último	conjunto de inteiros apanhados vai para o $suposto_inteiro todos os anteriomente apanhados vão para o $prefixo
-        // "KJ43HKLJH987IUY" = ($prefixo => "KJ43HKLJH", $sufixo => "IUY", $suposto_inteiro => "987")
-        foreach ($str_separada as $char) {
-            if (is_numeric($char)) {
-                if ($sufixo !== '') {
-                    if ($prefixo === '') {
-                        $prefixo = $suposto_inteiro . $sufixo;
-                        $sufixo = '';
-                        $suposto_inteiro = $char;
-                        continue;
-                    }
-                    $sufixo .= $char;
-                    continue;
-                }
-                $found_int = true;
-                $suposto_inteiro .= $char;
-            } else if ($found_int) {
-                $sufixo .= $char;
-            } else {
-                $prefixo .= $char;
-            }
+        if (isset($searchResult['data']['customers']['data'][0]['customerId'])) {
+            return $searchResult['data']['customers']['data'][0];
         }
 
-        if (strlen($suposto_inteiro) > 0) {
-            $inteiro_sep = str_split($suposto_inteiro);
-
-            // aqui verificam-se os 0 à esquerda para no fim acrecentar
-            if (strcmp($inteiro_sep[0], "0") === 0) {
-                $num_pad_left = count($inteiro_sep);
-                $leading_zeroes = true;
-            }
-
-            $suposto_inteiro = ((int)$suposto_inteiro + 1);
-            $next = $prefixo . $suposto_inteiro . $sufixo;
-
-            if (is_array($nums_ocupados) && !empty($nums_ocupados)) {
-
-                $new_nums_ocupados = array();
-                foreach ($nums_ocupados as $v) {
-                    $new_nums_ocupados[$v] = 1;
-                }
-
-                //para termos a certeza absoluta que não vai ficar aqui "ad aeternum"
-                $iteration = 0;
-                while (isset($new_nums_ocupados[$next])) {
-                    $suposto_inteiro += 1;
-                    $next = ($prefixo . ((int)$suposto_inteiro) . $sufixo);
-
-                    $iteration += 1;
-                    if ($iteration > 1000) {
-                        return '';
-                    }
-                }
-            }
-
-            // caso existam 0 à esquerda acrescentar
-            if ($leading_zeroes) {
-                $next = ($prefixo . (str_pad((int)$suposto_inteiro, $num_pad_left, "0", STR_PAD_LEFT)) . $sufixo);
-            }
-
-            return $next;
-        }
-
-        return self::sugereProximoNumero($str . '0', $nums_ocupados);
+        return false;
     }
 }

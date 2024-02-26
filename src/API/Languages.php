@@ -4,20 +4,21 @@
 namespace MoloniES\API;
 
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class Languages
+class Languages extends EndpointAbstract
 {
     /**
      * Gets languages.
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryLanguage($variables = [])
+    public static function queryLanguage(?array $variables = []): array
     {
         $query = 'query language($languageId: Int!)
         {
@@ -44,12 +45,12 @@ class Languages
     /**
      * Gets language info
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryLanguages($variables = [])
+    public static function queryLanguages(?array $variables = []): array
     {
         $query = 'query languages($options: LanguageOptions)
         {

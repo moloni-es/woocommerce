@@ -3,9 +3,9 @@
  *
  *   Plugin Name:  Moloni España
  *   Description:  Simple invoicing integration with Moloni ES
- *   Version:      1.0.51
- *   Tested up to: 6.2
- *   WC tested up to: 7.5.1
+ *   Version:      2.0.0
+ *   Tested up to: 6.4.3
+ *   WC tested up to: 8.6.1
  *
  *   Author:       Moloni.es
  *   Author URI:   https://moloni.es
@@ -51,6 +51,8 @@ if (!defined('MOLONI_ES_IMAGES_URL')) {
 register_activation_hook(__FILE__, '\MoloniES\Activators\Install::run');
 register_deactivation_hook(__FILE__, '\MoloniES\Activators\Remove::run');
 
+add_action('wp_initialize_site', '\MoloniES\Activators\Install::initializeSite', 200, 1);
+add_action('wp_uninitialize_site', '\MoloniES\Activators\Remove::uninitializeSite', 10, 1);
 add_action('plugins_loaded', Start::class);
 add_action('admin_enqueue_scripts', '\MoloniES\Scripts\Enqueue::defines');
 

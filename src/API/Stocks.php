@@ -2,20 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class Stocks
+class Stocks extends EndpointAbstract
 {
     /**
-     * Adds stock to an product
+     * Adds stock to a product
      *
      * @param array $variables variables of the query
      *
      * @return array returns info about the movement
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function mutationStockMovementManualEntryCreate($variables = [])
+    public static function mutationStockMovementManualEntryCreate(array $variables = []): array
     {
         $query = 'mutation stockMovementManualEntryCreate($companyId: Int!,$data: StockMovementManualInsert!)
         {
@@ -38,14 +40,15 @@ class Stocks
     }
 
     /**
-     * Removes stock from an product
+     * Removes stock from a product
      *
      * @param array $variables variables of the query
      *
      * @return array returns info about the movement
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function mutationStockMovementManualExitCreate($variables = [])
+    public static function mutationStockMovementManualExitCreate(array $variables = []): array
     {
         $query = 'mutation stockMovementManualExitCreate($companyId: Int!,$data: StockMovementManualInsert!)
         {
