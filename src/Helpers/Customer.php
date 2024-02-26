@@ -4,7 +4,7 @@ namespace MoloniES\Helpers;
 
 class Customer
 {
-    public static function isVatEsValid($vat = '')
+    public static function isVatEsValid($vat = ''): bool
     {
         // NIF types in which the control digit must be numeric
         $controlMustBeNumeric = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'U', 'V'];

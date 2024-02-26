@@ -7,7 +7,7 @@ use WC_Meta_Data;
 
 class MoloniOrder
 {
-    public static function getLastCreatedDocument(WC_Order $wcOrder)
+    public static function getLastCreatedDocument(WC_Order $wcOrder): int
     {
         /** @var WC_Meta_Data[] $documents */
         $documents = $wcOrder->get_meta('_molonies_sent', false);

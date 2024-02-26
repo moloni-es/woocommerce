@@ -1,0 +1,25 @@
+@tailwind utilities;
+
+.moloni {
+  @apply mt-6;
+
+  &__container {
+    @apply mb-0 ml-0.5 mt-2.5 mr-5;
+  }
+}
+
+#moloni {
+  @import "components/Buttons";
+  @import "components/Chips";
+  @import "components/InputText";
+  @import "components/Alerts";
+  @import "components/Dropdown";
+  @import "Login";
+  @import "Companies";
+  @import "Products";
+  @import "Settings";
+  @import "Utilities";
+}
+
+@import "Legacy";
+@import "Logs";

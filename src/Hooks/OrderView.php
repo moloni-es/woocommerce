@@ -2,6 +2,7 @@
 
 namespace MoloniES\Hooks;
 
+use MoloniES\Enums\DocumentTypes;
 use WP_Post;
 use WC_Order;
 use Exception;
@@ -87,31 +88,14 @@ class OrderView
     private function getDocumentTypeSelect()
     {
         $documentType = defined('DOCUMENT_TYPE') ? DOCUMENT_TYPE : '';
+
         ?>
         <select id="moloni_document_type" style="float:right">
-            <option value='invoice' <?= ($documentType === 'invoice' ? 'selected' : '') ?>>
-                <?= __('Invoice' , 'moloni_es') ?>
-            </option>
-
-            <option value='invoiceReceipt' <?= ($documentType === 'invoiceReceipt' ? 'selected' : '') ?>>
-                <?= __('Invoice + Receipt' , 'moloni_es') ?>
-            </option>
-
-            <option value='simplifiedInvoice'<?= ($documentType === 'simplifiedInvoice' ? 'selected' : '') ?>>
-                <?= __('Simplified Invoice' , 'moloni_es') ?>
-            </option>
-
-            <option value='billsOfLading' <?= ($documentType === 'billsOfLading' ? 'selected' : '') ?>>
-                <?= __('Bill of lading' , 'moloni_es') ?>
-            </option>
-
-            <option value='purchaseOrder' <?= ($documentType === 'purchaseOrder' ? 'selected' : '') ?>>
-                <?= __('Purchase Order' , 'moloni_es') ?>
-            </option>
-
-            <option value='proFormaInvoice' <?= ($documentType === 'proFormaInvoice' ? 'selected' : '') ?>>
-                <?= __('Pro Forma Invoice' , 'moloni_es') ?>
-            </option>
+            <?php foreach (DocumentTypes::getForRender() as $id => $name) : ?>
+                <option value='<?= $id ?>' <?= ($documentType === $id ? 'selected' : '') ?>>
+                    <?= $name ?>
+                </option>
+            <?php endforeach; ?>
         </select>
         <?php
     }

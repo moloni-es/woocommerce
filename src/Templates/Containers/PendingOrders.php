@@ -4,7 +4,12 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<?php use \MoloniES\Controllers\PendingOrders; ?>
+<?php
+
+use MoloniES\Enums\DocumentTypes;
+use MoloniES\Models\PendingOrders;
+
+?>
 
 <?php
 /** @var WC_Order[] $orders */
@@ -12,7 +17,7 @@ $orders = PendingOrders::getAllAvailable();
 ?>
 
 <div class="wrap">
-    <h3><?= __('Here you can see all the orders you have to generate' , 'moloni_es') ?></h3>
+    <h3><?= __('Here you can see all the orders you have to generate', 'moloni_es') ?></h3>
 
     <div class="tablenav top">
         <div class="alignleft actions bulkactions">
@@ -20,6 +25,7 @@ $orders = PendingOrders::getAllAvailable();
                     name="action" id="bulk-action-selector-top">
                 <option value="-1"><?= __('Bulk actions', 'moloni_es') ?></option>
                 <option value="bulkGenInvoice"><?= __('Generate documents', 'moloni_es') ?></option>
+                <option value="bulkDiscardOrder"><?= __('Discard documents', 'moloni_es') ?></option>
             </select>
             <input type="submit" id="doAction" class="button action" value="<?= __('Run', 'moloni_es') ?>">
         </div>
@@ -29,7 +35,7 @@ $orders = PendingOrders::getAllAvailable();
         </div>
     </div>
 
-    <table class='wp-list-table widefat fixed striped posts'>
+    <table class='wp-list-table widefat striped posts'>
         <thead>
         <tr>
             <td class="manage-column column-cb check-column">
@@ -57,14 +63,15 @@ $orders = PendingOrders::getAllAvailable();
                                value="<?= $order->get_id() ?>">
                     </td>
                     <td>
-                        <a target="_blank" href=<?= $order->get_edit_order_url() ?>>#<?= $order->get_order_number() ?></a>
+                        <a target="_blank"
+                           href=<?= $order->get_edit_order_url() ?>>#<?= $order->get_order_number() ?></a>
                     </td>
                     <td>
                         <?php
                         if (!empty($order->get_billing_first_name())) {
                             echo $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
                         } else {
-                            echo __('Unknown','moloni_es');
+                            echo __('Unknown', 'moloni_es');
                         }
                         ?>
                     <td>
@@ -109,51 +116,40 @@ $orders = PendingOrders::getAllAvailable();
                             <input type="hidden" name="id" value="<?= $order->get_id() ?>">
 
                             <select name="document_type" style="margin-right: 5px; max-width: 45%;">
-                                <option value='invoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoice' ? 'selected' : '') ?>>
-                                    <?= __('Invoice' , 'moloni_es') ?>
-                                </option>
+                                <?php
+                                $documentType = '';
 
-                                <option value='invoiceReceipt' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'invoiceReceipt' ? 'selected' : '') ?>>
-                                    <?= __('Invoice + Receipt' , 'moloni_es') ?>
-                                </option>
+                                if (defined('DOCUMENT_TYPE') && !empty(DOCUMENT_TYPE)) {
+                                    $documentType = DOCUMENT_TYPE;
+                                }
+                                ?>
 
-                                <option value='simplifiedInvoice'<?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'simplifiedInvoice' ? 'selected' : '') ?>>
-                                    <?= __('Simplified Invoice' , 'moloni_es') ?>
-                                </option>
-
-                                <option value='billsOfLading' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'billsOfLading' ? 'selected' : '') ?>>
-                                    <?= __('Bill of lading' , 'moloni_es') ?>
-                                </option>
-
-                                <option value='purchaseOrder' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'purchaseOrder' ? 'selected' : '') ?>>
-                                    <?= __('Purchase Order' , 'moloni_es') ?>
-                                </option>
-
-                                <option value='proFormaInvoice' <?= (defined('DOCUMENT_TYPE') && DOCUMENT_TYPE === 'proFormaInvoice' ? 'selected' : '') ?>>
-                                    <?= __('Pro Forma Invoice' , 'moloni_es') ?>
-                                </option>
+                                <?php foreach (DocumentTypes::getForRender() as $id => $name) : ?>
+                                    <option value='<?= $id ?>' <?= ($documentType === $id ? 'selected' : '') ?>>
+                                        <?= $name ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
 
                             <input type="submit"
                                    class="wp-core-ui button-primary"
                                    style="width: 80px; text-align: center; margin-right: 5px"
-                                   value="<?= __('Create' , 'moloni_es') ?>"
+                                   value="<?= __('Create', 'moloni_es') ?>"
                             >
 
 
                             <a class="wp-core-ui button-secondary" style="width: 80px; text-align: center"
                                href="<?= esc_url(admin_url('admin.php?page=molonies&action=remInvoice&id=' . $order->get_id())) ?>">
-                                <?= __('Remove' , 'moloni_es') ?>
+                                <?= __('Discard', 'moloni_es') ?>
                             </a>
                         </form>
                     </td>
                 </tr>
             <?php endforeach; ?>
-
         <?php else : ?>
             <tr>
                 <td colspan="8">
-                    <?= __('No orders to be generated were found!','moloni_es') ?>
+                    <?= __('No orders to be generated were found!', 'moloni_es') ?>
                 </td>
             </tr>
 
@@ -167,12 +163,12 @@ $orders = PendingOrders::getAllAvailable();
                        type="checkbox">
             </td>
 
-            <th><a><?= __('Order' , 'moloni_es') ?></a></th>
-            <th><a><?= __('Client' , 'moloni_es') ?></a></th>
-            <th><a><?= __('VAT' , 'moloni_es') ?></a></th>
-            <th><a><?= __('Total' , 'moloni_es') ?></a></th>
-            <th><a><?= __('Status' , 'moloni_es') ?></a></th>
-            <th><a><?= __('Payment date' , 'moloni_es') ?></a></th>
+            <th><a><?= __('Order', 'moloni_es') ?></a></th>
+            <th><a><?= __('Client', 'moloni_es') ?></a></th>
+            <th><a><?= __('VAT', 'moloni_es') ?></a></th>
+            <th><a><?= __('Total', 'moloni_es') ?></a></th>
+            <th><a><?= __('Status', 'moloni_es') ?></a></th>
+            <th><a><?= __('Payment date', 'moloni_es') ?></a></th>
             <th></th>
         </tr>
         </tfoot>
@@ -185,16 +181,20 @@ $orders = PendingOrders::getAllAvailable();
     </div>
 </div>
 
-<div id="bulk-action-progress-modal" class="modal" style="display: none">
-    <div id="bulk-action-progress-content">
-        <h2>
-            <?= __('Generating ' , 'moloni_es') ?>
-            <span id="bulk-action-progress-current">0</span>
-            <?= __(' of ' , 'moloni_es')?>
-            <span id="bulk-action-progress-total">0</span>
-            <?= __(' documents.' , 'moloni_es')?>
-        </h2>
-        <div id="bulk-action-progress-message">
-        </div>
-    </div>
-</div>
+<?php include MOLONI_ES_TEMPLATE_DIR . 'Modals/PendingOrders/BulkActionModal.php'; ?>
+
+<script>
+    jQuery(document).ready(function () {
+        Moloni.OrdersBulkAction({
+            startingProcess: "<?=__('Starting process...', 'moloni_es')?>",
+            noOrdersSelected: "<?=__('No orders selected to process', 'moloni_es')?>",
+            creatingDocument: "<?=__('Creating document', 'moloni_es')?>",
+            discardingOrder: "<?=__('Discarding order', 'moloni_es')?>",
+            createdDocuments: "<?=__('Documents created:', 'moloni_es')?>",
+            documentsWithErrors: "<?=__('Documents with errors:', 'moloni_es')?>",
+            discardedOrders: "<?=__('Orders discarded:', 'moloni_es')?>",
+            ordersWithErrors: "<?=__('Orders with errors:', 'moloni_es')?>",
+            close: "<?=__('Close', 'moloni_es')?>",
+        });
+    });
+</script>

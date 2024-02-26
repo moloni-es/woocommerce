@@ -3,7 +3,7 @@
 namespace MoloniES\Helpers;
 
 use MoloniES\API\Hooks;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 use MoloniES\Model;
 use MoloniES\Storage;
 
@@ -16,52 +16,46 @@ class WebHooks
     private static $restApiNamespace = 'moloni/v1';
 
     /**
-     * Used routes
-     * (only used in foreach on create and delete hooks)
-     * ([route => Moloni Model])
+     * Model => routes mapping
+     *
      * @var string[]
      */
     private static $routes = [
-        'products' => 'Product'
-    ];//'properties' => 'Property'
+        'Product' => 'products'
+    ];
 
     /**
      * Create hook in moloni
-     * @throws Error
+     *
+     * @param string $model
+     * @param string $operation
+     *
+     * @throws APIExeption
      */
-    public static function createHooks()
+    public static function createHook(string $model, string $operation)
     {
-        if (!Storage::$MOLONI_ES_COMPANY_ID) {
+        if (!isset(self::$routes[$model])) {
             return;
         }
 
-        $variables = [
-            'data' => []
+        $url = get_site_url() . '/wp-json/' . self::$restApiNamespace . '/' . self::$routes[$model] . '/' . self::createHash();
+
+        $variables['data'] = [
+            'model' => $model,
+            'url' => $url,
+            'operation' => $operation
         ];
 
-        foreach (self::$routes as $route => $model) {
-            $variables['data'] = [
-                "model" => $model,
-                "url" => get_site_url() . '/wp-json/' . self::$restApiNamespace . '/' . $route . '/' . Model::createHash()
-            ];
-
-            Hooks::mutationHookCreate($variables);
-        }
-
+        Hooks::mutationHookCreate($variables);
     }
 
     /**
      * Deletes the created hooks
      *
-     * @throws Error
+     * @throws APIExeption
      */
     public static function deleteHooks()
     {
-        if (!Storage::$MOLONI_ES_COMPANY_ID) {
-            return;
-        }
-
-        //Load required variables (Storage:$MOLONI_ES_COMPANY_ID)
         Model::defineValues();
 
         $ids = [];
@@ -77,13 +71,26 @@ class WebHooks
 
         $query = Hooks::queryHooks($variables);
 
-        foreach ($query as $hook) {
-            $ids[] = $hook['hookId'];
+        if (!empty($query)) {
+            foreach ($query as $hook) {
+                $ids[] = $hook['hookId'];
+            }
+
+            Hooks::mutationHookDelete([
+                'hookId' => $ids
+            ]);
         }
+    }
 
-        unset($variables['data']);
-        $variables['hookId'] = $ids;
+    //            Privates            //
 
-        Hooks::mutationHookDelete($variables);
+    /**
+     * Creates hash from company id
+     *
+     * @return string
+     */
+    private static function createHash(): string
+    {
+        return hash('md5', Storage::$MOLONI_ES_COMPANY_ID);
     }
 }

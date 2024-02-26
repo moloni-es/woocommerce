@@ -2,20 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class Customers
+class Customers extends EndpointAbstract
 {
     /**
-     * Creates an costumer
+     * Creates a costumer
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function mutationCustomerCreate($variables = [])
+    public static function mutationCustomerCreate(?array $variables = []): array
     {
         $query = 'mutation customerCreate($companyId: Int!,$data: CustomerInsert!)
         {
@@ -40,11 +42,14 @@ class Customers
 
     /**
      * Updates an costumer
-     * @param array $variables
+     *
+     * @param array|null $variables
+     *
      * @return mixed
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function mutationCustomerUpdate($variables = [])
+    public static function mutationCustomerUpdate(?array $variables = [])
     {
         $query = 'mutation customerUpdate($companyId: Int!,$data: CustomerUpdate!)
         {
@@ -70,12 +75,13 @@ class Customers
     /**
      * Gets costumer information
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function queryCustomer($variables = [])
+    public static function queryCustomer(?array $variables = []): array
     {
         $query = 'query customer($companyId: Int!,$customerId: Int!,$options: CustomerOptionsSingle)
         {
@@ -107,12 +113,13 @@ class Customers
     /**
      * Gets costumers of the company
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function queryCustomers($variables = [])
+    public static function queryCustomers(?array $variables = []): array
     {
         $query = 'query customers($companyId: Int!,$options: CustomerOptions)
         {
@@ -153,13 +160,13 @@ class Customers
     /**
      * Gets the next number available for customers
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
      *
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryCustomerNextNumber($variables = [])
+    public static function queryCustomerNextNumber(?array $variables = []): array
     {
         $query = 'query customerNextNumber($companyId: Int!, $options: GetNextCustomerNumberOptions)
         {

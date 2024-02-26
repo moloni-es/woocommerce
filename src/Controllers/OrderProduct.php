@@ -2,19 +2,20 @@
 
 namespace MoloniES\Controllers;
 
-use MoloniES\API\Taxes;
-use MoloniES\API\Warehouses;
-use MoloniES\Error;
-use MoloniES\Tools;
+use WC_Tax;
 use WC_Order;
 use WC_Order_Item_Product;
-use WC_Tax;
+use MoloniES\Tools;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\DocumentError;
+use MoloniES\Exceptions\HelperException;
+use MoloniES\Controllers\Helpers\GetMoloniProductFromOrder;
 
 class OrderProduct
 {
 
     /** @var int */
-    public $product_id = 0;
+    private $product_id = 0;
 
     /** @var int */
     private $order;
@@ -22,7 +23,7 @@ class OrderProduct
     /**
      * @var WC_Order_Item_Product
      */
-    private $product;
+    private $orderProduct;
 
     /** @var WC_Order */
     private $wc_order;
@@ -31,10 +32,10 @@ class OrderProduct
     private $taxes = [];
 
     /** @var float */
-    public $qty;
+    private $qty;
 
     /** @var float */
-    public $price;
+    private $price;
 
     /** @var string */
     private $exemption_reason;
@@ -49,31 +50,36 @@ class OrderProduct
     private $discount;
 
     /** @var int */
-    private $warehouse_id;
-    
-    /** @var bool */
-    private $hasIVA = false;
+    private $warehouse_id = 0;
+
     private $fiscalZone;
 
     /**
      * OrderProduct constructor.
+     *
      * @param WC_Order_Item_Product $product
      * @param WC_Order $wcOrder
-     * @param int $order
+     * @param int|null $order
+     * @param array|null $fiscalZone
      */
-    public function __construct($product, $wcOrder, $order = 0, $fiscalZone = 'es')
+    public function __construct(WC_Order_Item_Product $product, WC_Order $wcOrder, ?int $order = 0, ?array $fiscalZone = [])
     {
-        $this->product = $product;
+        $this->orderProduct = $product;
         $this->wc_order = $wcOrder;
         $this->order = $order;
         $this->fiscalZone = $fiscalZone;
     }
 
+    //          Publics          //
+
     /**
+     * Create product
+     *
      * @return $this
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    public function create()
+    public function create(): OrderProduct
     {
         $this
             ->setName()
@@ -88,43 +94,101 @@ class OrderProduct
         return $this;
     }
 
-    public function setName()
+    public function mapPropsToValues(): array
     {
-        $this->name = $this->product->get_name();
-        return $this;
-    }
+        $props = [
+            'productId' => (int)$this->product_id,
+            'name' => $this->name,
+            'price' => (float)$this->price,
+            'summary' => $this->summary,
+            'ordering' => $this->order,
+            'qty' => (float)$this->qty,
+            'discount' => (float)$this->discount,
+            'exemptionReason' => '',
+            'taxes' => [],
+        ];
 
-    /**
-     * @param null|string $summary
-     * @return $this
-     */
-    public function setSummary($summary = null)
-    {
-        if ($summary) {
-            $this->summary = $summary;
-        } else {
-            $this->summary .= $this->getSummaryVariationAttributes();
-
-            if (!empty($this->summary)) {
-                $this->summary .= "\n";
-            }
-
-            $this->summary .= $this->getSummaryExtraProductOptions();
+        if (!empty($this->warehouse_id)) {
+            $props['warehouseId'] = $this->warehouse_id;
         }
 
+        if (!empty($this->taxes)) {
+            $props['taxes'] = $this->taxes;
+        }
+
+        if (!empty($this->exemption_reason)) {
+            $props['exemptionReason'] = $this->exemption_reason;
+        }
+
+        return $props;
+    }
+
+    //          Sets          //
+
+    private function setName(?string $name = ''): OrderProduct
+    {
+        $name = apply_filters('moloni_es_before_order_item_setName', $name, $this->orderProduct);
+
+        if (empty($name)) {
+            $name = $this->orderProduct->get_name();
+        }
+
+        $this->name = apply_filters('moloni_es_after_order_item_setName', $name, $this->orderProduct);
+
         return $this;
     }
 
     /**
+     * Set summary
+     *
+     * @return $this
+     */
+    private function setSummary(?string $summary = ''): OrderProduct
+    {
+        $summary = apply_filters('moloni_es_before_order_item_setSummary', $summary, $this->orderProduct);
+
+        if (empty($summary)) {
+            $variationAttributes = $this->getSummaryVariationAttributes();
+            $extraOptions = $this->getSummaryExtraProductOptions();
+
+            switch (true) {
+                case !empty($variationAttributes) && !empty($extraOptions):
+                    $summary = $variationAttributes . '\n' . $extraOptions;
+
+                    break;
+                case !empty($variationAttributes):
+                    $summary = $variationAttributes;
+
+                    break;
+                case !empty($extraOptions):
+                    $summary = $extraOptions;
+
+                    break;
+                default:
+                    $summary = '';
+
+                    break;
+            }
+        }
+
+        $this->summary = apply_filters('moloni_es_after_order_item_setSummary', $summary, $this->orderProduct);
+
+        return $this;
+    }
+
+    /**
+     * Set variation summary
+     *
      * @return string
      */
-    private function getSummaryVariationAttributes()
+    private function getSummaryVariationAttributes(): string
     {
         $summary = '';
 
-        if ($this->product->get_variation_id() > 0) {
-            $product = wc_get_product($this->product->get_variation_id());
+        if ($this->orderProduct->get_variation_id() > 0) {
+            $product = wc_get_product($this->orderProduct->get_variation_id());
             $attributes = $product->get_attributes();
+
             if (is_array($attributes) && !empty($attributes)) {
                 $summary = wc_get_formatted_variation($attributes, true);
             }
@@ -134,12 +198,14 @@ class OrderProduct
     }
 
     /**
+     * Set extra summary
+     *
      * @return string
      */
-    private function getSummaryExtraProductOptions()
+    private function getSummaryExtraProductOptions(): string
     {
         $summary = '';
-        $checkEPO = $this->product->get_meta('_tmcartepo_data', true);
+        $checkEPO = $this->orderProduct->get_meta('_tmcartepo_data', true);
         $extraProductOptions = maybe_unserialize($checkEPO);
 
         if ($extraProductOptions && is_array($extraProductOptions)) {
@@ -159,12 +225,14 @@ class OrderProduct
     }
 
     /**
+     * Set price
+     *
      * @return OrderProduct
      */
-    public function setPrice()
+    private function setPrice(): OrderProduct
     {
-        $this->price = (float)$this->product->get_subtotal() / $this->qty;
-        $refundedValue = $this->wc_order->get_total_refunded_for_item($this->product->get_id());
+        $this->price = (float)$this->orderProduct->get_subtotal() / $this->qty;
+        $refundedValue = $this->wc_order->get_total_refunded_for_item($this->orderProduct->get_id());
 
         if ($refundedValue !== 0) {
             $refundedValue /= $this->qty;
@@ -180,12 +248,14 @@ class OrderProduct
     }
 
     /**
+     * Set quantity
+     *
      * @return OrderProduct
      */
-    public function setQty()
+    private function setQty(): OrderProduct
     {
-        $this->qty = (float)$this->product->get_quantity();
-        $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->product->get_id()));
+        $this->qty = (float)$this->orderProduct->get_quantity();
+        $refundedQty = absint($this->wc_order->get_qty_refunded_for_item($this->orderProduct->get_id()));
 
         if ($refundedQty !== 0) {
             $this->qty -= $refundedQty;
@@ -195,38 +265,34 @@ class OrderProduct
     }
 
     /**
+     * Fetch product from Moloni
+     *
      * @return $this
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    private function setProductId()
+    private function setProductId(): OrderProduct
     {
-        $wooCommerceProduct = $this->product->get_product();
-
-        if (empty($wooCommerceProduct)) {
-            throw new Error(__('Order products were deleted.','moloni_es'));
+        try {
+            $this->product_id = (new GetMoloniProductFromOrder($this->orderProduct))->handle();
+        } catch (HelperException $e) {
+            throw new DocumentError($e->getMessage(), $e->getData());
         }
-
-        $product = new Product($wooCommerceProduct);
-
-        if (!$product->loadByReference()) {
-            $product->create();
-        }
-
-        $this->product_id = $product->getProductId();
 
         return $this;
     }
 
     /**
      * Set the discount in percentage
+     *
      * @return $this
      */
-    private function setDiscount()
+    private function setDiscount(): OrderProduct
     {
-        $total = (float)$this->product->get_total();
-        $subTotal = (float)$this->product->get_subtotal();
+        $total = (float)$this->orderProduct->get_total();
+        $subTotal = (float)$this->orderProduct->get_subtotal();
 
-        if ($subTotal !== (float)0) {
+        if ((int)$subTotal !== 0) {
             $this->discount = (100 - (($total * 100) / $subTotal));
         }
 
@@ -243,55 +309,25 @@ class OrderProduct
 
     /**
      * Set the taxes of a product
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    private function setTaxes()
+    private function setTaxes(): OrderProduct
     {
-        //if a tax is set in settings (should not be used by the client)
-        if(defined('TAX_ID') && TAX_ID > 0) {
-
-            $variables = [
-                'taxId' => (int) TAX_ID
-            ];
-
-            $query = (Taxes::queryTax($variables))['data']['tax']['data'];
-
-            $tax['taxId'] = (int) $query['taxId'];
-            $tax['value'] = (float) $query['value'];
-            $tax['ordering'] = 1;
-            $tax['cumulative'] = false;
-
-            $unitPrice = (((float) $this->product->get_subtotal() + (float) $this->product->get_subtotal_tax())) / (float)$this->product->get_quantity();
-
-            $refundedValue = $this->wc_order->get_total_refunded_for_item($this->product->get_id());
-            if ((float)$refundedValue > 0) {
-                $unitPrice -= (float)$refundedValue;
-            }
-
-            $this->price = ($unitPrice * 100);
-            $this->price = $this->price / (100 + $tax['value']);
-
-            $this->taxes = $tax;
-            $this->exemption_reason = '';
-
-            return $this;
-        }
-
-        //normal set of taxes
-        $taxes = $this->product->get_taxes();
+        $taxes = $this->orderProduct->get_taxes();
 
         foreach ($taxes['subtotal'] as $taxId => $value) {
-            if (!empty($value)) {
+            if (!empty($value) || empty($this->price)) {
                 $taxRate = preg_replace('/[^0-9.]/', '', WC_Tax::get_rate_percent($taxId));
+
                 if ((float)$taxRate > 0) {
                     $this->taxes[] = $this->setTax($taxRate);
                 }
             }
         }
 
-        if (!$this->hasIVA) {
+        if (empty($this->taxes)) {
             $this->exemption_reason = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
-            $this->taxes=[];
         } else {
             $this->exemption_reason = '';
         }
@@ -300,23 +336,33 @@ class OrderProduct
     }
 
     /**
-     * @param float $taxRate Tax Rate in percentage
+     * Set product tax
+     *
+     * @param float|int|null $taxRate Tax Rate in percentage
+     *
      * @return array
-     * @throws Error
+     *
+     * @throws DocumentError
      */
-    private function setTax($taxRate)
+    private function setTax($taxRate): array
     {
-        $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
-        
-        $tax = [];
-        $tax['taxId'] = (int) $moloniTax['taxId'];
-        $tax['value'] = (float) $taxRate;
-        $tax['ordering'] = count($this->taxes) + 1;
-        $tax['cumulative'] = (bool) 0;
-
-        if ((int) $moloniTax['type'] === 1) {
-            $this->hasIVA = true;
+        try {
+            $moloniTax = Tools::getTaxFromRate((float)$taxRate, $this->fiscalZone);
+        } catch (APIExeption $e) {
+            throw new DocumentError(
+                __('Error fetching taxes', 'moloni_es'),
+                [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
         }
+
+        $tax = [];
+        $tax['taxId'] = (int)$moloniTax['taxId'];
+        $tax['value'] = (float)$taxRate;
+        $tax['ordering'] = count($this->taxes) + 1;
+        $tax['cumulative'] = false;
 
         return $tax;
     }
@@ -324,52 +370,12 @@ class OrderProduct
     /**
      * Set order product warehouse
      *
-     * @param bool|int $warehouseId
-     *
-     * @return OrderProduct
-     *
-     * @throws Error
+     * @return void
      */
-    private function setWarehouse($warehouseId = false)
+    private function setWarehouse(): void
     {
-        if ((int)$warehouseId > 0) {
-            $this->warehouse_id = $warehouseId;
-            return $this;
+        if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int)MOLONI_PRODUCT_WAREHOUSE > 0) {
+            $this->warehouse_id = (int)MOLONI_PRODUCT_WAREHOUSE;
         }
-
-        if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int) MOLONI_PRODUCT_WAREHOUSE > 0) {
-            $this->warehouseId = (int) MOLONI_PRODUCT_WAREHOUSE;
-        } else {
-            $results = Warehouses::queryWarehouses();
-
-            $this->warehouse_id = $results[0]['warehouseId']; //fail safe
-            foreach ($results as $result) {
-                if ((bool) $result['isDefault'] === true) {
-                    $this->warehouse_id = $result['warehouseId'];
-
-                    break;
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function mapPropsToValues()
-    {
-        return [
-            'productId' => (int) $this->product_id,
-            'name' => $this->name,
-            'price' => (float) $this->price,
-            'summary' => $this->summary,
-            'exemptionReason' => $this->exemption_reason,
-            'ordering' => $this->order,
-            'qty' => (float) $this->qty,
-            'discount' => (float) $this->discount,
-            'taxes' => $this->taxes,
-            'warehouseId' => (int) $this->warehouse_id
-        ];
     }
 }

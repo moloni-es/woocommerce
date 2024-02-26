@@ -2,20 +2,21 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class Taxes
+class Taxes extends EndpointAbstract
 {
     /**
      * Gets all the taxes of the company
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns an array with taxes information
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryTaxes($variables = [])
+    public static function queryTaxes(?array $variables = []): array
     {
         $query = 'query taxes($companyId: Int!,$options: TaxOptions)
         {
@@ -63,12 +64,12 @@ class Taxes
     /**
      * Gets tax info
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns an array with taxes information
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryTax($variables = [])
+    public static function queryTax(?array $variables = []): array
     {
         $query = 'query tax($companyId: Int!,$taxId: Int!)
         {
@@ -105,14 +106,14 @@ class Taxes
     }
 
     /**
-     * Creates an tax
+     * Creates a tax
      *
-     * @param array $variables variables of the query
+     * @param array|null $variables
      *
      * @return array returns data about the created tax
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function mutationTaxCreate($variables = [])
+    public static function mutationTaxCreate(?array $variables = []): array
     {
         $query = 'mutation taxCreate($companyId: Int!,$data: TaxInsert!)
         {

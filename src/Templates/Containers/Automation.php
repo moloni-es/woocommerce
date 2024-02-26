@@ -1,13 +1,36 @@
 <?php
+
 if (!defined('ABSPATH')) {
     exit;
+}
+
+use MoloniES\API\Companies;
+use MoloniES\API\Warehouses;
+use MoloniES\Enums\MoloniPlans;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Enums\Boolean;
+use MoloniES\Enums\AutomaticDocumentsStatus;
+
+try {
+    $warehouses = Warehouses::queryWarehouses();
+    $company = Companies::queryCompany()['data']['company']['data'] ?? [];
+} catch (APIExeption $e) {
+    $e->showError();
+    return;
 }
 ?>
 
 <form method='POST' action='<?= admin_url('admin.php?page=molonies&tab=automation') ?>' id='formOpcoes'>
-    <input type='hidden' value='save' name='action'>
+    <input type='hidden' value='saveAutomations' name='action'>
     <div>
-        <h2 class="title"><?= __('Automation', 'moloni_es') ?></h2>
+        <h2 class="title">
+            <?= __('Automatic actions from WooCommerce', 'moloni_es') ?>
+        </h2>
+
+        <div class="subtitle">
+            (<?= __('This actions happen when an action occours in your WooCommerce store.', 'moloni_es') ?>)
+        </div>
+
         <table class="form-table">
             <tbody>
 
@@ -17,10 +40,48 @@ if (!defined('ABSPATH')) {
                 </th>
                 <td>
                     <select id="invoice_auto" name='opt[invoice_auto]' class='inputOut'>
-                        <option value='0' <?= (defined('INVOICE_AUTO') && INVOICE_AUTO === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('INVOICE_AUTO') && INVOICE_AUTO === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                        <?php $invoiceAuto = defined('INVOICE_AUTO') ? (int)INVOICE_AUTO : Boolean::NO; ?>
+
+                        <option value='0' <?= ($invoiceAuto === Boolean::NO ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= ($invoiceAuto === Boolean::YES ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
                     </select>
                     <p class='description'><?= __('Automatically create document when an order is paid', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <tr id="invoice_auto_status_line" <?= ($invoiceAuto === Boolean::NO ? 'style="display: none;"' : '') ?>>
+                <th>
+                    <label for="invoice_auto_status"><?= __('Create documents when the order is', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="invoice_auto_status" name='opt[invoice_auto_status]' class='inputOut'>
+                        <?php $invoiceAutoStatus = defined('INVOICE_AUTO_STATUS') ? INVOICE_AUTO_STATUS : ''; ?>
+
+                        <option value='completed' <?= ($invoiceAutoStatus === AutomaticDocumentsStatus::COMPLETED ? 'selected' : '') ?>>
+                            <?= __('Complete', 'moloni_es') ?>
+                        </option>
+                        <option value='processing' <?= ($invoiceAutoStatus === AutomaticDocumentsStatus::PROCESSING ? 'selected' : '') ?>>
+                            <?= __('Processing', 'moloni_es') ?>
+                        </option>
+                    </select>
+                    <p class='description'><?= __('Documents will be created automatically once they are in the selected state', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <label for="moloni_product_sync"><?= __('Sync products', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="moloni_product_sync" name='opt[moloni_product_sync]' class='inputOut'>
+                        <option value='0' <?= (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
+                        <option value='1' <?= (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                    </select>
+                    <p class='description'><?= __('When saving a product in WooCommerce, the plugin will automatically create the product in Moloni or update if it already exists (only if product has SKU set)', 'moloni_es') ?></p>
                 </td>
             </tr>
 
@@ -39,22 +100,42 @@ if (!defined('ABSPATH')) {
 
             <tr>
                 <th>
-                    <label for="moloni_product_sync"><?= __('Sync products', 'moloni_es') ?></label>
+                    <label for="moloni_stock_sync_warehouse"><?= __('Sync stocks warehouse', 'moloni_es') ?></label>
                 </th>
                 <td>
-                    <select id="moloni_product_sync" name='opt[moloni_product_sync]' class='inputOut'>
-                        <option value='0' <?= (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('MOLONI_PRODUCT_SYNC') && MOLONI_PRODUCT_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                    <select id="moloni_stock_sync_warehouse" name='opt[moloni_stock_sync_warehouse]' class='inputOut'>
+                        <option value='0'>
+                            <?= __('Default company warehouse', 'moloni_es') ?>
+                        </option>
+
+                        <?php $hookStockSyncWarehouse = defined('MOLONI_STOCK_SYNC_WAREHOUSE') ? (int)MOLONI_STOCK_SYNC_WAREHOUSE : 0; ?>
+
+                        <optgroup label="<?= __('Warehouses', 'moloni_es') ?>">
+                            <?php foreach ($warehouses as $warehouse) : ?>
+                                <option
+                                        value='<?= $warehouse['warehouseId'] ?>' <?= ($hookStockSyncWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
+                                    <?= $warehouse['name'] ?> (<?= $warehouse['number'] ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </optgroup>
                     </select>
-                    <p class='description'><?= __('When saving a product in WooCommerce, the plugin will automatically create the product in Moloni or update if it already exists (only if product has SKU set)', 'moloni_es') ?></p>
+                    <p class='description'>
+                        <?= __('This warehouse will be used when a product is inserted or updated in WooCommerce', 'moloni_es') ?>
+                    </p>
                 </td>
             </tr>
 
             </tbody>
         </table>
 
-        <h2 class="title"><?= __('Hooks', 'moloni_es') ?></h2>
-        <span>(Moloni -> WooCommerce)</span>
+        <h2 class="title">
+            <?= __('Automatic actions from Moloni', 'moloni_es') ?>
+        </h2>
+
+        <div class="subtitle">
+            (<?= __('This actions happen when an action occours in your Moloni account.', 'moloni_es') ?>)
+        </div>
+
         <table class="form-table">
             <tbody>
 
@@ -73,16 +154,98 @@ if (!defined('ABSPATH')) {
 
             <tr>
                 <th>
-                    <label for="moloni_variants_sync"><?= __('Update products with variants', 'moloni_es') ?></label>
+                    <label for="hook_stock_sync"><?= __('Sync stocks automatically', 'moloni_es') ?></label>
                 </th>
                 <td>
-                    <select id="moloni_variants_sync" name='opt[moloni_variants_sync]' class='inputOut'>
-                        <option value='0' <?= (defined('MOLONI_VARIANTS_SYNC') && MOLONI_VARIANTS_SYNC === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('MOLONI_VARIANTS_SYNC') && MOLONI_VARIANTS_SYNC === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
+                    <select id="hook_stock_sync" name='opt[hook_stock_sync]' class='inputOut'>
+                        <option value='0' <?= (defined('HOOK_STOCK_SYNC') && HOOK_STOCK_SYNC === '0' ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= (defined('HOOK_STOCK_SYNC') && HOOK_STOCK_SYNC === '1' ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
                     </select>
-                    <p class='description'><?= __('When updating a product with variants in Moloni, it will update the product in WooCommerce (if product already exists in WooCommerce)', 'moloni_es') ?></p>
+                    <p class='description'>
+                        <?= __('When a stock movement is created in moloni, the movement will be recreated in WooCommerce (if product exists)', 'moloni_es') ?>
+                    </p>
                 </td>
             </tr>
+
+            <tr>
+                <th>
+                    <label for="hook_stock_sync_warehouse"><?= __('Sync stocks warehouse', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="hook_stock_sync_warehouse" name='opt[hook_stock_sync_warehouse]' class='inputOut'>
+                        <option value='1'>
+                            <?= __('Accumulated stock', 'moloni_es') ?>
+                        </option>
+
+                        <?php $hookStockSyncWarehouse = defined('HOOK_STOCK_SYNC_WAREHOUSE') ? (int)HOOK_STOCK_SYNC_WAREHOUSE : 1 ?>
+
+                        <optgroup label="<?= __('Warehouses', 'moloni_es') ?>">
+                            <?php foreach ($warehouses as $warehouse) : ?>
+                                <option
+                                        value='<?= $warehouse['warehouseId'] ?>' <?= ($hookStockSyncWarehouse === $warehouse['warehouseId'] ? 'selected' : '') ?>>
+                                    <?= $warehouse['name'] ?> (<?= $warehouse['number'] ?>)
+                                </option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                    </select>
+
+                    <p class='description'>
+                        <?= __('This warehouse will be used when a product is inserted or updated in Moloni', 'moloni_es') ?>
+                    </p>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <h2 class="title">
+            <?= __('Synchronization extras', 'moloni_es') ?>
+        </h2>
+
+        <div class="subtitle">
+            (<?= __('This settings will be applied to all automatic actions.', 'moloni_es') ?>)
+        </div>
+
+        <table class="form-table">
+            <tbody>
+
+
+            <?php if (MoloniPlans::hasVariants((int)($company['subscription'][0]['plan']['planId'] ?? 0))) : ?>
+                <tr>
+                    <th>
+                        <label for="sync_products_with_variants">
+                            <?= __('Sync products with variants/variations', 'moloni_es') ?>
+                        </label>
+                    </th>
+                    <td>
+                        <?php $syncProductsWithVariants = defined('SYNC_PRODUCTS_WITH_VARIANTS') ? (int)SYNC_PRODUCTS_WITH_VARIANTS : 0; ?>
+
+                        <select id="sync_products_with_variants" name='opt[sync_products_with_variants]' class='inputOut'>
+                            <option value='0' <?= ($syncProductsWithVariants === Boolean::NO ? 'selected' : '') ?>>
+                                <?= __('No', 'moloni_es') ?>
+                            </option>
+                            <option value='1' <?= ($syncProductsWithVariants === Boolean::YES ? 'selected' : '') ?>>
+                                <?= __('Yes', 'moloni_es') ?>
+                            </option>
+                        </select>
+                        <p class='description'>
+                            <?= __('WooCommerce product with variations will be created in Moloni as products with variants. If disabled, each WooCommerce variation will be created as a simple product.', 'moloni_es') ?>
+                            <br/>
+                            <?= __('Moloni product with variants will be created in WooCommerce as products with variations. If disabled, Moloni products with variants will not be synchronized.', 'moloni_es') ?>
+                        </p>
+                    </td>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <td>
+                        <input type='hidden' id='sync_products_with_variants' name='opt[sync_products_with_variants]' value="0">
+                    </td>
+                </tr>
+            <?php endif; ?>
 
             <tr>
                 <th>
@@ -91,36 +254,33 @@ if (!defined('ABSPATH')) {
                 <td>
                     <fieldset>
                         <input type="checkbox" name="opt[sync_fields_name]" id="name"
-                               value="1" <?= (defined('SYNC_FIELDS_NAME') && SYNC_FIELDS_NAME === '1' ? 'checked' : '') ?>/><label for="name"><?= __('Name', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_NAME') && SYNC_FIELDS_NAME === '1' ? 'checked' : '') ?>/><label
+                                for="name"><?= __('Name', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_price]" id="price"
-                               value="1" <?= (defined('SYNC_FIELDS_PRICE') && SYNC_FIELDS_PRICE === '1' ? 'checked' : '') ?>/><label for="price"><?= __('Price', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_PRICE') && SYNC_FIELDS_PRICE === '1' ? 'checked' : '') ?>/><label
+                                for="price"><?= __('Price', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_description]]" id="description"
-                               value="1" <?= (defined('SYNC_FIELDS_DESCRIPTION') && SYNC_FIELDS_DESCRIPTION === '1' ? 'checked' : '') ?>/><label for="description"><?= __('Description', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_DESCRIPTION') && SYNC_FIELDS_DESCRIPTION === '1' ? 'checked' : '') ?>/><label
+                                for="description"><?= __('Description', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_visibility]" id="visibility"
-                               value="1" <?= (defined('SYNC_FIELDS_VISIBILITY') && SYNC_FIELDS_VISIBILITY === '1' ? 'checked' : '') ?>/><label for="visibility"><?= __('Visibility', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_VISIBILITY') && SYNC_FIELDS_VISIBILITY === '1' ? 'checked' : '') ?>/><label
+                                for="visibility"><?= __('Visibility', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_stock]" id="stock"
-                               value="1" <?= (defined('SYNC_FIELDS_STOCK') && SYNC_FIELDS_STOCK === '1' ? 'checked' : '') ?>/><label for="stock"><?= __('Stock', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_STOCK') && SYNC_FIELDS_STOCK === '1' ? 'checked' : '') ?>/><label
+                                for="stock"><?= __('Stock', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_categories]" id="categories"
-                               value="1" <?= (defined('SYNC_FIELDS_CATEGORIES') && SYNC_FIELDS_CATEGORIES === '1' ? 'checked' : '') ?>/><label for="categories"><?= __('Categories', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_CATEGORIES') && SYNC_FIELDS_CATEGORIES === '1' ? 'checked' : '') ?>/><label
+                                for="categories"><?= __('Categories', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_ean]" id="ean"
-                               value="1" <?= (defined('SYNC_FIELDS_EAN') && SYNC_FIELDS_EAN === '1' ? 'checked' : '') ?>/><label for="ean"><?= __('EAN', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_EAN') && SYNC_FIELDS_EAN === '1' ? 'checked' : '') ?>/><label
+                                for="ean"><?= __('EAN', 'moloni_es') ?></label><br/>
                         <input type="checkbox" name="opt[sync_fields_image]" id="image"
-                               value="1" <?= (defined('SYNC_FIELDS_IMAGE') && SYNC_FIELDS_IMAGE === '1' ? 'checked' : '') ?>/><label for="image"><?= __('Image', 'moloni_es') ?></label><br/>
+                               value="1" <?= (defined('SYNC_FIELDS_IMAGE') && SYNC_FIELDS_IMAGE === '1' ? 'checked' : '') ?>/><label
+                                for="image"><?= __('Image', 'moloni_es') ?></label><br/>
                     </fieldset>
-                    <p class='description'><?= __('Optional field that will sync when updating/creating a product on your Moloni account', 'moloni_es') ?></p>
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="hook_stock_update"><?= __('Update stock', 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="hook_stock_update" name='opt[hook_stock_update]' class='inputOut'>
-                        <option value='0' <?= (defined('HOOK_STOCK_UPDATE') && HOOK_STOCK_UPDATE === '0' ? 'selected' : '') ?>><?= __('No', 'moloni_es') ?></option>
-                        <option value='1' <?= (defined('HOOK_STOCK_UPDATE') && HOOK_STOCK_UPDATE === '1' ? 'selected' : '') ?>><?= __('Yes', 'moloni_es') ?></option>
-                    </select>
-                    <p class='description'><?= __('When a stock movement is created in moloni, the movement will be recreated in WooCommerce (if product exists)', 'moloni_es') ?></p>
+                    <p class='description'>
+                        <?= __('Optional field that will sync when synchronizing products', 'moloni_es') ?>
+                    </p>
                 </td>
             </tr>
 
@@ -136,3 +296,9 @@ if (!defined('ABSPATH')) {
         </table>
     </div>
 </form>
+
+<script>
+    jQuery(document).ready(function () {
+        Moloni.Automations.init();
+    });
+</script>

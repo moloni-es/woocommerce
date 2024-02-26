@@ -2,20 +2,21 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class Timezones
+class Timezones extends EndpointAbstract
 {
     /**
      * Get All Timezones from Moloni ES
      *
-     * @param $variables
+     * @param array|null $variables
      *
      * @return array returns the Graphql response array or an error array
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryTimezones($variables = [])
+    public static function queryTimezones(?array $variables = []): array
     {
         $query = 'query timezones($options: TimezoneOptions)
         {

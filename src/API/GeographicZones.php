@@ -2,20 +2,21 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class GeographicZones
+class GeographicZones extends EndpointAbstract
 {
     /**
      * Gets geographic zones
      *
-     * @param array $variables variables of the request
+     * @param array|null $variables
      *
      * @return array Api data
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function queryGeographicZones($variables = [])
+    public static function queryGeographicZones(?array $variables = []): array
     {
         $query = 'query geographicZones($companyId: Int!,$options: GeographicZoneOptions)
         {

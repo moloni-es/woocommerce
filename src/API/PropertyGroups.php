@@ -2,18 +2,22 @@
 
 namespace MoloniES\API;
 
+use MoloniES\API\Abstracts\EndpointAbstract;
 use MoloniES\Curl;
-use MoloniES\Error;
+use MoloniES\Exceptions\APIExeption;
 
-class PropertyGroups
+class PropertyGroups extends EndpointAbstract
 {
     /**
      * Get multiple property groups
-     * @param $variables
-     * @return array|bool
-     * @throws Error
+     *
+     * @param array|null $variables
+     *
+     * @return array
+     *
+     * @throws APIExeption
      */
-    public static function queryPropertyGroups($variables = [])
+    public static function queryPropertyGroups(?array $variables = []): array
     {
         $query = 'query propertyGroups($companyId: Int!,$options: PropertyGroupOptions)
         {
@@ -21,24 +25,7 @@ class PropertyGroups
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . self::getCommonSegment() . '
                 }
                 errors
                 {
@@ -62,11 +49,14 @@ class PropertyGroups
 
     /**
      * Get single property group
-     * @param $variables
+     *
+     * @param array $variables
+     *
      * @return array|bool
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function queryPropertyGroup($variables = [])
+    public static function queryPropertyGroup(array $variables = [])
     {
         $query = 'query propertyGroup($companyId: Int!,$propertyGroupId: String!)
         {
@@ -74,24 +64,7 @@ class PropertyGroups
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . self::getCommonSegment() . '
                 }
                 errors
                 {
@@ -106,11 +79,14 @@ class PropertyGroups
 
     /**
      * Update a property group
-     * @param $variables
+     *
+     * @param array $variables
+     *
      * @return array|bool
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function mutationPropertyGroupUpdate($variables = [])
+    public static function mutationPropertyGroupUpdate(array $variables = [])
     {
         $query = 'mutation propertyGroupUpdate($companyId: Int!,$data: PropertyGroupUpdate!)
         {
@@ -118,24 +94,7 @@ class PropertyGroups
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . self::getCommonSegment() . '
                 }
                 errors
                 {
@@ -150,11 +109,14 @@ class PropertyGroups
 
     /**
      * Create a property group
-     * @param $variables
-     * @return array
-     * @throws Error
+     *
+     * @param array $variables
+     *
+     * @return mixed
+     *
+     * @throws APIExeption
      */
-    public static function mutationPropertyGroupCreate($variables = [])
+    public static function mutationPropertyGroupCreate(array $variables = [])
     {
         $query = 'mutation propertyGroupCreate($companyId: Int!,$data: PropertyGroupInsert!)
         {
@@ -162,24 +124,7 @@ class PropertyGroups
             {
                 data
                 {
-                    propertyGroupId
-                    name
-                    visible
-                    properties
-                    {
-                        propertyId
-                        name
-                        visible
-                        ordering
-                        values
-                        {
-                           propertyValueId
-                           code
-                           value
-                           visible
-                           ordering
-                        }
-                    }
+                    ' . self::getCommonSegment() . '
                 }
                 errors
                 {
@@ -190,5 +135,37 @@ class PropertyGroups
         }';
 
         return Curl::simple('propertygroup/propertyGroupCreate', $query, $variables);
+    }
+
+    /**
+     * Common segments for all queries and mutations
+     *
+     * @return string
+     */
+    private static function getCommonSegment(): string
+    {
+        return '
+            propertyGroupId
+            name
+            visible
+            deletable
+            properties
+            {
+                propertyId
+                name
+                visible
+                ordering
+                deletable
+                values
+                {
+                   propertyValueId
+                   code
+                   value
+                   visible
+                   ordering
+                   deletable
+                }
+            }
+        ';
     }
 }

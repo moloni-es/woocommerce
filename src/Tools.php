@@ -2,10 +2,14 @@
 
 namespace MoloniES;
 
-use MoloniES\API\FiscalZone;
-use MoloniES\API\Taxes;
 use MoloniES\API\Countries;
 use MoloniES\API\Currencies;
+use MoloniES\API\FiscalZone;
+use MoloniES\API\Taxes;
+use MoloniES\Enums\Languages;
+use MoloniES\Enums\TaxFiscalZoneType;
+use MoloniES\Enums\TaxType;
+use MoloniES\Exceptions\APIExeption;
 
 /**
  * Multiple tools for handling recurring tasks
@@ -23,7 +27,7 @@ class Tools
      *
      * @return string
      */
-    public static function createReferenceFromString($string, $productId = 0, $variationId = 0)
+    public static function createReferenceFromString($string, $productId = 0, $variationId = 0): string
     {
         $reference = '';
         $name = explode(' ', $string);
@@ -46,22 +50,26 @@ class Tools
     /**
      * Create moloni tax based on value and country code
      *
-     * @param float $taxRate Tax value
-     * @param string $countryCode Country code
+     * @param float|int $taxRate Tax value
+     * @param array|null $fiscalZone Fiscal zone
      *
      * @return array
      *
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function createTaxFromRateAndCode($taxRate, $countryCode = 'es') {
+    public static function createTaxFromRateAndCode($taxRate, ?array $fiscalZone = []): array
+    {
+        $countryId = $fiscalZone['countryId'] ?? Enums\Countries::SPAIN;
+        $countryCode = $fiscalZone['code'] ?? 'es';
+
         $taxCreateVariables = [
             'data' => [
                 'visible' => 1,
                 'name' => 'VAT - ' . strtoupper($countryCode) . ' - ' . $taxRate . '%',
                 'fiscalZone' => $countryCode,
-                'countryId' => self::getCountryIdFromCode($countryCode),
-                'type' => 1,
-                'fiscalZoneFinanceType' => 1,
+                'countryId' => $countryId,
+                'type' => TaxType::PERCENTAGE,
+                'fiscalZoneFinanceType' => TaxFiscalZoneType::VAT,
                 'isDefault' => false,
                 'value' => (float)$taxRate
             ]
@@ -85,17 +93,19 @@ class Tools
      * Get full tax Object given a tax rate
      * As a fallback if we don't find a tax with the same rate we return the company default
      *
-     * @param float $taxRate Tax value
-     * @param string $countryCode Country code
+     * @param float|int $taxRate Tax value
+     * @param array|null $fiscalZone Fiscal zone
      *
      * @return mixed
      *
-     * @throws Error
+     * @throws APIExeption
      */
-    public static function getTaxFromRate($taxRate, $countryCode = 'es')
+    public static function getTaxFromRate($taxRate, ?array $fiscalZone = [])
     {
-        $moloniTax = [];
+        $countryCode = $fiscalZone['code'] ?? 'es';
         $countryCode = strtolower((string)$countryCode);
+
+        $moloniTax = [];
 
         $queryVariables = [
             'options' => [
@@ -109,6 +119,16 @@ class Tools
                         'field' => 'flags',
                         'comparison' => 'eq',
                         'value' => '0'
+                    ],
+                    [
+                        'field' => 'type',
+                        'comparison' => 'eq',
+                        'value' => (string)TaxType::PERCENTAGE
+                    ],
+                    [
+                        'field' => 'fiscalZoneFinanceType',
+                        'comparison' => 'eq',
+                        'value' => (string)TaxFiscalZoneType::VAT
                     ]
                 ],
                 'search' => [
@@ -125,7 +145,7 @@ class Tools
         }
 
         if (empty($moloniTax)) {
-            $moloniTax = self::createTaxFromRateAndCode($taxRate, $countryCode);
+            $moloniTax = self::createTaxFromRateAndCode($taxRate, $fiscalZone);
         }
 
         return $moloniTax;
@@ -133,47 +153,68 @@ class Tools
 
     /**
      * Returns country id
-     * @param $countryCode
-     * @return string
-     * @throws Error
+     *
+     * @param string $countryIso
+     *
+     * @return array
+     *
+     * @throws APIExeption
      */
-    public static function getCountryIdFromCode($countryCode)
+    public static function getMoloniCountryByCode(?string $countryIso = ''): array
     {
-        $variables = [
-            'options' => [
-                'filter' => [
-                    'field' => 'iso3166_1',
-                    'comparison' => 'eq',
-                    'value' => $countryCode
-                ]
-            ]
+        $default = [
+            'countryId' => Enums\Countries::SPAIN,
+            'languageId' => Languages::ES,
+            'code' => strtoupper($countryIso)
         ];
-        $countryId = \MoloniES\Enums\Countries::SPAIN;
 
-        $countriesList = Countries::queryCountries($variables);
-
-        if (isset($countriesList['data']['countries']['data']) &&
-            is_array($countriesList['data']['countries']['data']) ) {
-            foreach ($countriesList['data']['countries']['data'] as $country) {
-                if (strtoupper($country['iso3166_1']) === strtoupper($countryCode)) {
-                    $countryId = $country['countryId'];
-
-                    break;
-                }
-            }
+        /** Early return */
+        if (empty($countryIso)) {
+            return $default;
         }
 
-        return $countryId;
+        $variables = [
+            'options' => [
+                'search' => [
+                    'field' => 'iso3166_1',
+                    'value' => $countryIso,
+                ],
+                'order' => [
+                    [
+                        'field' => 'ordering',
+                        'sort' => 'ASC'
+                    ]
+                ],
+                'defaultLanguageId' => Languages::EN
+            ],
+        ];
+
+        $targetCountries = Countries::queryCountries($variables)['data']['countries']['data'] ?? [];
+
+        /** Early return */
+        if (empty($targetCountries)) {
+            return $default;
+        }
+
+        /** Return first */
+        return [
+            'countryId' => (int)$targetCountries[0]['countryId'],
+            'languageId' => (int)$targetCountries[0]['language']['languageId'],
+            'code' => strtoupper($countryIso)
+        ];
     }
 
     /**
      * Returns currency exchange rate
+     *
      * @param int $from
      * @param int $to
+     *
      * @return array
-     * @throws Error
+     *
+     * @throws APIExeption
      */
-    public static function getCurrencyExchangeRate($from, $to)
+    public static function getCurrencyExchangeRate($from, $to): array
     {
         $variables = [
             'options' => [
@@ -201,59 +242,5 @@ class Tools
             'exchange' => null,
             'currencyExchangeId' => null
         ];
-    }
-
-    /**
-     * @param $input
-     * @return string
-     */
-    public static function zipCheck($input)
-    {
-        $zipCode = trim(str_replace(' ', '', $input));
-        $zipCode = preg_replace('/[^0-9]/', '', $zipCode);
-        if (strlen($zipCode) == 7) {
-            $zipCode = $zipCode[0] . $zipCode[1] . $zipCode[2] . $zipCode[3] . '-' . $zipCode[4] . $zipCode[5] . $zipCode[6];
-        }
-        if (strlen($zipCode) == 6) {
-            $zipCode = $zipCode[0] . $zipCode[1] . $zipCode[2] . $zipCode[3] . '-' . $zipCode[4] . $zipCode[5] . '0';
-        }
-        if (strlen($zipCode) == 5) {
-            $zipCode = $zipCode[0] . $zipCode[1] . $zipCode[2] . $zipCode[3] . '-' . $zipCode[4] . '00';
-        }
-        if (strlen($zipCode) == 4) {
-            $zipCode = $zipCode . '-' . '000';
-        }
-        if (strlen($zipCode) == 3) {
-            $zipCode = $zipCode . '0-' . '000';
-        }
-        if (strlen($zipCode) == 2) {
-            $zipCode = $zipCode . '00-' . '000';
-        }
-        if (strlen($zipCode) == 1) {
-            $zipCode = $zipCode . '000-' . '000';
-        }
-        if (strlen($zipCode) == 0) {
-            $zipCode = '1000-100';
-        }
-        if (self::finalCheck($zipCode)) {
-            return $zipCode;
-        }
-
-        return '1000-100';
-    }
-
-    /**
-     * Validate a Zip Code format
-     * @param string $zipCode
-     * @return bool
-     */
-    private static function finalCheck($zipCode)
-    {
-        $regexp = "/[0-9]{4}\-[0-9]{3}/";
-        if (preg_match($regexp, $zipCode)) {
-            return (true);
-        }
-
-        return (false);
     }
 }

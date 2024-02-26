@@ -1,14 +1,33 @@
 <?php
 
+/** @noinspection PhpPropertyOnlyWrittenInspection */
+
 namespace MoloniES;
 
+use MoloniES\Enums\Boolean;
+use MoloniES\Exceptions\APIExeption;
+use MoloniES\Exceptions\Core\MoloniException;
+use MoloniES\Exceptions\DocumentError;
+use MoloniES\Exceptions\DocumentWarning;
 use MoloniES\Helpers\Context;
 use MoloniES\Helpers\WebHooks;
-use MoloniES\Controllers\Documents;
-use MoloniES\Controllers\PendingOrders;
+use MoloniES\Hooks\Ajax;
+use MoloniES\Hooks\OrderList;
+use MoloniES\Hooks\OrderPaid;
+use MoloniES\Hooks\OrderView;
+use MoloniES\Hooks\ProductDelete;
+use MoloniES\Hooks\ProductUpdate;
+use MoloniES\Hooks\ProductView;
+use MoloniES\Hooks\UpgradeProcess;
 use MoloniES\Hooks\WoocommerceInitialize;
+use MoloniES\Menus\Admin;
+use MoloniES\Models\Logs;
+use MoloniES\Services\Documents\DownloadDocumentPDF;
+use MoloniES\Services\Documents\OpenDocument;
+use MoloniES\Services\Orders\CreateMoloniDocument;
+use MoloniES\Services\Orders\DiscardOrder;
+use MoloniES\Tools\Logger;
 use MoloniES\WebHooks\WebHook;
-use WC_Order;
 
 /**
  * Main constructor
@@ -17,6 +36,9 @@ use WC_Order;
  */
 class Plugin
 {
+    private $action = '';
+    private $activeTab = '';
+
     /**
      * Plugin constructor.
      */
@@ -36,7 +58,11 @@ class Plugin
      */
     private function onStart()
     {
+        $this->action = sanitize_text_field($_REQUEST['action'] ?? '');
+        $this->activeTab = sanitize_text_field($_GET['tab'] ?? '');
+
         Storage::$USES_NEW_ORDERS_SYSTEM = Context::isNewOrdersSystemEnabled();
+        Storage::$LOGGER = new Logger();
     }
 
     /**
@@ -44,7 +70,7 @@ class Plugin
      */
     private function translations()
     {
-        //loads translations files
+        /** Loads translations files */
         load_plugin_textdomain('moloni_es', FALSE, basename(dirname(MOLONI_ES_PLUGIN_FILE)) . '/languages/');
     }
 
@@ -53,14 +79,22 @@ class Plugin
      */
     private function actions()
     {
-        new WoocommerceInitialize($this);
-        new Menus\Admin($this);
-        new Hooks\ProductUpdate($this);
-        new Hooks\ProductView($this);
-        new Hooks\OrderView($this);
-        new Hooks\OrderPaid($this);
-        new WebHook();
+        /** Admin pages */
+        new Admin($this);
         new Ajax($this);
+
+        /** Webservices */
+        new WebHook();
+
+        /** Hooks */
+        new ProductUpdate($this);
+        new ProductDelete($this);
+        new ProductView($this);
+        new OrderView($this);
+        new OrderPaid($this);
+        new OrderList($this);
+        new UpgradeProcess($this);
+        new WoocommerceInitialize($this);
     }
 
     //            Publics            //
@@ -76,15 +110,9 @@ class Plugin
 
             /** If the user is not logged in show the login form */
             if ($authenticated) {
-                $action = isset($_REQUEST['action']) ? sanitize_text_field($_REQUEST['action']) : '';
-
-                switch ($action) {
+                switch ($this->action) {
                     case 'remInvoice':
                         $this->removeOrder();
-                        break;
-
-                    case 'remInvoiceAll':
-                        $this->removeOrdersAll();
                         break;
 
                     case 'reinstallWebhooks':
@@ -95,10 +123,6 @@ class Plugin
                         $this->createDocument();
                         break;
 
-                    case 'syncStocks':
-                        $this->syncStocks();
-                        break;
-
                     case 'remLogs':
                         $this->removeLogs();
                         break;
@@ -106,9 +130,12 @@ class Plugin
                     case 'getInvoice':
                         $this->openDocument();
                         break;
+                    case 'downloadDocument':
+                        $this->downloadDocument();
+                        break;
                 }
             }
-        } catch (Error $error) {
+        } catch (MoloniException $error) {
             $pluginErrorException = $error;
         }
 
@@ -122,17 +149,45 @@ class Plugin
     /**
      * Create a new document
      *
-     * @throws Error
+     * @throws DocumentWarning|DocumentError|MoloniException
      */
     private function createDocument()
     {
-        $orderId = (int)(sanitize_text_field($_REQUEST['id']));
+        $service = new CreateMoloniDocument((int)(sanitize_text_field($_REQUEST['id'])));
+        $orderName = $service->getOrderNumber();
 
-        $document = new Documents($orderId);
-        $document->createDocument();
+        try {
+            $service->run();
+        } catch (DocumentWarning $e) {
+            $message = sprintf(__('There was an warning when generating the document (%s)'), $orderName);
+            $message .= ' </br>';
+            $message .= $e->getMessage();
 
-        if ($document->documentId > 0) {
-            $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $document->documentId)) . '" target="_BLANK">' . __('View document', 'moloni_es') . '</a>';
+            Storage::$LOGGER->alert($message, [
+                    'tag' => 'service:document:create:manual:warning',
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+
+            throw $e;
+        } catch (DocumentError $e) {
+            $message = sprintf(__('There was an error when generating the document (%s)'), $orderName);
+            $message .= ' </br>';
+            $message .= strip_tags($e->getMessage());
+
+            Storage::$LOGGER->error($message, [
+                    'tag' => 'service:document:create:manual:error',
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData()
+                ]
+            );
+
+            throw $e;
+        }
+
+        if ($service->getDocumentId() > 0) {
+            $viewUrl = ' <a href="' . esc_url(admin_url('admin.php?page=molonies&action=getInvoice&id=' . $service->getDocumentId())) . '" target="_BLANK">' . __('View document', 'moloni_es') . '</a>';
 
             add_settings_error('molonies', 'moloni-document-created-success', __('Document was created!', 'moloni_es') . $viewUrl, 'updated');
         }
@@ -142,20 +197,29 @@ class Plugin
      * Open Moloni document
      *
      * @return void
-     *
-     * @throws Error
      */
     private function openDocument()
     {
-        $document = false;
         $documentId = (int)(sanitize_text_field($_REQUEST['id']));
 
         if ($documentId > 0) {
-            $document = Documents::showDocument($documentId);
+            new OpenDocument($documentId);
         }
 
-        if (!$document) {
-            add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
+        add_settings_error('molonies', 'moloni-document-not-found', __('Document not found.', 'moloni_es'));
+    }
+
+    /**
+     * Download Moloni document
+     *
+     * @return void
+     */
+    private function downloadDocument(): void
+    {
+        $documentId = (int)$_REQUEST['id'];
+
+        if ($documentId > 0) {
+            new DownloadDocumentPDF($documentId);
         }
     }
 
@@ -166,7 +230,7 @@ class Plugin
      */
     private function removeLogs()
     {
-        Log::removeLogs();
+        Logs::removeOlderLogs();
 
         add_settings_error('molonies', 'moloni-rem-logs', __('Logs cleanup is complete.', 'moloni_es'), 'updated');
     }
@@ -180,9 +244,10 @@ class Plugin
 
         if (isset($_GET['confirm']) && sanitize_text_field($_GET['confirm']) === 'true') {
             $order = wc_get_order($orderId);
-            $order->add_meta_data('_molonies_sent', '-1');
-            $order->add_order_note(__('Order marked as created'));
-            $order->save();
+
+            $service = new DiscardOrder($order);
+            $service->run();
+            $service->saveLog();
 
             add_settings_error(
                 'molonies',
@@ -200,69 +265,25 @@ class Plugin
     }
 
     /**
-     * Removes all orders form the pending list
-     */
-    private function removeOrdersAll()
-    {
-        if (isset($_GET['confirm']) && sanitize_text_field($_GET['confirm']) === 'true') {
-            /** @var WC_Order[] $allOrders */
-            $allOrders = PendingOrders::getAllAvailable();
-
-            if (!empty($allOrders)) {
-                foreach ($allOrders as $order) {
-                    $order->add_meta_data('_molonies_sent', '-1');
-                    $order->add_order_note(__('Order marked as created'));
-                    $order->save();
-                }
-
-                add_settings_error('molonies', 'moloni-order-all-remove-success', __('All orders have been marked as generated!', 'moloni_es'), 'updated');
-            } else {
-                add_settings_error('molonies', 'moloni-order-all-remove-not-found', __('No order found to generate!', 'moloni_es'));
-            }
-        } else {
-            $url = esc_url(admin_url('admin.php?page=molonies&action=remInvoiceAll&confirm=true'));
-
-            add_settings_error(
-                'molonies', 'moloni-order-remove',
-                __('Do you confirm that you want to mark all orders as generated?', 'moloni_es') . " <a href='" . $url . "'>" . __('Yes, i confirm', 'moloni_es') . "</a>"
-            );
-        }
-    }
-
-    /**
-     * Forces stock synchronization
-     */
-    private function syncStocks()
-    {
-        $date = isset($_GET['since']) ? sanitize_text_field($_GET['since']) : gmdate('Y-m-d', strtotime('-1 week'));
-
-        $syncStocksResult = (new Controllers\SyncProducts($date))->run();
-
-        if ($syncStocksResult->countUpdated() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('%s products updated.', 'moloni_es'), $syncStocksResult->countUpdated()), 'updated');
-        }
-
-        if ($syncStocksResult->countEqual() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-updated', sprintf(__('There are %s products up to date.', 'moloni_es'), $syncStocksResult->countEqual()), 'updated');
-        }
-
-        if ($syncStocksResult->countNotFound() > 0) {
-            add_settings_error('molonies', 'moloni-sync-stocks-not-found', sprintf(__('%s products were not found in WooCommerce.', 'moloni_es'), $syncStocksResult->countNotFound()));
-        }
-    }
-
-    /**
      * Reinstall Moloni Webhooks
      */
     private function reinstallWebhooks()
     {
         try {
             WebHooks::deleteHooks();
-            WebHooks::createHooks();
+
+            if (defined('HOOK_STOCK_SYNC') && (int)HOOK_STOCK_SYNC === Boolean::YES) {
+                WebHooks::createHook('Product', 'stockChanged');
+            }
+
+            if (defined('HOOK_PRODUCT_SYNC') && (int)HOOK_PRODUCT_SYNC === Boolean::YES) {
+                WebHooks::createHook('Product', 'create');
+                WebHooks::createHook('Product', 'update');
+            }
 
             $msg = __('Moloni Webhooks reinstalled successfully.', 'moloni_es');
             $type = 'updated';
-        } catch (Error $e) {
+        } catch (APIExeption $e) {
             $msg = __('Something went wrong reinstalling Moloni Webhooks.', 'moloni_es');
             $type = 'error';
         }
