@@ -2,9 +2,9 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 1.0.51
-Tested up to: 6.2
-WC tested up to: 7.5.1
+Stable tag: 2.0.0
+Tested up to: 6.4.3
+WC tested up to: 8.6.1
 
 Requires PHP: 7.2
 Requires at least: 5.0
@@ -63,10 +63,27 @@ Via FTP
 3. Synchronization and query tools
 
 == Upgrade Notice ==
+= 2.0.0 =
+ Released plugin version 2.0.0.
+
 = 1.0.0 =
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 2.0.0 =
+* Tested up to version 6.4.3 of WordPress
+* Tested up to version 8.6.1 of WooCommerce
+* Added logging system
+* Added support for multisite
+* Added filters and actions
+* Added possibility of creating Transport Documents together with the documents generated
+* New tools to synchronise product and stock
+* New design on the login and company selection page
+* New email alert system to notify admins in case of plugin errors/alerts
+* Improvements in the automatic synchronization of Products/stocks
+* Added the possibility of discarding orders in "bulk"
+* Various improvements to the plugin’s stability
+
 = 1.0.51 =
 * Force VAT numbers to upper case
 

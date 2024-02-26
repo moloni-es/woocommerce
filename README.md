@@ -3,9 +3,9 @@
 ![WordPress Plugin Required PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-blue)
 ![WordPress Plugin: Tested PHP Version](https://img.shields.io/badge/php-8.1%20tested-blue)
 ![WordPress Plugin: Required WP Version](https://img.shields.io/badge/WordPress-%3E%3D%205.0-orange)
-![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.2%20tested-orange)
+![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.4.3%20tested-orange)
 ![WooCommerce: Required Version](https://img.shields.io/badge/WooCommerce-%3E%3D%203.0.0-orange)
-![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-7.5.1%20tested-orange)
+![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-8.6.1%20tested-orange)
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
@@ -13,9 +13,9 @@
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
-**Tested up to:**      6.2  
-**WC tested up to**    7.5.1  
-**Stable tag:**        1.0.51  
+**Tested up to:**      6.4.3  
+**WC tested up to**    8.6.1  
+**Stable tag:**        2.0.0  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -66,10 +66,27 @@ This plugin can be installed via FTP or using the WordPress plugin installer.
 2. Activate the plugin through the `Plugins` option visible in WordPress
 
 ## Upgrade Notice
+### 2.0.0
+Released plugin version 2.0.0.
+
 ### 1.0.0
 Released plugin version 1.0.0.
 
 ## Changelog
+### 2.0.0
+* Tested up to version 6.4.3 of WordPress
+* Tested up to version 8.6.1 of WooCommerce
+* Added logging system
+* Added support for multisite
+* Added filters and actions
+* Added possibility of creating Transport Documents together with the documents generated
+* New tools to synchronise product and stock
+* New design on the login and company selection page
+* New email alert system to notify admins in case of plugin errors/alerts
+* Improvements in the automatic synchronization of Products/stocks
+* Added the possibility of discarding orders in "bulk"
+* Various improvements to the plugin’s stability
+
 ### 1.0.51
 * Force VAT numbers to upper case
 
