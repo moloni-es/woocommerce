@@ -131,7 +131,7 @@ class OrderCustomer
      *
      * @return string
      *
-     * @throws Error
+     * @throws DocumentError
      */
     public function getVatNumber(): ?string
     {
@@ -172,7 +172,7 @@ class OrderCustomer
                 }
 
                 if (!empty($vat) && !Customer::isVatEsValid($vat)) {
-                    throw new Error(__('Customer has invalid VAT for Spain.','moloni_es'));
+                    throw new DocumentError(__('Customer has invalid VAT for Spain.','moloni_es'));
                 }
             }
         }
