@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-25 16:37+0000\n"
+"POT-Creation-Date: 2024-03-14 14:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -66,9 +66,9 @@ msgid "Alert e-mail"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:121
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:189
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:197
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:116
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:184
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:192
 msgid "Alerts"
 msgstr ""
 
@@ -134,9 +134,9 @@ msgid "Automation"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:96
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:204
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:212
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:91
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:199
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:207
 msgid "Back"
 msgstr ""
 
@@ -165,8 +165,8 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:243
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:256
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:238
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:251
 msgid "Changes saved."
 msgstr ""
 
@@ -201,8 +201,8 @@ msgstr ""
 msgid "Click here for more instructions"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:230
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:225
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:238
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:233
 msgid "Click to see"
 msgstr ""
 
@@ -241,8 +241,8 @@ msgstr ""
 msgid "Complete"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:231
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:226
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:239
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:234
 msgid "Completed"
 msgstr ""
 
@@ -296,6 +296,10 @@ msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:454
 msgid "Custom field associated with the customer's VAT"
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:175
+msgid "Customer has invalid VAT for Spain."
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:347
@@ -557,7 +561,7 @@ msgstr ""
 msgid "Error fetching company"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:270
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:280
 msgid "Error fetching countries"
 msgstr ""
 
@@ -565,7 +569,7 @@ msgstr ""
 msgid "Error fetching country"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:362
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:372
 msgid "Error fetching customers."
 msgstr ""
 
@@ -635,8 +639,8 @@ msgstr ""
 msgid "Error getting shipping"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:229
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:224
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:237
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:232
 msgid "Error in the process"
 msgstr ""
 
@@ -688,7 +692,7 @@ msgid "Export all stock"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:120
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:188
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:196
 msgid "Export product"
 msgstr ""
 
@@ -697,7 +701,7 @@ msgid "Export products to Moloni"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:123
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:191
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:199
 msgid "Export stock"
 msgstr ""
 
@@ -800,7 +804,7 @@ msgstr ""
 msgid "Import all stock"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:193
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:201
 msgid "Import product"
 msgstr ""
 
@@ -813,7 +817,7 @@ msgid "Import produt"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:128
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:196
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:204
 msgid "Import stock"
 msgstr ""
 
@@ -982,9 +986,9 @@ msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:258
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:112
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:180
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:188
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:107
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:175
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:183
 msgid "Name"
 msgstr ""
 
@@ -1009,7 +1013,7 @@ msgstr ""
 msgid "No default warehouse found"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:171
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:179
 msgid "No Moloni products were found!"
 msgstr ""
 
@@ -1025,7 +1029,7 @@ msgstr ""
 msgid "No records found!"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:166
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:174
 msgid "No WooCommerce products were found!"
 msgstr ""
 
@@ -1194,8 +1198,8 @@ msgstr ""
 msgid "Processing"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:227
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:222
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:235
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:230
 msgid "Processing product"
 msgstr ""
 
@@ -1211,8 +1215,8 @@ msgstr ""
 msgid "Product blocked"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:224
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:219
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:232
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:227
 msgid "product creation processes."
 msgstr ""
 
@@ -1281,8 +1285,8 @@ msgstr ""
 msgid "Product types do not match"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:225
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:220
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:233
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:228
 msgid "product update processes."
 msgstr ""
 
@@ -1354,9 +1358,9 @@ msgid ""
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:115
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:183
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:191
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:110
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:178
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:186
 msgid "Reference"
 msgstr ""
 
@@ -1394,12 +1398,12 @@ msgid "Run"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:95
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:203
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:211
 msgid "Run exports"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:100
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:208
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:216
 msgid "Run imports"
 msgstr ""
 
@@ -1548,8 +1552,8 @@ msgstr ""
 msgid "Stock is already updated in WooCommerce (%s)"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:226
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:221
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:234
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:229
 msgid "stock update processes."
 msgstr ""
 
@@ -1567,8 +1571,8 @@ msgstr ""
 msgid "Stock: "
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:228
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:223
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:236
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:231
 msgid "Successfully processed"
 msgstr ""
 
@@ -1708,9 +1712,9 @@ msgid "Total results"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:118
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:186
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:194
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:113
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:181
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:189
 msgid "Type"
 msgstr ""
 
