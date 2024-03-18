@@ -5,7 +5,7 @@
  *   Requires Plugins: woocommerce
  *   Description:  Simple invoicing integration with Moloni ES
  *   Version:      2.0.0
- *   Tested up to: 6.4.3
+ *   Tested up to: 6.5.0
  *   WC tested up to: 8.6.1
  *
  *   Author:       Moloni.es
