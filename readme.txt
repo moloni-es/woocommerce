@@ -1,6 +1,7 @@
 === Plugin Name ===
 Moloni España
 Contributors: Moloni
+Requires Plugins: woocommerce
 Tags: Invoicing, Orders
 Stable tag: 2.0.0
 Tested up to: 6.4.3
