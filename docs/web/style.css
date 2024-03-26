@@ -113,27 +113,40 @@ footer.page-footer {
 
 .footerSectionIconRSHolder {
     overflow: hidden;
-    margin: 35px 8px;
+    margin: 35px 8px 32px;
     text-align: center;
 }
 
-.footerIconeRedesSociais_fb_off, .footerIconeRedesSociais_in_off {
-    background: url(./images/tut/fe_v3_shapes_1.png) no-repeat -1px;
-    width: 38px;
-    height: 38px;
-    display: inline-block;
-    cursor: pointer;
+.footerIconeRedesSociais_linkedIn_off,
+.footerIconeRedesSociais_instagram_off,
+.footerIconeRedesSociais_x_off {
+  background: url(./images/tut/fe_v3_shapes_1.png) no-repeat -1px;
+  width: 38px;
+  height: 38px;
+  display: inline-block;
+  cursor: pointer;
+  opacity: 0.8;
 }
 
-.footerIconeRedesSociais_fb_off {
-    background-position-x: -1px;
-    margin-right: 30px;
+.footerIconeRedesSociais_linkedIn_off:hover,
+.footerIconeRedesSociais_instagram_off:hover,
+.footerIconeRedesSociais_x_off:hover {
+  opacity: 1;
 }
 
-.footerIconeRedesSociais_in_off {
-    background-position-x: -73px;
+.footerIconeRedesSociais_linkedIn_off {
+  background-position-x: -73px;
+  margin-right: 32px;
 }
 
+.footerIconeRedesSociais_instagram_off {
+  background-position-x: -143px;
+  margin-right: 32px;
+}
+
+.footerIconeRedesSociais_x_off {
+  background-position-x: -213px;
+}
 
 /*MEDIA QUERIES*/
 
