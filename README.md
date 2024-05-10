@@ -9,12 +9,12 @@
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
-**Contributors:**      [moloni-es](https://github.com/moloni-es)  
+**Contributors:**      [Moloni](https://github.com/moloni-es)  
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
 **Tested up to:**      6.5.0  
-**WC tested up to**    8.6.1  
+**WC tested up to**    8.7.0  
 **Stable tag:**        2.0.0  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)

@@ -1,18 +1,16 @@
-=== Plugin Name ===
-Moloni España
+=== Moloni España ===
 Contributors: Moloni
 Requires Plugins: woocommerce
 Tags: Invoicing, Orders
-Stable tag: 2.0.0
-Tested up to: 6.5.0
-WC tested up to: 8.6.1
-
-Requires PHP: 7.2
 Requires at least: 5.0
+Stable tag: 2.0.0
+Requires PHP: 7.2
+Tested up to: 6.5.0
+WC tested up to: 8.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Innovative billing software that fits your business.! Intended for professionals, micro, small and medium enterprises. No initial investment, complete and intuitive.
+Innovative billing software that fits your business.! Intended for professionals, micro, small and medium enterprises.
 
 == Description ==
 Moloni is an innovative online billing and POS software that includes access to numerous useful and functional tools that allow each company to manage their billing, control stocks, automate processes and issue documents quickly, simply and intuitively.
