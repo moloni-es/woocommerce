@@ -121,8 +121,8 @@ class OrderDetails
 
             $document = Documents::queryDocument($variables);
 
-            if (isset($document['documentId'])) {
-                return $document;
+            if (isset($document['data']['document']['data']['documentId'])) {
+                return $document['data']['document']['data'];
             }
         } catch (APIExeption $e) {
         }
