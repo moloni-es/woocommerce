@@ -1,184 +1,191 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-10 09:30+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: \n"
-"Language: \n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"POT-Creation-Date: 2020-07-16 16:52+0000\n"
+"PO-Revision-Date: 2024-05-10 09:41+0000\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese (Portugal)\n"
+"Language: pt_PT\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.4.0; wp-5.4.2"
+"X-Loco-Version: 2.6.6; wp-6.2"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:426
 #, php-format
 msgid "%s was created with success (%s)"
-msgstr ""
+msgstr "%s foi criado com sucesso (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:107
 msgid "(Invoice + Receipt cannot be created in draft)"
-msgstr ""
+msgstr "(Fatura + Recibo não pode ser criado em rascunho)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentWarning.php:56
 msgid ""
 "A document was created as draft because the order and document values do not "
 "match."
 msgstr ""
+"Um documento foi criado como rascunho porque os valores da encomenda e do "
+"documento não correspondem."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:181
 msgid "Accumulated stock"
-msgstr ""
+msgstr "Stock acumulado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:69
 msgid "Accumulated stock from all warehouses."
-msgstr ""
+msgstr "Stock acumulado de todos os armazéns."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:3
 msgid "Action in progress"
-msgstr ""
+msgstr "Ação em progresso"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:472
 msgid ""
 "Add, in WooCommerce, a column in the order list with fast download of PDF "
 "documents"
 msgstr ""
+"Adicionar, no WooCommerce, uma coluna na lista de pedidos com download "
+"rápido de documentos em PDF"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:493
 msgid ""
 "Add, on the order view page (for the customer), a section with the generated "
 "document to download in PDF"
 msgstr ""
+"Adicionar, na página visualização encomenda (do cliente), uma secção com o "
+"documento gerado para descarregar em PDF"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/CompanyCard.php:23
 msgid "Address"
-msgstr ""
+msgstr "Morada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:502
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:28
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:50
 msgid "Alert"
-msgstr ""
+msgstr "Alerta"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:510
 msgid "Alert e-mail"
-msgstr ""
+msgstr "E-mail de alerta"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:121
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:197
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:116
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:192
 msgid "Alerts"
-msgstr ""
+msgstr "Alertas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:41
 msgid ""
 "All actions on this page will be in the Moloni -> WooCommerce direction."
-msgstr ""
+msgstr "Todas as ações nesta página serão na direção Moloni -> WooCommerce."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:42
 msgid ""
 "All actions on this page will be in the WooCommerce -> Moloni direction."
-msgstr ""
+msgstr "Todas as ações nesta página serão na direção WooCommerce -> Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportProductsModal.php:7
 msgid ""
 "All your Moloni products will be created in your WooCommerce store if they "
 "do not exist."
 msgstr ""
+"Todos os seus produtos Moloni serão criados em sua loja WooCommerce, caso "
+"não existam."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentFailed.php:56
 msgid "An error occurred creating an Moloni document."
-msgstr ""
+msgstr "Ocorreu um erro ao criar um documento Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportProductsModal.php:13
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportStocksModal.php:16
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportProductsModal.php:13
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportStocksModal.php:13
 msgid "Are you sure you want to continue?"
-msgstr ""
+msgstr "Tem certeza que quer continuar?"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:13
 msgid "Authentication Expired Email Template."
-msgstr ""
+msgstr "Modelo de e-mail expirado de autenticação."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:340
 msgid "Automatic"
-msgstr ""
+msgstr "Automático"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:132
 msgid "Automatic actions from Moloni"
-msgstr ""
+msgstr "Ações automáticas do Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:27
 msgid "Automatic actions from WooCommerce"
-msgstr ""
+msgstr "Ações automáticas no WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:97
 msgid "Automatic stock synchronization"
-msgstr ""
+msgstr "Sincronização automática de stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:52
 msgid "Automatically create document when an order is paid"
-msgstr ""
+msgstr "Criar documento automaticamente quando a encomenda é paga"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:41
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:98
 #, php-format
 msgid "Automatically generating order document in status '%s' (%s)"
-msgstr ""
+msgstr "Gerando documento de encomenda automaticamente no estado '%s' (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/MainContainer.php:30
 msgid "Automation"
-msgstr ""
+msgstr "Automatização"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:96
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:212
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:91
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:207
 msgid "Back"
-msgstr ""
+msgstr "Voltar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/NoCompanies.php:30
 msgid "Back to login"
-msgstr ""
+msgstr "Voltar ao login"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:83
 msgid "Bill of lading"
-msgstr ""
+msgstr "Guia de transporte"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderDetails.php:143
 msgid "Billing document"
-msgstr ""
+msgstr "Documento de faturação"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:61
 msgid "Bills of lading"
-msgstr ""
+msgstr "Guias de Transporte"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:60
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:81
 msgid "Budget"
-msgstr ""
+msgstr "Orçamento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:26
 msgid "Bulk actions"
-msgstr ""
+msgstr "Acções por lote"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:273
 msgid "Categories"
-msgstr ""
+msgstr "Categorias"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:238
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Start.php:251
 msgid "Changes saved."
-msgstr ""
+msgstr "Alteração guardadas."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:49
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:204
@@ -186,44 +193,46 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:405
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:424
 msgid "Choose an option"
-msgstr ""
+msgstr "Escolher opção"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/CompanyCard.php:45
 msgid "Choose company"
-msgstr ""
+msgstr "Escolher empresa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:133
 msgid ""
 "Choose if you want to create a Bill of Lading associated with the main "
 "document"
 msgstr ""
+"Escolha se pretende criar guias de transporte associado ao documento "
+"principal"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:155
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:150
 msgid "Clear"
-msgstr ""
+msgstr "Limpar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Exceptions/ExceptionError.php:17
 msgid "Click here for more information"
-msgstr ""
+msgstr "Clique aqui para mais informações"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/LoginForm.php:64
 msgid "Click here for more instructions"
-msgstr ""
+msgstr "Clique aqui para mais instruções"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:238
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:233
 msgid "Click to see"
-msgstr ""
+msgstr "Clique para ver"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:46
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:167
 msgid "Client"
-msgstr ""
+msgstr "Cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/LoginForm.php:56
 msgid "Client Secret"
-msgstr ""
+msgstr "Segredo de cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:197
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:35
@@ -232,286 +241,292 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportProductsModal.php:18
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportStocksModal.php:18
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:105
 msgid "Closed"
-msgstr ""
+msgstr "Fechado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:179
 msgid "Company address"
-msgstr ""
+msgstr "Morada da empresa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:51
 msgid "Company slug"
-msgstr ""
+msgstr "Slug da empresa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:42
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:65
 msgid "Complete"
-msgstr ""
+msgstr "Completo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:239
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:234
 msgid "Completed"
-msgstr ""
+msgstr "Concluído"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:31
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:119
 msgid "Context"
-msgstr ""
+msgstr "Contexto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Helpers/GetMoloniProductFromOrder.php:214
 msgid "Could not find variant after update."
-msgstr ""
+msgstr "Não foi possível encontrar a variante após a atualização."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:78
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:137
 msgid "Create"
-msgstr ""
+msgstr "Criar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:114
 msgid "Create bill of lading"
-msgstr ""
+msgstr "Criar documento de transporte"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:39
 msgid "Create document automatically"
-msgstr ""
+msgstr "Criar documento automaticamente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:58
 msgid "Create documents when the order is"
-msgstr ""
+msgstr "Criar documentos quando a encomenda é"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:406
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:422
 msgid "creating"
-msgstr ""
+msgstr "criando"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:191
 msgid "Creating document"
-msgstr ""
+msgstr "A criar documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:32
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:52
 msgid "Critical"
-msgstr ""
+msgstr "Crítico"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Activators/Install.php:19
 msgid "cURL library is required for using Moloni Plugin."
-msgstr ""
+msgstr "A biblioteca cURL é necessária para usar o Moloni Plugin."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:181
 msgid "Custom"
-msgstr ""
+msgstr "Personalizada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:434
 msgid "Custom field associated with the customer's VAT"
 msgstr ""
+"Custom field associado ao contribuinte do cliente. Se o campo não aparecer, "
+"certifique-se que tem pelo menos uma encomenda com o campo em uso."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:175
 msgid "Customer has invalid VAT for Spain."
-msgstr ""
+msgstr "Cliente com NIF inválido"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:327
 msgid "Customer language"
-msgstr ""
+msgstr "Idioma do cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:419
 msgid "Customer VAT"
-msgstr ""
+msgstr "Contribuinte do cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:321
 msgid "Customer's"
-msgstr ""
+msgstr "Clientes"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:364
 msgid "Customer's number prefix"
-msgstr ""
+msgstr "Prefixo do cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Exceptions/ExceptionError.php:21
 msgid "Data"
-msgstr ""
+msgstr "Dados"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:28
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:116
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:48
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:108
 msgid "Default company warehouse"
-msgstr ""
+msgstr "Armazém por defeito da empresa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:356
 msgid "Default language for customer's"
-msgstr ""
+msgstr "Idioma padrão do cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:394
 msgid "Default maturity date for customer's"
-msgstr ""
+msgstr "Prazo de vencimento por defeito do cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:413
 msgid "Default payment method for customer's"
-msgstr ""
+msgstr "Método de pagamento por defeito do cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:256
 msgid "Default warehouse"
-msgstr ""
+msgstr "Armazém predefinido "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:129
 msgid "Delete records older than 1 week"
-msgstr ""
+msgstr "Descartar registros com mais de 1 semana"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:264
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/LoginForm.php:49
 msgid "Developer Id"
-msgstr ""
+msgstr "Id de programador"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:101
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:194
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:181
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:243
 msgid "Different stock control status"
-msgstr ""
+msgstr "Diferentes status de controle de stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:143
 msgid "Discard"
-msgstr ""
+msgstr "Descartar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:28
 msgid "Discard documents"
-msgstr ""
+msgstr "Descartar documentos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:192
 msgid "Discarding order"
-msgstr ""
+msgstr "A descartar encomenda"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:271
 #, php-format
 msgid "Do you confirm that you want to mark the order %s as paid?"
-msgstr ""
+msgstr "Confirma que pretende marcar a encomenda %s como gerada?"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:47
 msgid "Do you want to export your entire catalogue?"
-msgstr ""
+msgstr "Quer exportar todo o seu catálogo?"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:46
 msgid "Do you want to import your entire catalogue?"
-msgstr ""
+msgstr "Quer importar todo o seu catálogo?"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:44
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:242
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:319
 msgid "Document"
-msgstr ""
+msgstr "Documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:66
 #, php-format
 msgid "Document %s successfully inserted"
-msgstr ""
+msgstr "Documento %s criado com sucesso"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:194
 msgid "Document creation stopped"
-msgstr ""
+msgstr "A criação do documento foi interrompida"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentFailed.php:13
 msgid "Document Error Email Template."
-msgstr ""
+msgstr "Modelo de e-mail de erro de documento."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:264
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:287
 msgid "Document inserted as a draft in Moloni"
-msgstr ""
+msgstr "Documento criado como rascunho no Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:380
 msgid "Document inserted in Moloni"
-msgstr ""
+msgstr "Documento inserido no Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:70
 msgid "Document marked as generated."
-msgstr ""
+msgstr "Documento marcado como gerado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Documents/DownloadDocumentPDF.php:50
 msgid "Document not found"
-msgstr ""
+msgstr "Documento não encontrado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:218
 msgid "Document not found."
-msgstr ""
+msgstr "Documento não encontrado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:375
 msgid "Document sent by email to the customer"
-msgstr ""
+msgstr "Documento enviado por email para o cliente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:140
 msgid "Document set"
-msgstr ""
+msgstr "Série de documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:781
 msgid "Document set missing. Please select a document set in settings."
 msgstr ""
+"Série de documentos em falta. Por favor selecione uma série nas opções do "
+"plugin."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:90
 msgid "Document status"
-msgstr ""
+msgstr "Estado do documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:63
 msgid "Document type"
-msgstr ""
+msgstr "Tipo de documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentWarning.php:13
 msgid "Document Warning Email Template."
-msgstr ""
+msgstr "Modelo de e-mail de aviso de documento."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:201
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:199
 msgid "Document was created!"
-msgstr ""
+msgstr "Documento foi criado!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:193
 msgid "Documents created:"
-msgstr ""
+msgstr "Documentos criados: "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:71
 msgid ""
 "Documents will be created automatically once they are in the selected state"
 msgstr ""
+"Os documentos serão criados automaticamente assim que estiverem no estado "
+"selecionado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:194
 msgid "Documents with errors:"
-msgstr ""
+msgstr "Documentos com erros: "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderList.php:110
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Logs/LogsContextModal.php:9
 msgid "Download"
-msgstr ""
+msgstr "Download"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:103
 msgid "Draft"
-msgstr ""
+msgstr "Rascunho"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:276
 msgid "EAN"
-msgstr ""
+msgstr "EAN"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:54
 msgid "Emergency"
-msgstr ""
+msgstr "Emergência"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:350
 msgid "English"
-msgstr ""
+msgstr "Inglês"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:20
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:42
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:405
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:421
@@ -519,215 +534,215 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:469
 #, php-format
 msgid "Error %s product in Moloni (%s)"
-msgstr ""
+msgstr "Erro %s produto em Moloni (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:344
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:354
 msgid "Error closing document"
-msgstr ""
+msgstr "Erro ao fechar documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/CreateEntirePropertyGroup.php:83
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/CreateEntirePropertyGroup.php:95
 #, php-format
 msgid "Error creating %s attribute group"
-msgstr ""
+msgstr "Erro ao criar o grupo de atributos %s"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/GetOrCreateCategory.php:102
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/GetOrCreateCategory.php:115
 #, php-format
 msgid "Error creating category %s"
-msgstr ""
+msgstr "Erro a criar categoria %s"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:90
 msgid "Error creating customer."
-msgstr ""
+msgstr "Erro ao criar cliente."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/DeliveryMethod.php:119
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/DeliveryMethod.php:135
 #, php-format
 msgid "Error creating delivery method (%s)"
-msgstr ""
+msgstr "Erro na criação do método de transporte (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:234
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:246
 msgid "Error creating document"
-msgstr ""
+msgstr "Erro ao criar documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:159
 msgid "Error creating order fee"
-msgstr ""
+msgstr "Erro ao criar taxa de pedido"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Payment.php:88
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Payment.php:102
 #, php-format
 msgid "Error creating payment method (%s)"
-msgstr ""
+msgstr "Erro a criar método de pagamento (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/GetOrCreateCategory.php:63
 msgid "Error fetching categories"
-msgstr ""
+msgstr "Erro a obter categorias"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Orders/CreateMoloniDocument.php:62
 msgid "Error fetching company"
-msgstr ""
+msgstr "Erro a obter empresa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:280
 msgid "Error fetching countries"
-msgstr ""
+msgstr "Erro ao obter países"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:1045
 msgid "Error fetching country"
-msgstr ""
+msgstr "Erro ao obter o país"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:372
 msgid "Error fetching customers."
-msgstr ""
+msgstr "Erro a obter clientes."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/DeliveryMethod.php:46
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/DeliveryMethod.php:85
 msgid "Error fetching delivery methods"
-msgstr ""
+msgstr "Erro a obter método de entrega"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:742
 msgid "Error fetching document fiscal zone"
-msgstr ""
+msgstr "Erro ao obter documento da zona fiscal"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:894
 msgid "Error fetching exchange rate."
-msgstr ""
+msgstr "Erro ao obter a taxa de câmbio."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:111
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:225
 msgid "Error fetching Moloni product"
-msgstr ""
+msgstr "Erro ao obter o produto Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:135
 msgid "Error fetching order fee"
-msgstr ""
+msgstr "Erro a obter taxa de encomenda"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Payment.php:57
 msgid "Error fetching payment methods"
-msgstr ""
+msgstr "Erro a obter métodos de pagamento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Helpers/GetMoloniProductFromOrder.php:237
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Helpers/GetMoloniProductFromOrder.php:283
 msgid "Error fetching products"
-msgstr ""
+msgstr "Erro a obter produtos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/GetOrUpdatePropertyGroup.php:59
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/GetOrUpdatePropertyGroup.php:64
 msgid "Error fetching property group"
-msgstr ""
+msgstr "Erro a obter grupo de propriedade"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/FindOrCreatePropertyGroup.php:46
 msgid "Error fetching property groups"
-msgstr ""
+msgstr "Erro a obter grupos de propriedades"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:265
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderProduct.php:353
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:306
 msgid "Error fetching taxes"
-msgstr ""
+msgstr "Erro a obter impostos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Helpers/MoloniWarehouse.php:24
 msgid "Error fetching warehouses"
-msgstr ""
+msgstr "Erro a obter armazéns"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Documents/DownloadDocumentPDF.php:98
 msgid "Error getting document"
-msgstr ""
+msgstr "Erro a obter documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:139
 msgid "Error getting or updating property group"
-msgstr ""
+msgstr "Erro ao obter ou atualizar o grupo de propriedades"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:74
 msgid "Error getting product"
-msgstr ""
+msgstr "Erro a buscar produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:175
 msgid "Error getting shipping"
-msgstr ""
+msgstr "Erro a obter envío"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:237
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:232
 msgid "Error in the process"
-msgstr ""
+msgstr "Erro no processo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:172
 msgid "Error inserting order fees"
-msgstr ""
+msgstr "Erro a inserir taxas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:194
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:209
 msgid "Error inserting shipping"
-msgstr ""
+msgstr "Erro a inserir portes de envio "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:162
 msgid "Error parsing product properties"
-msgstr ""
+msgstr "Erro ao analisar as propriedades do produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:126
 msgid "Error synchronizing products to Moloni."
-msgstr ""
+msgstr "Erro ao sincronizar produtos com o Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:89
 msgid "Error synchronizing products to WooCommerce."
-msgstr ""
+msgstr "Erro ao sincronizar produtos para o WooCommerce."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:61
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:122
 msgid "Error synchronizing stock."
-msgstr ""
+msgstr "Erro ao sincronizar stock."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:106
 msgid "Error updating customer."
-msgstr ""
+msgstr "Erro a atualizar clientes."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:372
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:537
 msgid "Example"
-msgstr ""
+msgstr "Exemplo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:293
 msgid "Exemption reason"
-msgstr ""
+msgstr "Razão de Isenção"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:52
 msgid "Export all products"
-msgstr ""
+msgstr "Exportar todos os produtos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:56
 msgid "Export all stock"
-msgstr ""
+msgstr "Exportar todo o stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:120
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:196
 msgid "Export product"
-msgstr ""
+msgstr "Exportar produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportProductsModal.php:3
 msgid "Export products to Moloni"
-msgstr ""
+msgstr "Exportar produtos para Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:123
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:199
 msgid "Export stock"
-msgstr ""
+msgstr "Exportar stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportStocksModal.php:3
 msgid "Export stocks to Moloni"
-msgstr ""
+msgstr "Exportar stocks para Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:25
 msgid "External"
-msgstr ""
+msgstr "Externo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/PrepareVariantPropertiesReturn.php:36
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/PrepareVariantPropertiesReturn.php:46
 #, php-format
 msgid "Failed to find matching property value for \"%s\""
-msgstr ""
+msgstr "Falha ao encontrar valor da propriedade correspondente para \"%s\""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/FindOrCreatePropertyGroup.php:172
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/FindOrCreatePropertyGroup.php:181
@@ -735,7 +750,7 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/GetOrUpdatePropertyGroup.php:150
 #, php-format
 msgid "Failed to update existing property group \"%s\""
-msgstr ""
+msgstr "Falha ao atualizar o grupo de propriedades existente \"%s\""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:95
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:83
@@ -745,46 +760,46 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:143
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:108
 msgid "Fatal error"
-msgstr ""
+msgstr "Erro fatal"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:83
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:99
 msgid "Fee"
-msgstr ""
+msgstr "Taxa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:252
 msgid "Fields to sync"
-msgstr ""
+msgstr "Campos para sincronizar "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:76
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:134
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Orders/CreateMoloniDocument.php:185
 msgid "Generate again"
-msgstr ""
+msgstr "Gerar de novo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:27
 msgid "Generate documents"
-msgstr ""
+msgstr "Gerar documentos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:29
 msgid "Grouped"
-msgstr ""
+msgstr "Agrupado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:16
 msgid "Here you can check all plugin logs"
-msgstr ""
+msgstr "Aqui você pode verificar todos os registos do plugin"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:20
 msgid "Here you can see all the orders you have to generate"
-msgstr ""
+msgstr "Aqui pode consultar todas as encomendas que tem por gerar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:451
 msgid "Hooks"
-msgstr ""
+msgstr "Hooks"
 
 #. Author URI of the plugin
 msgid "https://moloni.es"
-msgstr ""
+msgstr "https://moloni.es"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:70
 #, php-format
@@ -792,6 +807,8 @@ msgid ""
 "If the authentication has expired, please proceed with the authentication "
 "process again, which you can consult <a href=\"%s\">here</a>."
 msgstr ""
+"Se a autenticação expirou, prossiga com o processo de autenticação novamente,"
+" pode consultar <a href=\"%s\">aqui</a>."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:438
 #, php-format
@@ -799,184 +816,192 @@ msgid ""
 "If you don't have any fields VAT yet, you can add the available plugin <a "
 "target=\"_blank\" href=\"%s\">here.</a>"
 msgstr ""
+"Se ainda não tem nenhum campo VAT, pode adicionar o plugin disponível <a "
+"target=\"_blank\" href=\"%s\">aqui.</a>"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:79
 msgid ""
 "If you have any questions or concerns, please contact our customer support "
 "at 910 780 054 or via email soporte@moloni.es."
 msgstr ""
+"Se tiver alguma dúvida ou questão, contacte o nosso apoio ao cliente através "
+"do número 910 780 054 ou através do e-mail soporte@moloni.es."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:279
 msgid "Image"
-msgstr ""
+msgstr "Imagem"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:51
 msgid "Import all products"
-msgstr ""
+msgstr "Importar todos os produtos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:55
 msgid "Import all stock"
-msgstr ""
+msgstr "Importar todo stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:201
 msgid "Import product"
-msgstr ""
+msgstr "Importar produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportProductsModal.php:3
 msgid "Import products from Moloni"
-msgstr ""
+msgstr "Importar produtos de Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:125
 msgid "Import produt"
-msgstr ""
+msgstr "Importar produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:128
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:204
 msgid "Import stock"
-msgstr ""
+msgstr "Importar stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportStocksModal.php:3
 msgid "Import stocks from Moloni"
-msgstr ""
+msgstr "Importar stocks do Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:24
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:46
 msgid "Informative"
-msgstr ""
+msgstr "Informativo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Curl.php:204
 msgid "Invalid credentials"
-msgstr ""
+msgstr "Credenciais inválidas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:81
 msgid "Inventory must be managed at the variations level"
-msgstr ""
+msgstr "O estoque deve ser gerenciado no nível das variações"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:55
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:69
 msgid "Invoice"
-msgstr ""
+msgstr "Fatura"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:56
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:73
 msgid "Invoice + Receipt"
-msgstr ""
+msgstr "Fatura + Recibo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:342
 msgid "Language"
-msgstr ""
+msgstr "Linguagem"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/NoCompanies.php:23
 msgid "Learn more about our plans at: "
-msgstr ""
+msgstr "Saiba mais sobre nossos planos em:"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:29
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:117
 msgid "Level"
-msgstr ""
+msgstr "Nível"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:34
 msgid ""
 "List all products in Moloni company and import data into your WooCommerce "
 "store"
 msgstr ""
+"Liste todos os produtos da empresa Moloni e importe dados para sua loja "
+"WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:52
 msgid ""
 "List all products in WooCommerce store and export data to your Moloni company"
 msgstr ""
+"Liste todos os produtos da loja WooCommerce e exporte dados para sua empresa "
+"Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:31
 msgid "List Moloni products"
-msgstr ""
+msgstr "Listar produtos Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:49
 msgid "List WooCommerce Products"
-msgstr ""
+msgstr "Lista de produtos WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:172
 msgid "Load address"
-msgstr ""
+msgstr "Morada de carga"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:217
 msgid "Load address used in shipping informations"
-msgstr ""
+msgstr "Morada de carga usada nas informações de envio"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Logs/LogsContextModal.php:3
 msgid "Log context"
-msgstr ""
+msgstr "Contexto do registo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/LoginForm.php:70
 msgid "Login"
-msgstr ""
+msgstr "Entrar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:67
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:76
 msgid "Logout"
-msgstr ""
+msgstr "Sair"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/MainContainer.php:35
 msgid "Logs"
-msgstr ""
+msgstr "Registos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:244
 msgid "Logs cleanup is complete."
-msgstr ""
+msgstr "Logs eliminados com sucesso"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:381
 msgid "Maturity date"
-msgstr ""
+msgstr "Prazo de Vencimento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:203
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:244
 msgid "Measure unit not set!"
-msgstr ""
+msgstr "Unidade de medida não definida"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:276
 msgid "Measurement unit"
-msgstr ""
+msgstr "Unidade de medida"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:30
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:118
 msgid "Message"
-msgstr ""
+msgstr "Mensagem"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Menus/Admin.php:32
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Menus/Admin.php:33
 msgid "Moloni"
-msgstr ""
+msgstr "Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderList.php:81
 msgid "Moloni document"
-msgstr ""
+msgstr "Documento Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/DocumentFailed.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentFailed.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentFailed.php:52
 msgid "Moloni document error"
-msgstr ""
+msgstr "Erro de documento Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/DocumentWarning.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentWarning.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentWarning.php:52
 msgid "Moloni document warning"
-msgstr ""
+msgstr "Alerta de documento Moloni"
 
 #. Name of the plugin
 msgid "Moloni España"
-msgstr ""
+msgstr "Moloni Espanha"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:78
 msgid "Moloni login invalid"
-msgstr ""
+msgstr "Credenciais Moloni inválidas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:36
 msgid "Moloni product list"
-msgstr ""
+msgstr "Lista de produtos Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:389
 msgid "Moloni product not found"
-msgstr ""
+msgstr "Produto Moloni não encontrado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:238
 msgid ""
@@ -984,19 +1009,22 @@ msgid ""
 "variations. If disabled, Moloni products with variants will not be "
 "synchronized."
 msgstr ""
+"O produto Moloni com variantes será criado no WooCommerce como produtos com "
+"variações. Se desativado, os produtos Moloni com variantes não serão "
+"sincronizados."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:62
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:63
 msgid "Moloni stock values based on:"
-msgstr ""
+msgstr "Valores das stock Moloni com base em:"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:293
 msgid "Moloni Webhooks reinstalled successfully."
-msgstr ""
+msgstr "Webhooks Moloni reinstalados com sucesso."
 
 #. Author of the plugin
 msgid "Moloni.es"
-msgstr ""
+msgstr "Moloni.es"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:258
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:112
@@ -1004,7 +1032,7 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:107
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:183
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:46
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:81
@@ -1018,255 +1046,260 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:466
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:486
 msgid "No"
-msgstr ""
+msgstr "Não"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderList.php:112
 msgid "No associated document"
-msgstr ""
+msgstr "Nenhum documento associado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Helpers/MoloniWarehouse.php:36
 msgid "No default warehouse found"
-msgstr ""
+msgstr "Nenhum armazém padrão encontrado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:179
 msgid "No Moloni products were found!"
-msgstr ""
+msgstr "Nenhum produto Moloni foi encontrado!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:190
 msgid "No orders selected to process"
-msgstr ""
+msgstr "Nenhuma encomenda selecionada para processar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:152
 msgid "No orders to be generated were found!"
-msgstr ""
+msgstr "Sem encomendas para gerar encontradas!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:109
 msgid "No records found!"
-msgstr ""
+msgstr "Nenhum resultado foi encontrado!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:174
 msgid "No WooCommerce products were found!"
-msgstr ""
+msgstr "Nenhum produto WooCommerce foi encontrado!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:56
 msgid "Observation"
-msgstr ""
+msgstr "Observação"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/PendingOrders/BulkActionModal.php:7
 msgid "of"
-msgstr ""
+msgstr "de"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderFees.php:183
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:224
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:150
 msgid "Online Store"
-msgstr ""
+msgstr "Loja Online"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Curl.php:85
 msgid "Oops, an error was encountered..."
-msgstr ""
+msgstr "Ups, foi encontrado um erro..."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:49
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:68
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:56
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:83
 msgid "Open in Moloni"
-msgstr ""
+msgstr "Abrir no Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:64
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:75
 msgid "Open in WooCommerce"
-msgstr ""
+msgstr "Abrir no WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:282
 msgid "Optional field that will sync when synchronizing products"
-msgstr ""
+msgstr "Campo opcional que será sincronizado ao sincronizar produtos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/DocumentFailed.php:16
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/DocumentWarning.php:16
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:45
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:166
 msgid "Order"
-msgstr ""
+msgstr "Encomenda"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:264
 #, php-format
 msgid "Order %s has been marked as generated!"
-msgstr ""
+msgstr "Encomenda %s foi marcada como gerada!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Helpers/GetMoloniProductFromOrder.php:72
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Helpers/GetMoloniProductFromOrder.php:112
 msgid "Order products were deleted."
-msgstr ""
+msgstr "Os produtos do pedido foram excluídos."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Orders/DiscardOrder.php:20
 msgid "Order was discarded"
-msgstr ""
+msgstr "E encomenda foi descartada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Orders/DiscardOrder.php:27
 #, php-format
 msgid "Order was discarded (%s)"
-msgstr ""
+msgstr "E encomenda foi descartada (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/MainContainer.php:20
 msgid "Orders"
-msgstr ""
+msgstr "Encomendas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/PendingOrders/BulkActionModal.php:11
 msgid "orders"
-msgstr ""
+msgstr "encomendas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:195
 msgid "Orders discarded:"
-msgstr ""
+msgstr "Encomendas descartadas:"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:196
 msgid "Orders with errors:"
-msgstr ""
+msgstr "Encomendas com erros:"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:45
 msgid "Others"
-msgstr ""
+msgstr "Outros"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:50
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:171
 msgid "Payment date"
-msgstr ""
+msgstr "Data de pagamento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:400
 msgid "Payment method"
-msgstr ""
+msgstr "Método de pagamento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:62
 msgid ""
 "Please access the Moloni Spain plugin from your WooCommerce store admin "
 "panel and confirm the authentication status of your account."
 msgstr ""
+"Aceda o plug-in Moloni Espanha no painel de administração da loja "
+"WooCommerce e confirme o estado de autenticação da sua conta."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:29
 msgid "Please check logs for more information."
-msgstr ""
+msgstr "Verifique os registos para obter mais informações."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentFailed.php:59
 msgid "Please check plugin logs for more information."
-msgstr ""
+msgstr "Verifique os registos do plug-in para obter mais informações."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/DocumentWarning.php:59
 msgid "Please check the resulting document."
-msgstr ""
+msgstr "Verifique o documento resultante."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/NoCompanies.php:19
 msgid ""
 "Please confirm that your account has access to an active company with a plan "
 "that allows you to access the plugins."
 msgstr ""
+"Confirme se sua conta tem acesso a uma empresa ativa com um plano que "
+"permite acesso aos plugins."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:20
 msgid "Please wait until the process finishes!"
 msgstr ""
+"Aguarde até que o processo termine!\n"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/Blocks/ActionModalContent.php:13
 msgid "Please wait, tool in progress"
-msgstr ""
+msgstr "Aguarde, ferramenta em andamento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/AuthenticationExpired.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/DocumentFailed.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/DocumentWarning.php:12
 msgid "Plugin Moloni"
-msgstr ""
+msgstr "Plugin Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:344
 msgid "Portuguese"
-msgstr ""
+msgstr "Português"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:375
 msgid "Prefix used when creating customer's"
-msgstr ""
+msgstr "Prefixo usado na criação dos clientes"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:261
 msgid "Price"
-msgstr ""
+msgstr "Preço"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:89
 msgid "Price: "
-msgstr ""
+msgstr "Preço: "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:58
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:77
 msgid "Pro Forma Invoice"
-msgstr ""
+msgstr "Fatura pro forma"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/Blocks/ActionModalContent.php:17
 msgid "Process complete"
-msgstr ""
+msgstr "Processo concluído"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:7
 msgid "Process concluded"
-msgstr ""
+msgstr "Processo concluído"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:99
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:68
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/PendingOrders/BulkActionModal.php:3
 msgid "Processing"
-msgstr ""
+msgstr "Em processamento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:235
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:230
 msgid "Processing product"
-msgstr ""
+msgstr "A processar produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:139
 msgid "Product already exists"
-msgstr ""
+msgstr "Produto já existe"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Helpers/Variants/ParseProductProperties.php:72
 msgid "Product attribute not found"
-msgstr ""
+msgstr "Atributo do produto não encontrado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:75
 msgid "Product blocked"
-msgstr ""
+msgstr "Produto bloqueado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:232
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:227
 msgid "product creation processes."
-msgstr ""
+msgstr "processos de criação de produtos."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:395
 msgid "Product does not have reference"
-msgstr ""
+msgstr "Produto não tem referência"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:227
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:286
 msgid "Product does not manage stock"
-msgstr ""
+msgstr "Produto não tem stock ativo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:247
 msgid "Product has timeout"
-msgstr ""
+msgstr "O produto está com timeout"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:243
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:391
 msgid "Product is not published"
-msgstr ""
+msgstr "O produto em rascunho"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:394
 msgid "Product is variant, will be skipped"
-msgstr ""
+msgstr "O produto é variante, será ignorado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:219
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductUpdate.php:387
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:187
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:249
 msgid "Product not found"
-msgstr ""
+msgstr "Produto não encontrado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:68
 msgid "Product not found in Moloni"
-msgstr ""
+msgstr "Produto não encontrado no Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:236
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:301
@@ -1274,7 +1307,7 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:118
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:232
 msgid "Product not found in Moloni account"
-msgstr ""
+msgstr "Produto não encontrado na conta Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:307
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/Ajax.php:353
@@ -1282,11 +1315,11 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:83
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:142
 msgid "Product not found in WooCommerce store"
-msgstr ""
+msgstr "Produto não encontrado na loja WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:399
 msgid "Product reference blacklisted"
-msgstr ""
+msgstr "Referência do produto bloqueada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:223
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductSetStock.php:239
@@ -1298,377 +1331,384 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:154
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:129
 msgid "Product types do not match"
-msgstr ""
+msgstr "Os tipos de produto não correspondem"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:233
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:228
 msgid "product update processes."
-msgstr ""
+msgstr "processos de atualização de produtos."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Create/CreateVariantProduct.php:64
 #, php-format
 msgid "Product with variants created in Moloni (%s)"
-msgstr ""
+msgstr "Produto com variantes criadas no Moloni (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Update/UpdateVariantProduct.php:68
 #, php-format
 msgid "Product with variants updated in Moloni (%s)"
-msgstr ""
+msgstr "Produto com variantes atualizado no Moloni (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Create/CreateParentProduct.php:62
 #, php-format
 msgid "Product with variations created in WooCommerce (%s)"
-msgstr ""
+msgstr "Produto com variações criado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Update/UpdateParentProduct.php:57
 #, php-format
 msgid "Product with variations updated in WooCommerce (%s)"
-msgstr ""
+msgstr "Produto com variações atualizado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:244
 msgid "Products"
-msgstr ""
+msgstr "Produtos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Exports/ExportProducts.php:58
 #, php-format
 msgid "Products export. Part %s"
-msgstr ""
+msgstr "Exportação de produtos. Parte %s"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Imports/ImportProducts.php:76
 #, php-format
 msgid "Products import. Part %s"
-msgstr ""
+msgstr "Importação de produtos. Parte %s"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Exports/ExportStockChanges.php:54
 #, php-format
 msgid "Products stock export. Part %s"
-msgstr ""
+msgstr "Exportação de stock de produtos. Parte %s"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Imports/ImportStockChanges.php:87
 #, php-format
 msgid "Products stock import. Part %s"
-msgstr ""
+msgstr "Importação de stock de produtos. Parte %s"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/PendingOrders/BulkActionModal.php:14
 msgid "Progress completed"
-msgstr ""
+msgstr "Progresso completo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:57
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:75
 msgid "Purchase Order"
-msgstr ""
+msgstr "Nota de encomenda"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:165
 msgid "Put shipping info on documents"
-msgstr ""
+msgstr "Inserir dados de envio no documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:71
 msgid "Receipt"
-msgstr ""
+msgstr "Recibo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:517
 msgid ""
 "Receive alerts for when an error occurs (document creation/authentication "
 "lost)."
 msgstr ""
+"Receba alertas para quando ocorrer um erro (erro de criação de "
+"documento/autenticação)."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:115
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:191
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:110
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:186
 msgid "Reference"
-msgstr ""
+msgstr "Referência"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:88
 msgid "Reference: "
-msgstr ""
+msgstr "Referência: "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:14
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:23
 msgid "Reinstall Moloni Webhooks"
-msgstr ""
+msgstr "Reinstalar Webhooks Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:17
 msgid "Remove this store Webhooks and install them again"
-msgstr ""
+msgstr "Remova os Webhooks desta loja e instale-os novamente"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:82
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:107
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:149
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:287
 msgid "Required"
-msgstr ""
+msgstr "Obrigatório "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Activators/Install.php:24
 msgid "Requires WooCommerce 3.0.0 or above."
-msgstr ""
+msgstr "Requer WooCommerce 3.0.0 ou superior."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Model.php:141
 #, php-format
 msgid "Reseting tokens after %s tries"
-msgstr ""
+msgstr "Redefinindo tokens após %s tentativas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:30
 msgid "Run"
-msgstr ""
+msgstr "Correr"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:95
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:211
 msgid "Run exports"
-msgstr ""
+msgstr "Correr exportações"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:100
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:216
 msgid "Run imports"
-msgstr ""
+msgstr "Correr importações"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:291
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:525
 msgid "Save changes"
-msgstr ""
+msgstr "Guardar alterações"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:72
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:151
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:146
 msgid "Search"
-msgstr ""
+msgstr "Pesquisar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Logs.php:101
 msgid "See"
-msgstr ""
+msgstr "Ver"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:296
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:112
 msgid "See document"
-msgstr ""
+msgstr "Ver documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:111
 msgid "See product"
-msgstr ""
+msgstr "Ver produto"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/CompanySelect.php:15
 msgid "Select the company you want to connect with WooCommerce"
-msgstr ""
+msgstr "Selecione a empresa que deseja conectar com WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:224
 msgid "Send e-mail"
-msgstr ""
+msgstr "Enviar e-mail"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/MainContainer.php:25
 msgid "Settings"
-msgstr ""
+msgstr "Definições"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderShipping.php:140
 msgid "Shipping"
-msgstr ""
+msgstr "Envio"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:305
 msgid "Shipping exemption reason"
-msgstr ""
+msgstr "Razão de isenção de envio"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:156
 msgid "Shipping info"
-msgstr ""
+msgstr "Detalhes de envio"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/LoginForm.php:31
 msgid "Sign in to your account"
-msgstr ""
+msgstr "Inicie sessão na sua conta"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:28
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:33
 msgid "Simple"
-msgstr ""
+msgstr "Simples"
 
 #. Description of the plugin
 msgid "Simple invoicing integration with Moloni ES"
-msgstr ""
+msgstr "Integração simples de faturamento com Moloni ES"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Create/CreateSimpleProduct.php:59
 #, php-format
 msgid "Simple product created in Moloni (%s)"
-msgstr ""
+msgstr "Produto simples criado no Moloni (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Create/CreateSimpleProduct.php:61
 #, php-format
 msgid "Simple product created in WooCommerce (%s)"
-msgstr ""
+msgstr "Produto simples criado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Update/UpdateSimpleProduct.php:63
 #, php-format
 msgid "Simple product updated in Moloni (%s)"
-msgstr ""
+msgstr "Produto simples atualizado no Moloni (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Update/UpdateSimpleProduct.php:60
 #, php-format
 msgid "Simple product updated in WooCommerce (%s)"
-msgstr ""
+msgstr "Produto simples atualizado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:79
 msgid "Simplified Invoice"
-msgstr ""
+msgstr "Fatura simplificada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/DocumentTypes.php:59
 msgid "Simplified invoice"
-msgstr ""
+msgstr "Fatura Simplificada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:296
 msgid "Something went wrong reinstalling Moloni Webhooks."
-msgstr ""
+msgstr "Ocorreu um erro ao reinstalar os Webhooks Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Stock/SyncProductStock.php:74
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Stock/SyncProductStock.php:96
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Stock/SyncProductStock.php:112
 #, php-format
 msgid "Something went wrong updating stock (%s)"
-msgstr ""
+msgstr "Algo deu errado ao atualizar o stock (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:26
 msgid "Something went wrong!"
-msgstr ""
+msgstr "Algo deu errado!"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:347
 msgid "Spanish"
-msgstr ""
+msgstr "Espanhol"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportProductsModal.php:21
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportStocksModal.php:24
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportProductsModal.php:21
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportStocksModal.php:21
 msgid "Start"
-msgstr ""
+msgstr "Começar"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:189
 msgid "Starting process..."
-msgstr ""
+msgstr "A começar o processo..."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:49
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:170
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:270
 msgid "Stock"
-msgstr ""
+msgstr "Stock"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:113
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:206
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:193
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:255
 msgid "Stock does not match in WooCommerce and Moloni"
-msgstr ""
+msgstr "O estoque não corresponde no WooCommerce e Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Stock/SyncProductStock.php:47
 #, php-format
 msgid "Stock is already updated in Moloni (%s)"
-msgstr ""
+msgstr "O stock já está atualizado no Moloni (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Stock/SyncProductStock.php:29
 #, php-format
 msgid "Stock is already updated in WooCommerce (%s)"
-msgstr ""
+msgstr "O estoque já está atualizado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:234
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:229
 msgid "stock update processes."
-msgstr ""
+msgstr "processos de atualização de stock."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Stock/SyncProductStock.php:52
 #, php-format
 msgid "Stock updated in Moloni (old: %s | new: %s) (%s)"
-msgstr ""
+msgstr "Estoque atualizado no Moloni (antigo: %s | novo: %s) (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Stock/SyncProductStock.php:34
 #, php-format
 msgid "Stock updated in WooCommerce (old: %s | new: %s) (%s)"
-msgstr ""
+msgstr "Estoque atualizado no WooCommerce (antigo: %s | novo: %s) (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/ProductView.php:92
 msgid "Stock: "
-msgstr ""
+msgstr "Stock: "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:236
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:231
 msgid "Successfully processed"
-msgstr ""
+msgstr "Processado com sucesso"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:77
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:144
 msgid "Sync products"
-msgstr ""
+msgstr "Sincronizar produtos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:221
 msgid "Sync products with variants/variations"
-msgstr ""
+msgstr "Sincronizar produtos com variantes/variações"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:90
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:157
 msgid "Sync stocks automatically"
-msgstr ""
+msgstr "Sincronizar stocks automaticamente "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:103
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:176
 msgid "Sync stocks warehouse"
-msgstr ""
+msgstr "Armazém de stock de sincronização"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:206
 msgid "Synchronization extras"
-msgstr ""
+msgstr "Extras de sincronização"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/WebHooks/Products.php:405
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:133
 msgid "Synchronization of products with variants is disabled"
-msgstr ""
+msgstr "A sincronização de produtos com variantes está desativada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:64
 msgid "The document has already been generated in Moloni"
-msgstr ""
+msgstr "O documento já foi gerado no Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/Documents.php:295
 msgid "The document has been inserted but the totals do not match. "
-msgstr ""
+msgstr "Documento inserido mas valores não coincidem "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:233
 msgid "The document is only sent to the customer if it is inserted as closed"
 msgstr ""
+"O documento é apenas enviado para o cliente caso seja inserido como fechado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Mails/AuthenticationExpired.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:12
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:52
 msgid "The Moloni authentication expired"
-msgstr ""
+msgstr "A autenticação Moloni expirou"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Orders/CreateMoloniDocument.php:184
 #, php-format
 msgid "The order %s document was previously generated!"
-msgstr ""
+msgstr "A encomenda %s já foi gerada previamente! "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderView.php:84
 msgid "The order must be paid for in order to be generated."
-msgstr ""
+msgstr "A encomenda tem de ser paga para ser gerada."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:120
 msgid "There was an error saving the customer."
-msgstr ""
+msgstr "Ocorreu um erro ao guardar o cliente."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:136
 msgid "This actions happen when an action occours in your Moloni account."
-msgstr ""
+msgstr "Estas ações acontecem quando uma ação ocorre em sua conta Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:31
 msgid "This actions happen when an action occours in your WooCommerce store."
-msgstr ""
+msgstr "Essas ações acontecem quando uma ação ocorre na sua loja WooCommerce."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:41
 msgid ""
 "This list will display all WooCommerce products from the current store and "
 "indicate errors/alerts that may exist."
 msgstr ""
+"Esta lista exibirá todos os produtos WooCommerce da loja atual e indicará "
+"erros/alertas que possam existir."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:40
 msgid ""
 "This list will present all Moloni products from the current company and "
 "indicate errors/alerts that may exist."
 msgstr ""
+"Esta lista apresentará todos os produtos Moloni da empresa atual e indicará "
+"erros/alertas que possam existir."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportProductsModal.php:10
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportStocksModal.php:13
@@ -1678,10 +1718,12 @@ msgid ""
 "This may take a while, so, please keep this window open until the process "
 "finishes."
 msgstr ""
+"Isso pode demorar um pouco, portanto, mantenha esta janela aberta até que o "
+"processo seja concluído."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:210
 msgid "This settings will be applied to all automatic actions."
-msgstr ""
+msgstr "Essas configurações serão aplicadas a todas as ações automáticas."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportStocksModal.php:7
 msgid ""
@@ -1689,160 +1731,175 @@ msgid ""
 "manual stock movements in your Moloni account to make sure the stocks are "
 "equal in both platforms."
 msgstr ""
+"Esta ferramenta fará um ciclo para todos os seus produtos WooCommerce e "
+"inserirá movimentos manuais de estoque em sua conta Moloni para garantir que "
+"os estoques sejam iguais em ambas as plataformas."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ImportStocksModal.php:7
 msgid ""
 "This tool will fetch all your Moloni products and synchronize your "
 "WooCommerce stocks with the ones on your Moloni account."
 msgstr ""
+"Esta ferramenta buscará todos os seus produtos Moloni e sincronizará o stock "
+"WooCommerce com os da sua conta Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:197
 msgid ""
 "This warehouse will be used when a product is inserted or updated in Moloni"
 msgstr ""
+"Este armazém será utilizado quando um produto for inserido ou atualizado no "
+"Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:123
 msgid ""
 "This warehouse will be used when a product is inserted or updated in "
 "WooCommerce"
 msgstr ""
+"Este armazém será utilizado quando um produto for inserido ou atualizado no "
+"WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportProductsModal.php:7
 msgid ""
 "This will fetch all the products in WooCommerce store and create them in "
 "your Moloni account."
 msgstr ""
+"Isso buscará todos os produtos na loja WooCommerce e os criará em sua conta "
+"Moloni."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/MainContainer.php:40
 msgid "Tools"
-msgstr ""
+msgstr "Ferramentas"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:48
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:169
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/Blocks/ActionModalContent.php:2
 msgid "Total results"
-msgstr ""
+msgstr "Resultados totais"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:118
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:194
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:113
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:189
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/Documents/DownloadDocumentPDF.php:32
 msgid "Unexpected error"
-msgstr ""
+msgstr "Erro inesperado"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:74
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:454
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:470
 msgid "updating"
-msgstr ""
+msgstr "atualizando"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:24
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:37
 msgid "Variable"
-msgstr ""
+msgstr "Variável"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:176
 msgid "Variant is not visible"
-msgstr ""
+msgstr "A variante não está visível"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:172
 msgid "Variant not found"
-msgstr ""
+msgstr "Variante não encontrada"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:26
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/WcProducts/ProductRow.php:41
 msgid "Variation"
-msgstr ""
+msgstr "Variação"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Page/CheckProduct.php:184
 msgid "Variation not found in WooCommerce"
-msgstr ""
+msgstr "Variação não encontrada no WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Create/CreateChildProduct.php:60
 #, php-format
 msgid "Variation product created in WooCommerce (%s)"
-msgstr ""
+msgstr "Produto com variações criado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Update/UpdateChildProduct.php:53
 #, php-format
 msgid "Variation product updated in WooCommerce (%s)"
-msgstr ""
+msgstr "Produto com variações atualizado no WooCommerce (%s)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:47
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/PendingOrders.php:168
 msgid "VAT"
-msgstr ""
+msgstr "Numero de contribuinte "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/CompanyCard.php:35
 msgid "Vat number"
-msgstr ""
+msgstr "Contribuinte"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:199
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Hooks/OrderPaid.php:197
 msgid "View document"
-msgstr ""
+msgstr "Ver documento"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:41
 msgid "View Moloni products"
-msgstr ""
+msgstr "Ver produtos Moloni"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:59
 msgid "View WooCommerce Products"
-msgstr ""
+msgstr "Ver produtos WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:267
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilidade"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/MoloniProducts.php:80
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:251
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:76
 msgid "Warehouse"
-msgstr ""
+msgstr "Armazém"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:270
 msgid "Warehouse used in documents"
-msgstr ""
+msgstr "Armazém usado em documentos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:113
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:186
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:261
 msgid "Warehouses"
-msgstr ""
+msgstr "Armazéns"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Enums/LogLevel.php:44
 msgid "Warning"
-msgstr ""
+msgstr "Aviso"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ActionModal.php:14
 msgid "We are processing your request."
-msgstr ""
+msgstr "Estamos a processar o seu pedido."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Tools.php:70
 msgid "We will keep the data regarding the documents already issued"
-msgstr ""
+msgstr "Manteremos os dados referentes aos documentos já emitidos"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:169
 msgid ""
 "When a stock movement is created in moloni, the movement will be recreated "
 "in WooCommerce (if product exists)"
 msgstr ""
+"Quando um movimento de stock é criado em Moloni, o movimento será recriado "
+"no WooCommerce (se existir)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:151
 msgid ""
 "When saving a product in Moloni, the plugin will automatically create the "
 "product in WooCommerce or update if it already exists"
 msgstr ""
+"Ao guardar um produto no Moloni, será criado automaticamente o produto no "
+"WooCommerce ou atualizado caso já exista"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:84
 msgid ""
@@ -1850,32 +1907,37 @@ msgid ""
 "the product in Moloni or update if it already exists (only if product has "
 "SKU set)"
 msgstr ""
+"Ao guardar um produto no WooCommerce, será criado automaticamente o produto "
+"no Moloni ou atualizado caso já exista (somente se o produto tiver SKU "
+"definido)"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Modals/Products/ExportStocksModal.php:10
 msgid ""
 "When the tool is finish, all your Moloni stock will be updated to match the "
 "stock on your WooCommerce store."
 msgstr ""
+"Quando a ferramenta terminar, todo o seu stock Moloni será atualizado para "
+"corresponder ao stock na loja WooCommerce."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:299
 msgid "Will be used if items do not have tax"
-msgstr ""
+msgstr "Vai ser usado caso produtos nãotenham taxa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:311
 msgid "Will be used if shipping does not have tax"
-msgstr ""
+msgstr "Vai ser usado caso envio não tenha taxa"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:479
 msgid "WooCommerce order details"
-msgstr ""
+msgstr "Detalhes do pedido WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:459
 msgid "WooCommerce order list"
-msgstr ""
+msgstr "Lista de encomendas do WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/WcProducts.php:37
 msgid "WooCommerce product listing"
-msgstr ""
+msgstr "Lista de produtos WooCommerce"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:236
 msgid ""
@@ -1883,15 +1945,18 @@ msgid ""
 "with variants. If disabled, each WooCommerce variation will be created as a "
 "simple product."
 msgstr ""
+"O produto WooCommerce com variações será criado no Moloni como produtos com "
+"variantes. Se desativado, cada variação do WooCommerce será criada como um "
+"produto simples."
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:103
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:217
 msgid "WooCommerce product without reference"
-msgstr ""
+msgstr "Produto WooCommerce sem referência"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/WcProduct/Page/CheckProduct.php:157
 msgid "WooCommerce variation without reference"
-msgstr ""
+msgstr "Variação WooCommerce sem referência"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:49
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:82
@@ -1905,18 +1970,20 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:469
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:489
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Plugin.php:271
 msgid "Yes, i confirm"
-msgstr ""
+msgstr "Sim, confirmo "
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/CompanySelect/NoCompanies.php:15
 msgid "You do not have any valid company to use the plugin"
-msgstr ""
+msgstr "Não tem nenhuma empresa válida para usar o plugin"
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Emails/AuthenticationExpired.php:56
 msgid ""
 "You're getting this email because there was an error getting new Moloni "
 "authentication tokens in your Wordpress plugin."
 msgstr ""
+"Se receber este e-mail é porque ocorreu um erro ao obter novos tokens de "
+"autenticação Moloni no seu plug-in do Wordpress."

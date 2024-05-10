@@ -53,11 +53,5 @@ register_deactivation_hook(__FILE__, '\MoloniES\Activators\Remove::run');
 
 add_action('wp_initialize_site', '\MoloniES\Activators\Install::initializeSite', 200, 1);
 add_action('wp_uninitialize_site', '\MoloniES\Activators\Remove::uninitializeSite', 10, 1);
-add_action('plugins_loaded', Start::class);
+add_action('plugins_loaded', 'MoloniES\Plugin::init');
 add_action('admin_enqueue_scripts', '\MoloniES\Scripts\Enqueue::defines');
-
-function Start()
-{
-    //start the plugin
-    return new Plugin();
-}

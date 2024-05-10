@@ -234,26 +234,6 @@ try {
                 </td>
             </tr>
 
-            <!-- Listagem de encomendas -->
-            <tr>
-                <th>
-                    <label for="moloni_show_download_column"><?= __('WooCommerce order list', 'moloni_es') ?></label>
-                </th>
-                <td>
-                    <select id="moloni_show_download_column" name='opt[moloni_show_download_column]' class='inputOut'>
-                        <?php $moloniShowDownloadColumn = defined('MOLONI_SHOW_DOWNLOAD_COLUMN') ? (int)MOLONI_SHOW_DOWNLOAD_COLUMN : Boolean::NO; ?>
-
-                        <option value='0' <?= ($moloniShowDownloadColumn === Boolean::NO ? 'selected' : '') ?>>
-                            <?= __('No', 'moloni_es') ?>
-                        </option>
-                        <option value='1' <?= ($moloniShowDownloadColumn === Boolean::YES ? 'selected' : '') ?>>
-                            <?= __('Yes', 'moloni_es') ?>
-                        </option>
-                    </select>
-                    <p class='description'><?= __('Add, in WooCommerce, a column in the order list with fast download of PDF documents', 'moloni_es') ?></p>
-                </td>
-            </tr>
-
             </tbody>
         </table>
 
@@ -463,6 +443,57 @@ try {
                 </td>
             </tr>
 
+            </tbody>
+        </table>
+
+        <!-- Hooks -->
+        <h2 class="title">
+            <?= __('Hooks', 'moloni_es') ?>
+        </h2>
+        <table class="form-table mb-4">
+            <tbody>
+
+            <!-- Listagem de encomendas -->
+            <tr>
+                <th>
+                    <label for="moloni_show_download_column"><?= __('WooCommerce order list', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="moloni_show_download_column" name='opt[moloni_show_download_column]' class='inputOut'>
+                        <?php $moloniShowDownloadColumn = defined('MOLONI_SHOW_DOWNLOAD_COLUMN') ? (int)MOLONI_SHOW_DOWNLOAD_COLUMN : Boolean::NO; ?>
+
+                        <option value='0' <?= ($moloniShowDownloadColumn === Boolean::NO ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= ($moloniShowDownloadColumn === Boolean::YES ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
+                    </select>
+                    <p class='description'><?= __('Add, in WooCommerce, a column in the order list with fast download of PDF documents', 'moloni_es') ?></p>
+                </td>
+            </tr>
+
+            <!-- Detalhes da encomenda -->
+            <tr>
+                <th>
+                    <label for="moloni_show_download_my_account_order_view"><?= __('WooCommerce order details', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <select id="moloni_show_download_my_account_order_view" name='opt[moloni_show_download_my_account_order_view]' class='inputOut'>
+                        <?php $myAccountOrderViewShowDownload = defined('MOLONI_SHOW_DOWNLOAD_MY_ACCOUNT_ORDER_VIEW') ? (int)MOLONI_SHOW_DOWNLOAD_MY_ACCOUNT_ORDER_VIEW : Boolean::NO; ?>
+
+                        <option value='0' <?= ($myAccountOrderViewShowDownload === Boolean::NO ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= ($myAccountOrderViewShowDownload === Boolean::YES ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
+                    </select>
+                    <p class='description'>
+                        <?= __('Add, on the order view page (for the customer), a section with the generated document to download in PDF', 'moloni_es') ?>
+                    </p>
+                </td>
+            </tr>
             </tbody>
         </table>
 

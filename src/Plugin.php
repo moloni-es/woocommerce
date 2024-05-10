@@ -49,6 +49,15 @@ class Plugin
         $this->actions();
     }
 
+    /**
+     * Starts this class
+     */
+    public static function init()
+    {
+        return new (__CLASS__);
+    }
+
+
     //            Privates            //
 
     /**
