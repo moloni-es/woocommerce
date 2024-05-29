@@ -60,6 +60,7 @@ class Products
     public function products($requestData)
     {
         $parameters = $requestData->get_params();
+        $errorMessage = '';
 
         try {
             /** Model has to be 'Product', needs to be logged in and received hash has to match logged in company id hash */
@@ -74,28 +75,36 @@ class Products
             //switch between operations
             switch ($parameters['operation']) {
                 case 'create':
+                    $errorMessage = __('Error creating product in WooCommerce', 'moloni_es');
+
                     $this->onCreate();
                     break;
                 case 'update':
+                    $errorMessage = __('Error updating product in WooCommerce', 'moloni_es');
+
                     $this->onUpdate();
                     break;
                 case 'stockChanged':
+                    $errorMessage = __('Error updating stock in WooCommerce', 'moloni_es');
+
                     $this->onStockUpdate();
                     break;
             }
 
             $this->reply();
         } catch (MoloniException $exception) {
-            $message = __('Error synchronizing products to WooCommerce.', 'moloni_es');
-            $message .= ' </br>';
-            $message .= $exception->getMessage();
+            $identifier = $this->moloniProduct['reference'] ?? "---";
 
-            if (!in_array(substr($message, -1), ['.', '!', '?'])) {
-                $message .= '.';
+            $errorMessage .= " ($identifier) ";
+            $errorMessage .= '</br>';
+            $errorMessage .= $exception->getMessage();
+
+            if (!in_array(substr($errorMessage, -1), ['.', '!', '?'])) {
+                $errorMessage .= '.';
             }
 
-            Storage::$LOGGER->error($message, [
-                'tag' => 'automatic:product:save:error',
+            Storage::$LOGGER->error($errorMessage, [
+                'tag' => 'webhook:product:error',
                 'message' => $exception->getMessage(),
                 'extra' => [
                     'parameters' => $parameters,
