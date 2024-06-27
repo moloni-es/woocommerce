@@ -15,7 +15,7 @@
 **Requires PHP:**      7.2  
 **Tested up to:**      6.4.3  
 **WC tested up to**    8.6.1  
-**Stable tag:**        2.0.0  
+**Stable tag:**        2.0.1  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -73,6 +73,9 @@ Released plugin version 2.0.0.
 Released plugin version 1.0.0.
 
 ## Changelog
+### 2.0.1
+* Fix fatal error in pending orders page
+
 ### 2.0.0
 * Tested up to version 6.4.3 of WordPress
 * Tested up to version 8.6.1 of WooCommerce
