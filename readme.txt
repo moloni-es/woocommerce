@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 Tested up to: 6.4.3
 WC tested up to: 8.6.1
 
@@ -70,6 +70,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 2.0.1 =
+* Fix fatal error in pending orders page
+
 = 2.0.0 =
 * Tested up to version 6.4.3 of WordPress
 * Tested up to version 8.6.1 of WooCommerce

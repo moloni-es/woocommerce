@@ -13,18 +13,35 @@ class PendingOrders
     private static $totalPages = 1;
     private static $currentPage = 1;
 
-    public static function getAllAvailable()
+    /**
+     * Fetch pending orders paginated
+     *
+     * @see https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
+     * @see https://developer.wordpress.org/reference/classes/wp_query/#custom-field-post-meta-parameters
+     *
+     * @return array
+     */
+    public static function getAllAvailable(): array
     {
-        self::$currentPage = (int)sanitize_text_field(isset($_GET['paged']) ? $_GET['paged'] : 1);
-        self::$currentPage = self::$currentPage > 0 ? self::$currentPage : 1;
+        $args = [
+            'post_status' => self::$ordersStatuses,
+            'posts_per_page' => self::$limit,
+            'paged' => self::$currentPage,
+            'orderby' => 'date',
+            'paginate' => true,
+            'order' => 'DESC',
+            'post_type' => 'shop_order', //filter out refunds
+            'meta_key'      => '_molonies_sent',
+            'meta_compare'  => 'NOT EXISTS',
+        ];
 
-        if (Storage::$USES_NEW_ORDERS_SYSTEM) {
-            $ordersList = self::getAllNewSystem();
-        } else {
-            $ordersList = self::getAllOldSystem();
-        }
+        $args = apply_filters('moloni_es_before_pending_orders_fetch', $args);
 
-        return $ordersList;
+        $results = wc_get_orders($args);
+
+        self::$totalPages = $results->max_num_pages;
+
+        return $results->orders;
     }
 
     public static function getPagination()
@@ -37,89 +54,5 @@ class PendingOrders
         ];
 
         return paginate_links($args);
-    }
-
-    //           Privates           //
-
-    /**
-     * Fetch orders "old school" way
-     *
-     * @return array
-     */
-    private static function getAllOldSystem()
-    {
-        $ordersList = [];
-
-        $args = [
-            'post_type' => 'shop_order',
-            'post_status' => self::$ordersStatuses,
-            'posts_per_page' => self::$limit,
-            'paged' => self::$currentPage,
-            'orderby' => 'date',
-            'order' => 'DESC',
-            'meta_query' => [
-                'relation' => 'OR',
-                [
-                    'key' => '_molonies_sent',
-                    'compare' => 'NOT EXISTS'
-                ],
-                [
-                    'key' => '_molonies_sent',
-                    'value' => '0',
-                    'compare' => '='
-                ]
-            ],
-        ];
-
-        $args = apply_filters('moloni_es_before_pending_orders_fetch', $args);
-
-        $query = new WP_Query($args);
-        self::$totalPages = $query->max_num_pages;
-
-        foreach ($query->posts as $order) {
-            $ordersList[] = new WC_Order($order->ID);
-        }
-
-        return $ordersList;
-    }
-
-    /**
-     * Fetch orders from the new HPOS system
-     *
-     * @see https://github.com/woocommerce/woocommerce/wiki/HPOS:-new-order-querying-APIs
-     * @see https://developer.wordpress.org/reference/classes/wp_query/#custom-field-post-meta-parameters
-     *
-     * @return array
-     */
-    private static function getAllNewSystem()
-    {
-        $args = [
-            'post_status' => self::$ordersStatuses,
-            'posts_per_page' => self::$limit,
-            'paged' => self::$currentPage,
-            'orderby' => 'date',
-            'paginate' => true,
-            'order' => 'DESC',
-            'meta_query' => [
-                'relation' => 'OR',
-                [
-                    'key' => '_molonies_sent',
-                    'compare' => 'NOT EXISTS'
-                ],
-                [
-                    'key' => '_molonies_sent',
-                    'value' => '0',
-                    'compare' => '='
-                ]
-            ],
-        ];
-
-        $args = apply_filters('moloni_es_before_pending_orders_fetch', $args);
-
-        $results = wc_get_orders($args);
-
-        self::$totalPages = $results->max_num_pages;
-
-        return $results->orders;
     }
 }
