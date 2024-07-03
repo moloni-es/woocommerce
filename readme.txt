@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Tested up to: 6.4.3
 WC tested up to: 8.6.1
 
@@ -70,6 +70,10 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 2.0.2 =
+* Fix paginator error
+* Fix document log payload
+
 = 2.0.1 =
 * Fix fatal error in pending orders page
 
