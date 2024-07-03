@@ -23,6 +23,8 @@ class PendingOrders
      */
     public static function getAllAvailable(): array
     {
+        self::$currentPage = (isset($_GET['paged']) && (int)($_GET['paged']) > 0) ? (int)$_GET['paged'] : 1;
+
         $args = [
             'post_status' => self::$ordersStatuses,
             'posts_per_page' => self::$limit,
