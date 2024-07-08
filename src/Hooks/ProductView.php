@@ -161,7 +161,7 @@ class ProductView
             ]
         ];
 
-        $byReference = Products::queryProducts($variables);
+        $byReference = Products::queryProducts($variables)['data']['products']['data'] ?? [];
 
         if (!empty($byReference) && isset($byReference[0]['productId'])) {
             $this->moloniProduct = $byReference[0];
