@@ -129,7 +129,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
                         type="text"
                         class="inputOut ml-0"
                         name="filter_name"
-                        value="<?= $filters['filter_name'] ?>"
+                        value="<?= esc_html($filters['filter_name']) ?>"
                 >
             </th>
             <th>
@@ -137,7 +137,7 @@ $backAction = admin_url('admin.php?page=molonies&tab=tools');
                         type="text"
                         class="inputOut ml-0"
                         name="filter_reference"
-                        value="<?= $filters['filter_reference'] ?>"
+                        value="<?= esc_html($filters['filter_reference']) ?>"
             </th>
             <th></th>
             <th></th>
