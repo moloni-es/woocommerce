@@ -3,8 +3,8 @@ Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
 Stable tag: 2.0.3
-Tested up to: 6.4.3
-WC tested up to: 8.6.1
+Tested up to: 6.5.5
+WC tested up to: 9.0.2
 
 Requires PHP: 7.2
 Requires at least: 5.0
