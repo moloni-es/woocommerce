@@ -3,7 +3,7 @@
  *
  *   Plugin Name:  Moloni España
  *   Description:  Simple invoicing integration with Moloni ES
- *   Version:      2.0.3
+ *   Version:      2.1.0
  *   Tested up to: 6.5.5
  *   WC tested up to: 9.0.2
  *

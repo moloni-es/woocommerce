@@ -15,7 +15,7 @@
 **Requires PHP:**      7.2  
 **Tested up to:**      6.5.5  
 **WC tested up to**    9.0.2  
-**Stable tag:**        2.0.3  
+**Stable tag:**        2.1.0  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -73,6 +73,11 @@ Released plugin version 2.0.0.
 Released plugin version 1.0.0.
 
 ## Changelog
+### 2.1.0
+* Security fixes
+* Tested up to version 6.5.5 of WordPress
+* Tested up to version 9.0.2 of WooCommerce
+
 ### 2.0.3
 * Fix product view card
 
