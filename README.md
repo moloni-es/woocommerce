@@ -3,9 +3,9 @@
 ![WordPress Plugin Required PHP Version](https://img.shields.io/badge/php-%3E%3D5.6-blue)
 ![WordPress Plugin: Tested PHP Version](https://img.shields.io/badge/php-8.1%20tested-blue)
 ![WordPress Plugin: Required WP Version](https://img.shields.io/badge/WordPress-%3E%3D%205.0-orange)
-![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.4.3%20tested-orange)
+![WordPress Plugin: Tested WP Version](https://img.shields.io/badge/WordPress-6.5.5%20tested-orange)
 ![WooCommerce: Required Version](https://img.shields.io/badge/WooCommerce-%3E%3D%203.0.0-orange)
-![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-8.6.1%20tested-orange)
+![WooCommerce: Tested Version](https://img.shields.io/badge/WooCommerce-9.0.2%20tested-orange)
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
@@ -13,9 +13,9 @@
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
-**Tested up to:**      6.4.3  
-**WC tested up to**    8.6.1  
-**Stable tag:**        2.0.3  
+**Tested up to:**      6.5.5  
+**WC tested up to**    9.0.2  
+**Stable tag:**        2.1.0  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -73,6 +73,11 @@ Released plugin version 2.0.0.
 Released plugin version 1.0.0.
 
 ## Changelog
+### 2.1.0
+* Security fixes
+* Tested up to version 6.5.5 of WordPress
+* Tested up to version 9.0.2 of WooCommerce
+
 ### 2.0.3
 * Fix product view card
 
