@@ -34,13 +34,11 @@ class Install
                 $prefix = $wpdb->get_blog_prefix($site->blog_id);
 
                 self::createTables($prefix);
-                self::insertSettings($prefix);
             }
         } else {
             $prefix = $wpdb->get_blog_prefix();
 
             self::createTables($prefix);
-            self::insertSettings($prefix);
         }
     }
 
@@ -58,7 +56,6 @@ class Install
         $prefix = $wpdb->get_blog_prefix($site->blog_id);
 
         self::createTables($prefix);
-        self::insertSettings($prefix);
     }
 
     /**
@@ -122,34 +119,5 @@ class Install
                 active INT(11) DEFAULT 1
             ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;"
         );
-    }
-
-    /**
-     * Create Moloni account settings
-     */
-    private static function insertSettings(string $prefix): void
-    {
-        global $wpdb;
-
-        $wpdb->query("
-            INSERT INTO `" . $prefix . "moloni_api_config`(config, description) 
-            VALUES 
-                ('document_set_id', 'Choose a Document Set for better organization'),
-                ('exemption_reason', 'Choose a Tax Exemption for products that do not have taxes'),
-                ('exemption_reason_shipping', 'Choose a Tax Exemption for shipping that does not have taxes'),
-                ('payment_method', 'Choose a default payment method'),
-                ('measure_unit', 'Choose the unit of measurement to use'),
-                ('maturity_date', 'Maturity date'),
-                ('document_status', 'Choose the status of the document (closed or in draft)'),
-                ('document_type', 'Choose the type of documents you want to issue'),
-                ('client_prefix', 'WC', 'Customer reference prefix'),
-                ('product_prefix', 'Product reference prefix'),
-                ('update_final_consumer', 'Update customer'),
-                ('shipping_info', 'Shipping info'),
-                ('vat_field', 'VAT'),
-                ('email_send', 'Send e-mail'),
-                ('moloni_stock_sync', 'Sync Stocks'),
-                ('moloni_product_sync', 'Sync products')
-        ");
     }
 }
