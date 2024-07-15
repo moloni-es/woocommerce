@@ -75,25 +75,24 @@ class SyncLogs
     {
         global $wpdb;
 
-        $query = 'SELECT COUNT(*) FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs 
-            WHERE `entity_id` = ' . $entityId . ' AND';
+        $sql = "SELECT COUNT(*) FROM `{$wpdb->get_blog_prefix()}moloni_sync_logs` WHERE `entity_id` = %d";
 
         if (is_array($typeId)) {
-            $query .= ' `type_id` IN (';
-
-            foreach ($typeId as $value) {
-                $query .= (int)$value . ',';
-            }
-
-            $query = rtrim($query, ',');
-            $query .= ')';
+            $sql .= " AND `type_id` IN (%s)";
+            $typeId = implode("','", $typeId);
         } else {
-            $query .= ' `type_id` = ' . (int)$typeId;
+            $sql .= " AND `type_id` = %d";
         }
 
-        $queryResult = $wpdb->get_row($query, ARRAY_A);
+        $query = $wpdb->prepare(
+            $sql,
+            $entityId,
+            $typeId
+        );
 
-        return (int)$queryResult['COUNT(*)'] > 0;
+        $queryResult = $wpdb->get_results($query, ARRAY_A);
+
+        return (int)($queryResult[0]['COUNT(*)'] ?? 0) > 0;
     }
 
     /**
@@ -105,6 +104,11 @@ class SyncLogs
     {
         global $wpdb;
 
-        $wpdb->query('DELETE FROM ' . $wpdb->get_blog_prefix() . 'moloni_es_sync_logs WHERE sync_date < ' . time());
+        $query = $wpdb->prepare(
+            "DELETE FROM `{$wpdb->get_blog_prefix()}moloni_es_sync_logs` WHERE sync_date < %d",
+            time()
+        );
+
+        $wpdb->query($query);
     }
 }
