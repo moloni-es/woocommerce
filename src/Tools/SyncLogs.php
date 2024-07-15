@@ -75,24 +75,25 @@ class SyncLogs
     {
         global $wpdb;
 
-        $sql = "SELECT COUNT(*) FROM `{$wpdb->get_blog_prefix()}moloni_es_sync_logs` WHERE `entity_id` = %d";
+        $query = "SELECT COUNT(*) FROM {$wpdb->get_blog_prefix()}moloni_es_sync_logs 
+            WHERE `entity_id` = {$entityId} AND";
 
         if (is_array($typeId)) {
-            $sql .= " AND `type_id` IN (%s)";
-            $typeId = implode("','", $typeId);
+            $query .= ' `type_id` IN (';
+
+            foreach ($typeId as $value) {
+                $query .= (int)$value . ',';
+            }
+
+            $query = rtrim($query, ',');
+            $query .= ')';
         } else {
-            $sql .= " AND `type_id` = %d";
+            $query .= ' `type_id` = ' . (int)$typeId;
         }
 
-        $query = $wpdb->prepare(
-            $sql,
-            $entityId,
-            $typeId
-        );
+        $queryResult = $wpdb->get_row($query, ARRAY_A);
 
-        $queryResult = $wpdb->get_results($query, ARRAY_A);
-
-        return (int)($queryResult[0]['COUNT(*)'] ?? 0) > 0;
+        return (int)$queryResult['COUNT(*)'] > 0;
     }
 
     /**
