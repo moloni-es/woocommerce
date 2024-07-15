@@ -75,7 +75,7 @@ class SyncLogs
     {
         global $wpdb;
 
-        $sql = "SELECT COUNT(*) FROM `{$wpdb->get_blog_prefix()}moloni_sync_logs` WHERE `entity_id` = %d";
+        $sql = "SELECT COUNT(*) FROM `{$wpdb->get_blog_prefix()}moloni_es_sync_logs` WHERE `entity_id` = %d";
 
         if (is_array($typeId)) {
             $sql .= " AND `type_id` IN (%s)";
