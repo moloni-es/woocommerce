@@ -5,6 +5,7 @@ namespace MoloniES\Controllers;
 use WC_Order;
 use MoloniES\Exceptions\DocumentError;
 use MoloniES\API\Customers;
+use MoloniES\Enums\Boolean;
 use MoloniES\Enums\Countries;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Helpers\Customer;
@@ -172,7 +173,11 @@ class OrderCustomer
                 }
 
                 if (!empty($vat) && !Customer::isVatEsValid($vat)) {
-                    throw new DocumentError(__('Customer has invalid VAT for Spain.','moloni_es'));
+                    if (!defined('VAT_VALIDATE') || (int)VAT_VALIDATE === Boolean::NO) {
+                        throw new DocumentError(__('Customer has invalid VAT for Spain.','moloni_es'));
+                    }
+
+                    $vat = null;
                 }
             }
         }
