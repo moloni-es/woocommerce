@@ -75,6 +75,7 @@ Released plugin version 1.0.0.
 ## Changelog
 ### 2.1.1
 * Security fixes
+* New settings to validate VAT values
 
 ### 2.1.0
 * Security fixes
