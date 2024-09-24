@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Moloni ES\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-14 14:47+0000\n"
+"POT-Creation-Date: 2024-09-23 13:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:471
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:498
 msgid "Advanced"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Alert"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:479
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:506
 msgid "Alert e-mail"
 msgstr ""
 
@@ -298,7 +298,7 @@ msgstr ""
 msgid "Custom field associated with the customer's VAT"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:175
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:177
 msgid "Customer has invalid VAT for Spain."
 msgstr ""
 
@@ -528,7 +528,7 @@ msgstr ""
 msgid "Error creating category %s"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:90
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:91
 msgid "Error creating customer."
 msgstr ""
 
@@ -561,7 +561,7 @@ msgstr ""
 msgid "Error fetching company"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:280
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:285
 msgid "Error fetching countries"
 msgstr ""
 
@@ -569,7 +569,7 @@ msgstr ""
 msgid "Error fetching country"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:372
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:377
 msgid "Error fetching customers."
 msgstr ""
 
@@ -670,12 +670,12 @@ msgstr ""
 msgid "Error synchronizing stock."
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:106
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:107
 msgid "Error updating customer."
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:392
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:506
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:533
 msgid "Example"
 msgstr ""
 
@@ -777,6 +777,12 @@ msgstr ""
 msgid ""
 "If the authentication has expired, please proceed with the authentication "
 "process again, which you can consult <a href=\"%s\">here</a>."
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:488
+msgid ""
+"If the VAT number is invalid, the document will be issued to the \"final "
+"consumer\""
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:458
@@ -1002,6 +1008,7 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:161
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:229
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:247
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:481
 msgid "No"
 msgstr ""
 
@@ -1351,7 +1358,7 @@ msgstr ""
 msgid "Receipt"
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:486
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:513
 msgid ""
 "Receive alerts for when an error occurs (document creation/authentication "
 "lost)."
@@ -1408,7 +1415,7 @@ msgid "Run imports"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Automation.php:291
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:494
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:521
 msgid "Save changes"
 msgstr ""
 
@@ -1631,7 +1638,7 @@ msgstr ""
 msgid "The order must be paid for in order to be generated."
 msgstr ""
 
-#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:120
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Controllers/OrderCustomer.php:121
 msgid "There was an error saving the customer."
 msgstr ""
 
@@ -1729,6 +1736,10 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:454
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Services/MoloniProduct/Abstracts/MoloniProductSyncAbstract.php:470
 msgid "updating"
+msgstr ""
+
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:468
+msgid "Validate VAT"
 msgstr ""
 
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Blocks/MoloniProduct/ProductRow.php:24
@@ -1884,6 +1895,7 @@ msgstr ""
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:163
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:231
 #: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:250
+#: bitnami/wordpress/wp-content/plugins/moloni-es/src/Templates/Containers/Settings.php:484
 msgid "Yes"
 msgstr ""
 
