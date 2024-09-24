@@ -463,6 +463,33 @@ try {
                 </td>
             </tr>
 
+            <tr>
+                <th>
+                    <label for="vat_validate"><?= __('Validate VAT', 'moloni_es') ?></label>
+                </th>
+                <td>
+                    <?php
+                    $vatValidate = 0;
+
+                    if (defined('VAT_VALIDATE')) {
+                        $vatValidate = (int)VAT_VALIDATE;
+                    }
+                    ?>
+
+                    <select id="vat_validate" name='opt[vat_validate]' class='inputOut'>
+                        <option value='0' <?= ($vatValidate === 0 ? 'selected' : '') ?>>
+                            <?= __('No', 'moloni_es') ?>
+                        </option>
+                        <option value='1' <?= ($vatValidate === 1 ? 'selected' : '') ?>>
+                            <?= __('Yes', 'moloni_es') ?>
+                        </option>
+                    </select>
+                    <p class='description'>
+                        <?= __('If the VAT number is invalid, the document will be issued to the "final consumer"', 'moloni_es') ?>
+                    </p>
+                </td>
+            </tr>
+
             </tbody>
         </table>
 
