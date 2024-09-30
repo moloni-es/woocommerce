@@ -31,7 +31,7 @@ class OrderProduct
     /** @var array */
     private $taxes = [];
 
-    /** @var float */
+    /** @var float|int */
     private $qty;
 
     /** @var float */
@@ -121,6 +121,13 @@ class OrderProduct
         }
 
         return $props;
+    }
+
+    //          Gets          //
+
+    public function getQty()
+    {
+        return $this->qty;
     }
 
     //          Sets          //
@@ -231,18 +238,24 @@ class OrderProduct
      */
     private function setPrice(): OrderProduct
     {
-        $this->price = (float)$this->orderProduct->get_subtotal() / $this->qty;
-        $refundedValue = $this->wc_order->get_total_refunded_for_item($this->orderProduct->get_id());
+        $price = 0;
 
-        if ($refundedValue !== 0) {
-            $refundedValue /= $this->qty;
+        if ($this->qty > 0) {
+            $price = (float)$this->orderProduct->get_subtotal() / $this->qty;
+            $refundedValue = $this->wc_order->get_total_refunded_for_item($this->orderProduct->get_id());
 
-            $this->price -= $refundedValue;
+            if ($refundedValue !== 0) {
+                $refundedValue /= $this->qty;
+
+                $price -= $refundedValue;
+            }
+
+            if ($price < 0) {
+                $price = 0;
+            }
         }
 
-        if ($this->price < 0) {
-            $this->price = 0;
-        }
+        $this->price = $price;
 
         return $this;
     }
