@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 Tested up to: 6.5.5
 WC tested up to: 9.0.2
 
@@ -70,6 +70,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 2.1.2 =
+* Fix fatal error when creating documents with refunds
+
 = 2.1.1 =
 * Security fixes
 * New settings to validate VAT values
