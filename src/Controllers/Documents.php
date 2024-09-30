@@ -823,11 +823,15 @@ class Documents
     public function setProducts(): Documents
     {
         foreach ($this->order->get_items() as $orderProduct) {
-            /** @var $orderProduct WC_Order_Item_Product */
+            /**
+             * @var $orderProduct WC_Order_Item_Product
+             */
             $newOrderProduct = new OrderProduct($orderProduct, $this->order, count($this->products), $this->fiscalZone);
+            $newOrderProduct->create();
 
-            $this->products[] = $newOrderProduct->create()->mapPropsToValues();
-
+            if ($newOrderProduct->getQty() > 0) {
+                $this->products[] = $newOrderProduct->mapPropsToValues();
+            }
         }
 
         return $this;
