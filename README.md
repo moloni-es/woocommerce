@@ -13,8 +13,8 @@
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
-**Tested up to:**      6.5.5  
-**WC tested up to**    9.0.2  
+**Tested up to:**      6.6.2  
+**WC tested up to**    9.3.3  
 **Stable tag:**        2.1.2  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
@@ -75,6 +75,8 @@ Released plugin version 1.0.0.
 ## Changelog
 ### 2.1.2
 * Fix fatal error when creating documents with refunds
+* Tested up to version 6.6.2 of WordPress
+* Tested up to version 9.3.3 of WooCommerce
 
 ### 2.1.1
 * Security fixes

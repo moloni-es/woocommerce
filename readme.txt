@@ -3,8 +3,8 @@ Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
 Stable tag: 2.1.2
-Tested up to: 6.5.5
-WC tested up to: 9.0.2
+Tested up to: 6.6.2
+WC tested up to: 9.3.3
 
 Requires PHP: 7.2
 Requires at least: 5.0
@@ -72,6 +72,8 @@ Via FTP
 == Changelog ==
 = 2.1.2 =
 * Fix fatal error when creating documents with refunds
+* Tested up to version 6.6.2 of WordPress
+* Tested up to version 9.3.3 of WooCommerce
 
 = 2.1.1 =
 * Security fixes
