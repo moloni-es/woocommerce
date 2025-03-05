@@ -154,7 +154,7 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
             );
 
             $this->wcProduct->set_stock_quantity($stock);
-            $this->wcProduct->set_low_stock_amount($this->moloniProduct['minStock']);
+            $this->wcProduct->set_low_stock_amount($this->moloniProduct['minStock'] ?? 0);
         }
     }
 
