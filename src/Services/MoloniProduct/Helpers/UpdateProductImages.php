@@ -37,7 +37,7 @@ class UpdateProductImages
             'companyId' => Storage::$MOLONI_ES_COMPANY_ID,
             'data' => [
                 'productId' => $this->moloniProduct['productId'],
-                'img' => empty($this->images[0]) ? null : '{' . 0 . '}',
+                'img' => empty($this->images[0]['file']) ? null : '{' . 0 . '}',
                 'variants' => [],
             ]
         ];
@@ -56,7 +56,7 @@ class UpdateProductImages
                     continue;
                 }
 
-                if (!isset($this->images[$variantId]) || empty($this->images[$variantId])) {
+                if (!isset($this->images[$variantId]) || empty($this->images[$variantId]['file'])) {
                     $variables['data']['variants'][] = [
                         'productId' => $variantId,
                         'img' => null
@@ -90,23 +90,67 @@ class UpdateProductImages
             $payload .= "\r\n";
         }
 
-        foreach ($this->images as $id => $image) {
-            if (empty($image)) {
+        foreach ($this->images as $id => $imageData) {
+            if (empty($imageData['file'])) {
                 continue;
             }
 
             $payload .= '--' . $this->boundary;
             $payload .= "\r\n";
-            $payload .= 'Content-Disposition: form-data; name="' . $id . '"; filename="' . basename($image) . '"' . "\r\n";
+            $payload .= 'Content-Disposition: form-data; name="' . $id . '"; filename="' . basename($imageData['file']) . '"' . "\r\n";
             $payload .= 'Content-Type: image/*' . "\r\n";
             $payload .= "\r\n";
-            $payload .= file_get_contents($image);
+            $payload .= file_get_contents($imageData['file']);
             $payload .= "\r\n";
         }
 
         $payload .= '--' . $this->boundary . '--';
 
-        Curl::simpleCustomPost($headers, $payload);
+        $response = Curl::simpleCustomPost($headers, $payload);
+
+        if (is_wp_error($response)) {
+            return;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+
+        if (is_wp_error($body)) {
+            return;
+        }
+
+        $updatedProduct = json_decode($body, true);
+        $updatedProduct = $updatedProduct['data']['productUpdate']['data'] ?? [];
+
+        if (empty($updatedProduct)) {
+            return;
+        }
+
+        $this->saveImagesMetaTag($updatedProduct);
+    }
+
+    private function saveImagesMetaTag($updatedProduct)
+    {
+        if (!empty($updatedProduct['img']) && !empty($this->images[0]['id'])) {
+            update_post_meta((int)$this->images[0]['id'], '_moloni_file_name', $updatedProduct['img']);
+        }
+
+        if (empty($this->moloniProduct['variants'])) {
+            return;
+        }
+
+        foreach ($updatedProduct['variants'] as $variant) {
+            if (empty($variant['img'])) {
+                continue;
+            }
+
+            $imageId = ($this->images[(int)$variant['productId']]['id'] ?? 0);
+
+            if (empty($imageId)) {
+                continue;
+            }
+
+            update_post_meta($imageId, '_moloni_file_name', $variant['img']);
+        }
     }
 
     private function getMutation(): string
@@ -120,6 +164,12 @@ class UpdateProductImages
                     productId
                     name
                     reference
+                    img
+                    variants
+                    {
+                        productId
+                        img
+                    }
                 }
                 errors
                 {

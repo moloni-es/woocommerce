@@ -154,7 +154,7 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
             );
 
             $this->wcProduct->set_stock_quantity($stock);
-            $this->wcProduct->set_low_stock_amount($this->moloniProduct['minStock']);
+            $this->wcProduct->set_low_stock_amount($this->moloniProduct['minStock'] ?? 0);
         }
     }
 
@@ -176,25 +176,28 @@ abstract class WcProductSyncAbstract implements WcSyncInterface
     protected function setImage()
     {
         $moloniImage = $this->moloniProduct['img'] ?? '';
+        $moloniImageTitle = '';
 
         if (empty($moloniImage)) {
             $this->wcProduct->set_image_id('');
-        } else {
-            $imageId = $this->wcProduct->get_image_id();
+            return;
+        }
 
-            if ($imageId > 0) {
-                $currentImageTitle = get_the_title($imageId);
+        $imageId = $this->wcProduct->get_image_id();
 
-                if (str_contains($moloniImage, $currentImageTitle)) {
-                    return;
-                }
+        if ($imageId > 0) {
+            $moloniImageTitle = get_the_title($imageId);
+            $imageMeta = get_post_meta($imageId, '_moloni_file_name', true);
+
+            if ($moloniImage === $imageMeta) {
+                return;
             }
+        }
 
-            $imageId = (new FetchImageFromMoloni($this->moloniProduct['img']))->get();
+        $imageId = (new FetchImageFromMoloni($this->moloniProduct['img'], $moloniImageTitle))->get();
 
-            if ($imageId > 0) {
-                $this->wcProduct->set_image_id($imageId);
-            }
+        if ($imageId > 0) {
+            $this->wcProduct->set_image_id($imageId);
         }
     }
 

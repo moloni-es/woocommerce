@@ -2,7 +2,7 @@
 Moloni España
 Contributors: Moloni
 Tags: Invoicing, Orders
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 Tested up to: 6.6.2
 WC tested up to: 9.3.3
 
@@ -70,6 +70,9 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 2.1.3 =
+* Improve image synchronization process
+
 = 2.1.2 =
 * Fix fatal error when creating documents with refunds
 * Tested up to version 6.6.2 of WordPress
