@@ -112,7 +112,7 @@ class UpdateProductImages
             return;
         }
 
-        $updatedProduct = $post['data']['products']['data'] ?? [];
+        $updatedProduct = $post['body']['data']['products']['data'] ?? [];
 
         if (empty($updatedProduct)) {
             return;
