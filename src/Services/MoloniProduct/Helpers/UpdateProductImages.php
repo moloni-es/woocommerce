@@ -106,13 +106,20 @@ class UpdateProductImages
 
         $payload .= '--' . $this->boundary . '--';
 
-        $post = Curl::simpleCustomPost($headers, $payload);
+        $response = Curl::simpleCustomPost($headers, $payload);
 
-        if (is_wp_error($post)) {
+        if (is_wp_error($response)) {
             return;
         }
 
-        $updatedProduct = $post['body']['data']['productUpdate']['data'] ?? [];
+        $body = wp_remote_retrieve_body($response);
+
+        if (is_wp_error($body)) {
+            return;
+        }
+
+        $updatedProduct = json_decode($body, true);
+        $updatedProduct = $updatedProduct['data']['productUpdate']['data'] ?? [];
 
         if (empty($updatedProduct)) {
             return;
