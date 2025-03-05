@@ -492,17 +492,26 @@ abstract class MoloniProductSyncAbstract implements MoloniProductServiceInterfac
         if ($url) {
             $uploads = wp_upload_dir();
 
-            $files[0] = str_replace($uploads['baseurl'], $uploads['basedir'], $url);
+            $files[0] = [
+                'id' => $wcImageId,
+                'file' => str_replace($uploads['baseurl'], $uploads['basedir'], $url)
+            ];
         } else {
-            $files[0] = '';
+            $files[0] = [
+                'id' => '',
+                'file' => '',
+            ];
         }
 
         if (!empty($this->variantServices)) {
             foreach ($this->variantServices as $variantService) {
-                $image = $variantService->getImage();
+                $file = $variantService->getImage();
                 $productId = $variantService->getMoloniVariantProductId();
 
-                $files[$productId] = $image;
+                $files[$productId] = [
+                    'id' => $variantService->getWcProduct()->get_image_id(),
+                    'file' => $file,
+                ];
             }
         }
 

@@ -90,12 +90,10 @@ class Curl
      *
      * @param $headers
      * @param $payload
-     *
-     * @return true
      */
-    public static function simpleCustomPost($headers, $payload): bool
+    public static function simpleCustomPost($headers, $payload)
     {
-        wp_remote_post(
+        return wp_remote_post(
             self::$url,
             [
                 'headers' => $headers,
@@ -104,8 +102,6 @@ class Curl
                 'user-agent' => self::$userAgent
             ]
         );
-
-        return true;
     }
 
     /**
