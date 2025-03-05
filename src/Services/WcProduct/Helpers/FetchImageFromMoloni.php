@@ -5,10 +5,12 @@ namespace MoloniES\Services\WcProduct\Helpers;
 class FetchImageFromMoloni
 {
     private $img;
+    private $imgTitle;
 
-    public function __construct(string $img)
+    public function __construct(string $img, ?string $imgTitle = '')
     {
         $this->img = $img;
+        $this->imgTitle = $imgTitle;
     }
 
     public function get()
@@ -38,7 +40,7 @@ class FetchImageFromMoloni
 
         $attachment = [
             'post_mime_type' => $wpFiletype['type'],
-            'post_title' => sanitize_file_name($filename),
+            'post_title' => $this->imgTitle,
             'post_content' => '',
             'post_status' => 'inherit'
         ];
@@ -47,6 +49,7 @@ class FetchImageFromMoloni
         $attachData = wp_generate_attachment_metadata($imageId, $file);
 
         wp_update_attachment_metadata($imageId, $attachData);
+        update_post_meta($imageId, '_moloni_file_name', $this->img);
 
         return $imageId;
     }
