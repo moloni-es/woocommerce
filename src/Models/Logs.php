@@ -109,8 +109,9 @@ class Logs
 
     private static function applyFilters(&$sql, &$arguments)
     {
-        $sql .= ' WHERE company_id = %d';
+        $sql .= ' WHERE (company_id = %d OR company_id = %d)';
         $arguments[] = Storage::$MOLONI_ES_COMPANY_ID ?? 0;
+        $arguments[] = 0;
 
         if (!empty(self::$filterMessage)) {
             $sql .= ' AND message LIKE %s';
