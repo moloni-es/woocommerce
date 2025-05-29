@@ -37,6 +37,10 @@ class PendingOrders
             'meta_compare'  => 'NOT EXISTS',
         ];
 
+        if (defined('ORDER_CREATED_AT_MAX') && !empty(ORDER_CREATED_AT_MAX)) {
+            $args['date_created'] = ">=" . ORDER_CREATED_AT_MAX;
+        }
+
         $args = apply_filters('moloni_es_before_pending_orders_fetch', $args);
 
         $results = wc_get_orders($args);
