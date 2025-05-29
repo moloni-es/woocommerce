@@ -1,0 +1,40 @@
+query taxes($companyId: Int!,$options: TaxOptions)
+{
+    taxes(companyId: $companyId,options: $options)
+    {
+        data
+        {
+            taxId
+            name
+            value
+            type
+            fiscalZone
+            flags
+            {
+                flagId
+                name
+            }
+            country
+            {
+                countryId
+            }
+            fiscalZoneFinanceType
+            isDefault
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

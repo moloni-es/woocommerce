@@ -19,23 +19,9 @@ class Categories extends EndpointAbstract
      */
     public static function mutationProductCategoryCreate(?array $variables = []): array
     {
-        $query = 'mutation productCategoryCreate($companyId: Int!,$data: ProductCategoryInsert!)
-        {
-            productCategoryCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    productCategoryId
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('productCategoryCreate');
 
-        return Curl::simple('categories/productCategoryCreate', $query, $variables);
+        return Curl::simple('productCategoryCreate', $query, $variables);
     }
 
     /**
@@ -49,38 +35,9 @@ class Categories extends EndpointAbstract
      */
     public static function queryProductCategories(?array $variables = []): array
     {
-        $query = 'query productCategories($companyId: Int!,$options: ProductCategoryOptions)
-        {
-            productCategories(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    productCategoryId
-                    name
-                    parent
-                    {
-                        productCategoryId
-                        name
-                    }
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('productCategories');
 
-        return Curl::complex('categories/productCategories', $query, $variables, 'productCategories');
+        return Curl::complex('productCategories', $query, $variables);
     }
 
     /**
@@ -94,30 +51,8 @@ class Categories extends EndpointAbstract
      */
     public static function queryProductCategory(?array $variables = []): array
     {
-        $query = 'query productCategory($companyId: Int!,$productCategoryId: Int!)
-        {
-            productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
-            {
-                data
-                {
-                    name
-                    posVisible
-                    summary
-                    visible
-                    parent
-                    {
-                        productCategoryId
-                        name
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('productCategory');
 
-        return Curl::simple('categories/productCategory', $query, $variables);
+        return Curl::simple('productCategory', $query, $variables);
     }
 }

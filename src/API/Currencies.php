@@ -21,42 +21,13 @@ class Currencies extends EndpointAbstract
     {
         $action = 'currencies/currencies';
 
-        $query = 'query currencies($options: CurrencyOptions)
-        {
-            currencies(options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    currencyId
-                    symbol
-                    symbolPosition
-                    numberDecimalPlaces
-                    iso4217
-                    largeCurrency
-                    description
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-            }
-        }';
+        $query = self::loadQuery('currencies');
 
-        if (empty(self::$cache[$action])) {
-            self::$cache[$action] = Curl::complex($action, $query, $variables, 'currencies');
+        if (empty(self::$requestsCache[$action])) {
+            self::$requestsCache[$action] = Curl::complex($action, $query, $variables);
         }
 
-        return self::$cache[$action];
+        return self::$requestsCache[$action];
     }
 
     /**
@@ -69,34 +40,8 @@ class Currencies extends EndpointAbstract
      */
     public static function queryCurrencyExchanges(?array $variables = []): array
     {
-        $query = 'query currencyExchanges($options: CurrencyExchangeOptions)
-        {
-            currencyExchanges(options: $options)
-            {
-                data
-                {
-                    currencyExchangeId
-                    name
-                    exchange
-                    from
-                    {
-                        currencyId
-                        iso4217
-                    }
-                    to
-                    {
-                        currencyId
-                        iso4217
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('currencyExchanges');
 
-        return Curl::complex('currencies/currencyExchanges', $query, $variables, 'currencyExchanges');
+        return Curl::complex('currencyExchanges', $query, $variables);
     }
 }

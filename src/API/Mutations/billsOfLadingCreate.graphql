@@ -1,0 +1,27 @@
+mutation billsOfLadingCreate($companyId: Int!,$data: BillsOfLadingInsert!, $options: BillsOfLadingMutateOptions)
+{
+    billsOfLadingCreate(companyId: $companyId,data: $data,options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            documentId
+            number
+            totalValue
+            currencyExchangeTotalValue
+            documentTotal
+            documentSetName
+            ourReference
+            products
+            {
+                productId
+                documentProductId
+            }
+        }
+    }
+}
+

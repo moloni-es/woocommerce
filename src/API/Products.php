@@ -19,23 +19,9 @@ class Products extends EndpointAbstract
      */
     public static function mutationProductCreate(?array $variables = []): ?array
     {
-        $query = 'mutation productCreate($companyId: Int!,$data: ProductInsert!)
-        {
-            productCreate(companyId: $companyId,data: $data) 
-            {
-                data
-                {
-                    ' . self::getProductSegment() . '
-                    ' . self::getVariantSegment() . '
-                }
-                errors{
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('productCreate');
 
-        return Curl::simple('products/productCreate', $query, $variables);
+        return Curl::simple('productCreate', $query, $variables);
     }
 
     /**
@@ -49,24 +35,9 @@ class Products extends EndpointAbstract
      */
     public static function mutationProductUpdate(?array $variables = []): ?array
     {
-        $query = 'mutation productUpdate($companyId: Int!,$data: ProductUpdate!)
-        {
-            productUpdate(companyId: $companyId ,data: $data)
-            {
-                data
-                {
-                    ' . self::getProductSegment() . '
-                    ' . self::getVariantSegment() . '
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('productUpdate');
 
-        return Curl::simple('products/productUpdate', $query, $variables);
+        return Curl::simple('productUpdate', $query, $variables);
     }
 
     /**
@@ -80,24 +51,9 @@ class Products extends EndpointAbstract
      */
     public static function queryProduct(?array $variables = []): ?array
     {
-        $query = 'query product($companyId: Int!,$productId: Int!)
-        {
-            product(companyId: $companyId,productId: $productId)
-            {
-                data
-                {
-                    ' . self::getProductSegment() . '
-                    ' . self::getVariantSegment() . '           
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('product');
 
-        return Curl::simple('products/product', $query, $variables);
+        return Curl::simple('product', $query, $variables);
     }
 
     /**
@@ -110,179 +66,8 @@ class Products extends EndpointAbstract
      */
     public static function queryProducts(array $variables = []): ?array
     {
-        $query = 'query products($companyId: Int!,$options: ProductOptions)
-        {
-            products(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    ' . self::getProductSegment() . '
-                    ' . self::getVariantSegment() . '            
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('products');
 
-        return Curl::simple('products/products', $query, $variables);
-    }
-
-    //          PRIVATES          //
-
-    /**
-     * Product part of query
-     *
-     * @return string
-     */
-    private static function getProductSegment(): string
-    {
-        return '
-            visible
-            name
-            productId
-            type
-            reference
-            summary
-            price
-            priceWithTaxes
-            hasStock
-            stock
-            img
-            deletable
-            identifications
-            {
-                type
-                favorite
-                text
-            }
-            measurementUnit
-            {
-                measurementUnitId
-                name
-            }   
-            warehouse
-            {
-                warehouseId
-            }
-            warehouses
-            {
-                warehouseId
-                stock
-                minStock
-            }
-            productCategory{
-                name
-                productCategoryId
-            }
-            parent
-            {
-                productId
-                name
-            }
-            propertyGroup
-            {
-                propertyGroupId
-                name
-                properties
-                {
-                    propertyId
-                    name
-                    ordering
-                    values
-                    {
-                        propertyValueId
-                        code
-                        value
-                    }
-                }
-            }
-            taxes
-            {
-                tax
-                {
-                    taxId
-                    value
-                    name
-                    type
-                    fiscalZone
-                    fiscalZoneFinanceType
-                    fiscalZoneFinanceTypeMode
-                }
-                value
-                ordering
-            }
-        ';
-    }
-
-    /**
-     * Variant part of query
-     *
-     * @return string
-     */
-    private static function getVariantSegment(): string
-    {
-        return '
-        variants
-        {
-            visible
-            productId
-            name
-            reference
-            summary
-            price
-            img
-            priceWithTaxes
-            hasStock
-            stock
-            deletable
-            parent
-            {
-                productId
-                name
-            }
-            warehouse
-            {
-                warehouseId
-            }
-            warehouses
-            {
-                warehouseId
-                stock
-                minStock
-            }
-            identifications
-            {
-                type
-                favorite
-                text
-            } 
-            propertyPairs
-            {
-                propertyId
-                propertyValueId
-                property
-                {
-                    name
-                }
-                propertyValue
-                {
-                    code
-                    value
-                }
-            }
-        }
-        ';
+        return Curl::simple('products', $query, $variables);
     }
 }

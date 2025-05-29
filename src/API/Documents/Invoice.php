@@ -19,31 +19,9 @@ class Invoice extends EndpointAbstract
      */
     public static function queryInvoice(?array $variables = []): array
     {
-        $query = 'query invoice($companyId: Int!,$documentId: Int!,$options: InvoiceOptionsSingle)
-        {
-            invoice(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('invoice');
 
-        return Curl::simple('documents/invoice', $query, $variables);
+        return Curl::simple('invoice', $query, $variables);
     }
 
     /**
@@ -57,40 +35,9 @@ class Invoice extends EndpointAbstract
      */
     public static function queryInvoices(?array $variables = []): array
     {
-        $query = 'query invoices($companyId: Int!,$options: InvoiceOptions)
-        {
-            invoices(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }                        
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('invoices');
 
-        return Curl::complex('documents/invoices', $query, $variables, 'invoices');
+        return Curl::complex('invoices', $query, $variables);
     }
 
     /**
@@ -104,25 +51,9 @@ class Invoice extends EndpointAbstract
      */
     public static function queryInvoiceGetPDFToken(?array $variables = []): array
     {
-        $query = 'query invoiceGetPDFToken($documentId: Int!)
-        {
-            invoiceGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('invoiceGetPDFToken');
 
-        return Curl::simple('documents/invoiceGetPDFToken', $query, $variables);
+        return Curl::simple('invoiceGetPDFToken', $query, $variables);
     }
 
     /**
@@ -136,12 +67,9 @@ class Invoice extends EndpointAbstract
      */
     public static function mutationInvoiceGetPDF(array $variables = []): array
     {
-        $query = 'mutation invoiceGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            invoiceGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('invoiceGetPDF');
 
-        return Curl::simple('documents/invoiceGetPDF', $query, $variables);
+        return Curl::simple('invoiceGetPDF', $query, $variables);
     }
 
     /**
@@ -155,33 +83,9 @@ class Invoice extends EndpointAbstract
      */
     public static function mutationInvoiceCreate(?array $variables = [])
     {
-        $query = 'mutation invoiceCreate($companyId: Int!,$data: InvoiceInsert!,$options: InvoiceMutateOptions)
-        {
-            invoiceCreate(companyId: $companyId,data: $data,options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data{
-                    documentId
-                    number
-                    totalValue
-                    currencyExchangeTotalValue
-                    documentTotal
-                    documentSetName
-                    ourReference
-                    products
-                    {
-                        productId
-                        documentProductId
-                    }
-                }
-            }
-        }';
+        $query = self::loadMutation('invoiceCreate');
 
-        return Curl::simple('documents/invoiceCreate', $query, $variables);
+        return Curl::simple('invoiceCreate', $query, $variables);
     }
 
     /**
@@ -195,24 +99,9 @@ class Invoice extends EndpointAbstract
      */
     public static function mutationInvoiceUpdate(?array $variables = []): array
     {
-        $query = 'mutation invoiceUpdate($companyId: Int!,$data: InvoiceUpdate!)
-        {
-            invoiceUpdate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    status                              
-                }
-            }
-        }';
+        $query = self::loadMutation('invoiceUpdate');
 
-        return Curl::simple('documents/invoiceUpdate', $query, $variables);
+        return Curl::simple('invoiceUpdate', $query, $variables);
     }
 
     /**
@@ -226,11 +115,8 @@ class Invoice extends EndpointAbstract
      */
     public static function mutationInvoiceSendMail(?array $variables = [])
     {
-        $query = 'mutation invoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            invoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('invoiceSendMail');
 
-        return Curl::simple('documents/invoiceSendMail', $query, $variables);
+        return Curl::simple('invoiceSendMail', $query, $variables);
     }
 }

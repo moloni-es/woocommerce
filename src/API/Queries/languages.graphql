@@ -1,0 +1,28 @@
+query languages($options: LanguageOptions)
+{
+    languages(options: $options)
+    {
+        data
+        {
+            languageId
+            name
+            iso3166
+            flag
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

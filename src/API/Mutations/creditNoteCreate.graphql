@@ -1,0 +1,24 @@
+mutation creditNoteCreate($companyId: Int!,$data: CreditNoteInsert!,$options:CreditNoteMutateOptions)
+{
+    creditNoteCreate(companyId: $companyId,data: $data,options: $options)
+    {
+        data
+        {
+            documentId
+            number
+            ourReference
+            yourReference
+            entityVat
+            entityNumber
+            entityName
+            documentSetName
+            totalValue
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

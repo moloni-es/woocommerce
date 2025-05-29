@@ -1,0 +1,28 @@
+query warehouses($companyId: Int!,$options: WarehouseOptions)
+{
+    warehouses(companyId: $companyId, options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        data
+        {
+            warehouseId
+            name
+            number
+            isDefault
+        }
+    }
+}
+

@@ -18,46 +18,8 @@ class Timezones extends EndpointAbstract
      */
     public static function queryTimezones(?array $variables = []): array
     {
-        $query = 'query timezones($options: TimezoneOptions)
-        {
-            timezones(options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    timezoneId
-                    name
-                    visible
-                    ordering
-                    tzName
-                    offset
-                    country
-                    {
-                           countryId
-                           iso3166_1
-                           title
-                           language
-                           {
-                                    languageId
-                                    name
-                           } 
-                    }
-                }
-            }
-        }';
+        $query = self::loadQuery('timezones');
 
-        return Curl::complex('timezones/timezones', $query, $variables, 'timezones');
+        return Curl::complex('timezones', $query, $variables);
     }
 }

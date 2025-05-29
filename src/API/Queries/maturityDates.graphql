@@ -1,0 +1,24 @@
+query maturityDates($companyId: Int!,$options: MaturityDateOptions){
+    maturityDates(companyId: $companyId, options: $options) {
+        errors{
+            field
+            msg
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        data{
+            maturityDateId
+            name
+            days
+            discount
+        }
+    }
+}
+

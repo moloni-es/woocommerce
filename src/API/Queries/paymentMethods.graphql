@@ -1,0 +1,28 @@
+query paymentMethods($companyId: Int!,$options: PaymentMethodOptions)
+{
+    paymentMethods(companyId: $companyId, options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        data
+        {
+            paymentMethodId
+            name
+            type
+            commission
+        }
+    }
+}
+

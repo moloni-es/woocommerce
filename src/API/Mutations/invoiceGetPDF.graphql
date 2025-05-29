@@ -1,0 +1,5 @@
+mutation invoiceGetPDF($companyId: Int!,$documentId: Int!)
+{
+    invoiceGetPDF(companyId: $companyId,documentId: $documentId)
+}
+

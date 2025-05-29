@@ -1,0 +1,19 @@
+query paymentMethod($companyId: Int!,$paymentMethodId: Int!)
+{
+    paymentMethod(companyId: $companyId,paymentMethodId: $paymentMethodId)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            paymentMethodId
+            name
+            type
+            commission
+        }
+    }
+}
+

@@ -1,0 +1,5 @@
+mutation proFormaInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+{
+    proFormaInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+}
+

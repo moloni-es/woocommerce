@@ -1,0 +1,5 @@
+mutation invoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+{
+    invoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+}
+

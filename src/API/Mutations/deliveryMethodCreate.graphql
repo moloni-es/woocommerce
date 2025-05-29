@@ -1,0 +1,17 @@
+mutation deliveryMethodCreate($companyId: Int!,$data: DeliveryMethodInsert!)
+{
+    deliveryMethodCreate(companyId: $companyId,data: $data)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            deliveryMethodId
+            name
+        }
+    }
+}
+

@@ -1,0 +1,23 @@
+mutation estimateCreate($companyId: Int!,$data: EstimateInsert!,$options: EstimateMutateOptions){
+    estimateCreate(companyId: $companyId,data: $data,options: $options) {
+        errors{
+            field
+            msg
+        }
+        data{
+            documentId
+            number
+            totalValue
+            documentTotal
+            documentSetName
+            ourReference
+            currencyExchangeTotalValue
+            products
+            {
+                documentProductId
+                productId
+            }
+        }
+    }
+}
+

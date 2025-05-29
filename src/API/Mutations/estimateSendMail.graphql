@@ -1,0 +1,5 @@
+mutation estimateSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+{
+    estimateSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+}
+

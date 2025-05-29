@@ -1,0 +1,26 @@
+mutation invoiceCreate($companyId: Int!,$data: InvoiceInsert!,$options: InvoiceMutateOptions)
+{
+    invoiceCreate(companyId: $companyId,data: $data,options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data{
+            documentId
+            number
+            totalValue
+            currencyExchangeTotalValue
+            documentTotal
+            documentSetName
+            ourReference
+            products
+            {
+                productId
+                documentProductId
+            }
+        }
+    }
+}
+

@@ -1,0 +1,21 @@
+query country($countryId: Int!)
+{
+    country(countryId: $countryId)
+    {
+        data
+        {
+            countryId
+            iso3166_1
+            language
+            {
+                languageId
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

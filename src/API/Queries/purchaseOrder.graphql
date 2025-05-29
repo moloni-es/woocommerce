@@ -1,0 +1,24 @@
+query purchaseOrder($companyId: Int!,$documentId: Int!,$options: PurchaseOrderOptionsSingle)
+{
+    purchaseOrder(companyId: $companyId,documentId: $documentId,options: $options)
+    {
+        data
+        {
+            documentId
+            number
+            ourReference
+            yourReference
+            entityVat
+            entityNumber
+            entityName
+            documentSetName
+            totalValue
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

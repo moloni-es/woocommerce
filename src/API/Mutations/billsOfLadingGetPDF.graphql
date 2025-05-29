@@ -1,0 +1,5 @@
+mutation billsOfLadingGetPDF($companyId: Int!,$documentId: Int!)
+{
+    billsOfLadingGetPDF(companyId: $companyId,documentId: $documentId)
+}
+

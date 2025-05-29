@@ -1,0 +1,27 @@
+query geographicZones($companyId: Int!,$options: GeographicZoneOptions)
+{
+    geographicZones(companyId: $companyId,options: $options)
+    {
+        data
+        {
+            geographicZoneId
+            name
+            abbreviation
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

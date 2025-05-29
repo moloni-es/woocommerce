@@ -1,0 +1,17 @@
+mutation stockMovementManualExitCreate($companyId: Int!,$data: StockMovementManualInsert!)
+{
+    stockMovementManualExitCreate(companyId: $companyId,data: $data)
+    {
+        data{
+            stockMovementId
+            type
+            direction
+            qty
+        }
+        errors{
+            field
+            msg
+        }
+    }
+}
+

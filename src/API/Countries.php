@@ -19,40 +19,9 @@ class Countries extends EndpointAbstract
      */
     public static function queryCountries(?array $variables = []): array
     {
-        $query = 'query countries($options: CountryOptions)
-        {
-            countries(options: $options)
-            {
-                data
-                {
-                    countryId
-                    iso3166_1
-                    title
-                    ordering
-                    language
-                    {
-                        languageId
-                        name
-                    }
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('countries');
 
-        return Curl::simple('countries/countries', $query, $variables);
+        return Curl::simple('countries', $query, $variables);
     }
 
     /**
@@ -65,27 +34,8 @@ class Countries extends EndpointAbstract
      */
     public static function queryCountry(?array $variables = []): array
     {
-        $query = 'query country($countryId: Int!)
-        {
-            country(countryId: $countryId)
-            {
-                data
-                {
-                    countryId
-                    iso3166_1
-                    language
-                    {
-                        languageId
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('country');
 
-        return Curl::simple('countries/country', $query, $variables);
+        return Curl::simple('country', $query, $variables);
     }
 }

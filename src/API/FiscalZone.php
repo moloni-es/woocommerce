@@ -18,33 +18,8 @@ class FiscalZone extends EndpointAbstract
      */
     public static function queryFiscalZoneTaxSettings(?array $variables = []): array
     {
-        $query = 'query fiscalZoneTaxSettings($companyId: Int!,$fiscalZone: String!)
-        {
-            fiscalZoneTaxSettings(companyId: $companyId,fiscalZone: $fiscalZone)
-            {
-                fiscalZone
-                fiscalZoneModes
-                {
-                    typeId
-                    name
-                    visible
-                    type
-                    values
-                    {
-                        code
-                        name
-                    }
-                }
-                fiscalZoneFinanceTypes
-                {
-                    id
-                    name
-                    code
-                    isVAT
-                }
-            }
-        }';
+        $query = self::loadQuery('fiscalZoneTaxSettings');
 
-        return Curl::simple('fiscalZone/fiscalZoneTaxSettings', $query, $variables);
+        return Curl::simple('fiscalZoneTaxSettings', $query, $variables);
     }
 }

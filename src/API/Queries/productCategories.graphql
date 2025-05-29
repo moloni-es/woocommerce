@@ -1,0 +1,31 @@
+query productCategories($companyId: Int!,$options: ProductCategoryOptions)
+{
+    productCategories(companyId: $companyId,options: $options)
+    {
+        data
+        {
+            productCategoryId
+            name
+            parent
+            {
+                productCategoryId
+                name
+            }
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

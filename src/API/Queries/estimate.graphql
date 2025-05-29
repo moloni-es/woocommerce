@@ -1,0 +1,25 @@
+query estimate($companyId: Int!,$documentId: Int!,$options: EstimateOptionsSingle)
+{
+    estimate(companyId: $companyId,documentId: $documentId,options: $options)
+    {
+        data
+        {
+            documentId
+            number
+            ourReference
+            yourReference
+            entityVat
+            entityNumber
+            entityName
+            documentSetName
+            totalValue
+            pdfExport
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

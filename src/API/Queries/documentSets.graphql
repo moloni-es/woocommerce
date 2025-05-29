@@ -1,0 +1,26 @@
+query documentSets($companyId: Int!,$options: DocumentSetOptions)
+{
+    documentSets(companyId: $companyId, options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        data{
+            documentSetId
+            name
+            isDefault
+        }
+    }
+}
+

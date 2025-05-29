@@ -1,0 +1,36 @@
+mutation propertyGroupCreate($companyId: Int!,$data: PropertyGroupInsert!)
+{
+    propertyGroupCreate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            propertyGroupId
+            name
+            visible
+            deletable
+            properties
+            {
+                propertyId
+                name
+                visible
+                ordering
+                deletable
+                values
+                {
+                   propertyValueId
+                   code
+                   value
+                   visible
+                   ordering
+                   deletable
+                }
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

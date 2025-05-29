@@ -1,0 +1,16 @@
+query{
+    me {
+        data {
+            userCompanies {
+                company {
+                    companyId
+                }
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}

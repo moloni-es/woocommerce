@@ -1,0 +1,29 @@
+mutation taxCreate($companyId: Int!,$data: TaxInsert!)
+{
+    taxCreate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            taxId
+            name
+            value
+            type
+            fiscalZone
+            flags
+            {
+                flagId
+                name
+            }
+            country
+            {
+                countryId
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

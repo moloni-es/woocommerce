@@ -1,0 +1,24 @@
+query productCategory($companyId: Int!,$productCategoryId: Int!)
+{
+    productCategory(companyId: $companyId,productCategoryId: $productCategoryId)
+    {
+        data
+        {
+            name
+            posVisible
+            summary
+            visible
+            parent
+            {
+                productCategoryId
+                name
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

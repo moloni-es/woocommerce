@@ -19,26 +19,9 @@ class Warehouses extends EndpointAbstract
      */
     public static function queryWarehouse(?array $variables = []): array
     {
-        $query = 'query warehouse($companyId: Int!,$warehouseId: Int!)
-        {
-            warehouse(companyId: $companyId,warehouseId: $warehouseId)
-            {
-                data
-                {
-                    warehouseId
-                    visible
-                    name
-                    number
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('warehouse');
 
-        return Curl::simple('warehouses/warehouse', $query, $variables);
+        return Curl::simple('warehouse', $query, $variables);
     }
 
     /**
@@ -52,40 +35,14 @@ class Warehouses extends EndpointAbstract
      */
     public static function queryWarehouses(?array $variables = []): array
     {
-        $action = 'warehouses/warehouses';
+        $action = 'warehouses';
 
-        $query = 'query warehouses($companyId: Int!,$options: WarehouseOptions)
-        {
-            warehouses(companyId: $companyId, options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data
-                {
-                    warehouseId
-                    name
-                    number
-                    isDefault
-                }
-            }
-        }';
+        $query = self::loadQuery($action);
 
-        if (empty(self::$cache[$action])) {
-            self::$cache[$action] = Curl::complex($action, $query, $variables, 'warehouses');
+        if (empty(self::$requestsCache[$action])) {
+            self::$requestsCache[$action] = Curl::complex($action, $query, $variables);
         }
 
-        return self::$cache[$action];
+        return self::$requestsCache[$action];
     }
 }

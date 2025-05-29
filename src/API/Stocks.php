@@ -19,24 +19,9 @@ class Stocks extends EndpointAbstract
      */
     public static function mutationStockMovementManualEntryCreate(array $variables = []): array
     {
-        $query = 'mutation stockMovementManualEntryCreate($companyId: Int!,$data: StockMovementManualInsert!)
-        {
-            stockMovementManualEntryCreate(companyId: $companyId,data: $data)
-            {
-                data{
-                    stockMovementId
-                    type
-                    direction
-                    qty
-                }
-                errors{
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('stockMovementManualEntryCreate');
 
-        return Curl::simple('stocks/stockMovementManualEntryCreate', $query, $variables);
+        return Curl::simple('stockMovementManualEntryCreate', $query, $variables);
     }
 
     /**
@@ -50,23 +35,8 @@ class Stocks extends EndpointAbstract
      */
     public static function mutationStockMovementManualExitCreate(array $variables = []): array
     {
-        $query = 'mutation stockMovementManualExitCreate($companyId: Int!,$data: StockMovementManualInsert!)
-        {
-            stockMovementManualExitCreate(companyId: $companyId,data: $data)
-            {
-                data{
-                    stockMovementId
-                    type
-                    direction
-                    qty
-                }
-                errors{
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('stockMovementManualExitCreate');
 
-        return Curl::simple('stocks/stockMovementManualExitCreate', $query, $variables);
+        return Curl::simple('stockMovementManualExitCreate', $query, $variables);
     }
 }

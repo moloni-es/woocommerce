@@ -1,0 +1,18 @@
+mutation customerUpdate($companyId: Int!,$data: CustomerUpdate!)
+{
+    customerUpdate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            customerId
+            name
+            number
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

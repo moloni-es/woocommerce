@@ -1,0 +1,31 @@
+query currencies($options: CurrencyOptions)
+{
+    currencies(options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            currencyId
+            symbol
+            symbolPosition
+            numberDecimalPlaces
+            iso4217
+            largeCurrency
+            description
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+    }
+}
+

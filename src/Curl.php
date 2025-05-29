@@ -64,21 +64,18 @@ class Curl
         $parsed = json_decode($raw, true);
 
         $log = [
-            'url' => self::$url . '/' . $action,
+            'url' => $action,
             'sent' => $variables,
             'received' => $parsed
         ];
 
         self::$logs[] = $log;
 
-        /** Errors sometimes come inside data/query(or mutation) */
-        $keyString = substr($action, strpos($action, '/') + strlen('/'));
-
-        if (empty($parsed['errors']) && empty($parsed['data'][$keyString]['errors'])) {
+        if (empty($parsed['errors']) && empty($parsed['data'][$action]['errors'])) {
             return $parsed;
         }
 
-        if (!empty($parsed['data'][$keyString]['data'])) {
+        if (!empty($parsed['data'][$action]['data'])) {
             return $parsed;
         }
 
@@ -90,6 +87,7 @@ class Curl
      *
      * @param $headers
      * @param $payload
+     * @return array|\WP_Error
      */
     public static function simpleCustomPost($headers, $payload)
     {
@@ -110,13 +108,12 @@ class Curl
      * @param $action
      * @param $query
      * @param $variables
-     * @param $keyString
      *
      * @return array
      *
      * @throws APIExeption
      */
-    public static function complex($action, $query, $variables, $keyString)
+    public static function complex($action, $query, $variables): array
     {
         /** To get all items we need to paginate */
 
@@ -129,8 +126,8 @@ class Curl
 
             $fetch = self::simple($action, $query, $variables);
 
-            $pagination = $fetch['data'][$keyString]['options']['pagination'] ?? ['count' => 0, 'qty' => 0, 'page' => 0];
-            $results = $fetch['data'][$keyString]['data'] ?? [];
+            $pagination = $fetch['data'][$action]['options']['pagination'] ?? ['count' => 0, 'qty' => 0, 'page' => 0];
+            $results = $fetch['data'][$action]['data'] ?? [];
 
             $array = array_merge($array, $results);
 

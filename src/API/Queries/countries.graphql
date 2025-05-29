@@ -1,0 +1,33 @@
+query countries($options: CountryOptions)
+{
+    countries(options: $options)
+    {
+        data
+        {
+            countryId
+            iso3166_1
+            title
+            ordering
+            language
+            {
+                languageId
+                name
+            }
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

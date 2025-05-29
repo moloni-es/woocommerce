@@ -1,0 +1,18 @@
+query estimateGetPDFToken($documentId: Int!)
+{
+    estimateGetPDFToken(documentId: $documentId)
+    {
+        data
+        {
+            token
+            filename
+            path
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

@@ -19,32 +19,9 @@ class Estimate extends EndpointAbstract
      */
     public static function queryEstimate(?array $variables = []): array
     {
-        $query = 'query estimate($companyId: Int!,$documentId: Int!,$options: EstimateOptionsSingle)
-        {
-            estimate(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                    pdfExport
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('estimate');
 
-        return Curl::simple('estimate/estimate', $query, $variables);
+        return Curl::simple('estimate', $query, $variables);
     }
 
     /**
@@ -58,25 +35,9 @@ class Estimate extends EndpointAbstract
      */
     public static function queryEstimateGetPDFToken(?array $variables = []): array
     {
-        $query = 'query estimateGetPDFToken($documentId: Int!)
-        {
-            estimateGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('estimateGetPDFToken');
 
-        return Curl::simple('estimate/estimateGetPDFToken', $query, $variables);
+        return Curl::simple('estimateGetPDFToken', $query, $variables);
     }
 
     /**
@@ -90,30 +51,9 @@ class Estimate extends EndpointAbstract
      */
     public static function mutationEstimateCreate(?array $variables = []): array
     {
-        $query = 'mutation estimateCreate($companyId: Int!,$data: EstimateInsert!,$options: EstimateMutateOptions){
-            estimateCreate(companyId: $companyId,data: $data,options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                data{
-                    documentId
-                    number
-                    totalValue
-                    documentTotal
-                    documentSetName
-                    ourReference
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }
-                }
-            }
-        }';
+        $query = self::loadMutation('estimateCreate');
 
-        return Curl::simple('estimate/estimateCreate', $query, $variables);
+        return Curl::simple('estimateCreate', $query, $variables);
     }
 
     /**
@@ -127,30 +67,9 @@ class Estimate extends EndpointAbstract
      */
     public static function mutationEstimateUpdate(?array $variables = []): array
     {
-        $query = 'mutation estimateUpdate($companyId: Int!,$data: EstimateUpdate!)
-        {
-            estimateUpdate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    status
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        documentProductId
-                        productId
-                    }                              
-                }
-            }
-        }';
+        $query = self::loadMutation('estimateUpdate');
 
-        return Curl::simple('estimate/estimateUpdate', $query, $variables);
+        return Curl::simple('estimateUpdate', $query, $variables);
     }
 
     /**
@@ -164,12 +83,9 @@ class Estimate extends EndpointAbstract
      */
     public static function mutationEstimateGetPDF(?array $variables = []): array
     {
-        $query = 'mutation estimateGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            estimateGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('estimateGetPDF');
 
-        return Curl::simple('estimate/estimateGetPDF', $query, $variables);
+        return Curl::simple('estimateGetPDF', $query, $variables);
     }
 
     /**
@@ -183,11 +99,8 @@ class Estimate extends EndpointAbstract
      */
     public static function mutationEstimateSendMail(?array $variables = [])
     {
-        $query = 'mutation estimateSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            estimateSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('estimateSendMail');
 
-        return Curl::simple('estimate/estimateSendMail', $query, $variables);
+        return Curl::simple('estimateSendMail', $query, $variables);
     }
 }

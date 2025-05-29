@@ -1,0 +1,36 @@
+query propertyGroup($companyId: Int!,$propertyGroupId: String!)
+{
+    propertyGroup(companyId: $companyId,propertyGroupId: $propertyGroupId)
+    {
+        data
+        {
+            propertyGroupId
+            name
+            visible
+            deletable
+            properties
+            {
+                propertyId
+                name
+                visible
+                ordering
+                deletable
+                values
+                {
+                   propertyValueId
+                   code
+                   value
+                   visible
+                   ordering
+                   deletable
+                }
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

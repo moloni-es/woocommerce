@@ -1,0 +1,17 @@
+mutation paymentMethodCreate($companyId: Int!,$data: PaymentMethodInsert!)
+{
+    paymentMethodCreate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            paymentMethodId
+            name
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

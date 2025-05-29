@@ -18,24 +18,9 @@ class DeliveryMethods extends EndpointAbstract
      * @throws APIExeption
      */
     public static function mutationDeliveryMethodCreate(?array $variables = []) {
-        $query = 'mutation deliveryMethodCreate($companyId: Int!,$data: DeliveryMethodInsert!)
-        {
-            deliveryMethodCreate(companyId: $companyId,data: $data) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    deliveryMethodId
-                    name
-                }
-            }
-        }';
+        $query = self::loadMutation('deliveryMethodCreate');
 
-        return Curl::simple('deliverymethods/deliveryMethodCreate', $query, $variables);
+        return Curl::simple('deliveryMethodCreate', $query, $variables);
     }
 
     /**
@@ -48,33 +33,8 @@ class DeliveryMethods extends EndpointAbstract
      */
     public static function queryDeliveryMethods(?array $variables = []): array
     {
-        $query = 'query deliveryMethods($companyId: Int!,$options: DeliveryMethodOptions)
-        {
-            deliveryMethods(companyId: $companyId,options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    deliveryMethodId
-                    name
-                    isDefault
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-            }
-        }';
+        $query = self::loadQuery('deliveryMethods');
 
-        return Curl::complex('deliverymethods/deliveryMethods', $query, $variables, 'deliveryMethods');
+        return Curl::complex('deliveryMethods', $query, $variables);
     }
 }

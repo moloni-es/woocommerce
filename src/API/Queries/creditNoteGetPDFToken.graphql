@@ -1,0 +1,18 @@
+query creditNoteGetPDFToken($documentId: Int!)
+{
+    creditNoteGetPDFToken(documentId: $documentId)
+    {
+        data
+        {
+            token
+            filename
+            path
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

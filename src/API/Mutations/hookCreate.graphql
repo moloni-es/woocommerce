@@ -1,0 +1,18 @@
+mutation hookCreate($companyId: Int!,$data: HookInsert!)
+{
+    hookCreate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            hookId
+            url
+            name
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

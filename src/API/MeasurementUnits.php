@@ -19,34 +19,9 @@ class MeasurementUnits extends EndpointAbstract
      */
     public static function queryMeasurementUnits(?array $variables = []): array
     {
-        $query = 'query measurementUnits($companyId: Int!,$options: MeasurementUnitOptions)
-        {
-            measurementUnits(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    measurementUnitId
-                    name
-                    abbreviation
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('measurementUnits');
 
-        return Curl::complex('MeasurementUnits/measurementUnits', $query, $variables, 'measurementUnits');
+        return Curl::complex('measurementUnits', $query, $variables);
     }
 
     /**
@@ -60,22 +35,8 @@ class MeasurementUnits extends EndpointAbstract
      */
     public static function mutationMeasurementUnitCreate(?array $variables = []): array
     {
-        $query = 'mutation measurementUnitCreate($companyId: Int!,$data: MeasurementUnitInsert!)
-        {
-            measurementUnitCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    measurementUnitId
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('measurementUnitCreate');
 
-        return Curl::simple('MeasurementUnits/measurementUnitCreate', $query, $variables);
+        return Curl::simple('measurementUnitCreate', $query, $variables);
     }
 }

@@ -1,0 +1,19 @@
+query language($languageId: Int!)
+{
+    language(languageId: $languageId)
+    {
+        data
+        {
+            languageId
+            name
+            iso3166
+            flag
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

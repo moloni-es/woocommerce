@@ -1,0 +1,17 @@
+mutation receiptUpdate($companyId: Int!,$data: ReceiptUpdate!)
+{
+    receiptUpdate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            documentId
+            status
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

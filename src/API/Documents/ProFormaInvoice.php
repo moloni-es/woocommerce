@@ -19,31 +19,9 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function queryProFormaInvoice(?array $variables = [])
     {
-        $query = 'query proFormaInvoice($companyId: Int!,$documentId: Int!,$options: ProFormaInvoiceOptionsSingle)
-        {
-            proFormaInvoice(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('proFormaInvoice');
 
-        return Curl::simple('documents/proFormaInvoice', $query, $variables);
+        return Curl::simple('proFormaInvoice', $query, $variables);
     }
 
     /**
@@ -57,40 +35,9 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function queryProFormaInvoices(?array $variables = []): array
     {
-        $query = 'query proFormaInvoices($companyId: Int!,$options: ProFormaInvoiceOptions)
-        {
-            proFormaInvoices(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('proFormaInvoices');
 
-        return Curl::complex('documents/proFormaInvoices', $query, $variables, 'proFormaInvoices');
+        return Curl::complex('proFormaInvoices', $query, $variables);
     }
 
     /**
@@ -104,25 +51,9 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function queryProFormaInvoiceGetPDFToken(?array $variables = []): array
     {
-        $query = 'query proFormaInvoiceGetPDFToken($documentId: Int!)
-        {
-            proFormaInvoiceGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('proFormaInvoiceGetPDFToken');
 
-        return Curl::simple('documents/proFormaInvoiceGetPDFToken', $query, $variables);
+        return Curl::simple('proFormaInvoiceGetPDFToken', $query, $variables);
     }
 
     /**
@@ -136,37 +67,9 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function mutationProFormaInvoiceCreate(?array $variables = [])
     {
-        $query = 'mutation proFormaInvoiceCreate($companyId: Int!,$data: ProFormaInvoiceInsert!,$options: ProFormaInvoiceMutateOptions)
-        {
-            proFormaInvoiceCreate(companyId: $companyId,data: $data,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        productId
-                        documentProductId
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('proFormaInvoiceCreate');
 
-        return Curl::simple('documents/proFormaInvoiceCreate', $query, $variables);
+        return Curl::simple('proFormaInvoiceCreate', $query, $variables);
     }
 
     /**
@@ -180,24 +83,9 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function mutationProFormaInvoiceUpdate(?array $variables = []): array
     {
-        $query = 'mutation proFormaInvoiceUpdate($companyId: Int!,$data: ProFormaInvoiceUpdate!)
-        {
-            proFormaInvoiceUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('proFormaInvoiceUpdate');
 
-        return Curl::simple('documents/proFormaInvoiceUpdate', $query, $variables);
+        return Curl::simple('proFormaInvoiceUpdate', $query, $variables);
     }
 
     /**
@@ -211,12 +99,9 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function mutationProFormaInvoiceGetPDF(?array $variables = []): array
     {
-        $query = 'mutation proFormaInvoiceGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            proFormaInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('proFormaInvoiceGetPDF');
 
-        return Curl::simple('documents/proFormaInvoiceGetPDF', $query, $variables);
+        return Curl::simple('proFormaInvoiceGetPDF', $query, $variables);
     }
 
     /**
@@ -230,11 +115,8 @@ class ProFormaInvoice extends EndpointAbstract
      */
     public static function mutationProFormaInvoiceSendMail(?array $variables = [])
     {
-        $query = 'mutation proFormaInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            proFormaInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('proFormaInvoiceSendMail');
 
-        return Curl::simple('documents/proFormaInvoiceSendMail', $query, $variables);
+        return Curl::simple('proFormaInvoiceSendMail', $query, $variables);
     }
 }

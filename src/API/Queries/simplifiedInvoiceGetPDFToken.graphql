@@ -1,0 +1,18 @@
+query simplifiedInvoiceGetPDFToken($documentId: Int!)
+{
+    simplifiedInvoiceGetPDFToken(documentId: $documentId)
+    {
+        data
+        {
+            token
+            filename
+            path
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

@@ -1,0 +1,17 @@
+mutation stockMovementManualEntryCreate($companyId: Int!,$data: StockMovementManualInsert!)
+{
+    stockMovementManualEntryCreate(companyId: $companyId,data: $data)
+    {
+        data{
+            stockMovementId
+            type
+            direction
+            qty
+        }
+        errors{
+            field
+            msg
+        }
+    }
+}
+

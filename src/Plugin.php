@@ -4,6 +4,7 @@
 
 namespace MoloniES;
 
+use MoloniES\API\Companies;
 use MoloniES\Enums\Boolean;
 use MoloniES\Exceptions\APIExeption;
 use MoloniES\Exceptions\Core\MoloniException;

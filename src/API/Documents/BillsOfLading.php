@@ -19,34 +19,9 @@ class BillsOfLading extends EndpointAbstract
      */
     public static function mutationBillsOfLadingCreate(?array $variables = [])
     {
-        $query = 'mutation billsOfLadingCreate($companyId: Int!,$data: BillsOfLadingInsert!, $options: BillsOfLadingMutateOptions)
-        {
-            billsOfLadingCreate(companyId: $companyId,data: $data,options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    number
-                    totalValue
-                    currencyExchangeTotalValue
-                    documentTotal
-                    documentSetName
-                    ourReference
-                    products
-                    {
-                        productId
-                        documentProductId
-                    }
-                }
-            }
-        }';
+        $query = self::loadMutation('billsOfLadingCreate');
 
-        return Curl::simple('documents/billsOfLadingCreate', $query, $variables);
+        return Curl::simple('billsOfLadingCreate', $query, $variables);
     }
 
     /**
@@ -60,28 +35,9 @@ class BillsOfLading extends EndpointAbstract
      */
     public static function mutationBillsOfLadingUpdate(?array $variables = [])
     {
-        $query = 'mutation billsOfLadingUpdate($companyId: Int!,$data: BillsOfLadingUpdate!)
-        {
-            billsOfLadingUpdate(companyId: $companyId,data: $data)
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                data
-                {
-                    documentId
-                    number
-                    totalValue
-                    documentTotal
-                    documentSetName
-                    ourReference
-                }
-            }
-        }';
+        $query = self::loadMutation('billsOfLadingUpdate');
 
-        return Curl::simple('documents/billsOfLadingUpdate', $query, $variables);
+        return Curl::simple('billsOfLadingUpdate', $query, $variables);
     }
 
     /**
@@ -95,25 +51,9 @@ class BillsOfLading extends EndpointAbstract
      */
     public static function queryBillsOfLadingGetPDFToken(?array $variables = [])
     {
-        $query = 'query billsOfLadingGetPDFToken($documentId: Int!)
-        {
-            billsOfLadingGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('billsOfLadingGetPDFToken');
 
-        return Curl::simple('documents/billsOfLadingGetPDFToken', $query, $variables);
+        return Curl::simple('billsOfLadingGetPDFToken', $query, $variables);
     }
 
     /**
@@ -127,12 +67,9 @@ class BillsOfLading extends EndpointAbstract
      */
     public static function mutationBillsOfLadingGetPDF(?array $variables = [])
     {
-        $query = 'mutation billsOfLadingGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            billsOfLadingGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('billsOfLadingGetPDF');
 
-        return Curl::simple('documents/billsOfLadingGetPDF', $query, $variables);
+        return Curl::simple('billsOfLadingGetPDF', $query, $variables);
     }
 
     /**
@@ -146,11 +83,8 @@ class BillsOfLading extends EndpointAbstract
      */
     public static function mutationBillsOfLadingSendMail(?array $variables = [])
     {
-        $query = 'mutation billsOfLadingSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            billsOfLadingSendMail(companyId: companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('billsOfLadingSendMail');
 
-        return Curl::simple('documents/billsOfLadingSendMail', $query, $variables);
+        return Curl::simple('billsOfLadingSendMail', $query, $variables);
     }
 }

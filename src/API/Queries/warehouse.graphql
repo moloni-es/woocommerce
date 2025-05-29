@@ -1,0 +1,19 @@
+query warehouse($companyId: Int!,$warehouseId: Int!)
+{
+    warehouse(companyId: $companyId,warehouseId: $warehouseId)
+    {
+        data
+        {
+            warehouseId
+            visible
+            name
+            number
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

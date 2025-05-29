@@ -1,0 +1,27 @@
+query deliveryMethods($companyId: Int!,$options: DeliveryMethodOptions)
+{
+    deliveryMethods(companyId: $companyId,options: $options)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            deliveryMethodId
+            name
+            isDefault
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+    }
+}
+

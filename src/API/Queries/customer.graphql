@@ -1,0 +1,24 @@
+query customer($companyId: Int!,$customerId: Int!,$options: CustomerOptionsSingle)
+{
+    customer(companyId: $companyId,customerId: $customerId,options: $options)
+    {
+        data
+        {
+            customerId
+            name
+            discount
+            documentSet
+            {
+                documentSetId
+                name
+            }
+            vat
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

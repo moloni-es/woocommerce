@@ -20,25 +20,9 @@ class Hooks extends EndpointAbstract
      */
     public static function queryHooks(?array $variables = []): array
     {
-        $query = 'query hooks($companyId: Int!,$options: HookOptions)
-        {
-            hooks(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    hookId
-                    url
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('hooks');
 
-        return Curl::complex('hooks/hooks', $query, $variables, 'hooks');
+        return Curl::complex('hooks', $query, $variables);
     }
 
     /**
@@ -52,25 +36,9 @@ class Hooks extends EndpointAbstract
      */
     public static function mutationHookCreate(?array $variables = []): array
     {
-        $query = 'mutation hookCreate($companyId: Int!,$data: HookInsert!)
-        {
-            hookCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    hookId
-                    url
-                    name
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('hookCreate');
 
-        return Curl::simple('hooks/hookCreate', $query, $variables);
+        return Curl::simple('hookCreate', $query, $variables);
     }
 
     /**
@@ -84,21 +52,8 @@ class Hooks extends EndpointAbstract
      */
     public static function mutationHookDelete(?array $variables = []): array
     {
-        $query = 'mutation hookDelete($companyId: Int!,$hookId: [String!]!)
-        {
-            hookDelete(companyId: $companyId,hookId: $hookId)
-            {
-                status
-                deletedCount
-                elementsCount
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('hookDelete');
 
-        return Curl::simple('hooks/hookDelete', $query, $variables);
+        return Curl::simple('hookDelete', $query, $variables);
     }
 }

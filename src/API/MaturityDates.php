@@ -19,30 +19,8 @@ class MaturityDates extends EndpointAbstract
      */
     public static function queryMaturityDates(?array $variables = []): array
     {
-        $query = 'query maturityDates($companyId: Int!,$options: MaturityDateOptions){
-            maturityDates(companyId: $companyId, options: $options) {
-                errors{
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    maturityDateId
-                    name
-                    days
-                    discount
-                }
-            }
-        }';
+        $query = self::loadQuery('maturityDates');
 
-        return Curl::complex('maturitydates/maturityDates', $query, $variables, 'maturityDates');
+        return Curl::complex('maturityDates', $query, $variables);
     }
 }

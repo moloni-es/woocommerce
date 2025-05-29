@@ -1,0 +1,33 @@
+query simplifiedInvoices($companyId: Int!,$options: SimplifiedInvoiceOptions)
+{
+    simplifiedInvoices(companyId: $companyId,options: $options)
+    {
+        data
+        {
+            documentId
+            number
+            ourReference
+            yourReference
+            entityVat
+            entityNumber
+            entityName
+            documentSetName
+            totalValue
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

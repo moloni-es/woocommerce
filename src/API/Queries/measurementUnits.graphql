@@ -1,0 +1,27 @@
+query measurementUnits($companyId: Int!,$options: MeasurementUnitOptions)
+{
+    measurementUnits(companyId: $companyId,options: $options)
+    {
+        data
+        {
+            measurementUnitId
+            name
+            abbreviation
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

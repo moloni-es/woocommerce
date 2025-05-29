@@ -19,31 +19,9 @@ class Receipt extends EndpointAbstract
      */
     public static function queryReceipt(?array $variables = []): array
     {
-        $query = 'query receipt($companyId: Int!,$documentId: Int!,$options: ReceiptOptionsSingle)
-        {
-            receipt(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('receipt');
 
-        return Curl::simple('documents/receipt', $query, $variables);
+        return Curl::simple('receipt', $query, $variables);
     }
 
     /**
@@ -57,40 +35,9 @@ class Receipt extends EndpointAbstract
      */
     public static function queryReceipts(?array $variables = []): array
     {
-        $query = 'query receipts($companyId: Int!,$options: ReceiptOptions)
-        {
-            receipts(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }                        
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('receipts');
 
-        return Curl::complex('documents/receipts', $query, $variables, 'receipts');
+        return Curl::complex('receipts', $query, $variables);
     }
 
     /**
@@ -104,25 +51,9 @@ class Receipt extends EndpointAbstract
      */
     public static function queryReceiptGetPDFToken(?array $variables = []): array
     {
-        $query = 'query receiptGetPDFToken($documentId: Int!)
-        {
-            receiptGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('receiptGetPDFToken');
 
-        return Curl::simple('documents/receiptGetPDFToken', $query, $variables);
+        return Curl::simple('receiptGetPDFToken', $query, $variables);
     }
 
     /**
@@ -136,30 +67,9 @@ class Receipt extends EndpointAbstract
      */
     public static function mutationReceiptCreate(?array $variables = [])
     {
-        $query = 'mutation receiptCreate($companyId: Int!,$data: ReceiptInsert!,$options: ReceiptMutateOptions)
-        {
-            receiptCreate(companyId: $companyId,data: $data,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                    currencyExchangeTotalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('receiptCreate');
 
-        return Curl::simple('documents/receiptCreate', $query, $variables);
+        return Curl::simple('receiptCreate', $query, $variables);
     }
 
     /**
@@ -173,24 +83,9 @@ class Receipt extends EndpointAbstract
      */
     public static function mutationReceiptUpdate(?array $variables = []): array
     {
-        $query = 'mutation receiptUpdate($companyId: Int!,$data: ReceiptUpdate!)
-        {
-            receiptUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('receiptUpdate');
 
-        return Curl::simple('documents/receiptUpdate', $query, $variables);
+        return Curl::simple('receiptUpdate', $query, $variables);
     }
 
     /**
@@ -204,12 +99,9 @@ class Receipt extends EndpointAbstract
      */
     public static function mutationReceiptSendMail(?array $variables = [])
     {
-        $query = 'mutation receiptSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            receiptSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('receiptSendMail');
 
-        return Curl::simple('documents/receiptSendMail', $query, $variables);
+        return Curl::simple('receiptSendMail', $query, $variables);
     }
 
     /**
@@ -223,11 +115,8 @@ class Receipt extends EndpointAbstract
      */
     public static function mutationReceiptGetPDF(?array $variables = []): array
     {
-        $query = 'mutation receiptGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            receiptGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('receiptGetPDF');
 
-        return Curl::simple('documents/receiptGetPDF', $query, $variables);
+        return Curl::simple('receiptGetPDF', $query, $variables);
     }
 }

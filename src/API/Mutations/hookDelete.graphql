@@ -1,0 +1,15 @@
+mutation hookDelete($companyId: Int!,$hookId: [String!]!)
+{
+    hookDelete(companyId: $companyId,hookId: $hookId)
+    {
+        status
+        deletedCount
+        elementsCount
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

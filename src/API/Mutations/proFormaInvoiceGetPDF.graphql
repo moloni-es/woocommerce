@@ -1,0 +1,5 @@
+mutation proFormaInvoiceGetPDF($companyId: Int!,$documentId: Int!)
+{
+    proFormaInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
+}
+

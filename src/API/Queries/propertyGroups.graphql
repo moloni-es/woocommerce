@@ -1,0 +1,45 @@
+query propertyGroups($companyId: Int!,$options: PropertyGroupOptions)
+{
+    propertyGroups(companyId: $companyId,options: $options)
+    {
+        data
+        {
+            propertyGroupId
+            name
+            visible
+            deletable
+            properties
+            {
+                propertyId
+                name
+                visible
+                ordering
+                deletable
+                values
+                {
+                   propertyValueId
+                   code
+                   value
+                   visible
+                   ordering
+                   deletable
+                }
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+        options
+        {
+            pagination
+            {
+                page
+                qty
+                count
+            }
+        }
+    }
+}
+

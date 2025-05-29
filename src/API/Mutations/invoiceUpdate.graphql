@@ -1,0 +1,17 @@
+mutation invoiceUpdate($companyId: Int!,$data: InvoiceUpdate!)
+{
+    invoiceUpdate(companyId: $companyId,data: $data)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            documentId
+            status
+        }
+    }
+}
+

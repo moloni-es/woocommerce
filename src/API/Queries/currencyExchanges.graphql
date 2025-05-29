@@ -1,0 +1,28 @@
+query currencyExchanges($options: CurrencyExchangeOptions)
+{
+    currencyExchanges(options: $options)
+    {
+        data
+        {
+            currencyExchangeId
+            name
+            exchange
+            from
+            {
+                currencyId
+                iso4217
+            }
+            to
+            {
+                currencyId
+                iso4217
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

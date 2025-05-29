@@ -1,0 +1,16 @@
+mutation productCategoryCreate($companyId: Int!,$data: ProductCategoryInsert!)
+{
+    productCategoryCreate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            productCategoryId
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

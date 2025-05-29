@@ -1,0 +1,16 @@
+mutation measurementUnitCreate($companyId: Int!,$data: MeasurementUnitInsert!)
+{
+    measurementUnitCreate(companyId: $companyId,data: $data)
+    {
+        data
+        {
+            measurementUnitId
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

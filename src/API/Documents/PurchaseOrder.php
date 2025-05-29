@@ -19,31 +19,9 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function queryPurchaseOrder(?array $variables = []): array
     {
-        $query = 'query purchaseOrder($companyId: Int!,$documentId: Int!,$options: PurchaseOrderOptionsSingle)
-        {
-            purchaseOrder(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('purchaseOrder');
 
-        return Curl::simple('documents/purchaseOrder', $query, $variables);
+        return Curl::simple('purchaseOrder', $query, $variables);
     }
 
     /**
@@ -57,40 +35,9 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function queryPurchaseOrders(?array $variables = []): array
     {
-        $query = 'query purchaseOrders($companyId: Int!,$options: PurchaseOrderOptions)
-        {
-            purchaseOrders(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('purchaseOrders');
 
-        return Curl::complex('documents/purchaseOrders', $query, $variables, 'purchaseOrders');
+        return Curl::complex('purchaseOrders', $query, $variables);
     }
 
     /**
@@ -104,25 +51,9 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function queryPurchaseOrderGetPDFToken(?array $variables = []): array
     {
-        $query = 'query purchaseOrderGetPDFToken($documentId: Int!)
-        {
-            purchaseOrderGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('purchaseOrderGetPDFToken');
 
-        return Curl::simple('documents/purchaseOrderGetPDFToken', $query, $variables);
+        return Curl::simple('purchaseOrderGetPDFToken', $query, $variables);
     }
 
     /**
@@ -136,37 +67,9 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function mutationPurchaseOrderCreate(?array $variables = [])
     {
-        $query = 'mutation purchaseOrderCreate($companyId: Int!,$data: PurchaseOrderInsert!,$options: PurchaseOrderMutateOptions)
-        {
-            purchaseOrderCreate(companyId: $companyId,data: $data,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        productId
-                        documentProductId
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('purchaseOrderCreate');
 
-        return Curl::simple('documents/purchaseOrderCreate', $query, $variables);
+        return Curl::simple('purchaseOrderCreate', $query, $variables);
     }
 
     /**
@@ -180,24 +83,9 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function mutationPurchaseOrderUpdate(?array $variables = [])
     {
-        $query = 'mutation purchaseOrderUpdate($companyId: Int!,$data: PurchaseOrderUpdate!)
-        {
-            purchaseOrderUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('purchaseOrderUpdate');
 
-        return Curl::simple('documents/purchaseOrderUpdate', $query, $variables);
+        return Curl::simple('purchaseOrderUpdate', $query, $variables);
     }
 
     /**
@@ -211,12 +99,9 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function mutationPurchaseOrderGetPDF(?array $variables = []): array
     {
-        $query = 'mutation purchaseOrderGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            purchaseOrderGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('purchaseOrderGetPDF');
 
-        return Curl::simple('documents/purchaseOrderGetPDF', $query, $variables);
+        return Curl::simple('purchaseOrderGetPDF', $query, $variables);
     }
 
     /**
@@ -230,11 +115,8 @@ class PurchaseOrder extends EndpointAbstract
      */
     public static function mutationPurchaseOrderSendMail(?array $variables = [])
     {
-        $query = 'mutation purchaseOrderSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            purchaseOrderSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('purchaseOrderSendMail');
 
-        return Curl::simple('documents/purchaseOrderSendMail', $query, $variables);
+        return Curl::simple('purchaseOrderSendMail', $query, $variables);
     }
 }

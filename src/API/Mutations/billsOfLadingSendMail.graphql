@@ -1,0 +1,5 @@
+mutation billsOfLadingSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
+{
+    billsOfLadingSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
+}
+

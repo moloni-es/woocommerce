@@ -18,33 +18,8 @@ class GeographicZones extends EndpointAbstract
      */
     public static function queryGeographicZones(?array $variables = []): array
     {
-        $query = 'query geographicZones($companyId: Int!,$options: GeographicZoneOptions)
-        {
-            geographicZones(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    geographicZoneId
-                    name
-                    abbreviation
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('geographicZones');
 
-        return Curl::complex('geographiczones/geographicZones', $query, $variables, 'geographicZones');
+        return Curl::complex('geographicZones', $query, $variables);
     }
 }

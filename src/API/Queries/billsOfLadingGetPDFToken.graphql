@@ -1,0 +1,18 @@
+query billsOfLadingGetPDFToken($documentId: Int!)
+{
+    billsOfLadingGetPDFToken(documentId: $documentId)
+    {
+        data
+        {
+            token
+            filename
+            path
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+

@@ -19,25 +19,9 @@ class Customers extends EndpointAbstract
      */
     public static function mutationCustomerCreate(?array $variables = []): array
     {
-        $query = 'mutation customerCreate($companyId: Int!,$data: CustomerInsert!)
-        {
-            customerCreate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    customerId
-                    name
-                    vat
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('customerCreate');
 
-        return Curl::simple('customers/customerCreate', $query, $variables);
+        return Curl::simple('customerCreate', $query, $variables);
     }
 
     /**
@@ -51,25 +35,9 @@ class Customers extends EndpointAbstract
      */
     public static function mutationCustomerUpdate(?array $variables = [])
     {
-        $query = 'mutation customerUpdate($companyId: Int!,$data: CustomerUpdate!)
-        {
-            customerUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    customerId
-                    name
-                    number
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('customerUpdate');
 
-        return Curl::simple('customers/customerUpdate', $query, $variables);
+        return Curl::simple('customerUpdate', $query, $variables);
     }
 
     /**
@@ -83,31 +51,9 @@ class Customers extends EndpointAbstract
      */
     public static function queryCustomer(?array $variables = []): array
     {
-        $query = 'query customer($companyId: Int!,$customerId: Int!,$options: CustomerOptionsSingle)
-        {
-            customer(companyId: $companyId,customerId: $customerId,options: $options)
-            {
-                data
-                {
-                    customerId
-                    name
-                    discount
-                    documentSet
-                    {
-                        documentSetId
-                        name
-                    }
-                    vat
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('customer');
 
-        return Curl::simple('customers/customer', $query, $variables);
+        return Curl::simple('customer', $query, $variables);
     }
 
     /**
@@ -121,40 +67,9 @@ class Customers extends EndpointAbstract
      */
     public static function queryCustomers(?array $variables = []): array
     {
-        $query = 'query customers($companyId: Int!,$options: CustomerOptions)
-        {
-            customers(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    customerId
-                    name
-                    number
-                    discount
-                    documentSet
-                    {
-                        documentSetId
-                        name
-                    }
-                    country
-                    {
-                        countryId
-                    }
-                    language
-                    {
-                        languageId
-                    }
-                    vat
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('customers');
 
-        return Curl::simple('customers/customers', $query, $variables);
+        return Curl::simple('customers', $query, $variables);
     }
 
     /**
@@ -168,19 +83,8 @@ class Customers extends EndpointAbstract
      */
     public static function queryCustomerNextNumber(?array $variables = []): array
     {
-        $query = 'query customerNextNumber($companyId: Int!, $options: GetNextCustomerNumberOptions)
-        {
-            customerNextNumber(companyId: $companyId, options: $options)
-            {
-                data
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('customerNextNumber');
 
-        return Curl::simple('customers/customerNextNumber', $query, $variables);
+        return Curl::simple('customerNextNumber', $query, $variables);
     }
 }

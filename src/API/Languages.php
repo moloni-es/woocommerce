@@ -20,26 +20,9 @@ class Languages extends EndpointAbstract
      */
     public static function queryLanguage(?array $variables = []): array
     {
-        $query = 'query language($languageId: Int!)
-        {
-            language(languageId: $languageId)
-            {
-                data
-                {
-                    languageId
-                    name
-                    iso3166
-                    flag
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('language');
 
-        return Curl::simple('languages/language', $query, $variables);
+        return Curl::simple('language', $query, $variables);
     }
 
     /**
@@ -52,34 +35,8 @@ class Languages extends EndpointAbstract
      */
     public static function queryLanguages(?array $variables = []): array
     {
-        $query = 'query languages($options: LanguageOptions)
-        {
-            languages(options: $options)
-            {
-                data
-                {
-                    languageId
-                    name
-                    iso3166
-                    flag
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('languages');
 
-        return Curl::complex('languages/languages', $query, $variables, 'languages');
+        return Curl::complex('languages', $query, $variables);
     }
 }

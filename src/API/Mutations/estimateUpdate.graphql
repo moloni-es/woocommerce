@@ -1,0 +1,23 @@
+mutation estimateUpdate($companyId: Int!,$data: EstimateUpdate!)
+{
+    estimateUpdate(companyId: $companyId,data: $data)
+    {
+        errors
+        {
+            field
+            msg
+        }
+        data
+        {
+            documentId
+            status
+            currencyExchangeTotalValue
+            products
+            {
+                documentProductId
+                productId
+            }
+        }
+    }
+}
+

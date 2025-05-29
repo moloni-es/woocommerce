@@ -1,0 +1,5 @@
+mutation estimateGetPDF($companyId: Int!,$documentId: Int!)
+{
+    estimateGetPDF(companyId: $companyId,documentId: $documentId)
+}
+

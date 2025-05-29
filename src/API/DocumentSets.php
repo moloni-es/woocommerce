@@ -19,32 +19,8 @@ class DocumentSets extends EndpointAbstract
      */
     public static function queryDocumentSets(?array $variables = []): array
     {
-        $query = 'query documentSets($companyId: Int!,$options: DocumentSetOptions)
-        {
-            documentSets(companyId: $companyId, options: $options) 
-            {
-                errors
-                {
-                    field
-                    msg
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                data{
-                    documentSetId
-                    name
-                    isDefault
-                }
-            }
-        }';
+        $query = self::loadQuery('documentSets');
 
-        return Curl::complex('documents/documentSets', $query, $variables, 'documentSets');
+        return Curl::complex('documentSets', $query, $variables);
     }
 }

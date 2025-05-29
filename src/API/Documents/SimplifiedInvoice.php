@@ -18,31 +18,9 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function querySimplifiedInvoice(?array $variables = []): array
     {
-        $query = 'query simplifiedInvoice($companyId: Int!,$documentId: Int!,$options: SimplifiedInvoiceOptionsSingle)
-        {
-            simplifiedInvoice(companyId: $companyId,documentId: $documentId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('simplifiedInvoice');
 
-        return Curl::simple('documents/simplifiedInvoice', $query, $variables);
+        return Curl::simple('simplifiedInvoice', $query, $variables);
     }
 
     /**
@@ -55,40 +33,9 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function querySimplifiedInvoices(?array $variables = []): array
     {
-        $query = 'query simplifiedInvoices($companyId: Int!,$options: SimplifiedInvoiceOptions)
-        {
-            simplifiedInvoices(companyId: $companyId,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                }
-                options
-                {
-                    pagination
-                    {
-                        page
-                        qty
-                        count
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('simplifiedInvoices');
 
-        return Curl::complex('documents/simplifiedInvoices', $query, $variables, 'simplifiedInvoices');
+        return Curl::complex('simplifiedInvoices', $query, $variables);
     }
 
     /**
@@ -101,25 +48,9 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function querySimplifiedInvoiceGetPDFToken(?array $variables = []): array
     {
-        $query = 'query simplifiedInvoiceGetPDFToken($documentId: Int!)
-        {
-            simplifiedInvoiceGetPDFToken(documentId: $documentId)
-            {
-                data
-                {
-                    token
-                    filename
-                    path
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadQuery('simplifiedInvoiceGetPDFToken');
 
-        return Curl::simple('documents/simplifiedInvoiceGetPDFToken', $query, $variables);
+        return Curl::simple('simplifiedInvoiceGetPDFToken', $query, $variables);
     }
 
     /**
@@ -133,37 +64,9 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function mutationSimplifiedInvoiceCreate(?array $variables = [])
     {
-        $query = 'mutation simplifiedInvoiceCreate($companyId: Int!,$data: SimplifiedInvoiceInsert!,$options: SimplifiedInvoiceMutateOptions)
-        {
-            simplifiedInvoiceCreate(companyId: $companyId,data: $data,options: $options)
-            {
-                data
-                {
-                    documentId
-                    number
-                    ourReference
-                    yourReference
-                    entityVat
-                    entityNumber
-                    entityName
-                    documentSetName
-                    totalValue
-                    currencyExchangeTotalValue
-                    products
-                    {
-                        productId
-                        documentProductId
-                    }
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('simplifiedInvoiceCreate');
 
-        return Curl::simple('documents/simplifiedInvoiceCreate', $query, $variables);
+        return Curl::simple('simplifiedInvoiceCreate', $query, $variables);
     }
 
     /**
@@ -177,24 +80,9 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function mutationSimplifiedInvoiceUpdate(?array $variables = []): array
     {
-        $query = 'mutation simplifiedInvoiceUpdate($companyId: Int!,$data: SimplifiedInvoiceUpdate!)
-        {
-            simplifiedInvoiceUpdate(companyId: $companyId,data: $data)
-            {
-                data
-                {
-                    documentId
-                    status
-                }
-                errors
-                {
-                    field
-                    msg
-                }
-            }
-        }';
+        $query = self::loadMutation('simplifiedInvoiceUpdate');
 
-        return Curl::simple('documents/simplifiedInvoiceUpdate', $query, $variables);
+        return Curl::simple('simplifiedInvoiceUpdate', $query, $variables);
     }
 
     /**
@@ -208,12 +96,9 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function mutationSimplifiedInvoiceGetPDF(?array $variables = []): array
     {
-        $query = 'mutation simplifiedInvoiceGetPDF($companyId: Int!,$documentId: Int!)
-        {
-            simplifiedInvoiceGetPDF(companyId: $companyId,documentId: $documentId)
-        }';
+        $query = self::loadMutation('simplifiedInvoiceGetPDF');
 
-        return Curl::simple('documents/simplifiedInvoiceGetPDF', $query, $variables);
+        return Curl::simple('simplifiedInvoiceGetPDF', $query, $variables);
     }
 
     /**
@@ -227,11 +112,8 @@ class SimplifiedInvoice extends EndpointAbstract
      */
     public static function mutationSimplifiedInvoiceSendMail(?array $variables = [])
     {
-        $query = 'mutation simplifiedInvoiceSendMail($companyId: Int!,$documents: [Int]!,$mailData: MailData)
-        {
-            simplifiedInvoiceSendMail(companyId: $companyId,documents: $documents,mailData: $mailData)
-        }';
+        $query = self::loadMutation('simplifiedInvoiceSendMail');
 
-        return Curl::simple('documents/simplifiedInvoiceSendMail', $query, $variables);
+        return Curl::simple('simplifiedInvoiceSendMail', $query, $variables);
     }
 }

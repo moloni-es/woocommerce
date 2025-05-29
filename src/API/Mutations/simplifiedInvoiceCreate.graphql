@@ -1,0 +1,30 @@
+mutation simplifiedInvoiceCreate($companyId: Int!,$data: SimplifiedInvoiceInsert!,$options: SimplifiedInvoiceMutateOptions)
+{
+    simplifiedInvoiceCreate(companyId: $companyId,data: $data,options: $options)
+    {
+        data
+        {
+            documentId
+            number
+            ourReference
+            yourReference
+            entityVat
+            entityNumber
+            entityName
+            documentSetName
+            totalValue
+            currencyExchangeTotalValue
+            products
+            {
+                productId
+                documentProductId
+            }
+        }
+        errors
+        {
+            field
+            msg
+        }
+    }
+}
+
