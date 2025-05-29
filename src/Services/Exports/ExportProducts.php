@@ -50,8 +50,15 @@ class ExportProducts extends ExportService
                 } else {
                     $this->createProductSimple($wcProduct);
                 }
-            } catch (MoloniException|Exception $e) {
-                $this->errorProducts[] = [$wcProduct->get_id() => $e->getMessage()];
+            } catch (MoloniException $e) {
+                $this->errorProducts[] = [$wcProduct->get_id() => [
+                    'message' => $e->getMessage(),
+                    'data' => $e->getData(),
+                ]];
+            } catch (Exception $e) {
+                $this->errorProducts[] = [$wcProduct->get_id() => [
+                    'message' => $e->getMessage(),
+                ]];
             }
         }
 
@@ -77,7 +84,9 @@ class ExportProducts extends ExportService
     private function createProductSimple(WC_Product $wcProduct)
     {
         if (empty($wcProduct->get_sku())) {
-            $this->errorProducts[] = [$wcProduct->get_id() => 'Product has no reference in WooCommerce.'];
+            $this->errorProducts[] = [$wcProduct->get_id() => [
+                'message' => 'Product has no reference in WooCommerce.',
+            ]];
 
             return;
         }
@@ -85,7 +94,9 @@ class ExportProducts extends ExportService
         $moloniProduct = $this->fetchMoloniProduct($wcProduct);
 
         if (!empty($moloniProduct)) {
-            $this->errorProducts[] = [$wcProduct->get_id() => 'Product already exists in Moloni.'];
+            $this->errorProducts[] = [$wcProduct->get_id() => [
+                'message' => 'Product already exists in Moloni.',
+            ]];
 
             return;
         }
@@ -105,7 +116,9 @@ class ExportProducts extends ExportService
     private function createProductWithVariants(WC_Product $wcProduct)
     {
         if (empty($wcProduct->get_sku())) {
-            $this->errorProducts[] = [$wcProduct->get_id() => 'Product has no reference in WooCommerce.'];
+            $this->errorProducts[] = [$wcProduct->get_id() => [
+                'message' => 'Product has no reference in WooCommerce.',
+            ]];
 
             return;
         }
@@ -113,7 +126,9 @@ class ExportProducts extends ExportService
         $moloniProduct = $this->fetchMoloniProduct($wcProduct);
 
         if (!empty($moloniProduct)) {
-            $this->errorProducts[] = [$wcProduct->get_id() => 'Product already exists in Moloni.'];
+            $this->errorProducts[] = [$wcProduct->get_id() => [
+                'message' => 'Product already exists in Moloni.',
+            ]];
 
             return;
         }
@@ -138,7 +153,9 @@ class ExportProducts extends ExportService
             $wcVariation = wc_get_product($variationId);
 
             if (empty($wcVariation->get_sku())) {
-                $this->errorProducts[] = [$wcVariation->get_id() => 'Product has no reference in WooCommerce.'];
+                $this->errorProducts[] = [$wcVariation->get_id() => [
+                    'message' => 'Variation has no reference in WooCommerce.',
+                ]];
 
                 continue;
             }
@@ -146,7 +163,9 @@ class ExportProducts extends ExportService
             $moloniProduct = $this->fetchMoloniProduct($wcVariation);
 
             if (!empty($moloniProduct)) {
-                $this->errorProducts[] = [$wcVariation->get_id() => 'Product already exists in Moloni.'];
+                $this->errorProducts[] = [$wcVariation->get_id() => [
+                    'message' => 'Variation already exists in Moloni.',
+                ]];
 
                 return;
             }

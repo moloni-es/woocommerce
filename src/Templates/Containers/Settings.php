@@ -20,7 +20,7 @@ use MoloniES\Model;
 use MoloniES\Tools;
 
 try {
-    $company = Companies::queryCompany();
+    $company = Companies::queryCompany()['data']['company']['data'] ?? [];
     $documentSets = DocumentSets::queryDocumentSets();
     $paymentMethods = PaymentMethods::queryPaymentMethods();
     $maturityDates = MaturityDates::queryMaturityDates();
@@ -59,7 +59,7 @@ try {
                             id="company_slug"
                             name="opt[company_slug]"
                             type="text"
-                            value="<?= $company['data']['company']['data']['slug'] ?>"
+                            value="<?= $company['slug'] ?>"
                             readonly
                             style="width: 330px;"
                     >
@@ -328,18 +328,17 @@ try {
         <table class="form-table mb-4">
             <tbody>
             <tr>
+                <?php
+                $reasonName = 'exemption_reason';
+                $reasonValue = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
+                ?>
                 <th>
-                    <label for="exemption_reason">
+                    <label for="<?= $reasonName ?>">
                         <?php esc_html_e('Exemption reason', 'moloni_es') ?>
                     </label>
                 </th>
                 <td>
-                    <input id="exemption_reason"
-                           name="opt[exemption_reason]"
-                           type="text"
-                           value="<?= (defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '') ?>"
-                           class="inputOut"
-                    >
+                    <?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Settings/ExemptionOption.php'; ?>
 
                     <p class='description'>
                         <?php esc_html_e('Will be used if items do not have tax', 'moloni_es') ?>
@@ -348,17 +347,18 @@ try {
             </tr>
 
             <tr>
+                <?php
+                $reasonName = 'exemption_reason_shipping';
+                $reasonValue = defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '';
+                ?>
+
                 <th>
-                    <label for="exemption_reason_shipping">
+                    <label for="<?= $reasonName ?>">
                         <?php esc_html_e('Shipping exemption reason', 'moloni_es') ?>
                     </label>
                 </th>
                 <td>
-                    <input id="exemption_reason_shipping" name="opt[exemption_reason_shipping]"
-                           type="text"
-                           value="<?= (defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '') ?>"
-                           class="inputOut"
-                    >
+                    <?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Settings/ExemptionOption.php'; ?>
 
                     <p class='description'>
                         <?php esc_html_e('Will be used if shipping does not have tax', 'moloni_es') ?>
@@ -381,17 +381,18 @@ try {
             <tbody>
 
             <tr>
+                <?php
+                $reasonName = 'exemption_reason_extra_community';
+                $reasonValue = defined('EXEMPTION_REASON_EXTRA_COMMUNITY') ? EXEMPTION_REASON_EXTRA_COMMUNITY : '';
+                ?>
+
                 <th>
-                    <label for="exemption_reason_extra_community">
+                    <label for="<?= $reasonName ?>">
                         <?php esc_html_e('Exemption reason', 'moloni_es') ?>
                     </label>
                 </th>
                 <td>
-                    <input id="exemption_reason_extra_community" name="opt[exemption_reason_extra_community]"
-                           type="text"
-                           value="<?= (defined('EXEMPTION_REASON_EXTRA_COMMUNITY') ? EXEMPTION_REASON_EXTRA_COMMUNITY : '') ?>"
-                           class="inputOut"
-                    >
+                    <?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Settings/ExemptionOption.php'; ?>
 
                     <p class='description'>
                         <?php esc_html_e('Will be used if items do not have tax', 'moloni_es') ?>
@@ -400,17 +401,18 @@ try {
             </tr>
 
             <tr>
+                <?php
+                $reasonName = 'exemption_reason_shipping_extra_community';
+                $reasonValue = defined('EXEMPTION_REASON_SHIPPING_EXTRA_COMMUNITY') ? EXEMPTION_REASON_SHIPPING_EXTRA_COMMUNITY : '';
+                ?>
+
                 <th>
-                    <label for="exemption_reason_shipping_extra_community">
+                    <label for="<?= $reasonName ?>">
                         <?php esc_html_e('Shipping exemption reason', 'moloni_es') ?>
                     </label>
                 </th>
                 <td>
-                    <input id="exemption_reason_shipping_extra_community"
-                           name="opt[exemption_reason_shipping_extra_community]" type="text"
-                           value="<?= (defined('EXEMPTION_REASON_SHIPPING_EXTRA_COMMUNITY') ? EXEMPTION_REASON_SHIPPING_EXTRA_COMMUNITY : '') ?>"
-                           class="inputOut"
-                    >
+                    <?php include MOLONI_ES_TEMPLATE_DIR . 'Blocks/Settings/ExemptionOption.php'; ?>
 
                     <p class='description'>
                         <?php esc_html_e('Will be used if shipping does not have tax', 'moloni_es') ?>
