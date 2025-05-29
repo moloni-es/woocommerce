@@ -143,7 +143,7 @@ class CreateMoloniDocument
 
     private function shouldCreateBillOfLading(): bool
     {
-        if (defined('DOCUMENT_STATUS') && (int)DOCUMENT_STATUS === DocumentStatus::DRAFT) {
+        if (!defined('DOCUMENT_STATUS') || (int)DOCUMENT_STATUS === DocumentStatus::DRAFT) {
             return false;
         }
 
