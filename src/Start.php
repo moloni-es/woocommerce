@@ -158,7 +158,7 @@ class Start
                 $variables = [
                     'companyId' => $company['company']['companyId'],
                     'options' => [
-                        'defaultLanguageId' => Languages::ES
+                        'defaultLanguageId' => Languages::EN
                     ]
                 ];
 
