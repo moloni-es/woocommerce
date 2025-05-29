@@ -17,9 +17,9 @@ class Companies extends EndpointAbstract
      */
     public static function queryMe(): array
     {
-        $action = 'companies/me';
+        $action = 'me';
 
-        $query = self::loadQuery('me');
+        $query = self::loadQuery($action);
 
         if (empty(self::$requestsCache[$action])) {
             self::$requestsCache[$action] = Curl::simple($action, $query);

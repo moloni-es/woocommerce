@@ -27,19 +27,7 @@ abstract class EndpointAbstract
      */
     protected static function loadQuery(string $queryName): string
     {
-        if (!empty(static::$queryCache[$queryName])) {
-            return static::$queryCache[$queryName];
-        }
-
-        $queryPath = __DIR__ . '/Queries/' . $queryName . '.graphql';
-
-        if (!file_exists($queryPath)) {
-            throw new APIExeption("Query file not found: " . $queryPath);
-        }
-
-        self::$queryCache[$queryName] = file_get_contents($queryName);
-
-        return self::$queryCache[$queryName];
+        return self::loadFromFile('Queries', $queryName);
     }
 
     /**
@@ -49,18 +37,32 @@ abstract class EndpointAbstract
      */
     protected static function loadMutation(string $mutationName): string
     {
-        if (!empty(self::$queryCache[$mutationName])) {
-            return self::$queryCache[$mutationName];
+        return self::loadFromFile('Mutations', $mutationName);
+    }
+
+    /**
+     * Load mutation or query from a file
+     *
+     * @throws APIExeption
+     */
+    private static function loadFromFile($folder, $name): string
+    {
+        $path = MOLONI_ES_DIR . "/src/API/$folder/$name.graphql";
+
+        if (!file_exists($path)) {
+            throw new APIExeption("Query/Mutation file not found: $path");
         }
 
-        $mutationPath = __DIR__ . '/Mutations/' . $mutationName . '.graphql';
+        $contents = file_get_contents($path);
 
-        if (!file_exists($mutationPath)) {
-            throw new APIExeption("Mutation file not found: " . $mutationPath);
+        if ($contents === false) {
+            $error = error_get_last();
+
+            throw new APIExeption("Query/Mutation file failed to read: {$error['message']}");
         }
 
-        self::$queryCache[$mutationName] = file_get_contents($mutationPath);
+        self::$queryCache[$name] = $contents;
 
-        return self::$queryCache[$mutationName];
+        return $contents;
     }
 }

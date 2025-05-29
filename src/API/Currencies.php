@@ -19,9 +19,9 @@ class Currencies extends EndpointAbstract
      */
     public static function queryCurrencies(?array $variables = []): array
     {
-        $action = 'currencies/currencies';
+        $action = 'currencies';
 
-        $query = self::loadQuery('currencies');
+        $query = self::loadQuery($action);
 
         if (empty(self::$requestsCache[$action])) {
             self::$requestsCache[$action] = Curl::complex($action, $query, $variables);
