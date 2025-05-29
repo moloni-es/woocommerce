@@ -29,7 +29,7 @@ class OrderFees
     private $price;
 
     /** @var string */
-    private $exemption_reason;
+    private $exemption_reason = '';
 
     /** @var string */
     private $name;
@@ -238,10 +238,14 @@ class OrderFees
 
         if ($taxRate > 0) {
             $this->taxes[] = $this->setTax($taxRate);
-            $this->exemption_reason = '';
+
+            return $this;
+        }
+
+        if ($this->isCountryIntraCommunity()) {
+            $this->exemption_reason = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
         } else {
-            $this->exemption_reason = defined('EXEMPTION_REASON_SHIPPING') ? EXEMPTION_REASON_SHIPPING : '';
-            $this->taxes = [];
+            $this->exemption_reason = defined('EXEMPTION_REASON_EXTRA_COMMUNITY') ? EXEMPTION_REASON_EXTRA_COMMUNITY : '';
         }
 
         return $this;
@@ -318,5 +322,25 @@ class OrderFees
         }
 
         return $variables;
+    }
+
+    //          Auxiliary          //
+
+    /**
+     * Check if the country is intra community
+     *
+     * @return bool
+     */
+    private function isCountryIntraCommunity(): bool
+    {
+        if (!isset(Tools::$europeanCountryCodes[$this->fiscalZone['code']])) {
+            return false;
+        }
+
+        if ($this->fiscalZone['code'] === 'ES' && in_array($this->fiscalZone['state'], ['TF', 'GC'])) {
+            return false;
+        }
+
+        return true;
     }
 }

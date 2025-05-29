@@ -38,7 +38,7 @@ class OrderProduct
     private $price;
 
     /** @var string */
-    private $exemption_reason;
+    private $exemption_reason = '';
 
     /** @var string */
     private $name;
@@ -339,10 +339,14 @@ class OrderProduct
             }
         }
 
-        if (empty($this->taxes)) {
+        if (!empty($this->taxes)) {
+            return $this;
+        }
+
+        if ($this->isCountryIntraCommunity()) {
             $this->exemption_reason = defined('EXEMPTION_REASON') ? EXEMPTION_REASON : '';
         } else {
-            $this->exemption_reason = '';
+            $this->exemption_reason = defined('EXEMPTION_REASON_EXTRA_COMMUNITY') ? EXEMPTION_REASON_EXTRA_COMMUNITY : '';
         }
 
         return $this;
@@ -390,5 +394,25 @@ class OrderProduct
         if (defined('MOLONI_PRODUCT_WAREHOUSE') && (int)MOLONI_PRODUCT_WAREHOUSE > 0) {
             $this->warehouse_id = (int)MOLONI_PRODUCT_WAREHOUSE;
         }
+    }
+
+    //          Auxiliary          //
+
+    /**
+     * Check if country is intra community
+     *
+     * @return bool
+     */
+    private function isCountryIntraCommunity(): bool
+    {
+        if (!isset(Tools::$europeanCountryCodes[$this->fiscalZone['code']])) {
+            return false;
+        }
+
+        if ($this->fiscalZone['code'] === 'ES' && in_array($this->fiscalZone['state'], ['TF', 'GC'])) {
+            return false;
+        }
+
+        return true;
     }
 }
