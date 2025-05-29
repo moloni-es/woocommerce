@@ -21,6 +21,6 @@ class Context
             return false;
         }
 
-        return is_plugin_active('woocommerce-contribuinte/contribuinte-checkout.php');
+        return is_plugin_active('contribuinte-checkout/contribuinte-checkout.php');
     }
 }
