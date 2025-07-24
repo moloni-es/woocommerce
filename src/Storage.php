@@ -2,7 +2,7 @@
 
 namespace MoloniES;
 
-use Psr\Log\LoggerInterface;
+use MoloniES\Tools\Logger;
 
 class Storage
 {
@@ -20,7 +20,7 @@ class Storage
     /**
      * Logger instance
      *
-     * @var LoggerInterface|null
+     * @var Logger|null
      */
     public static $LOGGER;
 }
