@@ -9,7 +9,7 @@
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
-**Contributors:**      [moloni-es](https://github.com/moloni-es)  
+**Contributors:**      [Moloni](https://github.com/moloni-es)  
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  

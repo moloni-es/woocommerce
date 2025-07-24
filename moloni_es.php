@@ -2,6 +2,7 @@
 /**
  *
  *   Plugin Name:  Moloni España
+ *   Requires Plugins: woocommerce
  *   Description:  Simple invoicing integration with Moloni ES
  *   Version:      2.1.3
  *   Tested up to: 6.6.2
