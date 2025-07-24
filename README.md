@@ -9,13 +9,13 @@
 
 ![GitHub](https://img.shields.io/github/license/moloni-pt/woocommerce)
 
-**Contributors:**      [moloni-es](https://github.com/moloni-es)  
+**Contributors:**      [Moloni](https://github.com/moloni-es)  
 **Homepage:**          [https://woocommerce.moloni.es/](https://woocommerce.moloni.es/)  
 **Tags:**              Invoicing, Orders  
 **Requires PHP:**      7.2  
-**Tested up to:**      6.6.2  
-**WC tested up to**    9.3.3  
-**Stable tag:**        2.1.3  
+**Tested up to:**      6.8.2  
+**WC tested up to**    10.0.4  
+**Stable tag:**        2.1.4  
 **License:**           GPLv2 or later  
 **License URI:**       [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
@@ -73,6 +73,13 @@ Released plugin version 2.0.0.
 Released plugin version 1.0.0.
 
 ## Changelog
+### 2.1.4
+* Tested up to version 6.8.2 of WordPress
+* Tested up to version 10.0.4 of WooCommerce
+* Added WooCommerce as dependency
+* Removed PSR logger
+* Minor fixes and improvements
+
 ### 2.1.3
 * Improve image synchronization process
 
