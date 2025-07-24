@@ -2,9 +2,9 @@
 Contributors: Moloni
 Requires Plugins: woocommerce
 Tags: Invoicing, Orders
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 Tested up to: 6.6.2
-WC tested up to: 9.3.3
+WC tested up to: 10.0.4
 
 Requires PHP: 7.2
 Requires at least: 5.0
@@ -70,6 +70,13 @@ Via FTP
  Released plugin version 1.0.0.
 
 == Changelog ==
+= 2.1.4 =
+* Tested up to version 6.8.2 of WordPress
+* Tested up to version 10.0.4 of WooCommerce
+* Added WooCommerce as dependency
+* Removed PSR logger
+* Minor fixes and improvements
+
 = 2.1.3 =
 * Improve image synchronization process
 
